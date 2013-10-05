@@ -6,3 +6,7 @@ Message::Message()
 
 }
 
+Message::~Message()
+{
+
+}

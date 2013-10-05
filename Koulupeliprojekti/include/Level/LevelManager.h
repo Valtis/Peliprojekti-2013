@@ -6,7 +6,8 @@ class Level;
 class LevelManager
 {
 public:
-
+  LevelManager();
+  ~LevelManager();
   void Update();
 private:
 

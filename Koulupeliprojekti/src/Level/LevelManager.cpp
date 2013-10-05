@@ -2,4 +2,12 @@
 #include "Level/Level.h"
 
 
+LevelManager::LevelManager()
+{
 
+}
+
+LevelManager::~LevelManager()
+{
+
+}

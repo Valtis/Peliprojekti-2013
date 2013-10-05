@@ -4,8 +4,6 @@ enum class MessageType : int { NONE };
 #include <functional>
 
 // if handler returns true, the message may be passed to next handler; otherwise do not pass
-typedef std::function<bool(Message *)> MessageCallback;
-
 
 class Message
 {
@@ -17,3 +15,6 @@ protected:
 private:
 
 };
+
+
+typedef std::function<bool(Message *)> MessageCallback;

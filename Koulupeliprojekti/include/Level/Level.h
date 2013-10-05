@@ -7,6 +7,9 @@ class Entity;
 class Level : public EntityParent
 {
 public:
+  Level();
+  ~Level();
+
   void AddMessage(std::unique_ptr<Message> message) override;
   void RegisterMessageHandler(MessageType type, MessageCallback callback) override; 
 
