@@ -13,11 +13,17 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Level">
-      <UniqueIdentifier>{faf47ec6-02c9-4bc1-9b19-b5b6f2622429}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Level">
       <UniqueIdentifier>{c607c0c6-4371-4f28-8a9b-735ea8f62e39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Level">
+      <UniqueIdentifier>{faf47ec6-02c9-4bc1-9b19-b5b6f2622429}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity">
+      <UniqueIdentifier>{0b109425-fc6a-4bfc-a32b-f19d705c94bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity">
+      <UniqueIdentifier>{3ec190ce-f639-469b-83c0-482fa654c5bf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -25,10 +31,13 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Level\LevelManager.h">
-      <Filter>Level</Filter>
+      <Filter>Header Files\Level</Filter>
     </ClInclude>
     <ClInclude Include="include\Level\Level.h">
-      <Filter>Level</Filter>
+      <Filter>Header Files\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Entity\Entity.h">
+      <Filter>Header Files\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -40,6 +49,9 @@
     </ClCompile>
     <ClCompile Include="src\Level\Level.cpp">
       <Filter>Source Files\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entity\Entity.cpp">
+      <Filter>Source Files\Entity</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
