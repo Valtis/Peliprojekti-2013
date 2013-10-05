@@ -10,6 +10,18 @@ Game::~Game()
 {
 }
 
+
+void Game::Run()
+{
+  Initialize();
+
+  while (true)
+  {
+    UpdateGameState();
+    Draw();
+  }
+}
+
 void Game::Initialize()
 {
   // initialization code here
@@ -24,15 +36,3 @@ void Game::Draw()
 {
 
 }
-
-void Game::Run()
-{
-  Initialize();
-
-  while (true)
-  {
-    UpdateGameState();
-    Draw();
-  }
-}
-
