@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Component">
       <UniqueIdentifier>{953b6ced-0a1e-449a-b64e-d7012308b3ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Message">
+      <UniqueIdentifier>{668f068b-f0b0-4adb-8163-49e4554e6a8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Message">
+      <UniqueIdentifier>{7fd1a0e1-593b-4a84-9911-2d57fbd7faa6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -51,6 +57,9 @@
     <ClInclude Include="include\Component\Component.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="include\Message\Message.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -67,6 +76,12 @@
     </ClCompile>
     <ClCompile Include="src\Component\Component.cpp">
       <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Message\Message.cpp">
+      <Filter>Source Files\Message</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

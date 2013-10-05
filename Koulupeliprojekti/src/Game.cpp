@@ -12,7 +12,7 @@ Game::~Game()
 
 void Game::Initialize()
 {
-	// initialization code here
+  // initialization code here
 }
 
 void Game::UpdateGameState()
@@ -27,12 +27,12 @@ void Game::Draw()
 
 void Game::Run()
 {
-	Initialize();
+  Initialize();
 
-	while (true)
-	{
-		UpdateGameState();
-		Draw();
-	}
+  while (true)
+  {
+    UpdateGameState();
+    Draw();
+  }
 }
 

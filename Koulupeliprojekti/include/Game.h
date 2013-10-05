@@ -5,17 +5,17 @@
 class Game
 {
 public:
-	Game();
-	~Game();
+  Game();
+  ~Game();
 
-	void Run();
+  void Run();
 
 private:
-	void Initialize();
-	void RunMainLoop();
-	void UpdateGameState();
-	void Draw();
+  void Initialize();
+  void RunMainLoop();
+  void UpdateGameState();
+  void Draw();
 
-	LevelManager m_levelManager;
+  LevelManager m_levelManager;
 };
 

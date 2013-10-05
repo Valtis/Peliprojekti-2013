@@ -7,8 +7,8 @@ class LevelManager
 {
 public:
 
-	void Update();
+  void Update();
 private:
 
-	std::vector<std::unique_ptr<Level>> m_Levels;
+  std::vector<std::unique_ptr<Level>> m_Levels;
 };

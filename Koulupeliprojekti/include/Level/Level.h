@@ -10,6 +10,6 @@ public:
 
 private:
 
-	std::vector<std::unique_ptr<Entity>> m_Entities;
+  std::vector<std::unique_ptr<Entity>> m_Entities;
 
 };
