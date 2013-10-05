@@ -5,6 +5,9 @@ enum class ComponentType : int { NONE, GRAPHICS, COLLISION, INPUT, LOCATION, VEL
 class Component
 {
 public:
+  virtual ~Component();
+protected:
+  Component();
 
 private:
 
