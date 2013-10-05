@@ -25,6 +25,12 @@
     <Filter Include="Source Files\Entity">
       <UniqueIdentifier>{3ec190ce-f639-469b-83c0-482fa654c5bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Component">
+      <UniqueIdentifier>{3f9fd227-3d15-4adf-ac1d-ef2be1f7a5f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Component">
+      <UniqueIdentifier>{953b6ced-0a1e-449a-b64e-d7012308b3ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -42,6 +48,9 @@
     <ClInclude Include="include\Entity\EntityParent.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
+    <ClInclude Include="include\Component\Component.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -55,6 +64,9 @@
     </ClCompile>
     <ClCompile Include="src\Entity\Entity.cpp">
       <Filter>Source Files\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Component.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
