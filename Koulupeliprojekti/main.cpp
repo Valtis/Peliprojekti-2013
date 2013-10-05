@@ -9,9 +9,9 @@ int main()
   }
   catch (const std::exception &e)
   {
-	  // catch any uncaught exceptions - preferably no exception should reach this point
-	  // log exception here 
-	  return 1;
+    // catch any uncaught exceptions - preferably no exception should reach this point
+    // log exception here 
+    return 1;
   }
   return 0;
 }

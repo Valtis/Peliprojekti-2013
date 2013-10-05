@@ -10,7 +10,7 @@ class Entity : public EntityParent
 {
 
 public:
-	void AddMessage(std::unique_ptr<Message> message) override;
+  void AddMessage(std::unique_ptr<Message> message) override;
   void RegisterMessageHandler(MessageType type, MessageCallback callback) override; 
 
 private:
