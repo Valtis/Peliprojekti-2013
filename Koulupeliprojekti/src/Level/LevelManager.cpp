@@ -21,3 +21,13 @@ void LevelManager::SetCurrentLevel(int level)
 
   m_currentLevel = level;
 }
+
+void LevelManager::Update(double ticks_passed)
+{
+  if (m_currentLevel == -1)
+  {
+    return;
+  }
+
+  m_levels[m_currentLevel]->Update(ticks_passed);
+}

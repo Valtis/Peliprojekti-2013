@@ -8,7 +8,7 @@ class LevelManager
 public:
   LevelManager();
   ~LevelManager();
-  void Update();
+  void Update(double ticks_passed);
   
   void SetCurrentLevel(int level);
 
