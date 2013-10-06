@@ -64,6 +64,11 @@ std::string Logger::CreateStamp(bool extendedTimeStamp) throw()
 
 void Logger::AddLine( LogLevel level, std::string text )
 {
+  if (!m_logFile.is_open())
+  {
+    return;
+  }
+
 	if (m_loggingLevel == LogLevel::NONE || (m_loggingLevel != LogLevel::ALL && level < m_loggingLevel))
   {
 		return;

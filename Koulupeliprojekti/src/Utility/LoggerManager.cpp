@@ -16,9 +16,13 @@ Logger & LoggerManager::GetLog( std::string name )
   if (m_logs.count(name) == 0)
   {
     m_logs[name].reset(new Logger());
-    m_logs[name]->Open(name);
     m_logs[name]->AddTimeStamps(true);
     m_logs[name]->SetLoggingLevel(m_globalLogLevel);
+
+    if (m_globalLogLevel != LogLevel::NONE)
+    {
+      m_logs[name]->Open(name);
+    }
   }
 
   return *m_logs[name];
