@@ -9,7 +9,10 @@ public:
   LevelManager();
   ~LevelManager();
   void Update();
-private:
+  
+  void SetCurrentLevel(int level);
 
-  std::vector<std::unique_ptr<Level>> m_Levels;
+private:
+  int m_currentLevel;
+  std::vector<std::unique_ptr<Level>> m_levels;
 };
