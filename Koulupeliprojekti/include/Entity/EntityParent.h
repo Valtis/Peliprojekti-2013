@@ -3,7 +3,7 @@
 #include <memory>
 #include "Message/Message.h"
 
-// abstract class for Message handling
+// interface class for entity parents. Entity/level/other classes that can act as parents for entities must inherit this
 class EntityParent
 {
 public:
