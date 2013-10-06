@@ -21,3 +21,12 @@ void Level::RegisterMessageHandler(MessageType type, Priority priority, MessageC
 {
   m_messageProcessor.RegisterMessageHandler(type, priority, callback);
 }
+
+
+void Level::Update(double ticks_passed)
+{
+  for (auto &entity : m_Entities)
+  {
+    entity->Update(ticks_passed);
+  }
+}

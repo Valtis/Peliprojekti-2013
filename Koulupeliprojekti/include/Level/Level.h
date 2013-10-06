@@ -12,7 +12,7 @@ public:
 
   void SendMessage(Message *message) override;
   void RegisterMessageHandler(MessageType type, Priority priority, MessageCallback callback) override; 
-
+  void Update(double ticks_passed);
 private:
 
   std::vector<std::unique_ptr<Entity>> m_Entities;
