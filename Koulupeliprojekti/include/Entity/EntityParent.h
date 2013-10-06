@@ -3,10 +3,15 @@
 #include <memory>
 #include "Message/Message.h"
 
-// interface for classes that can be parents for entities
+// abstract class for Message handling
 class EntityParent
 {
 public:
-  virtual void AddMessage(std::unique_ptr<Message> message) = 0;
-  virtual void RegisterMessageHandler(MessageType type, MessageCallback callback) = 0;
+  virtual void SendMessage(Message *message) = 0;
+  virtual void RegisterMessageHandler(MessageType type, Priority priority, MessageCallback callback) = 0;
+
+protected:
+
+private:
+
 };

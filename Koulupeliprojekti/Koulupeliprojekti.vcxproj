@@ -18,6 +18,7 @@
     <ClInclude Include="include\Level\Level.h" />
     <ClInclude Include="include\Level\LevelManager.h" />
     <ClInclude Include="include\Message\Message.h" />
+    <ClInclude Include="include\Message\MessageProcessor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -27,6 +28,12 @@
     <ClCompile Include="src\Level\Level.cpp" />
     <ClCompile Include="src\Level\LevelManager.cpp" />
     <ClCompile Include="src\Message\Message.cpp" />
+    <ClCompile Include="src\Message\MessageProcessor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.gitignore" />
+    <None Include="..\LICENSE" />
+    <None Include="..\README.md" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8D1292B3-5DB4-4E8D-8A06-0170615C3DF3}</ProjectGuid>

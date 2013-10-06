@@ -11,13 +11,13 @@ Level::~Level()
 
 }
 
-void Level::AddMessage(std::unique_ptr<Message> message)
+void Level::SendMessage(Message *message)
 {
-  // do something
+  m_messageProcessor.SendMessage(message);
 }
 
 
-void Level::RegisterMessageHandler(MessageType type, MessageCallback callback)
+void Level::RegisterMessageHandler(MessageType type, Priority priority, MessageCallback callback)
 {
-  // do something
+  m_messageProcessor.RegisterMessageHandler(type, priority, callback);
 }

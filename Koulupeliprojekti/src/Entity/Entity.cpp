@@ -1,45 +1,31 @@
 #include "Entity/Entity.h"
 
-
-void Entity::HandleMessages()
+void Entity::RegisterMessageHandler(MessageType type, Priority priority, MessageCallback callback)
 {
-  while (!m_messages.empty())
+  m_messageProcessor.RegisterMessageHandler(type, priority, callback);
+}
+
+void Entity::SendMessage(Message *message)
+{
+  if (!m_messageProcessor.SendMessage(message))
   {
-    HandleSingleMessage(std::move(m_messages.front()));
-    m_messages.pop();
+    SendMessageToParent(message);
   }
 }
 
-void Entity::HandleSingleMessage(std::unique_ptr<Message> message)
-{
-  auto handlers =  m_messageHandlers[message->GetType()];
-
-  if (handlers.empty())
-  {
-    SendMessageToParent(std::move(message));
-    return;
-  }
-
-  PassMessageToHandlers(handlers, message);
-  return;
-}
-
-void Entity::SendMessageToParent(std::unique_ptr<Message> message)
+void Entity::SendMessageToParent(Message *message)
 {
   if (m_parent != nullptr)
   {
-    m_parent->AddMessage(std::move(message));
+    m_parent->SendMessage(message);
   }
 }
 
 
-void Entity::PassMessageToHandlers( std::vector<MessageCallback> handlers, std::unique_ptr<Message> &message )
+void Entity::SendMessageToChildren(Message *message)
 {
-  for (auto &handler : handlers)
+  for (auto &child : m_children)
   {
-    if (!handler(message.get()))
-    {
-      return;
-    }
+    child->SendMessage(message);
   }
 }

@@ -2,7 +2,7 @@
 #include <vector>
 #include <memory>
 #include "Entity/EntityParent.h"
-
+#include "Message/MessageProcessor.h"
 class Entity;
 class Level : public EntityParent
 {
@@ -10,11 +10,12 @@ public:
   Level();
   ~Level();
 
-  void AddMessage(std::unique_ptr<Message> message) override;
-  void RegisterMessageHandler(MessageType type, MessageCallback callback) override; 
+  void SendMessage(Message *message) override;
+  void RegisterMessageHandler(MessageType type, Priority priority, MessageCallback callback) override; 
 
 private:
 
   std::vector<std::unique_ptr<Entity>> m_Entities;
+  MessageProcessor m_messageProcessor;
 
 };
