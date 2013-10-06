@@ -6,7 +6,11 @@ LogLevel LoggerManager::m_globalLogLevel = LogLevel::ALL;
 
 std::string LoggerManager::GetFullName( const std::string &name )
 {
-  return m_logFolder + "/" + name;	return name;
+  if (m_logFolder.empty())
+  {
+    return name;
+  }
+  return m_logFolder + "/" + name;
 }
 
 Logger & LoggerManager::GetLog( std::string name )
