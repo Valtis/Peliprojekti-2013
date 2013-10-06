@@ -19,12 +19,12 @@ public:
   void AddLine(LogLevel level, std::string text);
 
 
-  void SetLoggingLevel(LogLevel val) { m_loggingLevel = val; }
+  void SetLoggingLevel(LogLevel val);
 private:
 
   void WriteLogLevel( LogLevel level );
   LogLevel m_loggingLevel;
-  std::string CreateStamp(bool initializeStamp = false);
+  std::string CreateStamp(bool extendedTimeStamp = false);
   bool m_addTimeStamps;
   std::ofstream m_logFile;
 };

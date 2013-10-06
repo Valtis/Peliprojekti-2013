@@ -19,7 +19,6 @@ Logger::~Logger()
 
 void Logger::Open(std::string fileName)
 {
-    Close();
     m_logFile.open(fileName);
     m_logFile << CreateStamp(true) << "Opening new log file\n\n";
 }
@@ -28,7 +27,8 @@ void Logger::Close()
 {
     if (m_logFile.is_open())
     {
-        m_logFile << "\n" << CreateStamp(true) << "Closing log file\n";
+        
+        m_logFile << "\n" << CreateStamp(true) << "Closing log file" << std::endl;
         m_logFile.close();
     }
 }
@@ -38,7 +38,7 @@ void Logger::AddTimeStamps(bool stamp) throw()
     m_addTimeStamps = stamp;
 }
 
-std::string Logger::CreateStamp(bool initializeStamp) throw()
+std::string Logger::CreateStamp(bool extendedTimeStamp) throw()
 {
 #pragma warning(push)
 #pragma warning(disable: 4996)
@@ -49,10 +49,12 @@ std::string Logger::CreateStamp(bool initializeStamp) throw()
 
     std::ostringstream stamp;
     stamp << "[";
-    if (initializeStamp == true)
+
+    if (extendedTimeStamp == true)
     {
         stamp << timeInfo->tm_year + 1900 << "." <<  timeInfo->tm_mon + 1 << "." << timeInfo->tm_mday << " ";
     }
+
     stamp << (timeInfo->tm_hour < 10 ? "0" : "") <<  timeInfo->tm_hour << ":" << (timeInfo->tm_min < 10 ? "0" : "") <<  timeInfo->tm_min << ":" << (timeInfo->tm_sec < 10 ? "0" : "")  << timeInfo->tm_sec << "]";
     stamp << " ";
 #pragma warning(pop)
@@ -62,14 +64,17 @@ std::string Logger::CreateStamp(bool initializeStamp) throw()
 
 void Logger::AddLine( LogLevel level, std::string text )
 {
-	if (level > m_loggingLevel || m_loggingLevel == LogLevel::NONE)
+	if (m_loggingLevel == LogLevel::NONE || (m_loggingLevel != LogLevel::ALL && level < m_loggingLevel))
+  {
 		return;
+  }
 
 	if (m_addTimeStamps == true)
+  {
 		m_logFile << CreateStamp() << " ";
+  }
 
   WriteLogLevel(level);
-
 	m_logFile << text << std::endl;
 }
 
@@ -95,4 +100,9 @@ void Logger::WriteLogLevel( LogLevel level )
   default:
     m_logFile << "Logger error: Level " << static_cast<int>(level) << " given which is undefined. Following message attached: ";
   }
+}
+
+void Logger::SetLoggingLevel( LogLevel val )
+{
+  m_loggingLevel = val;
 }
