@@ -23,10 +23,10 @@ void Level::RegisterMessageHandler(MessageType type, Priority priority, MessageC
 }
 
 
-void Level::Update(double ticks_passed)
+void Level::Update(double ticksPassed)
 {
   for (auto &entity : m_Entities)
   {
-    entity->Update(ticks_passed);
+    entity->Update(ticksPassed);
   }
 }

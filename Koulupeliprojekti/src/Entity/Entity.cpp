@@ -48,3 +48,11 @@ Component *Entity::GetComponent(ComponentType type)
 
   return m_components[type].get();
 }
+
+void Entity::Update(double ticksPassed)
+{
+  for (auto &component : m_components)
+  {
+    component->Update(ticksPassed);
+  }
+}

@@ -14,6 +14,7 @@ public:
   void SendMessageToChildren(Message *message);
   void AddComponent(ComponentType type, std::unique_ptr<Component> c);
   Component *GetComponent(ComponentType type);
+  void Update(double ticksPassed);
   
 private:
   std::map<ComponentType, std::unique_ptr<Component>> m_components;
