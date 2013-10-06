@@ -6,6 +6,7 @@ class Component
 {
 public:
   virtual ~Component();
+  virtual void Update(double ticksPassed);
 protected:
   Component();
 

@@ -9,3 +9,8 @@ Component::~Component()
 {
 
 }
+
+void Component::Update(double ticksPassed)
+{
+
+};
