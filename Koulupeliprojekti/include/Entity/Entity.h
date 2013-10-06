@@ -12,6 +12,8 @@ public:
   void RegisterMessageHandler(MessageType type, Priority priority, MessageCallback callback) override;
   void SendMessageToParent(Message *message); 
   void SendMessageToChildren(Message *message);
+  void AddComponent(ComponentType type, std::unique_ptr<Component> c);
+  Component *GetComponent(ComponentType type);
   
 private:
   std::map<ComponentType, std::unique_ptr<Component>> m_components;

@@ -29,3 +29,22 @@ void Entity::SendMessageToChildren(Message *message)
     child->SendMessage(message);
   }
 }
+
+
+void Entity::AddComponent(ComponentType type, std::unique_ptr<Component> c)
+{
+  if (type != ComponentType::NONE)
+  {
+    m_components[type] = std::move(c);
+  }
+}
+
+Component *Entity::GetComponent(ComponentType type)
+{
+  if (m_components.count(type) == 0)
+  {
+    return nullptr;
+  }
+
+  return m_components[type].get();
+}
