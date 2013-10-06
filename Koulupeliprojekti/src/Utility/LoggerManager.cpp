@@ -1,31 +1,31 @@
 #include "Utility/LoggerManager.h"
 
-std::string LoggerManager::mLogFolder = "";
-std::unordered_map<std::string, std::unique_ptr<Logger>> LoggerManager::mLogs;
+std::string LoggerManager::m_logFolder = "";
+std::unordered_map<std::string, std::unique_ptr<Logger>> LoggerManager::m_logs;
 
 std::string LoggerManager::GetFullName( const std::string &name )
 {
-	return mLogFolder + "/" + name;	return name;
+  return m_logFolder + "/" + name;	return name;
 }
 
 Logger & LoggerManager::GetLog( std::string name )
 {
-	name = GetFullName(name);
+  name = GetFullName(name);
 
-	if (mLogs.count(name) == 0)
-	{
-		mLogs[name].reset(new Logger());
-		mLogs[name]->Open(name);
-		mLogs[name]->AddTimeStamps(true);
-		mLogs[name]->SetLoggingLevel(LogLevel::All);
-	}
+  if (m_logs.count(name) == 0)
+  {
+    m_logs[name].reset(new Logger());
+    m_logs[name]->Open(name);
+    m_logs[name]->AddTimeStamps(true);
+    m_logs[name]->SetLoggingLevel(LogLevel::ALL);
+  }
 
-	return *mLogs[name];
+  return *m_logs[name];
 }
 
 void LoggerManager::Release()
 {
-	mLogs.clear();
+  m_logs.clear();
 }
 
 LoggerManager::LoggerManager()
@@ -35,10 +35,10 @@ LoggerManager::LoggerManager()
 
 void LoggerManager::SetLogFolder( std::string folder )
 {
-	mLogFolder = folder;
+  m_logFolder = folder;
 }
 
 LoggerManager::~LoggerManager()
 {
-	mLogs.clear();
+  m_logs.clear();
 }

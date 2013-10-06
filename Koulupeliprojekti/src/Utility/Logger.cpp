@@ -3,12 +3,12 @@
 #include "Utility\Logger.h"
 
 
-Logger::Logger(std::string fileName, LogLevel loggingLevel) : mLoggingLevel(loggingLevel), mTimeStamps(false), mLogFile()
+Logger::Logger(std::string fileName, LogLevel loggingLevel) : m_loggingLevel(loggingLevel), m_addTimeStamps(false), m_logFile()
 {
-    if (mLoggingLevel > LogLevel::None)
+    if (m_loggingLevel > LogLevel::NONE)
         Open(fileName);
 }
-Logger::Logger() : mLoggingLevel(LogLevel::None), mTimeStamps(false), mLogFile()
+Logger::Logger() : m_loggingLevel(LogLevel::NONE), m_addTimeStamps(false), m_logFile()
 {
 
 }
@@ -20,22 +20,22 @@ Logger::~Logger()
 void Logger::Open(std::string fileName)
 {
     Close();
-    mLogFile.open(fileName);
-    mLogFile << CreateStamp(true) << "Opening new log file\n\n";
+    m_logFile.open(fileName);
+    m_logFile << CreateStamp(true) << "Opening new log file\n\n";
 }
 
 void Logger::Close()
 {
-    if (mLogFile.is_open())
+    if (m_logFile.is_open())
     {
-        mLogFile << "\n" << CreateStamp(true) << "Closing log file\n";
-        mLogFile.close();
+        m_logFile << "\n" << CreateStamp(true) << "Closing log file\n";
+        m_logFile.close();
     }
 }
 
 void Logger::AddTimeStamps(bool stamp) throw()
 {
-    mTimeStamps = stamp;
+    m_addTimeStamps = stamp;
 }
 
 std::string Logger::CreateStamp(bool initializeStamp) throw()
@@ -62,31 +62,37 @@ std::string Logger::CreateStamp(bool initializeStamp) throw()
 
 void Logger::AddLine( LogLevel level, std::string text )
 {
-	if (level > mLoggingLevel || mLoggingLevel == LogLevel::None)
+	if (level > m_loggingLevel || m_loggingLevel == LogLevel::NONE)
 		return;
 
-	if (mTimeStamps == true)
-		mLogFile << CreateStamp() << " ";
+	if (m_addTimeStamps == true)
+		m_logFile << CreateStamp() << " ";
 
-	switch (level)
-	{
-	case LogLevel::None:
-	case LogLevel::All:
-		break;
-	case LogLevel::Error:
-		mLogFile << "Error: ";
-		break;
-	case LogLevel::Warning:
-		mLogFile << "Warning: ";
-		break;
-	case LogLevel::Info:
-		mLogFile << "Info: ";
-		break;
-	case LogLevel::Debug:
-		mLogFile << "Debug: ";
-		break;
-	default:
-		mLogFile << "Logger error: Level " << static_cast<int>(level) << " given which is undefined. Following message attached: ";
-	}
-	mLogFile << text << std::endl;
+  WriteLogLevel(level);
+
+	m_logFile << text << std::endl;
+}
+
+void Logger::WriteLogLevel( LogLevel level )
+{
+  switch (level)
+  {
+  case LogLevel::NONE:
+  case LogLevel::ALL:
+    break;
+  case LogLevel::ERROR:
+    m_logFile << "Error: ";
+    break;
+  case LogLevel::WARNING:
+    m_logFile << "Warning: ";
+    break;
+  case LogLevel::INFO:
+    m_logFile << "Info: ";
+    break;
+  case LogLevel::DEBUG:
+    m_logFile << "Debug: ";
+    break;
+  default:
+    m_logFile << "Logger error: Level " << static_cast<int>(level) << " given which is undefined. Following message attached: ";
+  }
 }
