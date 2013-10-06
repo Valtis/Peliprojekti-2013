@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Message">
       <UniqueIdentifier>{7fd1a0e1-593b-4a84-9911-2d57fbd7faa6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{537771c5-c35f-4e71-a38f-dbe28f67c520}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{24068d92-f0a6-4763-aa36-4bdbe34ca972}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -63,6 +69,12 @@
     <ClInclude Include="include\Message\MessageProcessor.h">
       <Filter>Header Files\Message</Filter>
     </ClInclude>
+    <ClInclude Include="include\Utility\Logger.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\LoggerManager.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -88,6 +100,12 @@
     </ClCompile>
     <ClCompile Include="src\Message\MessageProcessor.cpp">
       <Filter>Source Files\Message</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utility\Logger.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utility\LoggerManager.cpp">
+      <Filter>Source Files\Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

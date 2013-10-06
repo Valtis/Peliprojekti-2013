@@ -19,6 +19,8 @@
     <ClInclude Include="include\Level\LevelManager.h" />
     <ClInclude Include="include\Message\Message.h" />
     <ClInclude Include="include\Message\MessageProcessor.h" />
+    <ClInclude Include="include\Utility\Logger.h" />
+    <ClInclude Include="include\Utility\LoggerManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -29,6 +31,8 @@
     <ClCompile Include="src\Level\LevelManager.cpp" />
     <ClCompile Include="src\Message\Message.cpp" />
     <ClCompile Include="src\Message\MessageProcessor.cpp" />
+    <ClCompile Include="src\Utility\Logger.cpp" />
+    <ClCompile Include="src\Utility\LoggerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
