@@ -10,6 +10,8 @@ public:
   static void Release();
   static Logger &GetLog(std::string name);
 
+  static void SetGlobalLogLevel(LogLevel level);
+
 private:
   LoggerManager();
   ~LoggerManager();
@@ -18,5 +20,5 @@ private:
 
   static std::string m_logFolder;
   static std::unordered_map<std::string, std::unique_ptr<Logger>> m_logs;
-
+  static LogLevel m_globalLogLevel;
 };

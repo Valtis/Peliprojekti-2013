@@ -2,6 +2,7 @@
 
 std::string LoggerManager::m_logFolder = "";
 std::unordered_map<std::string, std::unique_ptr<Logger>> LoggerManager::m_logs;
+LogLevel LoggerManager::m_globalLogLevel = LogLevel::ALL;
 
 std::string LoggerManager::GetFullName( const std::string &name )
 {
@@ -17,7 +18,7 @@ Logger & LoggerManager::GetLog( std::string name )
     m_logs[name].reset(new Logger());
     m_logs[name]->Open(name);
     m_logs[name]->AddTimeStamps(true);
-    m_logs[name]->SetLoggingLevel(LogLevel::ALL);
+    m_logs[name]->SetLoggingLevel(m_globalLogLevel);
   }
 
   return *m_logs[name];
@@ -41,4 +42,13 @@ void LoggerManager::SetLogFolder( std::string folder )
 LoggerManager::~LoggerManager()
 {
   m_logs.clear();
+}
+
+void LoggerManager::SetGlobalLogLevel(LogLevel level)
+{
+  m_globalLogLevel = level;
+  for (auto &log : m_logs)
+  {
+    log.second->SetLoggingLevel(m_globalLogLevel);
+  }
 }
