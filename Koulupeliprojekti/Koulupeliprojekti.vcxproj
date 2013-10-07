@@ -21,6 +21,7 @@
     <ClInclude Include="include\Message\MessageProcessor.h" />
     <ClInclude Include="include\Utility\Logger.h" />
     <ClInclude Include="include\Utility\LoggerManager.h" />
+    <ClInclude Include="include\Utility\Tick.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -33,6 +34,7 @@
     <ClCompile Include="src\Message\MessageProcessor.cpp" />
     <ClCompile Include="src\Utility\Logger.cpp" />
     <ClCompile Include="src\Utility\LoggerManager.cpp" />
+    <ClCompile Include="src\Utility\Tick.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
@@ -68,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>include;$(IncludePath)</IncludePath>
+    <IncludePath>include;C:\Libs\SDL\SDL2-2.0.0\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
