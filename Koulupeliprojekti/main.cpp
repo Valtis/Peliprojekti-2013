@@ -1,16 +1,18 @@
 #include "Game.h"
 #include <exception>
-int main()
+#include "Utility/LoggerManager.h"
+#include <string>
+
+int main( int argc, char * argv[])
 {
   try 
   {
     Game game;
     game.Run();
   }
-  catch (const std::exception &e)
+  catch (const std::exception &ex)
   {
-    // catch any uncaught exceptions - preferably no exception should reach this point
-    // log exception here 
+    LoggerManager::GetLog("error.log").AddLine(LogLevel::ERROR, std::string("Uncaught exception in main(): ") + ex.what());
     return 1;
   }
   return 0;
