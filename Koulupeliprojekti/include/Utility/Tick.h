@@ -3,6 +3,7 @@
 
 class Tick
 {
+public:
   Tick(Uint32 tickLength);
 
   double TicksPassed();

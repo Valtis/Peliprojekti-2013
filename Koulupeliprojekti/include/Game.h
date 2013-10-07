@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Level/LevelManager.h"
-
+#include "Utility/Tick.h"
 class Game
 {
 public:
@@ -17,5 +17,7 @@ private:
   void Draw();
 
   LevelManager m_levelManager;
+  Tick m_gameTick;
+  Tick m_drawTick;
 };
 
