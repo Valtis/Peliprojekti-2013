@@ -1,6 +1,6 @@
 
 #include <ctime>
-#include "Utility\Logger.h"
+#include "Utility/Logger.h"
 
 
 Logger::Logger(std::string fileName, LogLevel loggingLevel) : m_loggingLevel(loggingLevel), m_addTimeStamps(false), m_logFile()
@@ -33,12 +33,12 @@ void Logger::Close()
     }
 }
 
-void Logger::AddTimeStamps(bool stamp) throw()
+void Logger::AddTimeStamps(bool stamp)
 {
     m_addTimeStamps = stamp;
 }
 
-std::string Logger::CreateStamp(bool extendedTimeStamp) throw()
+std::string Logger::CreateStamp(bool extendedTimeStamp)
 {
 #pragma warning(push)
 #pragma warning(disable: 4996)
