@@ -11,4 +11,6 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 %.o : %.cpp
 	$(CC) $(CFLAGS) $< -o $@
-
+.PHONY clean
+clean:
+	rm -f $(OBJECTS) $(EXECUTABLE)
