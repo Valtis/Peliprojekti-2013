@@ -43,6 +43,12 @@
     <Filter Include="Source Files\Utility">
       <UniqueIdentifier>{24068d92-f0a6-4763-aa36-4bdbe34ca972}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Collision">
+      <UniqueIdentifier>{8080f3ee-c08b-4a01-bdbe-5e0a016bb632}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Collision">
+      <UniqueIdentifier>{123f9b06-4470-4b47-b07b-c70966fbf2be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -78,6 +84,9 @@
     <ClInclude Include="include\Utility\Tick.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="include\Collision\CollisionChecker.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -112,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="src\Utility\Tick.cpp">
       <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Collision\CollisionChecker.cpp">
+      <Filter>Source Files\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

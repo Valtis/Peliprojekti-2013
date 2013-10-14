@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Collision\CollisionChecker.h" />
     <ClInclude Include="include\Component\Component.h" />
     <ClInclude Include="include\Entity\Entity.h" />
     <ClInclude Include="include\Entity\EntityParent.h" />
@@ -25,6 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\Collision\CollisionChecker.cpp" />
     <ClCompile Include="src\Component\Component.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Game.cpp" />
