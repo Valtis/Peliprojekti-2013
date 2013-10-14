@@ -1,5 +1,6 @@
 #include "Level/Level.h"
 #include "Entity/Entity.h"
+#include "Collision/CollisionChecker.h"
 
 Level::Level()
 {
@@ -25,6 +26,7 @@ void Level::RegisterMessageHandler(MessageType type, Priority priority, MessageC
 
 void Level::Update(double ticksPassed)
 {
+  Collision::CheckCollisions(m_Entities);
   for (auto &entity : m_Entities)
   {
     entity->Update(ticksPassed);
