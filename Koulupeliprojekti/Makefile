@@ -9,8 +9,10 @@ all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+
 %.o : %.cpp
 	$(CC) $(CFLAGS) $< -o $@
-.PHONY clean
+
+.PHONY: clean
 clean:
 	rm -f $(OBJECTS) $(EXECUTABLE)
