@@ -111,6 +111,9 @@
     <ClInclude Include="include\UI\Window\WindowManager.h">
       <Filter>Header Files\UI\Window</Filter>
     </ClInclude>
+    <ClInclude Include="include\UI\Window\Window.h">
+      <Filter>Header Files\UI\Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -156,6 +159,9 @@
       <Filter>Source Files\UI\WindowBase</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\Window\WindowManager.cpp">
+      <Filter>Source Files\UI\WindowBase</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Window\Window.cpp">
       <Filter>Source Files\UI\WindowBase</Filter>
     </ClCompile>
   </ItemGroup>
