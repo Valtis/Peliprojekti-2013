@@ -17,6 +17,7 @@ void Game::Run()
 
   while (true)
   {
+    m_inputManager.HandleInput();
     UpdateGameState();
     Draw();
   }
