@@ -33,44 +33,44 @@ int WindowBase::GetRelativeY()
   return y;
 }
 
-void WindowBase::OnLeftMouseButtonDown(int x, int y)
+void WindowBase::OnLeftMouseButtonDown(int cursorX, int cursorY)
 {
-  ChildrenCaller([&](ChildPtr &c) { c->OnLeftMouseButtonDown(x, y); });
+  ChildrenCaller([=](ChildPtr &c) { if (CoordinateOnWindow(c, cursorX, cursorY)) c->OnLeftMouseButtonDown(cursorX, cursorY); });
 }
 
-void WindowBase::OnLeftMouseButtonUp(int x, int y)
+void WindowBase::OnLeftMouseButtonUp(int cursorX, int cursorY)
 {
-  ChildrenCaller([&](ChildPtr &c) { c->OnLeftMouseButtonUp(x, y); });
+  ChildrenCaller([=](ChildPtr &c) { if (CoordinateOnWindow(c, cursorX, cursorY)) c->OnLeftMouseButtonUp(cursorX, cursorY); });
 }
 
-void WindowBase::OnMiddleMouseButtonDown(int x, int y)
+void WindowBase::OnMiddleMouseButtonDown(int cursorX, int cursorY)
 {
-  ChildrenCaller([&](ChildPtr &c) { c->OnMiddleMouseButtonDown(x, y); });
+  ChildrenCaller([=](ChildPtr &c) { if (CoordinateOnWindow(c, cursorX, cursorY))  c->OnMiddleMouseButtonDown(cursorX, cursorY); });
 }
-void WindowBase::OnMiddleMouseButtonUp(int x, int y)
+void WindowBase::OnMiddleMouseButtonUp(int cursorX, int cursorY)
 {
-  ChildrenCaller([&](ChildPtr &c) { c->OnMiddleMouseButtonUp(x, y); });
-}
-
-void WindowBase::OnRightMouseButtonDown(int x, int y)
-{
-  ChildrenCaller([&](ChildPtr &c) { c->OnRightMouseButtonDown(x, y); });
-}
-void WindowBase::OnRightMouseButtonUp(int x, int y)
-{
-  ChildrenCaller([&](ChildPtr &c) { c->OnRightMouseButtonUp(x, y); });
+  ChildrenCaller([=](ChildPtr &c) { if (CoordinateOnWindow(c, cursorX, cursorY)) c->OnMiddleMouseButtonUp(cursorX, cursorY); });
 }
 
-void WindowBase::OnMouseWheelScrollUp()
+void WindowBase::OnRightMouseButtonDown(int cursorX, int cursorY)
 {
-  ChildrenCaller([&](ChildPtr &c) { c->OnMouseWheelScrollUp(); });
+  ChildrenCaller([=](ChildPtr &c) { if (CoordinateOnWindow(c, cursorX, cursorY)) c->OnRightMouseButtonDown(cursorX, cursorY); });
 }
-void WindowBase::OnMouseWheelScrollDown()
+void WindowBase::OnRightMouseButtonUp(int cursorX, int cursorY)
 {
-  ChildrenCaller([&](ChildPtr &c) { c->OnMouseWheelScrollDown(); });
+  ChildrenCaller([=](ChildPtr &c) { c->OnRightMouseButtonUp(cursorX, cursorY); });
 }
 
-void WindowBase::OnDrag(int dx, int dy)
+void WindowBase::OnMouseWheelScrollUp(int cursorX, int cursorY)
+{
+  ChildrenCaller([=](ChildPtr &c) { if (CoordinateOnWindow(c, cursorX, cursorY)) c->OnMouseWheelScrollUp(cursorX, cursorY); });
+}
+void WindowBase::OnMouseWheelScrollDown(int cursorX, int cursorY)
+{
+  ChildrenCaller([=](ChildPtr &c) { if (CoordinateOnWindow(c, cursorX, cursorY)) c->OnMouseWheelScrollDown(cursorX, cursorY); });
+}
+
+void WindowBase::OnDrag(int cursorX, int cursorY, int dx, int dy)
 {
   // owned windows should hold still - only main window should change its location
   if (m_parent == nullptr)
@@ -79,17 +79,17 @@ void WindowBase::OnDrag(int dx, int dy)
     m_location.y += dy;
   }
 
-  ChildrenCaller([&](ChildPtr &c) { c->OnDrag(dx, dy); });
+  ChildrenCaller([=](ChildPtr &c) { if (CoordinateOnWindow(c, cursorX, cursorY)) c->OnDrag(cursorX, cursorY, dx, dy); });
 }
 
-void WindowBase::OnGainingFocus()
+void WindowBase::OnGainingFocus(int cursorX, int cursorY)
 {
-  ChildrenCaller([&](ChildPtr &c) { c->OnGainingFocus(); });
+  ChildrenCaller([=](ChildPtr &c) { c->OnGainingFocus(cursorX, cursorY); });
 }
 
-void WindowBase::OnLosingFocus()
+void WindowBase::OnLosingFocus(int cursorX, int cursorY)
 {
-  ChildrenCaller([&](ChildPtr &c) { c->OnLosingFocus(); });
+  ChildrenCaller([=](ChildPtr &c) { c->OnLosingFocus(cursorX, cursorY); });
 }
 
 void WindowBase::AddWindow(std::unique_ptr<WindowBase> window)
@@ -104,4 +104,20 @@ void WindowBase::ChildrenCaller(std::function<void(ChildPtr &base)> f)
   {
     f(child);
   }
+}
+
+bool WindowBase::CoordinateOnWindow(ChildPtr &c, int x, int y)
+{
+  int childX = c->GetRelativeX();
+  int childY = c->GetRelativeY();
+  int childWidth = c->m_location.w;
+  int childHeight = c->m_location.h;
+
+  if (childX < x && childX + childWidth >= x &&
+      childY < y && childX + childHeight >= y)
+  {
+    return true;
+  }
+
+  return false;
 }

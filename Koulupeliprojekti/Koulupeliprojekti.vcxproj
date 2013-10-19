@@ -20,7 +20,11 @@
     <ClInclude Include="include\Level\LevelManager.h" />
     <ClInclude Include="include\Message\Message.h" />
     <ClInclude Include="include\Message\MessageProcessor.h" />
+    <ClInclude Include="include\UI\Window\Button.h" />
+    <ClInclude Include="include\UI\Window\ButtonHandler.h" />
+    <ClInclude Include="include\UI\Window\Window.h" />
     <ClInclude Include="include\UI\Window\WindowBase.h" />
+    <ClInclude Include="include\UI\Window\WindowManager.h" />
     <ClInclude Include="include\Utility\Logger.h" />
     <ClInclude Include="include\Utility\LoggerManager.h" />
     <ClInclude Include="include\Utility\Tick.h" />
@@ -35,7 +39,10 @@
     <ClCompile Include="src\Level\LevelManager.cpp" />
     <ClCompile Include="src\Message\Message.cpp" />
     <ClCompile Include="src\Message\MessageProcessor.cpp" />
+    <ClCompile Include="src\UI\Window\Button.cpp" />
+    <ClCompile Include="src\UI\Window\Window.cpp" />
     <ClCompile Include="src\UI\Window\WindowBase.cpp" />
+    <ClCompile Include="src\UI\Window\WindowManager.cpp" />
     <ClCompile Include="src\Utility\Logger.cpp" />
     <ClCompile Include="src\Utility\LoggerManager.cpp" />
     <ClCompile Include="src\Utility\Tick.cpp" />
