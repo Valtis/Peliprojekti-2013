@@ -1,6 +1,6 @@
 #include "UI/Window/WindowBase.h"
 
-WindowBase::WindowBase() : m_parent(nullptr)
+WindowBase::WindowBase() : m_parent(nullptr), m_isActive(false)
 {
   m_location.x = 0;
   m_location.y = 0;
@@ -33,32 +33,14 @@ int WindowBase::GetRelativeY()
   return y;
 }
 
-void WindowBase::OnLeftMouseButtonDown(int cursorX, int cursorY)
+void WindowBase::OnMouseButtonDown(Uint8 button, int cursorX, int cursorY)
 {
-  ChildrenCaller([=](ChildPtr &c) { if (CoordinateOnWindow(c, cursorX, cursorY)) c->OnLeftMouseButtonDown(cursorX, cursorY); });
+  ChildrenCaller([=](ChildPtr &c) { if (CoordinateOnWindow(c, cursorX, cursorY)) c->OnMouseButtonDown(button, cursorX, cursorY); });
 }
 
-void WindowBase::OnLeftMouseButtonUp(int cursorX, int cursorY)
+void WindowBase::OnMouseButtonUp(Uint8 button, int cursorX, int cursorY)
 {
-  ChildrenCaller([=](ChildPtr &c) { if (CoordinateOnWindow(c, cursorX, cursorY)) c->OnLeftMouseButtonUp(cursorX, cursorY); });
-}
-
-void WindowBase::OnMiddleMouseButtonDown(int cursorX, int cursorY)
-{
-  ChildrenCaller([=](ChildPtr &c) { if (CoordinateOnWindow(c, cursorX, cursorY))  c->OnMiddleMouseButtonDown(cursorX, cursorY); });
-}
-void WindowBase::OnMiddleMouseButtonUp(int cursorX, int cursorY)
-{
-  ChildrenCaller([=](ChildPtr &c) { if (CoordinateOnWindow(c, cursorX, cursorY)) c->OnMiddleMouseButtonUp(cursorX, cursorY); });
-}
-
-void WindowBase::OnRightMouseButtonDown(int cursorX, int cursorY)
-{
-  ChildrenCaller([=](ChildPtr &c) { if (CoordinateOnWindow(c, cursorX, cursorY)) c->OnRightMouseButtonDown(cursorX, cursorY); });
-}
-void WindowBase::OnRightMouseButtonUp(int cursorX, int cursorY)
-{
-  ChildrenCaller([=](ChildPtr &c) { c->OnRightMouseButtonUp(cursorX, cursorY); });
+  ChildrenCaller([=](ChildPtr &c) { if (CoordinateOnWindow(c, cursorX, cursorY)) c->OnMouseButtonUp(button, cursorX, cursorY); });
 }
 
 void WindowBase::OnMouseWheelScrollUp(int cursorX, int cursorY)

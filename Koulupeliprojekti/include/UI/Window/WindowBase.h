@@ -1,14 +1,20 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include <SDL.h>
+#include <SDL.h>  
 #include <functional>
+
+// move the enum to proper file, here for now (must be usable from windowmanager.h in the future)
 
 class WindowBase
 {
 public:
   
   virtual ~WindowBase();
+
+  bool IsActive() { return m_isActive; }
+  void Activate() { m_isActive = true; }
+  void Deactivate() { m_isActive = false; }
 
   int GetX() { return m_location.x; }
   int GetY() { return m_location.y; }
@@ -20,14 +26,8 @@ public:
 
   void SetParent(WindowBase *parent) { m_parent = parent; }
 
-  virtual void OnLeftMouseButtonDown(int cursorX, int cursorY);
-  virtual void OnLeftMouseButtonUp(int cursorX, int cursorY);
-
-  virtual void OnMiddleMouseButtonDown(int cursorX, int cursorY);
-  virtual void OnMiddleMouseButtonUp(int cursorX, int cursorY);
-  
-  virtual void OnRightMouseButtonDown(int cursorX, int cursorY);
-  virtual void OnRightMouseButtonUp(int cursorX, int cursorY);
+  virtual void OnMouseButtonDown(Uint8 button, int cursorX, int cursorY);
+  virtual void OnMouseButtonUp(Uint8 button, int cursorX, int cursorY);
 
   virtual void OnMouseWheelScrollUp(int cursorX, int cursorY);
   virtual void OnMouseWheelScrollDown(int cursorX, int cursorY);
@@ -50,4 +50,5 @@ private:
   SDL_Rect m_location;
   WindowBase *m_parent;
   std::vector<ChildPtr> m_children;
+  bool m_isActive;
 };
