@@ -49,6 +49,18 @@
     <Filter Include="Source Files\Collision">
       <UniqueIdentifier>{123f9b06-4470-4b47-b07b-c70966fbf2be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{a4142d48-0e31-4faf-be7e-645fabbbda74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI\Window">
+      <UniqueIdentifier>{88b66e92-52a4-4dab-a032-26ac7968bd84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{b076f4fe-8f92-4323-bf11-7ed03a1a158c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI\WindowBase">
+      <UniqueIdentifier>{918d95ef-65de-4c14-a1bd-9384211551ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -87,6 +99,9 @@
     <ClInclude Include="include\Collision\CollisionChecker.h">
       <Filter>Header Files\Message</Filter>
     </ClInclude>
+    <ClInclude Include="include\UI\Window\WindowBase.h">
+      <Filter>Header Files\UI\Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -124,6 +139,9 @@
     </ClCompile>
     <ClCompile Include="src\Collision\CollisionChecker.cpp">
       <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Window\WindowBase.cpp">
+      <Filter>Source Files\UI\WindowBase</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
