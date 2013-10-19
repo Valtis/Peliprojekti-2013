@@ -1,9 +1,13 @@
 #pragma once
 #include "Window.h"
+#include <memory>
 #include <deque>
 class WindowManager
 {
 public:
+  WindowManager();
 private:
-  std::deque<Window> m_windows;
+  void UpdateActiveWindow(int cursorX, int cursorY);
+  Window *GetWindowUnderCoordinates(int cursorX, int cursorY);
+  std::deque<std::unique_ptr<Window>> m_windows;
 };
