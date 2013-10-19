@@ -12,18 +12,31 @@ void WindowManager::HandleEvent(const SDL_Event &event)
   switch (event.type)
   {
   case SDL_MOUSEMOTION:
+    HandleMouseMotion(event);
     break;
   case SDL_MOUSEBUTTONDOWN:
     HandleDownButton(event);
     break;
   case SDL_MOUSEBUTTONUP:
+    HandleUpButton(event);
     break;
   case SDL_MOUSEWHEEL:
+    HandleMouseWheel(event);
     break;
 
   default:
     LoggerManager::GetLog(WINDOW_MANAGER_LOG).AddLine(LogLevel::WARNING, "Non-mouse event in WindowManager - shouldn't happen (event type: " + std::to_string(event.type) + ")");
   }
+}
+
+void WindowManager::HandleMouseMotion(const SDL_Event &event)
+{
+  if (!m_leftButtonDown)
+  {
+    return;
+  }
+
+  NotifyWindowUnderCursorOnEvent([=](Window *window) { window->OnDrag(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel); }, event.motion.x, event.motion.y);
 }
 
 void WindowManager::HandleDownButton(const SDL_Event &event)
@@ -33,10 +46,34 @@ void WindowManager::HandleDownButton(const SDL_Event &event)
     m_leftButtonDown = true;
   }
 
-  NotifyWindowOnEvent([=](Window *window) { window->OnMouseButtonDown(event.button.button, event.button.x, event.button.y ); }, event.button.x, event.button.y);
+  NotifyWindowUnderCursorOnEvent([=](Window *window) { window->OnMouseButtonDown(event.button.button, event.button.x, event.button.y ); }, event.button.x, event.button.y);
 }
 
-void WindowManager::NotifyWindowOnEvent(std::function<void(Window *)> f, int x, int y)
+void WindowManager::HandleUpButton(const SDL_Event &event)
+{
+  if (event.button.button == SDL_BUTTON_LEFT)
+  {
+    m_leftButtonDown = false;
+  }
+
+  NotifyWindowUnderCursorOnEvent([=](Window *window) { window->OnMouseButtonUp(event.button.button, event.button.x, event.button.y ); }, event.button.x, event.button.y);
+}
+
+void WindowManager::HandleMouseWheel(const SDL_Event &event)
+{
+  int x, y;
+  SDL_GetMouseState(&x, &y);
+  if (event.wheel.y > 0)
+  {
+    NotifyWindowUnderCursorOnEvent([=](Window *window) { window->OnMouseWheelScrollUp(x, y ); }, x, y);
+  }
+  else if (event.wheel.y < 0)
+  {
+    NotifyWindowUnderCursorOnEvent([=](Window *window) { window->OnMouseWheelScrollDown(x, y ); }, x, y);
+  }
+}
+
+void WindowManager::NotifyWindowUnderCursorOnEvent(std::function<void(Window *)> f, int x, int y)
 {
   Window * window = GetWindowUnderCoordinates(x, y);
   if (window == nullptr)

@@ -15,7 +15,7 @@ private:
   void HandleUpButton(const SDL_Event &event);
   void HandleMouseMotion(const SDL_Event &event);
   void HandleMouseWheel(const SDL_Event &event);
-  void NotifyWindowOnEvent(std::function<void(Window *)> f, int x, int y);
+  void NotifyWindowUnderCursorOnEvent(std::function<void(Window *)> f, int x, int y);
   Window *GetWindowUnderCoordinates(int cursorX, int cursorY);
   void UpdateActiveWindow(int cursorX, int cursorY);
   std::deque<std::unique_ptr<Window>> m_windows;
