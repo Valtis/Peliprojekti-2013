@@ -20,22 +20,22 @@ public:
 
   void SetParent(WindowBase *parent) { m_parent = parent; }
 
-  virtual void OnLeftMouseButtonDown(int x, int y);
-  virtual void OnLeftMouseButtonUp(int x, int y);
+  virtual void OnLeftMouseButtonDown(int cursorX, int cursorY);
+  virtual void OnLeftMouseButtonUp(int cursorX, int cursorY);
 
-  virtual void OnMiddleMouseButtonDown(int x, int y);
-  virtual void OnMiddleMouseButtonUp(int x, int y);
+  virtual void OnMiddleMouseButtonDown(int cursorX, int cursorY);
+  virtual void OnMiddleMouseButtonUp(int cursorX, int cursorY);
   
-  virtual void OnRightMouseButtonDown(int x, int y);
-  virtual void OnRightMouseButtonUp(int x, int y);
+  virtual void OnRightMouseButtonDown(int cursorX, int cursorY);
+  virtual void OnRightMouseButtonUp(int cursorX, int cursorY);
 
-  virtual void OnMouseWheelScrollUp();
-  virtual void OnMouseWheelScrollDown();
+  virtual void OnMouseWheelScrollUp(int cursorX, int cursorY);
+  virtual void OnMouseWheelScrollDown(int cursorX, int cursorY);
 
-  virtual void OnDrag(int dx, int dy);
+  virtual void OnDrag(int cursorX, int cursorY, int dx, int dy);
   
-  virtual void OnGainingFocus();
-  virtual void OnLosingFocus();
+  virtual void OnGainingFocus(int cursorX, int cursorY);
+  virtual void OnLosingFocus(int cursorX, int cursorY);
 
   void AddWindow(std::unique_ptr<WindowBase> window);
 
@@ -43,6 +43,7 @@ protected:
   typedef std::unique_ptr<WindowBase> ChildPtr;
   WindowBase();
   void ChildrenCaller(std::function<void(ChildPtr &base)> f);
+  bool CoordinateOnWindow(ChildPtr &c, int x, int y);
 private:
   
   // add sprite 
