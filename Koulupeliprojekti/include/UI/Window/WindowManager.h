@@ -6,6 +6,7 @@ class WindowManager
 {
 public:
   WindowManager();
+  void Draw();
 private:
   void UpdateActiveWindow(int cursorX, int cursorY);
   Window *GetWindowUnderCoordinates(int cursorX, int cursorY);

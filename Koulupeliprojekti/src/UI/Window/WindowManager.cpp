@@ -32,3 +32,12 @@ Window *WindowManager::GetWindowUnderCoordinates(int x, int y)
   }
   return nullptr;
 }
+
+
+void WindowManager::Draw()
+{
+  for (auto iter = m_windows.rbegin(); iter != m_windows.rend(); ++iter)
+  {
+    // draw
+  }
+}

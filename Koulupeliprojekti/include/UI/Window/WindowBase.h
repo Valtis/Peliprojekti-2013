@@ -10,6 +10,10 @@ public:
   
   virtual ~WindowBase();
 
+  bool IsActive() { return m_isActive; }
+  void Activate() { m_isActive = true; }
+  void Deactivate() { m_isActive = false; }
+
   int GetX() { return m_location.x; }
   int GetY() { return m_location.y; }
   int GetRelativeX();
@@ -50,4 +54,5 @@ private:
   SDL_Rect m_location;
   WindowBase *m_parent;
   std::vector<ChildPtr> m_children;
+  bool m_isActive;
 };

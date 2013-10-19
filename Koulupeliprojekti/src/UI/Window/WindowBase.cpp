@@ -1,6 +1,6 @@
 #include "UI/Window/WindowBase.h"
 
-WindowBase::WindowBase() : m_parent(nullptr)
+WindowBase::WindowBase() : m_parent(nullptr), m_isActive(false)
 {
   m_location.x = 0;
   m_location.y = 0;
