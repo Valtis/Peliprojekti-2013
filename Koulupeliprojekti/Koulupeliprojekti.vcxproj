@@ -21,6 +21,7 @@
     <ClInclude Include="include\Message\Message.h" />
     <ClInclude Include="include\Message\MessageProcessor.h" />
     <ClInclude Include="include\UI\Window\Button.h" />
+    <ClInclude Include="include\UI\Window\ButtonHandler.h" />
     <ClInclude Include="include\UI\Window\WindowBase.h" />
     <ClInclude Include="include\Utility\Logger.h" />
     <ClInclude Include="include\Utility\LoggerManager.h" />
