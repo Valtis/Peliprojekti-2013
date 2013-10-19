@@ -1,8 +1,10 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include <SDL.h>
+#include <SDL.h>  
 #include <functional>
+
+// move the enum to proper file, here for now (must be usable from windowmanager.h in the future)
 
 class WindowBase
 {
@@ -24,14 +26,8 @@ public:
 
   void SetParent(WindowBase *parent) { m_parent = parent; }
 
-  virtual void OnLeftMouseButtonDown(int cursorX, int cursorY);
-  virtual void OnLeftMouseButtonUp(int cursorX, int cursorY);
-
-  virtual void OnMiddleMouseButtonDown(int cursorX, int cursorY);
-  virtual void OnMiddleMouseButtonUp(int cursorX, int cursorY);
-  
-  virtual void OnRightMouseButtonDown(int cursorX, int cursorY);
-  virtual void OnRightMouseButtonUp(int cursorX, int cursorY);
+  virtual void OnMouseButtonDown(Uint8 button, int cursorX, int cursorY);
+  virtual void OnMouseButtonUp(Uint8 button, int cursorX, int cursorY);
 
   virtual void OnMouseWheelScrollUp(int cursorX, int cursorY);
   virtual void OnMouseWheelScrollDown(int cursorX, int cursorY);

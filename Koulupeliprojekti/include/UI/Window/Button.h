@@ -8,7 +8,7 @@ public:
   Button();
   ~Button();
   void AddHandler(ButtonHandler *handler) { m_handlers.push_back(handler); }
-  void OnLeftMouseButtonUp(int x, int y) override;
+  void OnMouseButtonUp(Uint8 button, int x, int y) override;
 
   void SetButtonText(std::string text) { m_text = text; }
   std::string GetButtonText() { return m_text; }
