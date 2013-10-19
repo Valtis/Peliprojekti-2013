@@ -113,8 +113,8 @@ bool WindowBase::CoordinateOnWindow(ChildPtr &c, int x, int y)
   int childWidth = c->m_location.w;
   int childHeight = c->m_location.h;
 
-  if (childX > x && childX + childWidth <= x &&
-      childY > y && childX + childHeight <= y)
+  if (childX < x && childX + childWidth >= x &&
+      childY < y && childX + childHeight >= y)
   {
     return true;
   }
