@@ -27,6 +27,7 @@
     <ClInclude Include="include\UI\Window\WindowManager.h" />
     <ClInclude Include="include\Utility\Logger.h" />
     <ClInclude Include="include\Utility\LoggerManager.h" />
+    <ClInclude Include="include\Utility\Logs.h" />
     <ClInclude Include="include\Utility\Tick.h" />
   </ItemGroup>
   <ItemGroup>

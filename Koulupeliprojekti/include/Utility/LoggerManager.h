@@ -3,6 +3,8 @@
 #include <unordered_map>
 #include <memory>
 
+#include "Utility/Logs.h"
+
 class LoggerManager
 {
 public:	
