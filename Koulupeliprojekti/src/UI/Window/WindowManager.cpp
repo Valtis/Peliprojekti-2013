@@ -20,7 +20,7 @@ void WindowManager::UpdateActiveWindow(int x, int y)
   }
 }
 
-Window *WindowManager::GetWindowUnderCoordinates(int cursorX, int cursorY)
+Window *WindowManager::GetWindowUnderCoordinates(int x, int y)
 {
   UpdateActiveWindow(x, y);
   if (m_windows.size() > 0 && 
