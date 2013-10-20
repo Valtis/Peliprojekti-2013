@@ -28,6 +28,7 @@
     <ClInclude Include="include\Message\Commands\MouseCommand.h" />
     <ClInclude Include="include\Message\Message.h" />
     <ClInclude Include="include\Message\MessageProcessor.h" />
+    <ClInclude Include="include\UI\Controller\Controller.h" />
     <ClInclude Include="include\UI\InputManager.h" />
     <ClInclude Include="include\UI\Window\Button.h" />
     <ClInclude Include="include\UI\Window\ButtonHandler.h" />

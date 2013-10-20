@@ -73,6 +73,12 @@
     <Filter Include="Source Files\Graphics">
       <UniqueIdentifier>{1213c9b2-bb69-4788-b2c1-c2388297c444}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\UI\Controller">
+      <UniqueIdentifier>{b6652a08-4d97-49e8-a709-42ecda122690}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI\Controller">
+      <UniqueIdentifier>{5c1eae25-664e-4827-ad17-c296ee803702}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -158,6 +164,9 @@
     </ClInclude>
     <ClInclude Include="include\Graphics\SpriteSheetLoader.h">
       <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UI\Controller\Controller.h">
+      <Filter>Header Files\UI\Controller</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
