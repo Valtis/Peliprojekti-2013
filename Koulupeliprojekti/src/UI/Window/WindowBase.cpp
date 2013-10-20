@@ -103,3 +103,26 @@ bool WindowBase::CoordinateOnWindow(ChildPtr &c, int x, int y)
 
   return false;
 }
+
+std::vector<std::pair<SDL_Rect, SDL_Texture *>> WindowBase::GetTextures()
+{
+  std::vector<std::pair<SDL_Rect, SDL_Texture *>> textures;
+
+  SDL_Rect rect;
+  rect.x = GetRelativeX();
+  rect.y = GetRelativeY();
+  rect.w = m_location.w;
+  rect.h = m_location.h;
+
+  textures.push_back(std::make_pair(rect, m_texture));
+  for (auto &child : m_children)
+  {
+    auto childTextures = child->GetTextures();
+    for (auto texture : childTextures)
+    {
+      textures.push_back(texture);
+    }
+  }
+
+  return textures;
+}

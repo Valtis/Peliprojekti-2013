@@ -24,6 +24,8 @@ public:
   int GetWidth() { return m_location.w; }
   int GetHeight() { return m_location.h; }
 
+  SDL_Rect GetRect() { return m_location; }
+
   void SetParent(WindowBase *parent) { m_parent = parent; }
 
   virtual void OnMouseButtonDown(Uint8 button, int cursorX, int cursorY);
@@ -39,6 +41,8 @@ public:
 
   void AddWindow(std::unique_ptr<WindowBase> window);
 
+  std::vector<std::pair<SDL_Rect, SDL_Texture *>> GetTextures();
+
 protected:
   typedef std::unique_ptr<WindowBase> ChildPtr;
   WindowBase();
@@ -46,7 +50,7 @@ protected:
   bool CoordinateOnWindow(ChildPtr &c, int x, int y);
 private:
   
-  // add sprite 
+  SDL_Texture *m_texture;
   SDL_Rect m_location;
   WindowBase *m_parent;
   std::vector<ChildPtr> m_children;

@@ -1,7 +1,7 @@
 #include "Graphics/Renderer.h"
 #include "Graphics/SpriteManager.h"
 #include "Graphics/Sprite.h"
-
+#include "UI/Window/Window.h"
 #include "Entity/Entity.h"
 
 #include <stdexcept>
@@ -18,8 +18,8 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
-  SDL_DestroyRenderer(mRenderer);
-  SDL_DestroyWindow(mWindow);
+  SDL_DestroyRenderer(m_renderer);
+  SDL_DestroyWindow(m_window);
 }
 
 
@@ -41,17 +41,17 @@ void Renderer::Release()
 
 void Renderer::CreateWindow(std::string title, int width, int height)
 {
-  if (SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_RESIZABLE, &mWindow, &mRenderer) != 0)
+  if (SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_RESIZABLE, &m_window, &m_renderer) != 0)
   {
     throw std::runtime_error("SDL_CreateWindowAndRenderer failed");
   }
 
-  if (mWindow == nullptr || mRenderer == nullptr)
+  if (m_window == nullptr || m_renderer == nullptr)
   {
     throw std::runtime_error("Failed to create window and render context");
   }
 
-  SDL_SetWindowTitle(mWindow, title.c_str());
+  SDL_SetWindowTitle(m_window, title.c_str());
 }
 
 void Renderer::LoadSprites(std::string datafilePath)
@@ -59,22 +59,39 @@ void Renderer::LoadSprites(std::string datafilePath)
   m_spriteManager.Initialize(datafilePath);
 }
 
-void Renderer::Draw(Camera *camera, const std::vector<std::unique_ptr<Entity>> &entities)
+void Renderer::Draw(Camera *camera, const std::vector<std::unique_ptr<Entity>> &entities, const std::deque<std::unique_ptr<Window>> &windows)
 {
   SDL_assert(camera != nullptr);
   ClearScreen();
   DrawEntities(camera, entities);
-  SDL_RenderPresent(mRenderer);
+  DrawWindows(windows);
+  SDL_RenderPresent(m_renderer);
 }
 
 
 void Renderer::ClearScreen()
 {
-  SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
-  SDL_RenderClear(mRenderer);
+  SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
+  SDL_RenderClear(m_renderer);
 }
 
 void Renderer::DrawEntities(Camera *camera, const std::vector<std::unique_ptr<Entity>> &entities)
 {
   // draw stuff
+}
+
+void Renderer::DrawWindows(const std::deque<std::unique_ptr<Window>> &windows)
+{
+  for (auto iter = windows.rbegin(); iter != windows.rend(); ++iter)
+  {
+    DrawWindow((*iter)->GetTextures());
+  }
+}
+
+void Renderer::DrawWindow(std::vector<std::pair<SDL_Rect, SDL_Texture *>> windowTextures)
+{
+  for (auto texture : windowTextures)
+  {
+    SDL_RenderCopy(m_renderer, texture.second, nullptr, &(texture.first));
+  }
 }
