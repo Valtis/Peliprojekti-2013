@@ -4,7 +4,7 @@
 #include "Utility/StringUtility.h"
 #include <fstream>
 #include <memory>
-
+class Sprite;
 struct SpriteDataFileLine
 {
   int x;
