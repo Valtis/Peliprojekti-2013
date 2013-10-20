@@ -16,10 +16,19 @@
     <ClInclude Include="include\Entity\Entity.h" />
     <ClInclude Include="include\Entity\EntityParent.h" />
     <ClInclude Include="include\Game.h" />
+    <ClInclude Include="include\Graphics\FontManager.h" />
+    <ClInclude Include="include\Graphics\Renderer.h" />
+    <ClInclude Include="include\Graphics\Sprite.h" />
+    <ClInclude Include="include\Graphics\SpriteLoader.h" />
+    <ClInclude Include="include\Graphics\SpriteManager.h" />
+    <ClInclude Include="include\Graphics\SpriteSheetLoader.h" />
     <ClInclude Include="include\Level\Level.h" />
     <ClInclude Include="include\Level\LevelManager.h" />
+    <ClInclude Include="include\Message\Commands\Command.h" />
+    <ClInclude Include="include\Message\Commands\MouseCommand.h" />
     <ClInclude Include="include\Message\Message.h" />
     <ClInclude Include="include\Message\MessageProcessor.h" />
+    <ClInclude Include="include\UI\InputManager.h" />
     <ClInclude Include="include\UI\Window\Button.h" />
     <ClInclude Include="include\UI\Window\ButtonHandler.h" />
     <ClInclude Include="include\UI\Window\Window.h" />
@@ -28,6 +37,7 @@
     <ClInclude Include="include\Utility\Logger.h" />
     <ClInclude Include="include\Utility\LoggerManager.h" />
     <ClInclude Include="include\Utility\Logs.h" />
+    <ClInclude Include="include\Utility\StringUtility.h" />
     <ClInclude Include="include\Utility\Tick.h" />
   </ItemGroup>
   <ItemGroup>
@@ -36,16 +46,24 @@
     <ClCompile Include="src\Component\Component.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\Graphics\FontManager.cpp" />
+    <ClCompile Include="src\Graphics\Renderer.cpp" />
+    <ClCompile Include="src\Graphics\Sprite.cpp" />
+    <ClCompile Include="src\Graphics\SpriteLoader.cpp" />
+    <ClCompile Include="src\Graphics\SpriteManager.cpp" />
+    <ClCompile Include="src\Graphics\SpriteSheetLoader.cpp" />
     <ClCompile Include="src\Level\Level.cpp" />
     <ClCompile Include="src\Level\LevelManager.cpp" />
     <ClCompile Include="src\Message\Message.cpp" />
     <ClCompile Include="src\Message\MessageProcessor.cpp" />
+    <ClCompile Include="src\UI\InputManager.cpp" />
     <ClCompile Include="src\UI\Window\Button.cpp" />
     <ClCompile Include="src\UI\Window\Window.cpp" />
     <ClCompile Include="src\UI\Window\WindowBase.cpp" />
     <ClCompile Include="src\UI\Window\WindowManager.cpp" />
     <ClCompile Include="src\Utility\Logger.cpp" />
     <ClCompile Include="src\Utility\LoggerManager.cpp" />
+    <ClCompile Include="src\Utility\StringUtility.cpp" />
     <ClCompile Include="src\Utility\Tick.cpp" />
   </ItemGroup>
   <ItemGroup>

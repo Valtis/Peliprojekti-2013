@@ -58,8 +58,20 @@
     <Filter Include="Source Files\UI">
       <UniqueIdentifier>{b076f4fe-8f92-4323-bf11-7ed03a1a158c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\UI\WindowBase">
+    <Filter Include="Header Files\Message\Commands">
+      <UniqueIdentifier>{75845b45-4fe5-416e-b7cb-a99280944fa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Message\Commands">
+      <UniqueIdentifier>{75c2a348-81e7-4a91-abbb-442806d5d6f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI\Window">
       <UniqueIdentifier>{918d95ef-65de-4c14-a1bd-9384211551ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics">
+      <UniqueIdentifier>{84063ab8-7a39-4f4d-b0f5-6cb856ceb9e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{1213c9b2-bb69-4788-b2c1-c2388297c444}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +129,36 @@
     <ClInclude Include="include\Utility\Logs.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="include\Message\Commands\Command.h">
+      <Filter>Header Files\Message\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\Commands\MouseCommand.h">
+      <Filter>Header Files\Message\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UI\InputManager.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\FontManager.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Renderer.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\SpriteManager.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\StringUtility.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Sprite.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\SpriteLoader.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\SpriteSheetLoader.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -156,16 +198,40 @@
       <Filter>Source Files\Collision</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\Window\WindowBase.cpp">
-      <Filter>Source Files\UI\WindowBase</Filter>
+      <Filter>Source Files\UI\Window</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\Window\Button.cpp">
-      <Filter>Source Files\UI\WindowBase</Filter>
+      <Filter>Source Files\UI\Window</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\Window\WindowManager.cpp">
-      <Filter>Source Files\UI\WindowBase</Filter>
+      <Filter>Source Files\UI\Window</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\Window\Window.cpp">
-      <Filter>Source Files\UI\WindowBase</Filter>
+      <Filter>Source Files\UI\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\InputManager.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\FontManager.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Renderer.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\SpriteManager.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utility\StringUtility.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Sprite.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\SpriteLoader.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\SpriteSheetLoader.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
