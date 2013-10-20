@@ -28,6 +28,11 @@ void SpriteManager::Initialize(Renderer *renderer, std::string datafilePath)
 void SpriteManager::LoadSpriteSheets(Renderer *renderer, std::string datafilePath)
 {
   SpriteSheetLoader loader;
+  for (auto spritesheet : m_spriteSheets)
+  {
+    SDL_DestroyTexture(spritesheet.second);
+  }
+
   m_spriteSheets = loader.LoadSpriteSheets(renderer, datafilePath);
 }
 
