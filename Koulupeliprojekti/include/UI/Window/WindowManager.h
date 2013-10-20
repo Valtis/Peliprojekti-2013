@@ -3,12 +3,15 @@
 #include <deque>
 #include <SDL.h>
 #include <functional>
+
 class Window;
 class Command;
+
 class WindowManager
 {
 public:
   WindowManager();
+  ~WindowManager();
   bool HandleInput(Command *command);
   const std::deque<std::unique_ptr<Window>> &GetWindows() { return m_windows; }
 private:

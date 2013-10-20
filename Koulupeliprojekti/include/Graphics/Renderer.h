@@ -19,11 +19,8 @@ class Sprite;
 class Renderer
 {
 public:
-
+  Renderer();
   virtual ~Renderer();
-
-  static Renderer &Instance();
-  static void Release();
 
   SDL_Renderer *GetRenderingContext() { return m_renderer; }
   void LoadSprites(std::string datafilePath);
@@ -36,9 +33,7 @@ public:
 
 protected:
 private:
-
-  static Renderer *mInstance;
-  Renderer();
+  
 
   void ClearScreen();
   void DrawEntities(Camera *camera, const std::vector<std::unique_ptr<Entity>> &entities);

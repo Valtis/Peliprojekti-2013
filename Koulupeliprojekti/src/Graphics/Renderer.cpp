@@ -8,9 +8,6 @@
 #include <string>
 #include <algorithm>
 
-Renderer *Renderer::mInstance = nullptr;
-
-
 Renderer::Renderer()
 {
 
@@ -23,21 +20,6 @@ Renderer::~Renderer()
 }
 
 
-Renderer &Renderer::Instance()
-{
-  if (mInstance == nullptr)
-  {
-    mInstance = new Renderer();
-  }
-
-  return *mInstance;
-}
-
-void Renderer::Release()
-{
-  delete mInstance;
-  mInstance = nullptr;
-}
 
 void Renderer::CreateWindow(std::string title, int width, int height)
 {
@@ -56,7 +38,7 @@ void Renderer::CreateWindow(std::string title, int width, int height)
 
 void Renderer::LoadSprites(std::string datafilePath)
 {
-  m_spriteManager.Initialize(datafilePath);
+  m_spriteManager.Initialize(this, datafilePath);
 }
 
 void Renderer::Draw(Camera *camera, const std::vector<std::unique_ptr<Entity>> &entities, const std::deque<std::unique_ptr<Window>> &windows)

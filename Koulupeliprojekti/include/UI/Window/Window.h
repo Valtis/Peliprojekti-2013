@@ -5,6 +5,7 @@ class Window : public WindowBase
 {
 public:
   Window();
+  ~Window();
 private:
   std::string title;
 };

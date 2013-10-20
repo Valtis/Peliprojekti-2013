@@ -5,8 +5,8 @@
 #include <memory>
 #include <SDL.h>
 
-#include "Graphics/Sprite.h"
-
+class Sprite;
+class Renderer;
 class SpriteManager
 {
 public:
@@ -14,7 +14,7 @@ public:
   ~SpriteManager();
 
 
-  void Initialize(std::string datafilePath);
+  void Initialize(Renderer *renderer, std::string datafilePath);
 
   Sprite *GetSprite(int id);
 
@@ -23,7 +23,7 @@ public:
 
 private:
 
-  void LoadSpriteSheets(std::string datafilePath);
+  void LoadSpriteSheets(Renderer *renderer, std::string datafilePath);
   void LoadSprites(std::string datafilePath);
 
   std::unordered_map<int, std::unique_ptr<Sprite>> m_sprites;

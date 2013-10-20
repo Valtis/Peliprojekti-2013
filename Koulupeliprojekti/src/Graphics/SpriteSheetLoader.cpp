@@ -1,15 +1,22 @@
 #include "Graphics/SpriteSheetLoader.h"
 #include "Graphics/Renderer.h"
 #include "Utility/StringUtility.h"
+#include "Utility/LoggerManager.h"
 #include <fstream>
 
-std::unordered_map<int, SDL_Texture *> SpriteSheetLoader::LoadSpriteSheets(std::string datafilePath)
+std::unordered_map<int, SDL_Texture *> SpriteSheetLoader::LoadSpriteSheets(Renderer *renderer, std::string datafilePath)
 {
   std::vector<std::pair<int, std::string>> spriteSheets = LoadSpriteSheetDetails(datafilePath);
   std::unordered_map<int, SDL_Texture *> textures;
   for (const auto &sheet : spriteSheets)
   {
-    textures[sheet.first] = LoadSpriteSheet(sheet);
+    if (textures.count(sheet.first) != 0)
+    {
+      LoggerManager::GetLog(GRAPHICS_LOG).AddLine(LogLevel::WARNING, "Sprite sheet with id " + std::to_string(sheet.first) + " already exists - skipping"  );
+      continue;
+    }
+
+    textures[sheet.first] = LoadSpriteSheet(renderer, sheet);
   }
 
   return textures;
@@ -37,7 +44,7 @@ std::pair<int, std::string> SpriteSheetLoader::ParseSpriteSheetLine(std::string 
   return std::make_pair(std::stoi(tokens[1]), datafilePath + tokens[0]);
 }
 
-SDL_Texture *SpriteSheetLoader::LoadSpriteSheet(std::pair<int, std::string> sheet)
+SDL_Texture *SpriteSheetLoader::LoadSpriteSheet(Renderer *renderer, std::pair<int, std::string> sheet)
 {
   SDL_Surface *spriteSheetSurface = SDL_LoadBMP(sheet.second.c_str());
 
@@ -47,7 +54,7 @@ SDL_Texture *SpriteSheetLoader::LoadSpriteSheet(std::pair<int, std::string> shee
   }
 
   SDL_SetColorKey(spriteSheetSurface, true, SDL_MapRGB(spriteSheetSurface->format, 255, 255, 255));
-  SDL_Texture *texture = SDL_CreateTextureFromSurface(Renderer::Instance().GetRenderingContext(), spriteSheetSurface);
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer->GetRenderingContext(), spriteSheetSurface);
   SDL_FreeSurface(spriteSheetSurface);
 
   if (texture == nullptr)

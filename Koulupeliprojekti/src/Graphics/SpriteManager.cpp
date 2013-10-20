@@ -2,7 +2,7 @@
 #include "Graphics/SpriteManager.h"
 #include "Graphics/SpriteSheetLoader.h"
 #include "Graphics/SpriteLoader.h"
-
+#include "Graphics/Sprite.h"
 
 SpriteManager::SpriteManager()
 {
@@ -19,16 +19,16 @@ SpriteManager::~SpriteManager()
   m_spriteSheets.clear();
 }
 
-void SpriteManager::Initialize(std::string datafilePath)
+void SpriteManager::Initialize(Renderer *renderer, std::string datafilePath)
 {
-  LoadSpriteSheets(datafilePath);
+  LoadSpriteSheets(renderer, datafilePath);
   LoadSprites(datafilePath);
 }
 
-void SpriteManager::LoadSpriteSheets(std::string datafilePath)
+void SpriteManager::LoadSpriteSheets(Renderer *renderer, std::string datafilePath)
 {
   SpriteSheetLoader loader;
-  m_spriteSheets = loader.LoadSpriteSheets(datafilePath);
+  m_spriteSheets = loader.LoadSpriteSheets(renderer, datafilePath);
 }
 
 void SpriteManager::LoadSprites(std::string datafilePath)

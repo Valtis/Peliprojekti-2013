@@ -7,6 +7,11 @@ WindowManager::WindowManager() : m_leftButtonDown(false)
 
 }
 
+WindowManager::~WindowManager()
+{
+
+}
+
 
 bool WindowManager::HandleInput(Command *command)
 {
