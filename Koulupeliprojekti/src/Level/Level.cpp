@@ -32,3 +32,9 @@ void Level::Update(double ticksPassed)
     entity->Update(ticksPassed);
   }
 }
+
+
+const std::vector<std::unique_ptr<Entity>> &Level::GetEntities()
+{
+  return m_Entities;
+}

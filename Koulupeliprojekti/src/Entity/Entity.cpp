@@ -1,5 +1,15 @@
 #include "Entity/Entity.h"
 
+Entity::Entity()
+{
+
+}
+
+Entity::~Entity()
+{
+
+}
+
 void Entity::RegisterMessageHandler(MessageType type, Priority priority, MessageCallback callback)
 {
   m_messageProcessor.RegisterMessageHandler(type, priority, callback);

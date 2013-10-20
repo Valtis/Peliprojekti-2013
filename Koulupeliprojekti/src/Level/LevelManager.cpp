@@ -1,8 +1,8 @@
 #include "Level/LevelManager.h"
 #include "Level/Level.h"
 #include <stdexcept>
-
-LevelManager::LevelManager() : m_currentLevel(-1)
+const int NO_ACTIVE_LEVEL = -1;
+LevelManager::LevelManager() : m_currentLevel(NO_ACTIVE_LEVEL)
 {
 
 }
@@ -24,10 +24,15 @@ void LevelManager::SetCurrentLevel(int level)
 
 void LevelManager::Update(double ticksPassed)
 {
-  if (m_currentLevel == -1)
+  if (m_currentLevel == NO_ACTIVE_LEVEL)
   {
     return;
   }
 
   m_levels[m_currentLevel]->Update(ticksPassed);
+}
+
+Level *LevelManager::GetCurrentLevel()
+{
+  return m_levels[m_currentLevel].get();
 }

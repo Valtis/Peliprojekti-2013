@@ -7,6 +7,8 @@
 class EntityParent
 {
 public:
+  EntityParent() { }
+  virtual ~EntityParent() { }
   virtual void SendMessage(Message *message) = 0;
   virtual void RegisterMessageHandler(MessageType type, Priority priority, MessageCallback callback) = 0;
 

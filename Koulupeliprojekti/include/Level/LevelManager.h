@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
-
+#include "Entity/Entity.h"
 class Level;
 class LevelManager
 {
@@ -9,7 +9,7 @@ public:
   LevelManager();
   ~LevelManager();
   void Update(double ticksPassed);
-  
+  Level *GetCurrentLevel();
   void SetCurrentLevel(int level);
 
 private:

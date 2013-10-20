@@ -1,5 +1,5 @@
 #include "Game.h"
-
+#include "Level/Level.h"
 Game::Game() : m_gameTick(30), m_drawTick(30)
 {
 }
@@ -39,6 +39,6 @@ void Game::Draw()
 {
   if (m_drawTick.TickHasPassed())
   {
- 
+    m_renderer.Draw(nullptr, m_levelManager.GetCurrentLevel()->GetEntities(), m_windowManager.GetWindows());
   }
 }

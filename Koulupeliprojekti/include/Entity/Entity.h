@@ -8,6 +8,8 @@ class Entity : public EntityParent
 {
 
 public:
+  Entity();
+  ~Entity();
   void SendMessage(Message *message) override;
   void RegisterMessageHandler(MessageType type, Priority priority, MessageCallback callback) override;
   void SendMessageToParent(Message *message); 
