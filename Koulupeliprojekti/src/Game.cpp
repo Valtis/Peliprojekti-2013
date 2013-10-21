@@ -57,9 +57,10 @@ void Game::Initialize()
   window->Activate();
   m_inputManager.Initialize();
 
-  location.w = 100;
-  location.h = 50;
+  location.w = 80;
+  location.h = 30;
   std::unique_ptr<Button> button(new Button(location, "text", &m_renderer));
+  button->AddHandler(this);
   window->AddWindow(std::move(button));
 
   m_windowManager.AddWindow(std::move(window));
@@ -87,6 +88,12 @@ void Game::HandleInput() {
      }
      m_inputManager.HandleInput(event);
   }
+}
+
+// for testing only - can be removed!
+void Game::OnButtonClick()
+{
+  m_running = false;
 }
 
 

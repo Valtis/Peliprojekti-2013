@@ -3,7 +3,8 @@
 class ButtonHandler 
 {
 public:
-  virtual ~ButtonHandler();
+
+  virtual ~ButtonHandler() { }
 
   virtual void OnButtonClick() = 0;
 
