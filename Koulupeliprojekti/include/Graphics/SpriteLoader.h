@@ -22,7 +22,7 @@ class SpriteLoader
 public:
   SpriteLoader() { }
   ~SpriteLoader() { }
-  std::vector<std::unique_ptr<Sprite>> SpriteLoader::LoadSprites(std::string datafilePath);
+  std::vector<std::unique_ptr<Sprite>> LoadSprites(std::string datafilePath);
 
 private:
 

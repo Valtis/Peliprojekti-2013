@@ -1,27 +1,35 @@
 #include <utility>
 #include <vector>
 #include "UI/InputManager.h"
-#include "UI/Controller/Controller.h"
+#include "UI/Controller/KeyboardController.h"
+#include "UI/Controller/MouseController.h"
 
 InputManager::InputManager()
 {
+AddController(new MouseController());
+AddController(new KeyboardController());
 }
 
 InputManager::~InputManager()
 {
 }
 
-void InputManager::HandleInput()
+void InputManager::HandleInput(const SDL_Event& event)
 {
 	for(auto const mController : mControllers)
 	{
-		Command* command = mController->HandleInput();
+		Command* command = mController->HandleInput(event);
 		if (command != nullptr)
+		{
 			for (auto handler : mInputHandlers)
 			{
-				if( !handler.second(command) )
+				if( handler.second(command) )
+				{
 					break;
+				}
 			}
+			delete command;
+		}
 	}
 }
 

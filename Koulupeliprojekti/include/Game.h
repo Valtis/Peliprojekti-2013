@@ -28,6 +28,7 @@ private:
   Renderer m_renderer;
   Tick m_gameTick;
   Tick m_drawTick;
+  bool m_running;
  
 };
 

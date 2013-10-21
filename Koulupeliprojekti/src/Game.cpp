@@ -23,25 +23,10 @@ void Game::Run()
 
 
 
-  while (true)
+  while (m_running)
   {
-    m_inputManager.HandleInput();
     UpdateGameState();
     Draw();
-
-
-    SDL_Event event;
-
-    while (SDL_PollEvent(&event))
-    {
-
-
-      if (event.type == SDL_MOUSEMOTION || event.type ==  SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP)
-      {
-        MouseCommand cmd(event);
-        m_windowManager.HandleInput(&cmd);
-      }
-    } 
   }
 }
 
@@ -70,6 +55,7 @@ void Game::Initialize()
   std::unique_ptr<Window> window(new Window(location, color, &m_renderer));
 
   m_windowManager.AddWindow(std::move(window));
+  m_inputManager.RegisterInputHandler([&](Command* cmd) { return this->m_windowManager.HandleInput(cmd); }, 1);
 
 }
 
@@ -77,18 +63,30 @@ void Game::UpdateGameState()
 {
   if (m_gameTick.TickHasPassed())
   {
-    m_inputManager.HandleInput();
+    HandleInput();
     m_levelManager.Update(m_gameTick.TicksPassed());
   }
 }
 
+void Game::HandleInput() {
+  SDL_Event event;
+  while (SDL_PollEvent(&event))
+  {
+     if (event.type == SDL_QUIT)
+     {
+       m_running = false;
+       return;
+     }
+     m_inputManager.HandleInput(event);
+  }
+}
 
 
 void Game::Draw()
 {
   if (m_drawTick.TickHasPassed())
   {
-    // m_renderer.Draw(nullptr, m_levelManager.GetCurrentLevel()->GetEntities(), m_windowManager.GetWindows());
+//     m_renderer.Draw(nullptr, m_levelManager.GetCurrentLevel()->GetEntities(), m_windowManager.GetWindows());
     std::vector<std::unique_ptr<Entity>> e;
     m_renderer.Draw(nullptr, e, m_windowManager.GetWindows());
   }

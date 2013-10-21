@@ -2,6 +2,7 @@
 #include <utility>
 #include <vector>
 #include <functional>
+#include <SDL.h>
 #include "UI/Controller/Controller.h"
 
 class InputManager
@@ -11,7 +12,7 @@ public:
 	~InputManager();
 	typedef std::function<bool(Command* command)> InputHandler;
 	typedef std::pair<int, InputHandler> InputHandlerNode;
-	void HandleInput();
+	void HandleInput(const SDL_Event& event);
 	void AddController(Controller* controller);
 	void RegisterInputHandler(InputHandler, int priority);
 private:
