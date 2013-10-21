@@ -2,7 +2,7 @@
 #include "UI/Window/Window.h"
 #include "Message/Commands/MouseCommand.h"
 #include "Utility/LoggerManager.h"
-WindowManager::WindowManager() : m_leftButtonDown(false)
+WindowManager::WindowManager() : m_leftButtonDown(false), m_isDragging(false)
 {
 
 }
@@ -51,12 +51,25 @@ bool  WindowManager::HandleEvent(const SDL_Event &event)
 
 bool  WindowManager::HandleMouseMotion(const SDL_Event &event)
 {
-  if (!m_leftButtonDown)
+  if (!m_leftButtonDown || m_windows.empty())
   {
     return true;
   }
+  
+  if (!m_isDragging && GetWindowUnderCoordinates(event.motion.x, event.motion.y) != nullptr)
+  {
+    m_isDragging = true;;
+  }
+  
+  if (m_isDragging)
+  {
+    m_windows[0]->OnDrag(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
+    return false;
+  }
 
-  return NotifyWindowUnderCursorOnEvent([=](Window *window) { window->OnDrag(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel); }, event.motion.x, event.motion.y);
+  return true;
+
+  return NotifyWindowUnderCursorOnEvent([=](Window *window) { window-> }, event.motion.x, event.motion.y);
 }
 
 bool WindowManager::HandleDownButton(const SDL_Event &event)
@@ -74,6 +87,7 @@ bool  WindowManager::HandleUpButton(const SDL_Event &event)
   if (event.button.button == SDL_BUTTON_LEFT)
   {
     m_leftButtonDown = false;
+    m_isDragging = false;
   }
 
   return NotifyWindowUnderCursorOnEvent([=](Window *window) { window->OnMouseButtonUp(event.button.button, event.button.x, event.button.y ); }, event.button.x, event.button.y);

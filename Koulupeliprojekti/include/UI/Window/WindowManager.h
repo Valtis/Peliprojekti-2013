@@ -26,4 +26,5 @@ private:
   void UpdateActiveWindow(int cursorX, int cursorY);
   std::deque<std::unique_ptr<Window>> m_windows;
   bool m_leftButtonDown;
+  bool m_isDragging;
 };

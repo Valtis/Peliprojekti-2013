@@ -180,6 +180,9 @@
     <ClInclude Include="include\Component\LocationComponent.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="include\Message\Commands\KeyboardCommand.h">
+      <Filter>Header Files\Message\Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -265,6 +268,9 @@
     </ClCompile>
     <ClCompile Include="src\Component\LocationComponent.cpp">
       <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Message\Commands\KeyboardCommand.cpp">
+      <Filter>Source Files\Message\Commands</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
