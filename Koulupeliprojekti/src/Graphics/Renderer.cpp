@@ -66,6 +66,10 @@ void Renderer::DrawWindows(const std::deque<std::unique_ptr<Window>> &windows)
 {
   for (auto iter = windows.rbegin(); iter != windows.rend(); ++iter)
   {
+    if (!(*iter)->IsActive())
+    {
+      continue;
+    }
     DrawWindow((*iter)->GetTextures());
   }
 }
