@@ -6,22 +6,26 @@
 
 InputManager::InputManager()
 {
-AddController(new MouseController());
-AddController(new KeyboardController());
 }
 
 InputManager::~InputManager()
 {
 }
 
-void InputManager::HandleInput(const SDL_Event& event)
+void InputManager::Initialize()
+{
+	AddController(new MouseController());
+	AddController(new KeyboardController());
+}
+
+void InputManager::HandleInput(const SDL_Event& event) const
 {
 	for(auto const mController : mControllers)
 	{
 		Command* command = mController->HandleInput(event);
 		if (command != nullptr)
 		{
-			for (auto handler : mInputHandlers)
+			for (const auto handler : mInputHandlers)
 			{
 				if( handler.second(command) )
 				{
