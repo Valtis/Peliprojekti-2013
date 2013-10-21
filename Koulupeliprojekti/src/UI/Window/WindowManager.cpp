@@ -68,8 +68,6 @@ bool  WindowManager::HandleMouseMotion(const SDL_Event &event)
   }
 
   return true;
-
-  return NotifyWindowUnderCursorOnEvent([=](Window *window) { window-> }, event.motion.x, event.motion.y);
 }
 
 bool WindowManager::HandleDownButton(const SDL_Event &event)

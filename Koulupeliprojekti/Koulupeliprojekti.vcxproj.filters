@@ -183,6 +183,9 @@
     <ClInclude Include="include\Message\Commands\KeyboardCommand.h">
       <Filter>Header Files\Message\Commands</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\TextureFactory.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -271,6 +274,9 @@
     </ClCompile>
     <ClCompile Include="src\Message\Commands\KeyboardCommand.cpp">
       <Filter>Source Files\Message\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\TextureFactory.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
