@@ -6,7 +6,7 @@ class Renderer;
 class Window : public WindowBase
 {
 public:
-  Window();
+
   Window(SDL_Rect location, SDL_Color color, Renderer *renderer);
   ~Window();
 private:

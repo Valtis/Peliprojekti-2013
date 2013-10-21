@@ -5,6 +5,7 @@
 #include "Entity/Entity.h"
 // for testing purposes - testing windows -  feel free to remove
 #include "UI/Window/Window.h"
+#include "UI/Window/Button.h"
 #include "Message/Commands/MouseCommand.h"
 
 Game::Game() : m_gameTick(30), m_drawTick(30)
@@ -55,6 +56,11 @@ void Game::Initialize()
   std::unique_ptr<Window> window(new Window(location, color, &m_renderer));
   window->Activate();
   m_inputManager.Initialize();
+
+  location.w = 100;
+  location.h = 100;
+  std::unique_ptr<Button> button(new Button(location, "text", &m_renderer));
+  window->AddWindow(std::move(button));
 
   m_windowManager.AddWindow(std::move(window));
   m_inputManager.RegisterInputHandler([&](Command* cmd) { return m_windowManager.HandleInput(cmd); }, 10);

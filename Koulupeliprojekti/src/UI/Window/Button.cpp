@@ -1,8 +1,9 @@
 #include "UI/Window/Button.h"
-
-Button::Button()
+#include "Graphics/TextureFactory.h"
+Button::Button(SDL_Rect location, std::string text, Renderer *renderer) : m_text(text)
 {
-  // initialize graphics 
+  SetRect(location);
+  SetTexture(TextureFactory::CreateButton(location.w, location.h, renderer));
 }
 
 Button::~Button()

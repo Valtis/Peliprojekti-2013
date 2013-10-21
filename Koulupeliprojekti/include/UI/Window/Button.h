@@ -2,10 +2,12 @@
 #include "WindowBase.h"
 #include "UI/Window/ButtonHandler.h"
 #include <string>
+
+class Renderer;
 class Button : public WindowBase
 {
 public:
-  Button();
+  Button(SDL_Rect location, std::string text, Renderer *renderer);
   ~Button();
   void AddHandler(ButtonHandler *handler) { m_handlers.push_back(handler); }
   void OnMouseButtonUp(Uint8 button, int x, int y) override;

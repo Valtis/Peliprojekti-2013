@@ -39,10 +39,24 @@ void ColorArea(SDL_Rect rect, SDL_Color color, SDL_Surface *surface)
   }
 }
 
+SDL_Surface *CreateSurface(int width, int height)
+{
+  auto surface =  SDL_CreateRGBSurface(0, width, height, 32, RMASK, GMASK, BMASK, AMASK);
+  SDL_assert_release(surface != nullptr);
+  return surface;
+}
+
+SDL_Texture *CreateTexture( Renderer * renderer, SDL_Surface * surface )
+{
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer->GetRenderingContext(), surface);
+  SDL_assert_release(texture != nullptr);
+  SDL_FreeSurface(surface);
+  return texture;
+}
+
 SDL_Texture *TextureFactory::CreateWindowTexture(int width, int height, SDL_Color color, Renderer *renderer)
 {
-  SDL_Surface *surface = SDL_CreateRGBSurface(0, width, height, 32, RMASK, GMASK, BMASK, AMASK);
-  SDL_assert_release(surface != nullptr);
+  SDL_Surface *surface = CreateSurface(width, height);
   SDL_Rect rect = { 0, 0, width, height};
 
   ColorArea(rect, color, surface);
@@ -50,9 +64,19 @@ SDL_Texture *TextureFactory::CreateWindowTexture(int width, int height, SDL_Colo
   SDL_Color red = { 255, 0, 0, 255 };
   DrawBox(rect, red, surface);
 
-  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer->GetRenderingContext(), surface);
-  SDL_assert_release(texture != nullptr);
-
-  SDL_FreeSurface(surface);
-  return texture;
+  return CreateTexture(renderer, surface);
 }
+
+SDL_Texture *TextureFactory::CreateButton(int width, int height, Renderer *renderer)
+{
+  SDL_Surface *surface = CreateSurface(width, height);
+  SDL_Rect rect = { 0, 0, width, height };
+  SDL_Color color = { 195, 195, 195, 255};
+  
+  ColorArea(rect, color, surface);
+  
+  
+  return CreateTexture(renderer, surface);
+}
+
+
