@@ -2,36 +2,28 @@
 #include "UI/Controller/KeyboardController.h"
 #include "Message/Commands/KeyboardCommand.h"
 
-Command* KeyboardController::HandleInput(SDL_Event event) const
+KeyboardController::KeyboardController(bool active) : Controller(active)
 {
+	LoadBinds();
+}
+Command* KeyboardController::HandleInput(SDL_Event event)
+{
+	Command* cmd = nullptr;
 	if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
 	{
 		bool state = (event.type == SDL_KEYDOWN);
-		Command* cmd = nullptr;
-		switch (event.key.keysym.sym)
-		{
-		case SDLK_LEFT:
-			cmd = new KeyboardCommand(KeyCommand::LEFT,state);
-			break;
-		case SDLK_RIGHT:
-			cmd = new KeyboardCommand(KeyCommand::RIGHT,state);
-			break;
-		case SDLK_UP:
-			cmd = new KeyboardCommand(KeyCommand::UP,state);
-			break;
-		case SDLK_DOWN:
-			cmd = new KeyboardCommand(KeyCommand::DOWN,state);
-			break;
-		case SDLK_SPACE:
-			cmd = new KeyboardCommand(KeyCommand::JUMP,state);
-			break;
-		case SDLK_ESCAPE:
-			cmd = new KeyboardCommand(KeyCommand::EXIT,state);
-		};
-		return cmd;
+		SDL_Keycode key = event.key.keysym.sym;
+		if (m_binds.count(key))
+			cmd = new KeyboardCommand(m_binds[key],state);
 	}
-	else
-	{
-		return nullptr;
-	}
+	return cmd;
+}
+void KeyboardController::LoadBinds()
+{
+	m_binds[SDLK_DOWN] = Action::DOWN;
+	m_binds[SDLK_UP] = Action::UP;
+	m_binds[SDLK_LEFT] = Action::LEFT;
+	m_binds[SDLK_RIGHT] = Action::RIGHT;
+	m_binds[SDLK_SPACE] = Action::JUMP;
+	m_binds[SDLK_ESCAPE] = Action::EXIT;
 }

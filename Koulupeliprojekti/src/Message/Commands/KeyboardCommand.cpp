@@ -2,7 +2,7 @@
 #include "Message/Message.h"
 #include "Message/Commands/KeyboardCommand.h"
 
-KeyboardCommand::KeyboardCommand(KeyCommand cmd, bool state) : m_command(cmd),m_state(state)
+KeyboardCommand::KeyboardCommand(Action cmd, bool state) : m_command(cmd),m_state(state)
 {
 }
 
@@ -16,7 +16,7 @@ bool KeyboardCommand::GetState() const
 	return m_state;
 }
 
-KeyCommand KeyboardCommand::GetCommand() const
+Action KeyboardCommand::GetCommand() const
 {
 	return m_command;
 }

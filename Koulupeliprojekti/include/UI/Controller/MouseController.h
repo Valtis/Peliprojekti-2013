@@ -8,5 +8,5 @@
 class MouseController : public Controller
 {
 public:
-	Command* HandleInput(SDL_Event event) const override;
+	Command* HandleInput(SDL_Event event) override;
 };
