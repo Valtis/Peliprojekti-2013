@@ -15,15 +15,15 @@
 
 void DrawBox(SDL_Rect rect, SDL_Color color, SDL_Surface *surface)
 {
-  for (int i = 0; i < rect.w; ++i)
+  for (int i = rect.x; i < rect.w; ++i)
   {
-    SetColor(i, 0, color, surface);
+    SetColor(i, rect.y, color, surface);
     SetColor(i, rect.h - 1, color, surface);
   }
 
-  for (int i = 0; i < rect.h; ++i)
+  for (int i = rect.y; i < rect.h; ++i)
   {
-    SetColor(0, i, color, surface);
+    SetColor(rect.x, i, color, surface);
     SetColor(rect.w - 1, i, color, surface);
   }
 }
@@ -69,12 +69,41 @@ SDL_Texture *TextureFactory::CreateWindowTexture(int width, int height, SDL_Colo
 
 SDL_Texture *TextureFactory::CreateButton(int width, int height, Renderer *renderer)
 {
+  if (width < 2 || height < 2)
+  {
+    throw std::runtime_error("Button size too small for texture creation!");
+  }
   SDL_Surface *surface = CreateSurface(width, height);
+  
   SDL_Rect rect = { 0, 0, width, height };
   SDL_Color color = { 195, 195, 195, 255};
-  
+  ColorArea(rect, color, surface);
+
+  rect.y = height/2;
+  color.r = 177;
+  color.g = 177;
+  color.b = 177;
+
   ColorArea(rect, color, surface);
   
+
+  color.r = 0;
+  color.g = 0;
+  color.b = 0;
+
+  rect.y = 0;
+
+  DrawBox(rect, color, surface);
+
+  rect.x = 1;
+  rect.y = 1;
+  rect.w--;
+  rect.h--;
+
+  color.r = 214;
+  color.g = 214;
+  color.b = 214;
+  DrawBox(rect, color, surface);
   
   return CreateTexture(renderer, surface);
 }

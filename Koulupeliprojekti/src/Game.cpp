@@ -58,7 +58,7 @@ void Game::Initialize()
   m_inputManager.Initialize();
 
   location.w = 100;
-  location.h = 100;
+  location.h = 50;
   std::unique_ptr<Button> button(new Button(location, "text", &m_renderer));
   window->AddWindow(std::move(button));
 
