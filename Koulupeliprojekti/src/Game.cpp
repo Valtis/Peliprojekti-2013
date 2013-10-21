@@ -53,11 +53,11 @@ void Game::Initialize()
   color.b = 248;
   color.a = 255;
   std::unique_ptr<Window> window(new Window(location, color, &m_renderer));
-
+  window->Activate();
   m_inputManager.Initialize();
 
   m_windowManager.AddWindow(std::move(window));
-  m_inputManager.RegisterInputHandler([&](Command* cmd) { return this->m_windowManager.HandleInput(cmd); }, 1);
+  m_inputManager.RegisterInputHandler([&](Command* cmd) { return m_windowManager.HandleInput(cmd); }, 1);
 
 }
 

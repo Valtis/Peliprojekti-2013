@@ -110,7 +110,7 @@ bool WindowManager::NotifyWindowUnderCursorOnEvent(std::function<void(Window *)>
 Window *WindowManager::GetWindowUnderCoordinates(int x, int y)
 {
   UpdateActiveWindow(x, y);
-  if (m_windows.size() > 0 && 
+  if (m_windows.size() > 0 && m_windows[0]->IsActive() &&
     m_windows.front()->GetX() < x && m_windows.front()->GetX() + m_windows.front()->GetWidth() >= x &&
     m_windows.front()->GetY() < y && m_windows.front()->GetY() + m_windows.front()->GetHeight() >= y
     )
@@ -124,6 +124,10 @@ void WindowManager::UpdateActiveWindow(int x, int y)
 {
   for (auto iter= m_windows.begin();  iter != m_windows.end(); ++iter)
   {
+    if (!(*iter)->IsActive())
+    {
+      continue;
+    }
     if ((*iter)->GetX() < x && (*iter)->GetX() + (*iter)->GetWidth() >= x &&
       (*iter)->GetY() < y && (*iter)->GetY() + (*iter)->GetHeight() >= y)
     {
