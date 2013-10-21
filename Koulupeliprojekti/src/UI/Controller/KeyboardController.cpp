@@ -3,11 +3,7 @@
 #include "UI/Controller/KeyboardController.h"
 #include "Message/Commands/KeyboardCommand.h"
 
-KeyboardController::KeyboardController()
-{
-}
-
-Command* KeyboardController::HandleInput(SDL_Event event)
+Command* KeyboardController::HandleInput(SDL_Event event) const
 {
 	if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
 		return new KeyboardCommand(event);

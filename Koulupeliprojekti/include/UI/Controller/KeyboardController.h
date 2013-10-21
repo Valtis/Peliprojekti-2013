@@ -7,6 +7,5 @@
 class KeyboardController : public Controller
 {
 public:
-	KeyboardController();
-	Command* HandleInput(SDL_Event event) override;
+	Command* HandleInput(SDL_Event event) const override;
 };
