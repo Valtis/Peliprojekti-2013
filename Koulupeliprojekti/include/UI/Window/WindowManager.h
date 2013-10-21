@@ -3,8 +3,7 @@
 #include <deque>
 #include <SDL.h>
 #include <functional>
-
-class Window;
+#include "UI/Window/Window.h"
 class Command;
 
 class WindowManager
@@ -13,6 +12,8 @@ public:
   WindowManager();
   ~WindowManager();
   bool HandleInput(Command *command);
+
+  void AddWindow(std::unique_ptr<Window> window) { m_windows.push_back(std::move(window)); }
   const std::deque<std::unique_ptr<Window>> &GetWindows() { return m_windows; }
 private:
   bool HandleEvent(const SDL_Event &event);

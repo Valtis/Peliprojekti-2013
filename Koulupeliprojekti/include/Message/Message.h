@@ -1,6 +1,6 @@
 #pragma once
 
-enum class MessageType : int { NONE };
+enum class MessageType : int { NONE, MOUSE_COMMAND };
 #include <functional>
 
 

@@ -15,12 +15,12 @@ WindowManager::~WindowManager()
 
 bool WindowManager::HandleInput(Command *command)
 {
-  MouseCommand *mouseCommand = dynamic_cast<MouseCommand *>(command);
-  if (mouseCommand == nullptr)
+  if (command == nullptr || command->GetType() != MessageType::MOUSE_COMMAND)
   {
     return true;
   }
 
+  MouseCommand *mouseCommand = static_cast<MouseCommand *>(command);
   return HandleEvent(mouseCommand->GetEvent());
 
 

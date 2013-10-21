@@ -1,6 +1,6 @@
 #include "Utility/Tick.h"
 
-Tick::Tick( Uint32 tickLength ) : m_lastTick(SDL_GetTicks()), m_lastTickLength(0), m_tickLength(tickLength)
+Tick::Tick( Uint32 tickLength ) : m_lastTick(0), m_lastTickLength(0), m_tickLength(tickLength)
 {
 
 }

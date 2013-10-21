@@ -168,6 +168,9 @@
     <ClInclude Include="include\UI\Controller\Controller.h">
       <Filter>Header Files\UI\Controller</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\SurfaceOperations.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -240,6 +243,9 @@
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\SpriteSheetLoader.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\SurfaceOperations.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>

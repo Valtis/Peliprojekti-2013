@@ -1,6 +1,6 @@
 #include "UI/Window/WindowBase.h"
-
-WindowBase::WindowBase() : m_parent(nullptr), m_isActive(false)
+#include "Utility/LoggerManager.h"
+WindowBase::WindowBase() : m_parent(nullptr), m_isActive(false), m_texture(nullptr)
 {
   m_location.x = 0;
   m_location.y = 0;
@@ -54,13 +54,19 @@ void WindowBase::OnMouseWheelScrollDown(int cursorX, int cursorY)
 
 void WindowBase::OnDrag(int cursorX, int cursorY, int dx, int dy)
 {
+  std::string line = "CursorX: " + std::to_string(cursorX) + "\tCursorY: " + std::to_string(cursorY) + "\tdx: " + std::to_string(dx) + "\tdy: " + std::to_string(dy);
+  LoggerManager::GetLog("debug.log").AddLine(LogLevel::DEBUG, line);
   // owned windows should hold still - only main window should change its location
+  
+  LoggerManager::GetLog("debug.log").AddLine(LogLevel::DEBUG, "OldX: " + std::to_string(m_location.x) + "\tOldY: " + std::to_string(m_location.y));
   if (m_parent == nullptr)
   {
     m_location.x += dx;
     m_location.y += dy;
   }
 
+
+  LoggerManager::GetLog("debug.log").AddLine(LogLevel::DEBUG, "NewX: " + std::to_string(m_location.x) + "\tNewY: " + std::to_string(m_location.y));
   ChildrenCaller([=](ChildPtr &c) { if (CoordinateOnWindow(c, cursorX, cursorY)) c->OnDrag(cursorX, cursorY, dx, dy); });
 }
 
@@ -125,4 +131,14 @@ std::vector<std::pair<SDL_Rect, SDL_Texture *>> WindowBase::GetTextures()
   }
 
   return textures;
+}
+
+
+void WindowBase::SetTexture(SDL_Texture *texture)
+{
+  if (m_texture != nullptr)
+  {
+    SDL_DestroyTexture(texture);
+  }
+  m_texture = texture;
 }

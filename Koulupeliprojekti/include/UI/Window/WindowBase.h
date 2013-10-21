@@ -25,6 +25,7 @@ public:
   int GetHeight() { return m_location.h; }
 
   SDL_Rect GetRect() { return m_location; }
+  void SetRect(SDL_Rect rect) { m_location = rect; }
 
   void SetParent(WindowBase *parent) { m_parent = parent; }
 
@@ -48,6 +49,7 @@ protected:
   WindowBase();
   void ChildrenCaller(std::function<void(ChildPtr &base)> f);
   bool CoordinateOnWindow(ChildPtr &c, int x, int y);
+  void SetTexture(SDL_Texture *texture);
 private:
   
   SDL_Texture *m_texture;

@@ -43,7 +43,7 @@ void Renderer::LoadSprites(std::string datafilePath)
 
 void Renderer::Draw(Camera *camera, const std::vector<std::unique_ptr<Entity>> &entities, const std::deque<std::unique_ptr<Window>> &windows)
 {
-  SDL_assert(camera != nullptr);
+ // SDL_assert(camera != nullptr);
   ClearScreen();
   DrawEntities(camera, entities);
   DrawWindows(windows);
