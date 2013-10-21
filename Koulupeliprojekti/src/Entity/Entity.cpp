@@ -45,6 +45,7 @@ void Entity::AddComponent(ComponentType type, std::unique_ptr<Component> c)
 {
   if (type != ComponentType::NONE)
   {
+    c->Attach(this);
     m_components[type] = std::move(c);
   }
 }
