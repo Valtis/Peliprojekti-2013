@@ -4,11 +4,11 @@
 #include "Level/LevelManager.h"
 #include "UI/Window/WindowManager.h"
 #include "Graphics/Renderer.h"
-#include "UI/Window/ButtonHandler.h"
+
 #include "Utility/Tick.h"
 
 
-class Game : public ButtonHandler
+class Game
 {
 public:
   Game();
@@ -23,7 +23,7 @@ private:
   void Draw();
   void HandleInput();
 
-  void OnButtonClick() override;
+  void OnButtonClick();
 
 
   LevelManager m_levelManager;

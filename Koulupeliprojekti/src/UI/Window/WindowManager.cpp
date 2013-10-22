@@ -15,6 +15,7 @@ WindowManager::~WindowManager()
 
 bool WindowManager::HandleInput(Command *command)
 {
+  // todo - catch keyboard events for menu etc
   if (command == nullptr || command->GetType() != MessageType::MOUSE_COMMAND)
   {
     return true;

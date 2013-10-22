@@ -60,7 +60,9 @@ void Game::Initialize()
   location.w = 80;
   location.h = 30;
   std::unique_ptr<Button> button(new Button(location, "text", &m_renderer));
-  button->AddHandler(this);
+
+  button->AddHandler([&]{ this->OnButtonClick(); });
+
   window->AddWindow(std::move(button));
 
   m_windowManager.AddWindow(std::move(window));
