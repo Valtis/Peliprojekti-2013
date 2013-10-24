@@ -33,7 +33,8 @@ void Game::Run()
 
 void Game::Initialize()
 {
-  SDL_Init(SDL_INIT_VIDEO);
+  SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
+  SDL_JoystickEventState(SDL_ENABLE);
   // test code - lots of stuff hardcoded
   m_renderer.CreateWindow("Title", 800, 600);
   m_renderer.LoadSprites("data/sprites");
@@ -55,6 +56,7 @@ void Game::Initialize()
   color.a = 255;
   std::unique_ptr<Window> window(new Window(location, color, &m_renderer));
   window->Activate();
+  
   m_inputManager.Initialize();
 
   location.w = 80;
