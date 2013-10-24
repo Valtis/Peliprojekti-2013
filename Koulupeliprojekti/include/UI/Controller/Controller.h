@@ -10,6 +10,6 @@ public:
 	virtual ~Controller() {}
 	virtual Command* HandleInput(SDL_Event event) = 0;
 	virtual void SetActive(bool active) { m_active = active; }
-private:
+protected:
 	bool m_active;
 };

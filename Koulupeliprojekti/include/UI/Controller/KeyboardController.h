@@ -10,7 +10,7 @@ class KeyboardController : public Controller
 public:
 	KeyboardController(bool active = true);
 	Command* HandleInput(SDL_Event event) override;
-	void LoadBinds();
 private:
+	void LoadBinds();
 	std::map<SDL_Keycode, Action> m_binds;
 };

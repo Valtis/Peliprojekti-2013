@@ -8,6 +8,8 @@ KeyboardController::KeyboardController(bool active) : Controller(active)
 }
 Command* KeyboardController::HandleInput(SDL_Event event)
 {
+	if (!m_active)
+		return nullptr;
 	Command* cmd = nullptr;
 	if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
 	{
