@@ -59,7 +59,7 @@ bool  WindowManager::HandleMouseMotion(const SDL_Event &event)
   
   if (!m_isDragging && GetWindowUnderCoordinates(event.motion.x, event.motion.y) != nullptr)
   {
-    m_isDragging = true;;
+    m_isDragging = true;
   }
   
   if (m_isDragging)
