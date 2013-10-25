@@ -4,6 +4,7 @@
 #include "UI/InputManager.h"
 #include "UI/Controller/KeyboardController.h"
 #include "UI/Controller/MouseController.h"
+#include "UI/Controller/JoystickController.h"
 
 InputManager::InputManager()
 {
@@ -19,7 +20,7 @@ void InputManager::Initialize()
 	AddController(new KeyboardController());
 	for (int i = 0; i < SDL_NumJoysticks(); i++)
 	{
-		// add joystick No. i
+		AddController(new JoystickController(i));
 	}
 }
 
