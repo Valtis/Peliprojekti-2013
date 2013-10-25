@@ -20,6 +20,9 @@ TextElement::TextElement(std::string text, int fontSize, TextAlingment alignment
     break;
   }
 
+  location.w = width*text.length();
+  location.h = height;
+
   SetTexture(FontManager::Instance().GetTextSingleLine(renderer, text, fontSize));
 
   SetRect(location);
