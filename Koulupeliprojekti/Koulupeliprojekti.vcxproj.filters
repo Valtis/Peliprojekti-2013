@@ -198,6 +198,9 @@
     <ClInclude Include="include\Message\VelocityChangeMessage.h">
       <Filter>Header Files\Message</Filter>
     </ClInclude>
+    <ClInclude Include="include\Component\GraphicsComponent.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -298,6 +301,9 @@
     </ClCompile>
     <ClCompile Include="src\Message\MessageFactory.cpp">
       <Filter>Source Files\Message</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\GraphicsComponent.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
