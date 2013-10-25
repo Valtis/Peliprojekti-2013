@@ -54,13 +54,25 @@ void WindowBase::OnMouseWheelScrollDown(int cursorX, int cursorY)
 
 void WindowBase::OnDrag(int cursorX, int cursorY, int dx, int dy)
 {
-  if (m_parent == nullptr)
+  bool childWasCalled = false;
+
+  for (auto &c : m_children)
+  {
+    if (CoordinateOnWindow(c, cursorX, cursorY))
+    {
+
+
+      childWasCalled = true;
+      c->OnDrag(cursorX, cursorY, dx, dy);
+    }
+  }
+
+  if (!childWasCalled && m_parent == nullptr)
   {
     m_location.x += dx;
     m_location.y += dy;
   }
 
-  ChildrenCaller([=](ChildPtr &c) { if (CoordinateOnWindow(c, cursorX, cursorY)) c->OnDrag(cursorX, cursorY, dx, dy); });
 }
 
 void WindowBase::OnGainingFocus(int cursorX, int cursorY)
@@ -95,7 +107,7 @@ bool WindowBase::CoordinateOnWindow(ChildPtr &c, int x, int y)
   int childHeight = c->m_location.h;
 
   if (childX < x && childX + childWidth >= x &&
-      childY < y && childY + childHeight >= y)
+    childY < y && childY + childHeight >= y)
   {
     return true;
   }
