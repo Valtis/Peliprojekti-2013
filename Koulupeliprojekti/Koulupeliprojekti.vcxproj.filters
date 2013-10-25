@@ -183,6 +183,9 @@
     <ClInclude Include="include\Graphics\TextureFactory.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\UI\Window\TextElement.h">
+      <Filter>Header Files\UI\Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -275,6 +278,9 @@
     <ClCompile Include="src\Graphics\TextureFactory.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\UI\Window\TextElement.cpp">
+      <Filter>Source Files\UI\Window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore">
@@ -286,5 +292,21 @@
     <None Include="..\README.md">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="data\sprites\sprites.dat">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\sprites\spritesheets.dat">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\sprites\spritesheet.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="data\fonts\FreeMono.otf">
+      <Filter>Resource Files</Filter>
+    </Font>
   </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Level/Level.h"
 #include "Utility/LoggerManager.h"
+#include "Graphics/FontManager.h"
 // for testing purposes until level manager actually contains levels - feel free to remove
 #include "Entity/Entity.h"
 // for testing purposes - testing windows -  feel free to remove
@@ -57,6 +58,8 @@ void Game::Initialize()
   m_renderer.LoadSprites("data/sprites");
   LoggerManager::SetGlobalLogLevel(LogLevel::ALL);
   LoggerManager::SetLogFolder("logs");
+
+  FontManager::Instance().Initialize("data/fonts/FreeMono.otf");
 
 
   SDL_Rect location;
