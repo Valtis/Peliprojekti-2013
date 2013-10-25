@@ -1,9 +1,13 @@
 #include "UI/Window/Button.h"
+#include "UI/Window/TextElement.h"
 #include "Graphics/TextureFactory.h"
-Button::Button(SDL_Rect location, std::string text, Renderer *renderer) : m_text(text)
+Button::Button(SDL_Rect location, std::string text, Renderer *renderer)
 {
   SetRect(location);
   SetTexture(TextureFactory::CreateButton(location.w, location.h, renderer));
+
+  std::unique_ptr<TextElement> element(new TextElement(text, 10, TextAlingment::ALIGN_CENTER, location, renderer));
+  AddWindow(std::move(element));
 }
 
 Button::~Button()
