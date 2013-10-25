@@ -79,9 +79,9 @@ void Game::Initialize()
   
   m_inputManager.Initialize();
 
-  location.w = 80;
+  location.w = 140;
   location.h = 30;
-  std::unique_ptr<Button> button(new Button(location, "text", &m_renderer));
+  std::unique_ptr<Button> button(new Button(location, "Close program", &m_renderer));
 
   button->AddHandler([&]{ this->ShutDownGame(); });
 
