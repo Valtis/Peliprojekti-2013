@@ -10,7 +10,11 @@ WindowBase::WindowBase() : m_parent(nullptr), m_isActive(false), m_texture(nullp
 
 WindowBase::~WindowBase()
 {
-
+  if (m_texture != nullptr)
+  {
+    SDL_DestroyTexture(m_texture);
+  }
+  
 }
 
 int WindowBase::GetRelativeX()

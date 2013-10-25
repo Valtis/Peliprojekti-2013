@@ -112,7 +112,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>include;C:\Libs\SDL\SDL2-2.0.0\include;$(IncludePath)</IncludePath>
+    <IncludePath>include;C:\Libs\SDL\SDL2-2.0.0\include;C:\Libs\SDL\SDL2_ttf\SDL2_ttf-2.0.12\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>include;C:\Libs\SDL\SDL2-2.0.0\include;$(IncludePath)</IncludePath>
@@ -125,7 +125,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>C:\Libs\SDL\SDL2-2.0.0\lib\x86\SDL2.lib;C:\Libs\SDL\SDL2-2.0.0\lib\x86\SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>C:\Libs\SDL\SDL2-2.0.0\lib\x86\SDL2.lib;C:\Libs\SDL\SDL2-2.0.0\lib\x86\SDL2main.lib;C:\Libs\SDL\SDL2_ttf\SDL2_ttf-2.0.12\lib\x86\SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <SubSystem>Windows</SubSystem>
     </Link>

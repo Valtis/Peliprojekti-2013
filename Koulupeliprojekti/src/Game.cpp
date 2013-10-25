@@ -22,12 +22,29 @@ void Game::Run()
 {
   Initialize();
 
-
-
   while (m_running)
   {
     UpdateGameState();
     Draw();
+  }
+}
+
+void Game::UpdateGameState()
+{
+  if (m_gameTick.TickHasPassed())
+  {
+    HandleInput();
+    m_levelManager.Update(m_gameTick.TicksPassed());
+  }
+}
+
+void Game::Draw()
+{
+  if (m_drawTick.TickHasPassed())
+  {
+    //     m_renderer.Draw(nullptr, m_levelManager.GetCurrentLevel()->GetEntities(), m_windowManager.GetWindows());
+    std::vector<std::unique_ptr<Entity>> e;
+    m_renderer.Draw(nullptr, e, m_windowManager.GetWindows());
   }
 }
 
@@ -63,7 +80,7 @@ void Game::Initialize()
   location.h = 30;
   std::unique_ptr<Button> button(new Button(location, "text", &m_renderer));
 
-  button->AddHandler([&]{ this->OnButtonClick(); });
+  button->AddHandler([&]{ this->ShutDownGame(); });
 
   window->AddWindow(std::move(button));
 
@@ -72,14 +89,7 @@ void Game::Initialize()
 
 }
 
-void Game::UpdateGameState()
-{
-  if (m_gameTick.TickHasPassed())
-  {
-    HandleInput();
-    m_levelManager.Update(m_gameTick.TicksPassed());
-  }
-}
+
 
 void Game::HandleInput() {
   SDL_Event event;
@@ -95,18 +105,9 @@ void Game::HandleInput() {
 }
 
 // for testing only - can be removed!
-void Game::OnButtonClick()
+void Game::ShutDownGame()
 {
   m_running = false;
 }
 
 
-void Game::Draw()
-{
-  if (m_drawTick.TickHasPassed())
-  {
-//     m_renderer.Draw(nullptr, m_levelManager.GetCurrentLevel()->GetEntities(), m_windowManager.GetWindows());
-    std::vector<std::unique_ptr<Entity>> e;
-    m_renderer.Draw(nullptr, e, m_windowManager.GetWindows());
-  }
-}

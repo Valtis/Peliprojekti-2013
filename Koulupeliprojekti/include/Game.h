@@ -23,7 +23,7 @@ private:
   void Draw();
   void HandleInput();
 
-  void OnButtonClick();
+  void ShutDownGame();
 
 
   LevelManager m_levelManager;
