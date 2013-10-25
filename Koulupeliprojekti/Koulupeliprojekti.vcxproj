@@ -35,6 +35,7 @@
     <ClInclude Include="include\Message\Message.h" />
     <ClInclude Include="include\Message\MessageFactory.h" />
     <ClInclude Include="include\Message\MessageProcessor.h" />
+    <ClInclude Include="include\Message\VelocityChangeMessage.h" />
     <ClInclude Include="include\UI\Controller\Controller.h" />
     <ClInclude Include="include\UI\Controller\KeyboardController.h" />
     <ClInclude Include="include\UI\Controller\MouseController.h" />
