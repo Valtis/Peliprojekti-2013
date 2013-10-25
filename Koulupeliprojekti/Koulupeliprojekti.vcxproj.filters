@@ -79,6 +79,9 @@
     <Filter Include="Header Files\UI\Controller">
       <UniqueIdentifier>{5c1eae25-664e-4827-ad17-c296ee803702}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Graphics\Camera">
+      <UniqueIdentifier>{0edf0203-48f1-424a-9101-163055e2b5c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -200,6 +203,9 @@
     </ClInclude>
     <ClInclude Include="include\Component\GraphicsComponent.h">
       <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Camera\Camera.h">
+      <Filter>Header Files\Graphics\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
