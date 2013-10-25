@@ -34,6 +34,9 @@ void Renderer::CreateWindow(std::string title, int width, int height)
   }
 
   SDL_SetWindowTitle(m_window, title.c_str());
+
+  m_windowSize.first = width;
+  m_windowSize.second = height;
 }
 
 void Renderer::LoadSprites(std::string datafilePath)
@@ -59,7 +62,8 @@ void Renderer::ClearScreen()
 
 void Renderer::DrawEntities(Camera *camera, const std::vector<std::unique_ptr<Entity>> &entities)
 {
-  // draw stuff
+  std::pair<>;
+
 }
 
 void Renderer::DrawWindows(const std::deque<std::unique_ptr<Window>> &windows)

@@ -41,6 +41,9 @@ private:
   void DrawWindow(std::vector<std::pair<SDL_Rect, SDL_Texture *>>);
 
 
+
+  std::pair<int, int> m_windowSize; // width/height
+
   SDL_Window *m_window;
   SDL_Renderer *m_renderer;
   SpriteManager m_spriteManager;
