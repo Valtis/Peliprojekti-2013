@@ -14,6 +14,7 @@
     <ClInclude Include="include\Collision\CollisionChecker.h" />
     <ClInclude Include="include\Component\Component.h" />
     <ClInclude Include="include\Component\LocationComponent.h" />
+    <ClInclude Include="include\Component\VelocityComponent.h" />
     <ClInclude Include="include\Entity\Entity.h" />
     <ClInclude Include="include\Entity\EntityParent.h" />
     <ClInclude Include="include\Game.h" />
@@ -52,6 +53,7 @@
     <ClCompile Include="src\Collision\CollisionChecker.cpp" />
     <ClCompile Include="src\Component\Component.cpp" />
     <ClCompile Include="src\Component\LocationComponent.cpp" />
+    <ClCompile Include="src\Component\VelocityComponent.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Graphics\FontManager.cpp" />

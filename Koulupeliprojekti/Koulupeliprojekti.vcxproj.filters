@@ -186,6 +186,9 @@
     <ClInclude Include="include\UI\Window\TextElement.h">
       <Filter>Header Files\UI\Window</Filter>
     </ClInclude>
+    <ClInclude Include="include\Component\VelocityComponent.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -280,6 +283,9 @@
     </ClCompile>
     <ClCompile Include="src\UI\Window\TextElement.cpp">
       <Filter>Source Files\UI\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\VelocityComponent.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
