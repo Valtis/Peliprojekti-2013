@@ -26,7 +26,7 @@ void VelocityComponent::OnAttatchingToEntity()
     [&](Message *msg) { return this->HandleVelocityChangeMessage(msg); });
 }
 
-void VelocityComponent::HandleVelocityChangeMessage(Message *msg)
+bool VelocityComponent::HandleVelocityChangeMessage(Message *msg)
 {
-
+  return true;
 }

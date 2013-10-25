@@ -10,7 +10,7 @@ public:
   void Update(double ticksPassed) override;
 
 private:
-  void HandleVelocityChangeMessage(Message *msg);
+  bool HandleVelocityChangeMessage(Message *msg);
   double m_xVelocity;
   double m_yVelocity;
 };
