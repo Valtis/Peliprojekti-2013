@@ -114,9 +114,6 @@
     <ClInclude Include="include\Utility\Tick.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="include\Collision\CollisionChecker.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
     <ClInclude Include="include\UI\Window\WindowBase.h">
       <Filter>Header Files\UI\Window</Filter>
     </ClInclude>
@@ -185,6 +182,18 @@
     </ClInclude>
     <ClInclude Include="include\UI\Window\TextElement.h">
       <Filter>Header Files\UI\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\VelocityComponent.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Collision\CollisionChecker.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\LocationChangeMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\MessageFactory.h">
+      <Filter>Header Files\Message</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -280,6 +289,12 @@
     </ClCompile>
     <ClCompile Include="src\UI\Window\TextElement.cpp">
       <Filter>Source Files\UI\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\VelocityComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Message\MessageFactory.cpp">
+      <Filter>Source Files\Message</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
