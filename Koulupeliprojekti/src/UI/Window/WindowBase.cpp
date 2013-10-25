@@ -14,7 +14,6 @@ WindowBase::~WindowBase()
   {
     SDL_DestroyTexture(m_texture);
   }
-  
 }
 
 int WindowBase::GetRelativeX()
