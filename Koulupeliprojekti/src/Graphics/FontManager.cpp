@@ -2,7 +2,7 @@
 #include "Graphics/Renderer.h"
 FontManager::FontManager()
 {
-
+  TTF_Init();
 }
 
 FontManager::~FontManager()
@@ -11,6 +11,7 @@ FontManager::~FontManager()
   {
     TTF_CloseFont(font.second);
   }
+  TTF_Quit();
 }
 
 FontManager &FontManager::Instance()
