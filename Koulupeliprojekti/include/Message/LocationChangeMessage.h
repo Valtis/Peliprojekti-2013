@@ -7,8 +7,8 @@ public:
   LocationChangeMessage(double x, double y) : m_dx(x), m_dy(y) { }
   MessageType GetType() const override { return MessageType::LOCATION_CHANGE; }
 
-  double GetXChange() { return m_dx; }
-  double GetYChange() { return m_dy; }
+  double GetXChange() const { return m_dx; }
+  double GetYChange() const { return m_dy; }
 
 private:
   const double m_dx;
