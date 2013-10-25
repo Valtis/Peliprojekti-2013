@@ -13,7 +13,11 @@ VelocityComponent::~VelocityComponent()
 
 void VelocityComponent::Update(double ticksPassed)
 {
-
+  if (m_xVelocity != 0 || m_yVelocity != 0)
+  {
+    auto locationChangeMessage = MessageFactory::CreateLocationChangeMessage(m_xVelocity*ticksPassed, m_yVelocity*ticksPassed);
+    GetOwner()->SendMessage(locationChangeMessage.get());
+  }
 }
 
 void VelocityComponent::OnAttatchingToEntity()

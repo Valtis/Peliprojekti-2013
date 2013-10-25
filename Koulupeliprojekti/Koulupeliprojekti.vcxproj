@@ -31,7 +31,9 @@
     <ClInclude Include="include\Message\Commands\Command.h" />
     <ClInclude Include="include\Message\Commands\KeyboardCommand.h" />
     <ClInclude Include="include\Message\Commands\MouseCommand.h" />
+    <ClInclude Include="include\Message\LocationChangeMessage.h" />
     <ClInclude Include="include\Message\Message.h" />
+    <ClInclude Include="include\Message\MessageFactory.h" />
     <ClInclude Include="include\Message\MessageProcessor.h" />
     <ClInclude Include="include\UI\Controller\Controller.h" />
     <ClInclude Include="include\UI\Controller\KeyboardController.h" />
@@ -68,6 +70,7 @@
     <ClCompile Include="src\Level\LevelManager.cpp" />
     <ClCompile Include="src\Message\Commands\KeyboardCommand.cpp" />
     <ClCompile Include="src\Message\Message.cpp" />
+    <ClCompile Include="src\Message\MessageFactory.cpp" />
     <ClCompile Include="src\Message\MessageProcessor.cpp" />
     <ClCompile Include="src\UI\Controller\KeyboardController.cpp" />
     <ClCompile Include="src\UI\Controller\MouseController.cpp" />
