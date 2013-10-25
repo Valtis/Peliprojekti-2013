@@ -18,6 +18,11 @@ public:
 
   int GetX() { return m_location.x; }
   int GetY() { return m_location.y; }
+  void SetX(int x) { m_location.x = x; }
+  void SetY(int y) { m_location.y = y; }
+  void ModifyX(int dx) { m_location.x += dx; }
+  void ModifyY(int dy) { m_location.y += dy; }
+  
   int GetRelativeX();
   int GetRelativeY();
 
@@ -49,6 +54,8 @@ protected:
   WindowBase();
   void ChildrenCaller(std::function<void(ChildPtr &base)> f);
   bool CoordinateOnWindow(ChildPtr &c, int x, int y);
+  bool CoordinateOnAnyWindow(int x, int y);
+
   void SetTexture(SDL_Texture *texture);
 private:
   

@@ -26,6 +26,6 @@ private:
   void UpdateActiveWindow(int cursorX, int cursorY);
   std::deque<std::unique_ptr<Window>> m_windows;
   bool m_leftButtonDown;
-  enum class DragStatus { Not_Dragging, Failed_Drag, Dragging };
+  
   DragStatus m_dragStatus;
 };
