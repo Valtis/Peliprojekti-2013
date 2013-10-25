@@ -61,7 +61,7 @@ void FontManager::OpenFontFile(int fontSize)
 {
   if (m_fonts.count(fontSize) == 0)
   {
-    m_fonts[fontSize] =  TTF_OpenFont(m_fontFilePathAndName.c_str(), fontSize);
+    m_fonts[fontSize] = TTF_OpenFont(m_fontFilePathAndName.c_str(), fontSize);
     SDL_assert_release(m_fonts[fontSize] != nullptr);
   }
 }
@@ -85,7 +85,7 @@ void FontManager::CalculateFontSize(int size)
   double height = textSurface->h;
   double length = text.length();
   
-  m_fontSizes[size] = std::make_pair(width/length, height/length);
+  m_fontSizes[size] = std::make_pair(width/length, height);
   
   SDL_FreeSurface(textSurface);
 }
