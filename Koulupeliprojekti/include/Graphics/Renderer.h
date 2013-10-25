@@ -7,7 +7,7 @@
 #include <vector>
 #include <SDL.h>
 #include <string>
-
+#include <utility>
 
 #include "SpriteManager.h"
 
@@ -15,6 +15,9 @@ class Camera;
 class Window;
 class Entity;
 class Sprite;
+class GraphicsComponent;
+class LocationComponent;
+
 
 class Renderer
 {
@@ -40,6 +43,10 @@ private:
   void DrawWindows(const std::deque<std::unique_ptr<Window>> &windows);
   void DrawWindow(std::vector<std::pair<SDL_Rect, SDL_Texture *>>);
 
+  std::vector<std::pair<SDL_Point, Sprite *>> GetDataForDrawing(SDL_Point topleft, const std::vector<std::unique_ptr<Entity>> &entities);
+  bool CullEntity(SDL_Point topleft, Sprite *sprite, LocationComponent *location);
+  void SortEntitiesByDrawPriority(std::vector<std::pair<SDL_Point, Sprite *>> &drawData);
+  void DrawCulledEntities(std::vector<std::pair<SDL_Point, Sprite *>> drawdata, SDL_Point point);
 
 
   std::pair<int, int> m_windowSize; // width/height

@@ -1,6 +1,10 @@
 #include "Graphics/Renderer.h"
 #include "Graphics/SpriteManager.h"
 #include "Graphics/Sprite.h"
+#include "Graphics/Camera/Camera.h"
+#include "Component/GraphicsComponent.h"
+#include "Component/LocationComponent.h"
+
 #include "UI/Window/Window.h"
 #include "Entity/Entity.h"
 
@@ -62,8 +66,73 @@ void Renderer::ClearScreen()
 
 void Renderer::DrawEntities(Camera *camera, const std::vector<std::unique_ptr<Entity>> &entities)
 {
-  std::pair<>;
+  SDL_Point topleft;
+  topleft.x = camera->GetX() - m_windowSize.first/2;
+  topleft.y = camera->GetY() - m_windowSize.second/2;
 
+  std::vector<std::pair<SDL_Point, Sprite *>> spriteIds = GetDataForDrawing(topleft, entities);
+  SortEntitiesByDrawPriority(spriteIds);
+  DrawCulledEntities(spriteIds, topleft);
+}
+
+std::vector<std::pair<SDL_Point, Sprite *>> Renderer::GetDataForDrawing(SDL_Point topleft, const std::vector<std::unique_ptr<Entity>> &entities)
+{
+  std::vector<std::pair<SDL_Point, Sprite *>> retval;
+  for (auto &entity : entities)
+  {
+    auto location = static_cast<LocationComponent *>(entity->GetComponent(ComponentType::LOCATION));
+    auto graphics = static_cast<GraphicsComponent *>(entity->GetComponent(ComponentType::GRAPHICS));
+    SDL_assert(location != nullptr);
+    SDL_assert(graphics != nullptr);
+
+    Sprite *sprite = m_spriteManager.GetSprite(graphics->GetSpriteID());
+    SDL_assert(sprite != nullptr);
+
+    if (CullEntity(topleft, sprite, location))
+    {
+      continue;
+    }
+    SDL_Point loc = { location->GetX(), location->GetY() };
+    retval.push_back(std::make_pair(loc, sprite));
+  }
+  return retval;
+}
+
+bool Renderer::CullEntity(SDL_Point topleft, Sprite *sprite, LocationComponent *location)
+{
+  SDL_Rect entityRect;
+
+  entityRect.x = location->GetX();
+  entityRect.y = location->GetY();
+  entityRect.w = sprite->GetLocation().w;
+  entityRect.h = sprite->GetLocation().h;
+
+  SDL_Rect screen = { topleft.x, topleft.y, m_windowSize.first, m_windowSize.second };
+
+  return !SDL_HasIntersection(&entityRect, &screen); // if screen and entityRect do not intersect, cull entity as it's not being seen anyway
+}
+
+void Renderer::SortEntitiesByDrawPriority(std::vector<std::pair<SDL_Point, Sprite *>> &drawData)
+{
+  std::stable_sort(drawData.begin(), drawData.end(), [&](std::pair<SDL_Point, Sprite *> first, std::pair<SDL_Point, Sprite *> second) 
+  {
+    return (first.second->GetDrawPriority() < second.second->GetDrawPriority());
+  }
+  );
+}
+
+void Renderer::DrawCulledEntities(std::vector<std::pair<SDL_Point, Sprite *>> drawdata, SDL_Point topleft)
+{
+  for (auto data : drawdata)
+  {
+    SDL_Texture *texture = m_spriteManager.GetSpriteSheet(data.second->GetSpriteSheetID());
+  
+    SDL_Rect locationOnScreen = data.second->GetLocation(); // need w/h-values. XY-values must be updated though
+    locationOnScreen.x = data.first.x - topleft.x;
+    locationOnScreen.y = data.first.y - topleft.y;
+   
+    SDL_RenderCopy(m_renderer, texture, &locationOnScreen, &data.second->GetLocation());
+  }
 }
 
 void Renderer::DrawWindows(const std::deque<std::unique_ptr<Window>> &windows)
