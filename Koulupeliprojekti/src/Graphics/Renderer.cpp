@@ -131,7 +131,7 @@ void Renderer::PerformEntityDraw(std::vector<std::pair<SDL_Point, Sprite *>> dra
     locationOnScreen.x = data.first.x - topleft.x;
     locationOnScreen.y = data.first.y - topleft.y;
    
-    SDL_RenderCopy(m_renderer, texture, &locationOnScreen, &data.second->GetLocation());
+    SDL_RenderCopy(m_renderer, texture, &data.second->GetLocation(), &locationOnScreen);
   }
 }
 

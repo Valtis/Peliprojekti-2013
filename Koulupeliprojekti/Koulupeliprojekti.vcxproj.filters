@@ -320,6 +320,9 @@
     <ClCompile Include="src\Graphics\Camera\EntityTrackingCamera.cpp">
       <Filter>Source Files\Graphics\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="src\UI\Controller\JoystickController.cpp">
+      <Filter>Source Files\UI\Controller</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore">
