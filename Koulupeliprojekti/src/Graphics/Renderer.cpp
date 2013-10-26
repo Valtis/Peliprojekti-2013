@@ -92,7 +92,7 @@ std::vector<std::pair<SDL_Point, Sprite *>> Renderer::GetDataForDrawing(SDL_Poin
     {
       continue;
     }
-    SDL_Point loc = { location->GetX(), location->GetY() };
+    SDL_Point loc = { (int)location->GetX(), (int)location->GetY() };
     retval.push_back(std::make_pair(loc, sprite));
   }
   return retval;
@@ -130,8 +130,9 @@ void Renderer::PerformEntityDraw(std::vector<std::pair<SDL_Point, Sprite *>> dra
     SDL_Rect locationOnScreen = data.second->GetLocation(); // need w/h-values. XY-values must be updated though
     locationOnScreen.x = data.first.x - topleft.x;
     locationOnScreen.y = data.first.y - topleft.y;
+    SDL_Rect loc = data.second->GetLocation();
    
-    SDL_RenderCopy(m_renderer, texture, &data.second->GetLocation(), &locationOnScreen);
+    SDL_RenderCopy(m_renderer, texture, &loc, &locationOnScreen);
   }
 }
 
