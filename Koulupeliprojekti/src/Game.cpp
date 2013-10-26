@@ -4,6 +4,9 @@
 #include "Graphics/FontManager.h"
 // for testing purposes until level manager actually contains levels - feel free to remove
 #include "Entity/Entity.h"
+#include "Component/GraphicsComponent.h"
+#include "Component/LocationComponent.h"
+#include "Graphics/Camera/EntityTrackingCamera.h"
 // for testing purposes - testing windows -  feel free to remove
 #include "UI/Window/Window.h"
 #include "UI/Window/Button.h"
@@ -43,9 +46,7 @@ void Game::Draw()
 {
   if (m_drawTick.TickHasPassed())
   {
-    //     m_renderer.Draw(nullptr, m_levelManager.GetCurrentLevel()->GetEntities(), m_windowManager.GetWindows());
-    std::vector<std::unique_ptr<Entity>> e;
-    m_renderer.Draw(nullptr, e, m_windowManager.GetWindows());
+    m_renderer.Draw(m_testDebugCamera.get(), m_levelManager.GetCurrentLevel()->GetEntities(), m_windowManager.GetWindows());
   }
 }
 
@@ -55,7 +56,7 @@ void Game::Initialize()
   SDL_JoystickEventState(SDL_ENABLE);
   // test code - lots of stuff hard coded
   m_renderer.CreateWindow("Title", 800, 600);
-  m_renderer.LoadSprites("data/sprites");
+  m_renderer.LoadSprites("data/sprites/");
   LoggerManager::SetGlobalLogLevel(LogLevel::ALL);
   LoggerManager::SetLogFolder("logs");
 
@@ -90,6 +91,26 @@ void Game::Initialize()
   m_windowManager.AddWindow(std::move(window));
   m_inputManager.RegisterInputHandler([&](Command* cmd) { return m_windowManager.HandleInput(cmd); }, 10);
 
+
+
+  std::unique_ptr<Level> level(new Level);
+  std::unique_ptr<Entity> e(new Entity);
+  std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
+  g->AddFrame(0, 200002);
+ 
+
+  e->AddComponent(ComponentType::GRAPHICS, std::move(g));
+  std::unique_ptr<LocationComponent> l(new LocationComponent);
+  l->SetLocation(400, 400);
+  e->AddComponent(ComponentType::LOCATION, std::move(l));
+
+  std::unique_ptr<EntityTrackingCamera> camera(new EntityTrackingCamera);
+  camera->SetEntity(e.get());
+  m_testDebugCamera = std::move(camera);
+  level->AddEntity(std::move(e));
+  
+  m_levelManager.AddLevel(std::move(level));
+  m_levelManager.SetCurrentLevel(0);
 }
 
 

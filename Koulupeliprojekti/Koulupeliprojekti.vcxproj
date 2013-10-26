@@ -20,6 +20,7 @@
     <ClInclude Include="include\Entity\EntityParent.h" />
     <ClInclude Include="include\Game.h" />
     <ClInclude Include="include\Graphics\Camera\Camera.h" />
+    <ClInclude Include="include\Graphics\Camera\EntityTrackingCamera.h" />
     <ClInclude Include="include\Graphics\FontManager.h" />
     <ClInclude Include="include\Graphics\Renderer.h" />
     <ClInclude Include="include\Graphics\Sprite.h" />
@@ -62,6 +63,7 @@
     <ClCompile Include="src\Component\VelocityComponent.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\Graphics\Camera\EntityTrackingCamera.cpp" />
     <ClCompile Include="src\Graphics\FontManager.cpp" />
     <ClCompile Include="src\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Graphics\Sprite.cpp" />

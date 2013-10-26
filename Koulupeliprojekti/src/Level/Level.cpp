@@ -26,8 +26,8 @@ void Level::RegisterMessageHandler(MessageType type, Priority priority, MessageC
 
 void Level::Update(double ticksPassed)
 {
-  Collision::CheckCollisions(m_Entities);
-  for (auto &entity : m_Entities)
+  Collision::CheckCollisions(m_entities);
+  for (auto &entity : m_entities)
   {
     entity->Update(ticksPassed);
   }
@@ -36,5 +36,11 @@ void Level::Update(double ticksPassed)
 
 const std::vector<std::unique_ptr<Entity>> &Level::GetEntities()
 {
-  return m_Entities;
+  return m_entities;
+}
+
+void Level::AddEntity(std::unique_ptr<Entity> e)
+{
+  e->SetParent(this);
+  m_entities.push_back(std::move(e));
 }

@@ -50,7 +50,7 @@ void Renderer::LoadSprites(std::string datafilePath)
 
 void Renderer::Draw(Camera *camera, const std::vector<std::unique_ptr<Entity>> &entities, const std::deque<std::unique_ptr<Window>> &windows)
 {
- // SDL_assert(camera != nullptr);
+  SDL_assert(camera != nullptr);
   ClearScreen();
   DrawEntities(camera, entities);
   DrawWindows(windows);
@@ -72,7 +72,7 @@ void Renderer::DrawEntities(Camera *camera, const std::vector<std::unique_ptr<En
 
   std::vector<std::pair<SDL_Point, Sprite *>> spriteIds = GetDataForDrawing(topleft, entities);
   SortEntitiesByDrawPriority(spriteIds);
-  DrawCulledEntities(spriteIds, topleft);
+  PerformEntityDraw(spriteIds, topleft);
 }
 
 std::vector<std::pair<SDL_Point, Sprite *>> Renderer::GetDataForDrawing(SDL_Point topleft, const std::vector<std::unique_ptr<Entity>> &entities)
@@ -121,7 +121,7 @@ void Renderer::SortEntitiesByDrawPriority(std::vector<std::pair<SDL_Point, Sprit
   );
 }
 
-void Renderer::DrawCulledEntities(std::vector<std::pair<SDL_Point, Sprite *>> drawdata, SDL_Point topleft)
+void Renderer::PerformEntityDraw(std::vector<std::pair<SDL_Point, Sprite *>> drawdata, SDL_Point topleft)
 {
   for (auto data : drawdata)
   {

@@ -17,6 +17,8 @@ public:
   void AddComponent(ComponentType type, std::unique_ptr<Component> c);
   Component *GetComponent(ComponentType type);
   void Update(double ticksPassed);
+
+  void SetParent(EntityParent *parent) { m_parent = parent; }
   
 private:
   std::map<ComponentType, std::unique_ptr<Component>> m_components;

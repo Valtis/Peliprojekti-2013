@@ -7,7 +7,7 @@
 
 #include "Utility/Tick.h"
 
-
+class Camera;
 class Game
 {
 public:
@@ -33,6 +33,8 @@ private:
   Tick m_gameTick;
   Tick m_drawTick;
   bool m_running;
+
+  std::unique_ptr<Camera> m_testDebugCamera;
  
 };
 

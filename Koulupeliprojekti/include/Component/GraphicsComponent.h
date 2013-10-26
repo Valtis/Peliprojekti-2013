@@ -14,7 +14,7 @@ public:
   void SetAnimation(int id);
   void NextFrame();
   void PreviousFrame();
-  void AddFrame(int animationID, int frameID);
+  void AddFrame(int animationID, int spriteID);
   void SetFrames(int animationID, std::vector<int> animationFrames);
   int GetSpriteID();
 

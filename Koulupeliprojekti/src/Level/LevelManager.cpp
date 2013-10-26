@@ -12,9 +12,15 @@ LevelManager::~LevelManager()
 
 }
 
+
+void LevelManager::AddLevel(std::unique_ptr<Level> level)
+{
+  m_levels.push_back(std::move(level));
+}
+
 void LevelManager::SetCurrentLevel(int level)
 {
-  if (m_currentLevel < 0 || m_currentLevel >= m_levels.size())
+  if (level < 0 || level >= m_levels.size())
   {
     throw std::runtime_error("Level id out of bounds in LevelManager::SetCurrentLevel");
   }

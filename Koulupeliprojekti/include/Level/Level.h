@@ -14,9 +14,11 @@ public:
   void RegisterMessageHandler(MessageType type, Priority priority, MessageCallback callback) override; 
   void Update(double ticksPassed);
   const std::vector<std::unique_ptr<Entity>> &GetEntities();
+  void AddEntity(std::unique_ptr<Entity> e);
 private:
 
-  std::vector<std::unique_ptr<Entity>> m_Entities;
+  std::vector<std::unique_ptr<Entity>> m_entities;
+  std::vector<std::unique_ptr<Entity>> m_ground; // potentially more than ground, rename if needed
   MessageProcessor m_messageProcessor;
 
 };

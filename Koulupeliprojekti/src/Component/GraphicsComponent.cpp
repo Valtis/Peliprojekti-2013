@@ -27,14 +27,32 @@ void GraphicsComponent::SetAnimation(int id)
   }
 }
 
-void GraphicsComponent::AddFrame(int animationID, int frameID)
+void GraphicsComponent::AddFrame(int animationID, int spriteID)
 {
-  m_animations[animationID].push_back(frameID);
+  m_animations[animationID].push_back(spriteID);
+  if (m_animationID == NO_VALUE)
+  {
+    m_animationID = animationID;
+  }
+  
+  if (m_frameID == NO_VALUE)
+  {
+    m_frameID = 0;
+  }
 }
 
 void GraphicsComponent::SetFrames(int animationID, std::vector<int> animationFrames)
 {
   m_animations[animationID] = animationFrames;
+  if (m_animationID == NO_VALUE)
+  {
+    m_animationID = animationID;
+  }
+
+  if (m_frameID == NO_VALUE)
+  {
+    m_frameID = 0;
+  }
 }
 
 int GraphicsComponent::GetSpriteID()

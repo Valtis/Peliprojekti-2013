@@ -82,6 +82,9 @@
     <Filter Include="Header Files\Graphics\Camera">
       <UniqueIdentifier>{0edf0203-48f1-424a-9101-163055e2b5c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Graphics\Camera">
+      <UniqueIdentifier>{d0a3f00a-9900-4f11-8b33-f84d5385ba8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -207,6 +210,9 @@
     <ClInclude Include="include\Graphics\Camera\Camera.h">
       <Filter>Header Files\Graphics\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\Camera\EntityTrackingCamera.h">
+      <Filter>Header Files\Graphics\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -310,6 +316,9 @@
     </ClCompile>
     <ClCompile Include="src\Component\GraphicsComponent.cpp">
       <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Camera\EntityTrackingCamera.cpp">
+      <Filter>Source Files\Graphics\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

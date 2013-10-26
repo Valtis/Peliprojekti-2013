@@ -46,7 +46,7 @@ private:
   std::vector<std::pair<SDL_Point, Sprite *>> GetDataForDrawing(SDL_Point topleft, const std::vector<std::unique_ptr<Entity>> &entities);
   bool CullEntity(SDL_Point topleft, Sprite *sprite, LocationComponent *location);
   void SortEntitiesByDrawPriority(std::vector<std::pair<SDL_Point, Sprite *>> &drawData);
-  void DrawCulledEntities(std::vector<std::pair<SDL_Point, Sprite *>> drawdata, SDL_Point point);
+  void PerformEntityDraw(std::vector<std::pair<SDL_Point, Sprite *>> drawdata, SDL_Point point);
 
 
   std::pair<int, int> m_windowSize; // width/height

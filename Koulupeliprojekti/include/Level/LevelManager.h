@@ -9,6 +9,7 @@ public:
   LevelManager();
   ~LevelManager();
   void Update(double ticksPassed);
+  void AddLevel(std::unique_ptr<Level> level);
   Level *GetCurrentLevel();
   void SetCurrentLevel(int level);
 
