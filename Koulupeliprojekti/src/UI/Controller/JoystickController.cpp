@@ -1,8 +1,8 @@
 #include <SDL.h>
 #include "UI/Controller/JoystickController.h"
-#include "Message/Commands/KeyboardCommand.h"
+#include "Message/Commands/ControlCommand.h"
 
-JoystickController::JoystickController(Uint8 joystick, bool active) : Controller(active), m_jindex(joystick)
+JoystickController::JoystickController(int id,Uint8 joystick, bool active) : Controller(active),m_id(id), m_jindex(joystick)
 {
 	m_joystick = SDL_JoystickOpen(joystick);
 	if (m_joystick == nullptr)

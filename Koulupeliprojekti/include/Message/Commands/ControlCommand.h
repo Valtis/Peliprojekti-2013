@@ -4,14 +4,16 @@
 #include "Message/Message.h"
 enum class Action : int { NONE, LEFT, RIGHT, UP, DOWN, JUMP, EXIT };
 
-class KeyboardCommand : public Command
+class ControlCommand : public Command
 {
 public:
-	KeyboardCommand(Action cmd, bool state);
+	ControlCommand(Action cmd, bool state, int controller);
 	MessageType GetType() const;
 	bool GetState() const;
 	Action GetCommand() const;
+	int GetController() const { return m_controller; }
 private:
 	bool m_state;
 	Action m_command;
+	int m_controller;
 };

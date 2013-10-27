@@ -1,12 +1,12 @@
 #pragma once
 #include <SDL.h>
 #include "UI/Controller/Controller.h"
-#include "Message/Commands/KeyboardCommand.h"
+#include "Message/Commands/ControlCommand.h"
 
 class JoystickController : public Controller
 {
 public:
-	JoystickController(Uint8 joystick,bool active = true);
+	JoystickController(int id,Uint8 joystick,bool active = true);
 	Command* HandleInput(SDL_Event event) override;
 	~JoystickController() override;
 private:
@@ -16,4 +16,5 @@ private:
 	void LoadBinds();
 	SDL_Joystick* m_joystick;
 	Uint8 m_jindex;
+	int m_id;
 };

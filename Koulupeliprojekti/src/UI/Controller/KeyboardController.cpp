@@ -1,8 +1,8 @@
 #include <SDL.h>
 #include "UI/Controller/KeyboardController.h"
-#include "Message/Commands/KeyboardCommand.h"
+#include "Message/Commands/ControlCommand.h"
 
-KeyboardController::KeyboardController(bool active) : Controller(active)
+KeyboardController::KeyboardController(int id,bool active) : Controller(active), m_id(id)
 {
 	LoadBinds();
 }
@@ -16,7 +16,7 @@ Command* KeyboardController::HandleInput(SDL_Event event)
 		bool state = (event.type == SDL_KEYDOWN);
 		SDL_Keycode key = event.key.keysym.sym;
 		if (m_binds.count(key))
-			cmd = new KeyboardCommand(m_binds[key],state);
+			cmd = new ControlCommand(m_binds[key],state,m_id);
 	}
 	return cmd;
 }

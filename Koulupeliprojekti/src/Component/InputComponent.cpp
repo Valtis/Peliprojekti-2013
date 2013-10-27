@@ -1,5 +1,5 @@
 #include "Component/InputComponent.h"
-#include "Message/Commands/KeyboardCommand.h"
+#include "Message/Commands/ControlCommand.h"
 InputComponent::InputComponent()
 {
 
@@ -12,7 +12,7 @@ InputComponent::~InputComponent()
 
 bool InputComponent::HandleInput(Command *command)
 {
-	if (command->GetType() != MessageType::KEYBOARD_COMMAND)
+	if (command->GetType() != MessageType::CONTROL_COMMAND)
 	{
 		return true;
 	}

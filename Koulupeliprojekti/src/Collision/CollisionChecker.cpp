@@ -22,7 +22,9 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
       continue;
 
     cc2 = static_cast<CollisionComponent *>((*e)->GetComponent(ComponentType::COLLISION));
-    if (cc2 && SDL_IntersectRect(&(cc->GetHitbox()),&(cc2->GetHitbox()),&intersectRect))
+    SDL_Rect cc_hitbox = cc->GetHitbox();
+    SDL_Rect cc2_hitbox = cc2->GetHitbox();
+    if (cc2 && SDL_IntersectRect(&cc_hitbox,&cc2_hitbox,&intersectRect))
     {
       auto collisionMessage1 =
         MessageFactory::CreateCollisionMessage(entity.get(), intersectRect);

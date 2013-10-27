@@ -17,10 +17,10 @@ InputManager::~InputManager()
 void InputManager::Initialize()
 {
 	AddController(new MouseController());
-	AddController(new KeyboardController());
+	AddController(new KeyboardController(0));
 	for (int i = 0; i < SDL_NumJoysticks(); i++)
 	{
-		AddController(new JoystickController(i));
+		AddController(new JoystickController(i+1,i));
 	}
 }
 
@@ -58,5 +58,4 @@ void InputManager::RegisterInputHandler(InputHandler handler, int priority)
 void InputManager::SortHandlers()
 {
 	std::stable_sort(mInputHandlers.begin(),mInputHandlers.end(),[&]( const std::pair<int, InputHandler> & a, const std::pair<int, InputHandler>& b) { return a.first > b.first; });
-// TODO: Sort Handlers
 }
