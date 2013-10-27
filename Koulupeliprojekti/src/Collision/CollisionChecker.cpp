@@ -20,7 +20,7 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
     cc2 = static_cast<CollisionComponent *>((*e)->GetComponent(ComponentType::COLLISION));
     if (SDL_IntersectRect(&(cc->GetHitbox()),&(cc2->GetHitbox()),&intersectRect))
     {
-
+      cc->HandleCollision((*e).get(),intersectRect);
     }
 
     /*
