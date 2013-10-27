@@ -37,13 +37,8 @@ void CollisionComponent::OnAttatchingToEntity()
 {
   Component::OnAttatchingToEntity();
   
-  GetOwner()->RegisterMessageHandler(MessageType::COLLISION, Priority::NORMAL, 
-    [&](Message *msg) { return this->HandleCollisionMessage(msg); });
-}
-
-void CollisionComponent::Update(double ticksPassed)
-{
-  Component::Update(ticksPassed);
+  // GetOwner()->RegisterMessageHandler(MessageType::COLLISION, Priority::NORMAL, 
+  // [&](Message *msg) { return this->HandleCollisionMessage(msg); });
 }
 
 SDL_Rect CollisionComponent::GetHitbox()
@@ -62,12 +57,6 @@ SDL_Rect CollisionComponent::GetHitbox()
   rect.y = m_hitbox.y + static_cast<int>(loc->GetY() + 0.5);
 
   return rect;
-}
-
-void CollisionComponent::HandleCollision(Entity *entity, SDL_Rect &intersection)
-{
-  auto collisionMessage = MessageFactory::CreateCollisionMessage(entity, intersection);
-  GetOwner()->SendMessage(collisionMessage.get());
 }
 
 bool CollisionComponent::HandleCollisionMessage(Message *msg)

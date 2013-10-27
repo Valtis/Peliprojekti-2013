@@ -32,6 +32,7 @@
     <ClInclude Include="include\Graphics\TextureFactory.h" />
     <ClInclude Include="include\Level\Level.h" />
     <ClInclude Include="include\Level\LevelManager.h" />
+    <ClInclude Include="include\Message\CollisionMessage.h" />
     <ClInclude Include="include\Message\Commands\Command.h" />
     <ClInclude Include="include\Message\Commands\KeyboardCommand.h" />
     <ClInclude Include="include\Message\Commands\MouseCommand.h" />

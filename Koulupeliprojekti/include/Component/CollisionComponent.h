@@ -11,8 +11,6 @@ public:
   CollisionComponent(SDL_Rect &box) : m_hitbox(box) { };
   ~CollisionComponent();
   void OnAttatchingToEntity() override;
-  void Update(double ticksPassed) override;
-  void HandleCollision(Entity *entity, SDL_Rect &intersection);
   SDL_Rect GetHitbox(); // World coordinates
 
 private:
