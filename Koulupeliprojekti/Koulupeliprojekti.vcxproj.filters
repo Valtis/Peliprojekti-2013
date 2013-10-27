@@ -213,6 +213,9 @@
     <ClInclude Include="include\Graphics\Camera\EntityTrackingCamera.h">
       <Filter>Header Files\Graphics\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="include\Component\CollisionComponent.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -322,6 +325,9 @@
     </ClCompile>
     <ClCompile Include="src\UI\Controller\JoystickController.cpp">
       <Filter>Source Files\UI\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\CollisionComponent.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,15 +1,16 @@
 #include "Collision/CollisionChecker.h"
 #include "Entity/Entity.h"
 
-
-void CheckEntityCollision(const std::unique_ptr<Entity> &entity, const std::vector<std::unique_ptr<Entity>> &entities)
+void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
+                          const std::vector<std::unique_ptr<Entity>>::const_iterator _e,
+                          const std::vector<std::unique_ptr<Entity>> &entities)
 {
-  for (auto &e : entities)
+  std::vector<std::unique_ptr<Entity>>::const_iterator e;
+  for (e = _e; e != entities.end(); e++)
   {
-    if (entity == e)
-    {
+    if (entity == (*e))
       continue;
-    }
+
     /*
       Get location component and collision component from both entities
       Check that the components aren't null
@@ -22,9 +23,8 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity, const std::vect
 
 void Collision::CheckCollisions(const std::vector<std::unique_ptr<Entity>> &entities)
 {
-  for (auto &e : entities)
-  {
-    CheckEntityCollision(e, entities);
-  }
+  std::vector<std::unique_ptr<Entity>>::const_iterator e;
+  for (e = entities.begin(); e != entities.end(); e++)
+    CheckEntityCollision((*e), e, entities);
 }
 
