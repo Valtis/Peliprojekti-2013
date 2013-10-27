@@ -1,6 +1,6 @@
 #pragma once
 
-enum class MessageType : int { NONE, LOCATION_CHANGE, VELOCITY_CHANGE, MOUSE_COMMAND, KEYBOARD_COMMAND };
+enum class MessageType : int { NONE, LOCATION_CHANGE, VELOCITY_CHANGE, MOUSE_COMMAND, KEYBOARD_COMMAND, COLLISION };
 #include <functional>
 
 
