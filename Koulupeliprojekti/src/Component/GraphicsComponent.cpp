@@ -72,7 +72,7 @@ void GraphicsComponent::NextFrame()
   }
 
   ++m_frameID;
-  if (m_frameID >= m_animations[m_animationID].size())
+  if (m_frameID >= static_cast<int>(m_animations[m_animationID].size()))
   {
     m_frameID = 0;
   }

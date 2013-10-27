@@ -45,14 +45,12 @@ SDL_Rect CollisionComponent::GetHitbox()
 {
   SDL_Rect rect;
   LocationComponent *loc;
-  int h, w, x, y;
+  
+  loc =
+    static_cast<LocationComponent *>(GetOwner()->GetComponent(ComponentType::LOCATION));
   
   rect.w = m_hitbox.w;
   rect.h = m_hitbox.h;
-
-  loc =
-    static_cast<LocationComponent *>(GetOwner()->GetComponent(ComponentType::LOCATION));
-
   rect.x = m_hitbox.x + static_cast<int>(loc->GetX() + 0.5);
   rect.y = m_hitbox.y + static_cast<int>(loc->GetY() + 0.5);
 

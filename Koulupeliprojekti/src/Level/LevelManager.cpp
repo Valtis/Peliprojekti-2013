@@ -20,7 +20,7 @@ void LevelManager::AddLevel(std::unique_ptr<Level> level)
 
 void LevelManager::SetCurrentLevel(int level)
 {
-  if (level < 0 || level >= m_levels.size())
+  if (level < 0 || level >= static_cast<int>(m_levels.size()))
   {
     throw std::runtime_error("Level id out of bounds in LevelManager::SetCurrentLevel");
   }

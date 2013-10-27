@@ -21,12 +21,12 @@ int EntityTrackingCamera::GetX()
 {
   auto locationComponent = static_cast<LocationComponent *>(m_entity->GetComponent(ComponentType::LOCATION));
   SDL_assert(locationComponent != nullptr);
-  return locationComponent->GetX();
+  return static_cast<int>(locationComponent->GetX());
 }
 
 int EntityTrackingCamera::GetY()
 {
   auto locationComponent = static_cast<LocationComponent *>(m_entity->GetComponent(ComponentType::LOCATION));
   SDL_assert(locationComponent != nullptr);
-  return locationComponent->GetY();
+  return static_cast<int>(locationComponent->GetY());
 }

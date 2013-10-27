@@ -102,8 +102,8 @@ bool Renderer::CullEntity(SDL_Point topleft, Sprite *sprite, LocationComponent *
 {
   SDL_Rect entityRect;
 
-  entityRect.x = location->GetX();
-  entityRect.y = location->GetY();
+  entityRect.x = static_cast<int>(location->GetX());
+  entityRect.y = static_cast<int>(location->GetY());
   entityRect.w = sprite->GetLocation().w;
   entityRect.h = sprite->GetLocation().h;
 
