@@ -1,6 +1,7 @@
 #include "Message/MessageFactory.h"
 #include "Message/LocationChangeMessage.h"
 #include "Message/CollisionMessage.h"
+#include "Entity/Entity.h"
 
 std::unique_ptr<Message> MessageFactory::CreateLocationChangeMessage(double x, double y)
 {

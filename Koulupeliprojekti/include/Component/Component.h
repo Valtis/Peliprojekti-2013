@@ -3,6 +3,7 @@
 #include "Message/MessageFactory.h"
 enum class ComponentType : int { NONE, GRAPHICS, COLLISION, INPUT, LOCATION, VELOCITY, ACCELERATION };
 class Entity;
+
 class Component
 {
 public:

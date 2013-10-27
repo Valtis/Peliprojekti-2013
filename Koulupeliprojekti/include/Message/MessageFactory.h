@@ -2,7 +2,7 @@
 class Message;
 #include <memory>
 #include <SDL.h>
-#include "Entity/Entity.h"
+class Entity;
 
 namespace MessageFactory
 {
