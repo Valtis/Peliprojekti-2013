@@ -11,6 +11,8 @@ public:
 
 private:
   bool HandleVelocityChangeMessage(Message *msg);
+  bool HandleSetVelocityMessage(Message *msg);
+
   double m_xVelocity;
   double m_yVelocity;
 };

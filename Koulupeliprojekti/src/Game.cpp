@@ -7,6 +7,7 @@
 #include "Component/GraphicsComponent.h"
 #include "Component/LocationComponent.h"
 #include "Graphics/Camera/EntityTrackingCamera.h"
+#include "Component/InputComponent.h"
 // for testing purposes - testing windows -  feel free to remove
 #include "UI/Window/Window.h"
 #include "UI/Window/Button.h"
@@ -103,12 +104,28 @@ void Game::Initialize()
   std::unique_ptr<LocationComponent> l(new LocationComponent);
   l->SetLocation(400, 400);
   e->AddComponent(ComponentType::LOCATION, std::move(l));
+  std::unique_ptr<InputComponent> i(new InputComponent);
+  i->RegisterInputHandler(m_inputManager);  
+
+  e->AddComponent(ComponentType::INPUT, std::move(i));
+
+
 
   std::unique_ptr<EntityTrackingCamera> camera(new EntityTrackingCamera);
   camera->SetEntity(e.get());
   m_testDebugCamera = std::move(camera);
   level->AddEntity(std::move(e));
-  
+
+
+  e.reset(new Entity);
+  g.reset(new GraphicsComponent);
+  g->AddFrame(0, 200000);
+  e->AddComponent(ComponentType::GRAPHICS, std::move(g));
+  l.reset(new LocationComponent);
+  l->SetLocation(600, 600);
+  e->AddComponent(ComponentType::LOCATION, std::move(l));
+  level->AddEntity(std::move(e));
+
   m_levelManager.AddLevel(std::move(level));
   m_levelManager.SetCurrentLevel(0);
 }

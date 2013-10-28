@@ -7,5 +7,7 @@ class Entity;
 namespace MessageFactory
 {
   std::unique_ptr<Message> CreateLocationChangeMessage(double x, double y);
+  std::unique_ptr<Message> CreateVelocityChangeMessage(double x, double y);
+  std::unique_ptr<Message> CreateSetVelocityMessage(double x, double y);
   std::unique_ptr<Message> CreateCollisionMessage(Entity *entity, SDL_Rect &intersection);
 }
