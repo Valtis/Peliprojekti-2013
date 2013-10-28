@@ -18,7 +18,7 @@ bool WindowManager::HandleInput(Command *command)
   // todo - catch keyboard events for menu etc
   if (command == nullptr || command->GetType() != MessageType::MOUSE_COMMAND)
   {
-    return true;
+    return false;
   }
 
   MouseCommand *mouseCommand = static_cast<MouseCommand *>(command);
@@ -47,14 +47,14 @@ bool  WindowManager::HandleEvent(const SDL_Event &event)
   default:
     LoggerManager::GetLog(WINDOW_MANAGER_LOG).AddLine(LogLevel::WARNING, "Non-mouse event in WindowManager - shouldn't happen (event type: " + std::to_string(event.type) + ")");
   }
-  return true;
+  return false;
 }
 
 bool  WindowManager::HandleMouseMotion(const SDL_Event &event)
 {
   if (!m_leftButtonDown || m_windows.empty())
   {
-    return true;
+    return false;
   }
 
   if (m_dragStatus == DragStatus::Not_Dragging)
@@ -73,10 +73,10 @@ bool  WindowManager::HandleMouseMotion(const SDL_Event &event)
   if (m_dragStatus == DragStatus::Dragging)
   {
     m_windows[0]->OnDrag(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
-    return false;
+    return true;
   }
 
-  return true;
+  return false;
 }
 
 bool WindowManager::HandleDownButton(const SDL_Event &event)
@@ -112,7 +112,7 @@ bool WindowManager::HandleMouseWheel(const SDL_Event &event)
   {
     return NotifyWindowUnderCursorOnEvent([=](Window *window) { window->OnMouseWheelScrollDown(x, y ); }, x, y);
   }
-  return true;
+  return false;
 }
 
 bool WindowManager::NotifyWindowUnderCursorOnEvent(std::function<void(Window *)> f, int x, int y)
@@ -120,11 +120,11 @@ bool WindowManager::NotifyWindowUnderCursorOnEvent(std::function<void(Window *)>
   Window * window = GetWindowUnderCoordinates(x, y);
   if (window == nullptr)
   {
-    return true;
+    return false;
   }
 
   f(window);
-  return false;
+  return true;
 }
 
 

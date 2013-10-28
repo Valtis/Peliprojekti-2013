@@ -4,10 +4,12 @@
 #include "Graphics/FontManager.h"
 // for testing purposes until level manager actually contains levels - feel free to remove
 #include "Entity/Entity.h"
+#include "Component/InputComponent.h"
 #include "Component/GraphicsComponent.h"
 #include "Component/LocationComponent.h"
+#include "Component/VelocityComponent.h"
 #include "Graphics/Camera/EntityTrackingCamera.h"
-#include "Component/InputComponent.h"
+
 // for testing purposes - testing windows -  feel free to remove
 #include "UI/Window/Window.h"
 #include "UI/Window/Button.h"
@@ -109,6 +111,8 @@ void Game::Initialize()
 
   e->AddComponent(ComponentType::INPUT, std::move(i));
 
+  std::unique_ptr<VelocityComponent> v(new VelocityComponent);
+  e->AddComponent(ComponentType::VELOCITY, std::move(v));
 
 
   std::unique_ptr<EntityTrackingCamera> camera(new EntityTrackingCamera);

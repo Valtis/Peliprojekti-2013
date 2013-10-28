@@ -49,7 +49,7 @@ bool VelocityComponent::HandleVelocityChangeMessage(Message *msg)
 
 bool VelocityComponent::HandleSetVelocityMessage(Message *msg)
 {
-  if (msg->GetType() != MessageType::VELOCITY_CHANGE)
+  if (msg->GetType() != MessageType::SET_VELOCITY)
   {
     LoggerManager::GetLog(COMPONENT_LOG).AddLine(LogLevel::WARNING, "Invalid message type received in VelocityComponent::HandleSetVelocityMessage() - ignoring");
     return true;

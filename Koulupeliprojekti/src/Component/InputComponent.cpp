@@ -15,7 +15,7 @@ InputComponent::~InputComponent()
 
 void InputComponent::OnAttatchingToEntity()
 {
- 
+
 }
 
 void InputComponent::RegisterInputHandler(InputManager &manager)
@@ -27,16 +27,16 @@ bool InputComponent::HandleInput( Command *msg )
 {
   if (msg->GetType() != MessageType::CONTROL_COMMAND)
   {
-    return true;
+    return false;
   }
 
   auto *command = static_cast<ControlCommand *>(msg);
   double xVel = 2;
   double yVel = 2;
- if (command->GetState() == false)
- {
-   xVel = yVel = 0;
- }
+  if (command->GetState() == false)
+  {
+    xVel = yVel = 0;
+  }
 
   // kinda ugly, probably needs to be refactored
   double newXVelocity = 0;
@@ -57,8 +57,9 @@ bool InputComponent::HandleInput( Command *msg )
     break;
   case Action::DOWN:
     newYVelocity = yVel;
+    break;
   default:
-    return true; // not handling anything
+    return false; // not handling anything
     break;
   }
 
@@ -67,5 +68,5 @@ bool InputComponent::HandleInput( Command *msg )
   auto message = MessageFactory::CreateSetVelocityMessage(newXVelocity, newYVelocity);
   GetOwner()->SendMessage(message.get());
 
-  return false;
+  return true;
 }
