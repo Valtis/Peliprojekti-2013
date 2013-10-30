@@ -17,6 +17,7 @@ protected:
 private:
 
   bool HandleLocationChangeMessage(Message *message);
+  bool HandleCollisionMessage(Message *message);
 
   double m_x;
   double m_y;

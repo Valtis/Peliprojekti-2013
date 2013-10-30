@@ -63,8 +63,6 @@ bool InputComponent::HandleInput( Command *msg )
     break;
   }
 
-
-
   auto message = MessageFactory::CreateSetVelocityMessage(newXVelocity, newYVelocity);
   GetOwner()->SendMessage(message.get());
 

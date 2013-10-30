@@ -7,7 +7,7 @@ class CollisionComponent : public Component
 public:
   CollisionComponent();
   CollisionComponent(int w, int h);
-  CollisionComponent(int w, int h, int x, int y);
+  CollisionComponent(int x, int y, int w, int h);
   CollisionComponent(SDL_Rect &box) : m_hitbox(box) { };
   ~CollisionComponent();
   void OnAttatchingToEntity() override;

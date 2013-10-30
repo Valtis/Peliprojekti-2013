@@ -26,11 +26,11 @@ void Level::RegisterMessageHandler(MessageType type, Priority priority, MessageC
 
 void Level::Update(double ticksPassed)
 {
-  Collision::CheckCollisions(m_entities);
   for (auto &entity : m_entities)
   {
     entity->Update(ticksPassed);
   }
+  Collision::CheckCollisions(m_entities);
 }
 
 

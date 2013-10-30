@@ -20,10 +20,10 @@ CollisionComponent::CollisionComponent(int w, int h)
   m_hitbox.y = 0;
 }
 
-CollisionComponent::CollisionComponent(int w, int h, int x, int y)
+CollisionComponent::CollisionComponent(int x, int y, int w, int h)
 {
-  m_hitbox.h = w;
-  m_hitbox.w = h;
+  m_hitbox.h = h;
+  m_hitbox.w = w;
   m_hitbox.x = x;
   m_hitbox.y = y;
 }

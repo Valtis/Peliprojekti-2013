@@ -8,6 +8,7 @@
 #include "Component/GraphicsComponent.h"
 #include "Component/LocationComponent.h"
 #include "Component/VelocityComponent.h"
+#include "Component/CollisionComponent.h"
 #include "Graphics/Camera/EntityTrackingCamera.h"
 
 // for testing purposes - testing windows -  feel free to remove
@@ -65,7 +66,6 @@ void Game::Initialize()
 
   FontManager::Instance().Initialize("data/fonts/FreeMono.otf");
 
-
   SDL_Rect location;
   SDL_Color color;
 
@@ -114,6 +114,9 @@ void Game::Initialize()
   std::unique_ptr<VelocityComponent> v(new VelocityComponent);
   e->AddComponent(ComponentType::VELOCITY, std::move(v));
 
+  std::unique_ptr<CollisionComponent> c(new CollisionComponent(0, 0, 50, 50));
+  e->AddComponent(ComponentType::COLLISION, std::move(c));
+
 
   std::unique_ptr<EntityTrackingCamera> camera(new EntityTrackingCamera);
   camera->SetEntity(e.get());
@@ -128,6 +131,9 @@ void Game::Initialize()
   l.reset(new LocationComponent);
   l->SetLocation(600, 600);
   e->AddComponent(ComponentType::LOCATION, std::move(l));
+  c.reset(new CollisionComponent(0, 0, 50, 50));
+  e->AddComponent(ComponentType::COLLISION, std::move(c));
+
   level->AddEntity(std::move(e));
 
   m_levelManager.AddLevel(std::move(level));
