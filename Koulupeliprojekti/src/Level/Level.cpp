@@ -1,6 +1,11 @@
 #include "Level/Level.h"
 #include "Entity/Entity.h"
+#include "Entity/EntityFactory.h"
 #include "Collision/CollisionChecker.h"
+#include "Utility/LoggerManager.h"
+
+#include "Message/SpawnEntityMessage.h"
+
 
 Level::Level()
 {
@@ -48,5 +53,12 @@ void Level::AddEntity(std::unique_ptr<Entity> e)
 
 bool Level::HandleEntitySpawning(Message *msg)
 {
+  if (msg->GetType() != MessageType::SPAWN_ENTITY)
+  {
+    LoggerManager::GetLog(LEVEL_LOG).AddLine(LogLevel::WARNING, "Invalid message type received in LocationComponent::HandleLocationChangeMessage() - ignoring");
+    return true;
+  }
+
+  AddEntity(EntityFactory::CreateEntity(static_cast<SpawnEntityMessage *>(msg)));
   return false;
 }

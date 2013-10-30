@@ -228,6 +228,9 @@
     <ClInclude Include="include\Message\SpawnEntityMessage.h">
       <Filter>Header Files\Message</Filter>
     </ClInclude>
+    <ClInclude Include="include\Entity\EntityFactory.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -343,6 +346,9 @@
     </ClCompile>
     <ClCompile Include="src\Message\Commands\ControlCommand.cpp">
       <Filter>Source Files\Message\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entity\EntityFactory.cpp">
+      <Filter>Source Files\Entity</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

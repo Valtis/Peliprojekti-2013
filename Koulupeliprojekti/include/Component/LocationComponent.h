@@ -11,7 +11,8 @@ public:
   double GetX() { return m_x; }
   double GetY() { return m_y; }
   void SetLocation(double x, double y) { m_x = x; m_y = y;}
-  Direction GetDirection() { m_direction; }
+  Direction GetDirection() { return m_direction; }
+  void SetDirection(Direction d) { m_direction = d; }
 protected:
   void OnAttatchingToEntity() override;
 

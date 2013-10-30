@@ -11,8 +11,8 @@ public:
   ~SpawnEntityMessage() { }
   MessageType GetType() const override { return MessageType::SPAWN_ENTITY; }
   EntityType GetEntityType() const { return m_entityType; }
-  const Entity *Spawner() const { return m_spawner; }
+  Entity *Spawner() const { return m_spawner; }
 private:
   const EntityType m_entityType;
-  const Entity *m_spawner;
+  Entity *m_spawner;
 };
