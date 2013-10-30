@@ -225,6 +225,9 @@
     <ClInclude Include="include\Message\Commands\ControlCommand.h">
       <Filter>Header Files\Message\Commands</Filter>
     </ClInclude>
+    <ClInclude Include="include\Message\SpawnEntityMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">

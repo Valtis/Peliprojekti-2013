@@ -4,7 +4,8 @@
 
 Level::Level()
 {
-
+  m_messageProcessor.RegisterMessageHandler(MessageType::SPAWN_ENTITY, Priority::HIGHEST, 
+    [&](Message *msg) { return this->HandleEntitySpawning(msg); });
 }
 
 Level::~Level()
@@ -43,4 +44,9 @@ void Level::AddEntity(std::unique_ptr<Entity> e)
 {
   e->SetParent(this);
   m_entities.push_back(std::move(e));
+}
+
+bool Level::HandleEntitySpawning(Message *msg)
+{
+  return false;
 }

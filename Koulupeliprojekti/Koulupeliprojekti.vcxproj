@@ -42,6 +42,7 @@
     <ClInclude Include="include\Message\MessageFactory.h" />
     <ClInclude Include="include\Message\MessageProcessor.h" />
     <ClInclude Include="include\Message\SetVelocityMessage.h" />
+    <ClInclude Include="include\Message\SpawnEntityMessage.h" />
     <ClInclude Include="include\Message\VelocityChangeMessage.h" />
     <ClInclude Include="include\UI\Controller\Controller.h" />
     <ClInclude Include="include\UI\Controller\KeyboardController.h" />

@@ -4,6 +4,9 @@
 #include "Entity/EntityParent.h"
 #include "Component/Component.h"
 #include "Message/MessageProcessor.h"
+
+enum class EntityType : int { BULLET };
+
 class Entity : public EntityParent
 {
 

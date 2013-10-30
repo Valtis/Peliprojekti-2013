@@ -17,6 +17,7 @@ public:
   void AddEntity(std::unique_ptr<Entity> e);
 private:
 
+  bool HandleEntitySpawning(Message *msg);
   std::vector<std::unique_ptr<Entity>> m_entities;
   std::vector<std::unique_ptr<Entity>> m_ground; // potentially more than ground, rename if needed
   MessageProcessor m_messageProcessor;

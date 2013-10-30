@@ -3,6 +3,8 @@
 #include "Message/VelocityChangeMessage.h"
 #include "Message/SetVelocityMessage.h"
 #include "Message/CollisionMessage.h"
+#include "Message/SpawnEntityMessage.h"
+
 #include "Entity/Entity.h"
 
 std::unique_ptr<Message> MessageFactory::CreateLocationChangeMessage(double x, double y)
@@ -25,3 +27,7 @@ std::unique_ptr<Message> MessageFactory::CreateCollisionMessage(Entity *entity, 
   return std::unique_ptr<Message>(new CollisionMessage(entity,intersection));
 }
 
+std::unique_ptr<Message> MessageFactory::CreateSpawnEntityMessage(EntityType type, Entity *spawner)
+{
+  return std::unique_ptr<Message>(new SpawnEntityMessage(type, spawner));
+}
