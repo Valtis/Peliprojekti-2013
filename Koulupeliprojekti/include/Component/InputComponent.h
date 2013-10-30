@@ -15,4 +15,5 @@ public:
 
 private:
   bool HandleInput(Command *msg);
+  void Fire();
 };

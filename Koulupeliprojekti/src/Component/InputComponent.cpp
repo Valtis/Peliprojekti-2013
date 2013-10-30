@@ -58,6 +58,9 @@ bool InputComponent::HandleInput( Command *msg )
   case Action::DOWN:
     newYVelocity = yVel;
     break;
+  case Action::FIRE:
+    Fire();
+    break;
   default:
     return false; // not handling anything
     break;
@@ -67,4 +70,10 @@ bool InputComponent::HandleInput( Command *msg )
   GetOwner()->SendMessage(message.get());
 
   return true;
+}
+
+void InputComponent::Fire()
+{
+  auto msg = MessageFactory::CreateSpawnEntityMessage(EntityType::BULLET, GetOwner());
+  GetOwner()->SendMessage(msg.get());
 }

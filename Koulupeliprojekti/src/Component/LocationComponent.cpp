@@ -4,7 +4,7 @@
 #include "Message/LocationChangeMessage.h"
 #include "Component/VelocityComponent.h"
 #include "Message/CollisionMessage.h"
-LocationComponent::LocationComponent() : m_x(0), m_y(0), m_direction(0)
+LocationComponent::LocationComponent() : m_x(0), m_y(0), m_direction(Direction::RIGHT)
 {
 
 }
