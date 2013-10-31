@@ -9,6 +9,7 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
                           const std::vector<std::unique_ptr<Entity>> &entities)
 {
   CollisionComponent *cc, *cc2;
+  SDL_Rect cc_hitbox, cc2_hitbox;
   SDL_Rect intersectRect;
   std::vector<std::unique_ptr<Entity>>::const_iterator e;
 
@@ -16,15 +17,18 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
   if (!cc)
     return;
 
+  cc_hitbox = cc->GetHitbox();
   for (e = _e; e != entities.end(); e++)
   {
     if (entity == (*e))
       continue;
 
     cc2 = static_cast<CollisionComponent *>((*e)->GetComponent(ComponentType::COLLISION));
-    SDL_Rect cc_hitbox = cc->GetHitbox();
-    SDL_Rect cc2_hitbox = cc2->GetHitbox();
-    if (cc2 && SDL_IntersectRect(&cc_hitbox,&cc2_hitbox,&intersectRect))
+    if (!cc2)
+      continue;
+
+    cc2_hitbox = cc2->GetHitbox();
+    if (SDL_IntersectRect(&cc_hitbox,&cc2_hitbox,&intersectRect))
     {
       auto collisionMessage1 =
         MessageFactory::CreateCollisionMessage(entity.get(), intersectRect);

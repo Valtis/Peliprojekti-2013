@@ -33,14 +33,6 @@ CollisionComponent::~CollisionComponent()
 
 }
 
-void CollisionComponent::OnAttatchingToEntity()
-{
-  Component::OnAttatchingToEntity();
-  
-  // GetOwner()->RegisterMessageHandler(MessageType::COLLISION, Priority::NORMAL, 
-  // [&](Message *msg) { return this->HandleCollisionMessage(msg); });
-}
-
 SDL_Rect CollisionComponent::GetHitbox()
 {
   SDL_Rect rect;
@@ -55,15 +47,4 @@ SDL_Rect CollisionComponent::GetHitbox()
   rect.y = m_hitbox.y + static_cast<int>(loc->GetY() + 0.5);
 
   return rect;
-}
-
-bool CollisionComponent::HandleCollisionMessage(Message *msg)
-{
-  if (msg->GetType() != MessageType::COLLISION)
-  {
-    LoggerManager::GetLog(COMPONENT_LOG).AddLine(LogLevel::WARNING, "Invalid message type received in CollisionComponent::HandleCollisionMessage() - ignoring");
-    return true;
-  }
-
-  return false;
 }
