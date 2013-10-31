@@ -6,6 +6,7 @@
 #include "Component/GraphicsComponent.h"
 #include "Component/InputComponent.h"
 #include "Component/VelocityComponent.h"
+#include "Component/FactionComponent.h"
 #include <string>
 #include <SDL.h>
 
@@ -14,12 +15,21 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   Entity *spawner = msg->Spawner();
 
   LocationComponent *spawnerLocation = static_cast<LocationComponent *>(spawner->GetComponent(ComponentType::LOCATION));
+  FactionComponent *spawnerFaction = static_cast<FactionComponent *>(spawner->GetComponent(ComponentType::FACTION));
   SDL_assert(spawnerLocation != nullptr);
+
+  Faction bulletFaction = Faction::NONE;
+  if (spawnerFaction != nullptr)
+  {
+    bulletFaction = spawnerFaction->GetFaction();
+  }
   
   double x = spawnerLocation->GetX();
   double y = spawnerLocation->GetY();
   Direction direction = spawnerLocation->GetDirection();
   
+
+
   std::unique_ptr<LocationComponent> location(new LocationComponent());
   location->SetLocation(x, y);
   location->SetDirection(spawnerLocation->GetDirection());
@@ -32,18 +42,20 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   std::unique_ptr<VelocityComponent> velocity(new VelocityComponent);
   y = 0;
   x = 5;
+
   if (direction == Direction::LEFT)
   {
     x = -5;
   }
   velocity->SetVelocity(x, y);
 
-  // faction component here
+  std::unique_ptr<FactionComponent> faction(new FactionComponent(bulletFaction)); 
 
   e->AddComponent(ComponentType::COLLISION, std::move(collision));
   e->AddComponent(ComponentType::GRAPHICS, std::move(graphics));
   e->AddComponent(ComponentType::LOCATION, std::move(location));
   e->AddComponent(ComponentType::VELOCITY, std::move(velocity));
+  e->AddComponent(ComponentType::FACTION, std::move(faction));
 }
 
 std::unique_ptr<Entity> EntityFactory::CreateEntity(SpawnEntityMessage *msg)
