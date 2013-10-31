@@ -8,7 +8,6 @@ class InputComponent : public Component
 public:
   InputComponent();
   ~InputComponent();
-
   void OnAttatchingToEntity() override;
   // possibly redo
   void RegisterInputHandler(InputManager &manager);

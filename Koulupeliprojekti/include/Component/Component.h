@@ -1,8 +1,7 @@
 #pragma once
 #include "Message/Message.h"
 #include "Message/MessageFactory.h"
-enum class ComponentType : int { NONE, GRAPHICS, COLLISION, INPUT, LOCATION, VELOCITY, ACCELERATION };
-class Entity;
+enum class ComponentType : int { NONE, GRAPHICS, COLLISION, INPUT, LOCATION, VELOCITY, ACCELERATION, AI };
 
 class Component
 {

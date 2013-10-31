@@ -15,7 +15,8 @@ InputComponent::~InputComponent()
 
 void InputComponent::OnAttatchingToEntity()
 {
-
+  GetOwner()->RegisterMessageHandler(MessageType::CONTROL_COMMAND, Priority::NORMAL,
+    [&](Message *msg) { return this->HandleInput(static_cast<Command*>(msg)); });
 }
 
 void InputComponent::RegisterInputHandler(InputManager &manager)
