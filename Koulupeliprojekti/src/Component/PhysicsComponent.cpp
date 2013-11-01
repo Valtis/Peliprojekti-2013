@@ -1,34 +1,29 @@
 #include "Component/PhysicsComponent.h"
 
 PhysicsComponent::PhysicsComponent()
-  : m_acceleration(1.0f), m_terminal_velocity(4.0f)
+  : m_acceleration_x(0.0f), m_acceleration_y(1.0f), m_terminal_velocity(4.0f)
 {
-  m_direction.x = 0;
-  m_direction.y = 1;
+
 }
 
-PhysicsComponent::PhysicsComponent(SDL_Point &direction)
-  : m_acceleration(1.0f), m_terminal_velocity(4.0f)
+PhysicsComponent::PhysicsComponent(float terminal_velocity)
+  : m_acceleration_x(0.0f), m_acceleration_y(1.0f),
+    m_terminal_velocity(terminal_velocity)
 {
-  m_direction.x = direction.x;
-  m_direction.y = direction.y;
+
 }
 
-PhysicsComponent::PhysicsComponent(float acceleration, float terminal_velocity)
+PhysicsComponent::PhysicsComponent(float acceleration_x, float acceleration_y)
+  : m_terminal_velocity(4.0f)
 {
-  m_acceleration = acceleration;
-  m_terminal_velocity = terminal_velocity;
-  m_direction.x = 0;
-  m_direction.y = 1;
+  SetAcceleration(acceleration_x, acceleration_y);
 }
 
-PhysicsComponent::PhysicsComponent(SDL_Point &direction,
-                                   float acceleration, float terminal_velocity)
+PhysicsComponent::PhysicsComponent(float acceleration_x, float acceleration_y,
+                                   float terminal_velocity)
+  : m_terminal_velocity(terminal_velocity)
 {
-  m_acceleration = acceleration;
-  m_terminal_velocity = terminal_velocity;
-  m_direction.x = direction.x;
-  m_direction.y = direction.y;
+  SetAcceleration(acceleration_x, acceleration_y);
 }
 
 PhysicsComponent::~PhysicsComponent()
@@ -36,17 +31,35 @@ PhysicsComponent::~PhysicsComponent()
 
 }
 
-SDL_Point PhysicsComponent::GetDirection()
+float PhysicsComponent::GetAccelerationX()
 {
-  return m_direction;
+  return m_acceleration_x;
 }
 
-float PhysicsComponent::GetAcceleration()
+float PhysicsComponent::GetAccelerationY()
 {
-  return m_acceleration;
+  return m_acceleration_y;
 }
 
 float PhysicsComponent::GetTerminalVelocity()
 {
   return m_terminal_velocity;
+}
+
+void PhysicsComponent::SetAcceleration(float x, float y)
+{
+  double _d, _x, _y;
+  if (x == 0 && y == 0)
+  {
+    m_acceleration_x = x;
+    m_acceleration_y = y;
+    return;
+  }
+
+  _x = static_cast<double>(x);
+  _y = static_cast<double>(y);
+  _d = _x + _y;
+
+  m_acceleration_x = static_cast<float>(_x / _d);
+  m_acceleration_y = static_cast<float>(_y / _d);
 }
