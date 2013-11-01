@@ -234,6 +234,9 @@
     <ClInclude Include="include\Component\FactionComponent.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="include\Component\HealthComponent.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -354,6 +357,9 @@
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
     <ClCompile Include="src\Component\FactionComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\HealthComponent.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>

@@ -16,6 +16,7 @@
     <ClInclude Include="include\Component\CollisionComponent.h" />
     <ClInclude Include="include\Component\FactionComponent.h" />
     <ClInclude Include="include\Component\GraphicsComponent.h" />
+    <ClInclude Include="include\Component\HealthComponent.h" />
     <ClInclude Include="include\Component\InputComponent.h" />
     <ClInclude Include="include\Component\LocationComponent.h" />
     <ClInclude Include="include\Component\VelocityComponent.h" />
@@ -68,6 +69,7 @@
     <ClCompile Include="src\Component\CollisionComponent.cpp" />
     <ClCompile Include="src\Component\FactionComponent.cpp" />
     <ClCompile Include="src\Component\GraphicsComponent.cpp" />
+    <ClCompile Include="src\Component\HealthComponent.cpp" />
     <ClCompile Include="src\Component\InputComponent.cpp" />
     <ClCompile Include="src\Component\LocationComponent.cpp" />
     <ClCompile Include="src\Component\VelocityComponent.cpp" />
