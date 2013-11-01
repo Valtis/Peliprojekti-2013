@@ -16,17 +16,17 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
   if (!cc)
     return;
 
-  for (auto cc_hitbox : cc->GetHitboxes(HitboxType::OBJECT))
+  for (e = _e; e != entities.end(); e++)
   {
-    for (e = _e; e != entities.end(); e++)
+    if (entity == (*e))
+      continue;
+
+    cc2 = static_cast<CollisionComponent *>((*e)->GetComponent(ComponentType::COLLISION));
+    if (!cc2)
+      continue;
+    
+    for (auto cc_hitbox : cc->GetHitboxes(HitboxType::OBJECT))
     {
-      if (entity == (*e))
-        continue;
-
-      cc2 = static_cast<CollisionComponent *>((*e)->GetComponent(ComponentType::COLLISION));
-      if (!cc2)
-        continue;
-
       for (auto cc2_hitbox : cc2->GetHitboxes(HitboxType::OBJECT))
       {
         if (SDL_IntersectRect(&cc_hitbox,&cc2_hitbox,&intersectRect))
