@@ -9,6 +9,7 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
                           const std::vector<std::unique_ptr<Entity>> &entities)
 {
   CollisionComponent *cc, *cc2;
+  std::vector<SDL_Rect> cc_hitboxes, cc2_hitboxes;
   SDL_Rect intersectRect;
   std::vector<std::unique_ptr<Entity>>::const_iterator e;
 
@@ -16,6 +17,7 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
   if (!cc)
     return;
 
+  cc_hitboxes = cc->GetHitboxes(HitboxType::OBJECT);
   for (e = _e; e != entities.end(); e++)
   {
     if (entity == (*e))
@@ -25,9 +27,10 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
     if (!cc2)
       continue;
     
-    for (auto cc_hitbox : cc->GetHitboxes(HitboxType::OBJECT))
+    cc2_hitboxes = cc2->GetHitboxes(HitboxType::OBJECT);
+    for (auto cc_hitbox : cc_hitboxes)
     {
-      for (auto cc2_hitbox : cc2->GetHitboxes(HitboxType::OBJECT))
+      for (auto cc2_hitbox : cc2_hitboxes)
       {
         if (SDL_IntersectRect(&cc_hitbox,&cc2_hitbox,&intersectRect))
         {
