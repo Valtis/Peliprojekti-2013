@@ -1,17 +1,24 @@
 #pragma once
+#include <vector>
 #include "Component/Component.h"
 #include <SDL.h>
+
+enum class HitboxType : int { OBJECT, WALL, TRIGGER };
 
 class CollisionComponent : public Component
 {
 public:
   CollisionComponent();
-  CollisionComponent(int w, int h);
-  CollisionComponent(int x, int y, int w, int h);
-  CollisionComponent(SDL_Rect &box) : m_hitbox(box) { };
   ~CollisionComponent();
-  SDL_Rect GetHitbox(); // World coordinates
-
+  void AddHitbox(SDL_Rect &box, const HitboxType type);
+  void AddHitbox(int x, int y, int w, int h, const HitboxType type);
+  const std::vector<SDL_Rect> GetHitboxes(const HitboxType type); // World coordinates
+  
 private:
-  SDL_Rect m_hitbox; // Local coordinates
+  SDL_Rect TransformHitbox(const SDL_Rect box); // Local -> World
+
+  // Local coordinates
+  std::vector<SDL_Rect> m_object_hitboxes;
+  std::vector<SDL_Rect> m_wall_hitboxes;
+  std::vector<SDL_Rect> m_trigger_hitboxes;
 };

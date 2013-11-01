@@ -6,26 +6,7 @@
 
 CollisionComponent::CollisionComponent()
 {
-  m_hitbox.h = 0;
-  m_hitbox.w = 0;
-  m_hitbox.x = 0;
-  m_hitbox.y = 0;
-}
 
-CollisionComponent::CollisionComponent(int w, int h)
-{
-  m_hitbox.h = w;
-  m_hitbox.w = h;
-  m_hitbox.x = 0;
-  m_hitbox.y = 0;
-}
-
-CollisionComponent::CollisionComponent(int x, int y, int w, int h)
-{
-  m_hitbox.h = h;
-  m_hitbox.w = w;
-  m_hitbox.x = x;
-  m_hitbox.y = y;
 }
 
 CollisionComponent::~CollisionComponent()
@@ -33,7 +14,56 @@ CollisionComponent::~CollisionComponent()
 
 }
 
-SDL_Rect CollisionComponent::GetHitbox()
+void CollisionComponent::AddHitbox(SDL_Rect &box, const HitboxType type)
+{
+  switch (type)
+  {
+  case HitboxType::OBJECT:
+    m_object_hitboxes.push_back(box);
+    break;
+  case HitboxType::WALL:
+    m_wall_hitboxes.push_back(box);
+    break;
+  case HitboxType::TRIGGER:
+    m_trigger_hitboxes.push_back(box);
+    break;
+  default:
+    LoggerManager::GetLog("error.log").AddLine(LogLevel::WARNING,
+                                               "Unrecognized Hitbox Type.");
+  }
+}
+
+void CollisionComponent::AddHitbox(int x, int y, int w, int h,
+                                   const HitboxType type)
+{
+  SDL_Rect box = { x, y, w, h };
+  AddHitbox(box, type);
+}
+
+const std::vector<SDL_Rect> CollisionComponent::GetHitboxes(const HitboxType type)
+{
+  std::vector<SDL_Rect> boxes;
+  
+  switch (type)
+  {
+  case HitboxType::OBJECT:
+    for (SDL_Rect box : m_object_hitboxes)
+      boxes.push_back(TransformHitbox(box));
+    break;
+  case HitboxType::WALL:
+    for (SDL_Rect box : m_wall_hitboxes)
+      boxes.push_back(TransformHitbox(box));
+    break;
+  case HitboxType::TRIGGER:
+    for (SDL_Rect box : m_trigger_hitboxes)
+      boxes.push_back(TransformHitbox(box));
+    break;
+  }
+
+  return boxes;
+}
+
+SDL_Rect CollisionComponent::TransformHitbox(const SDL_Rect box)
 {
   SDL_Rect rect;
   LocationComponent *loc;
@@ -41,10 +71,10 @@ SDL_Rect CollisionComponent::GetHitbox()
   loc =
     static_cast<LocationComponent *>(GetOwner()->GetComponent(ComponentType::LOCATION));
   
-  rect.w = m_hitbox.w;
-  rect.h = m_hitbox.h;
-  rect.x = m_hitbox.x + static_cast<int>(loc->GetX() + 0.5);
-  rect.y = m_hitbox.y + static_cast<int>(loc->GetY() + 0.5);
+  rect.w = box.w;
+  rect.h = box.h;
+  rect.x = box.x + static_cast<int>(loc->GetX() + 0.5);
+  rect.y = box.y + static_cast<int>(loc->GetY() + 0.5);
 
   return rect;
 }

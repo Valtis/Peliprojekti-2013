@@ -9,7 +9,6 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
                           const std::vector<std::unique_ptr<Entity>> &entities)
 {
   CollisionComponent *cc, *cc2;
-  SDL_Rect cc_hitbox, cc2_hitbox;
   SDL_Rect intersectRect;
   std::vector<std::unique_ptr<Entity>>::const_iterator e;
 
@@ -17,25 +16,29 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
   if (!cc)
     return;
 
-  cc_hitbox = cc->GetHitbox();
-  for (e = _e; e != entities.end(); e++)
+  for (auto cc_hitbox : cc->GetHitboxes(HitboxType::OBJECT))
   {
-    if (entity == (*e))
-      continue;
-
-    cc2 = static_cast<CollisionComponent *>((*e)->GetComponent(ComponentType::COLLISION));
-    if (!cc2)
-      continue;
-
-    cc2_hitbox = cc2->GetHitbox();
-    if (SDL_IntersectRect(&cc_hitbox,&cc2_hitbox,&intersectRect))
+    for (e = _e; e != entities.end(); e++)
     {
-      auto collisionMessage1 =
-        MessageFactory::CreateCollisionMessage(entity.get(), intersectRect);
-      auto collisionMessage2 =
-        MessageFactory::CreateCollisionMessage((*e).get(), intersectRect);
-      entity->SendMessage(collisionMessage1.get());
-      (*e)->SendMessage(collisionMessage2.get());
+      if (entity == (*e))
+        continue;
+
+      cc2 = static_cast<CollisionComponent *>((*e)->GetComponent(ComponentType::COLLISION));
+      if (!cc2)
+        continue;
+
+      for (auto cc2_hitbox : cc2->GetHitboxes(HitboxType::OBJECT))
+      {
+        if (SDL_IntersectRect(&cc_hitbox,&cc2_hitbox,&intersectRect))
+        {
+          auto collisionMessage1 =
+            MessageFactory::CreateCollisionMessage(entity.get(), intersectRect);
+          auto collisionMessage2 =
+            MessageFactory::CreateCollisionMessage((*e).get(), intersectRect);
+          entity->SendMessage(collisionMessage1.get());
+          (*e)->SendMessage(collisionMessage2.get());
+        }
+      }
     }
   }
 }

@@ -114,7 +114,8 @@ void Game::Initialize()
   std::unique_ptr<VelocityComponent> v(new VelocityComponent);
   e->AddComponent(ComponentType::VELOCITY, std::move(v));
 
-  std::unique_ptr<CollisionComponent> c(new CollisionComponent(0, 0, 50, 50));
+  std::unique_ptr<CollisionComponent> c(new CollisionComponent());
+  c->AddHitbox(0, 0, 50, 50, HitboxType::OBJECT);
   e->AddComponent(ComponentType::COLLISION, std::move(c));
 
 
@@ -131,7 +132,8 @@ void Game::Initialize()
   l.reset(new LocationComponent);
   l->SetLocation(600, 600);
   e->AddComponent(ComponentType::LOCATION, std::move(l));
-  c.reset(new CollisionComponent(0, 0, 50, 50));
+  c.reset(new CollisionComponent());
+  c->AddHitbox(0, 0, 50, 50, HitboxType::OBJECT);
   e->AddComponent(ComponentType::COLLISION, std::move(c));
 
   level->AddEntity(std::move(e));
