@@ -6,7 +6,7 @@ HealthComponent::HealthComponent() : m_hitpoints(0), m_lives(0)
 
 }
 
-HealthComponent::HealthComponent(int hitpoints, int lives) : m_hitpoints(hitpoints), m_lives(lives)
+HealthComponent::HealthComponent(int hitpoints, int maxHitpoints, int lives) : m_hitpoints(hitpoints), m_maxHitpoints(maxHitpoints), m_lives(lives)
 {
 
 }

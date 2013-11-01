@@ -237,6 +237,9 @@
     <ClInclude Include="include\Component\HealthComponent.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="include\Message\TerminateEntityMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
