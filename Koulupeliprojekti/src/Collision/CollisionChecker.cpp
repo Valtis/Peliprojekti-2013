@@ -14,7 +14,7 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
   std::vector<std::unique_ptr<Entity>>::const_iterator e;
 
   cc = static_cast<CollisionComponent *>(entity->GetComponent(ComponentType::COLLISION));
-  if (!cc)
+  if (cc == nullptr)
     return;
 
   cc_hitboxes = cc->GetHitboxes(HitboxType::OBJECT);
@@ -24,7 +24,7 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
       continue;
 
     cc2 = static_cast<CollisionComponent *>((*e)->GetComponent(ComponentType::COLLISION));
-    if (!cc2)
+    if (cc2 == nullptr)
       continue;
     
     cc2_hitboxes = cc2->GetHitboxes(HitboxType::OBJECT);
