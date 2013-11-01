@@ -42,7 +42,7 @@ bool LocationComponent::HandleLocationChangeMessage(Message *msg)
   }
   else if (locationMessage->GetXChange() < 0)
   {
-    Direction::LEFT;
+    m_direction = Direction::LEFT;
   }
 
   return false;

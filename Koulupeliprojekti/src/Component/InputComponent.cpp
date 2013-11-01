@@ -3,7 +3,8 @@
 #include "Entity/Entity.h"
 #include "Message/MessageFactory.h"
 #include "UI/InputManager.h"
-InputComponent::InputComponent()
+#include <SDL.h>
+InputComponent::InputComponent() : m_debugLastFireTick(0)
 {
 
 }
@@ -74,6 +75,13 @@ bool InputComponent::HandleInput( Command *msg )
 
 void InputComponent::Fire()
 {
+  if (m_debugLastFireTick + 500 >= SDL_GetTicks())
+  {
+    return;
+  }
+ 
+  m_debugLastFireTick = SDL_GetTicks();
+
   auto msg = MessageFactory::CreateSpawnEntityMessage(EntityType::BULLET, GetOwner());
   GetOwner()->SendMessage(msg.get());
 }

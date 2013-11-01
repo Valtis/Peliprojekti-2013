@@ -27,9 +27,9 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
     if (cc2 && SDL_IntersectRect(&cc_hitbox,&cc2_hitbox,&intersectRect))
     {
       auto collisionMessage1 =
-        MessageFactory::CreateCollisionMessage(entity.get(), intersectRect);
-      auto collisionMessage2 =
         MessageFactory::CreateCollisionMessage((*e).get(), intersectRect);
+      auto collisionMessage2 =
+        MessageFactory::CreateCollisionMessage(entity.get(), intersectRect);
       entity->SendMessage(collisionMessage1.get());
       (*e)->SendMessage(collisionMessage2.get());
     }

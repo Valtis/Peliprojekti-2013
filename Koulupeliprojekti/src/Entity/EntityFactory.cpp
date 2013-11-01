@@ -7,6 +7,7 @@
 #include "Component/InputComponent.h"
 #include "Component/VelocityComponent.h"
 #include "Component/FactionComponent.h"
+#include "Component/HealthComponent.h"
 #include <string>
 #include <SDL.h>
 
@@ -37,7 +38,7 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   std::unique_ptr<GraphicsComponent> graphics(new GraphicsComponent());
   graphics->AddFrame(0, 200007);
 
-  std::unique_ptr<CollisionComponent> collision(new CollisionComponent(10, 10));
+  std::unique_ptr<CollisionComponent> collision(new CollisionComponent(20, 20));
 
   std::unique_ptr<VelocityComponent> velocity(new VelocityComponent);
   y = 0;
@@ -50,12 +51,15 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   velocity->SetVelocity(x, y);
 
   std::unique_ptr<FactionComponent> faction(new FactionComponent(bulletFaction)); 
+  std::unique_ptr<HealthComponent> health(new HealthComponent(1, 1, 0));
+
 
   e->AddComponent(ComponentType::COLLISION, std::move(collision));
   e->AddComponent(ComponentType::GRAPHICS, std::move(graphics));
   e->AddComponent(ComponentType::LOCATION, std::move(location));
   e->AddComponent(ComponentType::VELOCITY, std::move(velocity));
   e->AddComponent(ComponentType::FACTION, std::move(faction));
+  e->AddComponent(ComponentType::HEALTH, std::move(health));
 }
 
 std::unique_ptr<Entity> EntityFactory::CreateEntity(SpawnEntityMessage *msg)
