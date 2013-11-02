@@ -255,6 +255,9 @@
     <ClInclude Include="include\Entity\EntityFactory.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
+    <ClInclude Include="include\UI\Window\TextBox.h">
+      <Filter>Header Files\UI\Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -391,6 +394,9 @@
     </ClCompile>
     <ClCompile Include="src\Entity\EntityFactory.cpp">
       <Filter>Source Files\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Window\TextBox.cpp">
+      <Filter>Source Files\UI\Window</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

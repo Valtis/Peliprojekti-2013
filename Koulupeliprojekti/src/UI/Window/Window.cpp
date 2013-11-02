@@ -4,7 +4,7 @@
 // test code - move sprite construction to proper class/method
 Window::Window(SDL_Rect location, SDL_Color color, Renderer *renderer) : m_dragging(DragStatus::Not_Dragging)
 {
-  SetRect(location);
+  SetLocation(location);
   SetTexture(TextureFactory::CreateWindowTexture(location.w, location.h, color, renderer));
 }
 

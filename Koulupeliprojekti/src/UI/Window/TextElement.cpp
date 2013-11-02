@@ -26,5 +26,5 @@ TextElement::TextElement(std::string text, int fontSize, TextAlingment alignment
 
   SetTexture(texture);
 
-  SetRect(location);
+  SetLocation(location);
 }
