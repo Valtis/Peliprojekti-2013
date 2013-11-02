@@ -6,6 +6,8 @@ Button::Button(SDL_Rect location, std::string text, Renderer *renderer)
   SetLocation(location);
   SetTexture(TextureFactory::CreateButton(location.w, location.h, renderer));
 
+  location.x = 0;
+  location.y = 0;
   std::unique_ptr<TextElement> element(new TextElement(text, 13, TextAlingment::ALIGN_CENTER, location, renderer));
   AddWindow(std::move(element));
 }
