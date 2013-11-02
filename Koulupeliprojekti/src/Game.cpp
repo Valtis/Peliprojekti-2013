@@ -16,6 +16,7 @@
 // for testing purposes - testing windows -  feel free to remove
 #include "UI/Window/Window.h"
 #include "UI/Window/Button.h"
+#include "UI/Window/TextBox.h"
 #include "Message/Commands/MouseCommand.h"
 
 Game::Game() : m_gameTick(30), m_drawTick(30)
@@ -72,7 +73,6 @@ void Game::Initialize()
 
   TestWindowCreation();
   TestAddLevelAndEntities();
-
 }
 
 
@@ -120,8 +120,14 @@ void Game::TestWindowCreation()
   std::unique_ptr<Button> button(new Button(location, "Close program", &m_renderer));
 
   button->AddHandler([&]{ this->ShutDownGame(); });
-
   window->AddWindow(std::move(button));
+
+  location.x = 20;
+  location.y = 60;
+  location.w = 200;
+  location.h = 230;
+  std::unique_ptr<TextBox> textBox(new TextBox(location, &m_renderer));
+  window->AddWindow(std::move(textBox));
 
   m_windowManager.AddWindow(std::move(window));
 }
