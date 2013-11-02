@@ -12,12 +12,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Collision\CollisionChecker.h" />
+    <ClInclude Include="include\Component\AiComponent.h" />
     <ClInclude Include="include\Component\Component.h" />
     <ClInclude Include="include\Component\CollisionComponent.h" />
+    <ClInclude Include="include\Component\FactionComponent.h" />
+    <ClInclude Include="include\Component\FollowingAiComponent.h" />
     <ClInclude Include="include\Component\GraphicsComponent.h" />
+    <ClInclude Include="include\Component\HealthComponent.h" />
     <ClInclude Include="include\Component\InputComponent.h" />
     <ClInclude Include="include\Component\LocationComponent.h" />
     <ClInclude Include="include\Component\PhysicsComponent.h" />
+    <ClInclude Include="include\Component\Scripts\BulletScriptComponent.h" />
     <ClInclude Include="include\Component\VelocityComponent.h" />
     <ClInclude Include="include\Entity\Entity.h" />
     <ClInclude Include="include\Entity\EntityParent.h" />
@@ -38,6 +43,7 @@
     <ClInclude Include="include\Message\Commands\Command.h" />
     <ClInclude Include="include\Message\Commands\ControlCommand.h" />
     <ClInclude Include="include\Message\Commands\MouseCommand.h" />
+    <ClInclude Include="include\Message\GenericMessageWithNoData.h" />
     <ClInclude Include="include\Message\LocationChangeMessage.h" />
     <ClInclude Include="include\Message\Message.h" />
     <ClInclude Include="include\Message\MessageFactory.h" />
@@ -62,12 +68,17 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Collision\CollisionChecker.cpp" />
+    <ClCompile Include="src\Component\AiComponent.cpp" />
     <ClCompile Include="src\Component\Component.cpp" />
     <ClCompile Include="src\Component\CollisionComponent.cpp" />
+    <ClCompile Include="src\Component\FactionComponent.cpp" />
+    <ClCompile Include="src\Component\FollowingAiComponent.cpp" />
     <ClCompile Include="src\Component\GraphicsComponent.cpp" />
+    <ClCompile Include="src\Component\HealthComponent.cpp" />
     <ClCompile Include="src\Component\InputComponent.cpp" />
     <ClCompile Include="src\Component\LocationComponent.cpp" />
     <ClCompile Include="src\Component\PhysicsComponent.cpp" />
+    <ClCompile Include="src\Component\Scripts\BulletScriptComponent.cpp" />
     <ClCompile Include="src\Component\VelocityComponent.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Game.cpp" />
