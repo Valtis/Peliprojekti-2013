@@ -126,7 +126,7 @@ void Game::TestWindowCreation()
   location.y = 60;
   location.w = 200;
   location.h = 230;
-  std::unique_ptr<TextBox> textBox(new TextBox(location, &m_renderer));
+  std::unique_ptr<TextBox> textBox(new TextBox("Add a disclaimer here by demo deadline where it's stated that this is badly unfinished game", location, &m_renderer));
   window->AddWindow(std::move(textBox));
 
   m_windowManager.AddWindow(std::move(window));

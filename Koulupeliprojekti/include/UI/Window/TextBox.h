@@ -4,7 +4,7 @@ class Renderer;
 class TextBox : public WindowBase
 {
 public:
-  TextBox(SDL_Rect location, Renderer *renderer);
+  TextBox(std::string text, SDL_Rect location, Renderer *renderer);
 
   ~TextBox();
 private:
