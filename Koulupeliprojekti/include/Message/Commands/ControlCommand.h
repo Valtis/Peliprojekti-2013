@@ -2,7 +2,7 @@
 #include <SDL.h>
 #include "Message/Commands/Command.h"
 #include "Message/Message.h"
-enum class Action : int { NONE, LEFT, RIGHT, UP, DOWN, JUMP, EXIT };
+enum class Action : int { NONE, LEFT, RIGHT, UP, DOWN, JUMP, FIRE, EXIT };
 
 class ControlCommand : public Command
 {

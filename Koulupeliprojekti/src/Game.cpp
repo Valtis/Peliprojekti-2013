@@ -9,7 +9,9 @@
 #include "Component/LocationComponent.h"
 #include "Component/VelocityComponent.h"
 #include "Component/CollisionComponent.h"
+#include "Component/FactionComponent.h"
 #include "Graphics/Camera/EntityTrackingCamera.h"
+
 
 // for testing purposes - testing windows -  feel free to remove
 #include "UI/Window/Window.h"
@@ -117,6 +119,8 @@ void Game::Initialize()
   std::unique_ptr<CollisionComponent> c(new CollisionComponent());
   c->AddHitbox(0, 0, 50, 50, HitboxType::OBJECT);
   e->AddComponent(ComponentType::COLLISION, std::move(c));
+  std::unique_ptr<FactionComponent> f(new FactionComponent(Faction::PLAYER));
+  e->AddComponent(ComponentType::FACTION, std::move(f));
 
 
   std::unique_ptr<EntityTrackingCamera> camera(new EntityTrackingCamera);
@@ -135,6 +139,8 @@ void Game::Initialize()
   c.reset(new CollisionComponent());
   c->AddHitbox(0, 0, 50, 50, HitboxType::OBJECT);
   e->AddComponent(ComponentType::COLLISION, std::move(c));
+  
+
 
   level->AddEntity(std::move(e));
 
