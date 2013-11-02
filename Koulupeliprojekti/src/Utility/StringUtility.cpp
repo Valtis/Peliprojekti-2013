@@ -44,30 +44,37 @@ std::vector<std::string> Utility::Tokenize(std::string text, std::string delimit
 std::vector<std::string> Utility::HandleControlCharacters(std::string line)
 {
   std::vector<std::string> tokens = Tokenize(line, "\n");
-  std::vector<std::string> lines;
-  
-  int tabSize = 4;
-  for (auto token: tokens)
+ 
+  return tokens;
+}
+
+
+std::vector<std::string> Utility::WrapLines(std::vector<std::string> lines, double lineWidth, double characterWidth)
+{
+  std::vector<std::string> wrappedLines;
+  for (auto line : lines)
   {
+    auto lineTokens = Tokenize(line, " ");
     std::string newLine;
-    auto tabTokens = Tokenize(token, "\t");
-    for (auto tabToken : tabTokens)
+
+    for (auto token : lineTokens)
     {
-      newLine += tabToken;
-      for (int i = (newLine.length() % tabSize); i < tabSize; ++i)
+      if ((newLine + " " + token).length()*characterWidth < lineWidth)
       {
-        newLine += " ";
+        newLine += " " + token;
+      }
+      else
+      {
+        wrappedLines.push_back(newLine);
+        newLine = token;
       }
     }
 
     if (!newLine.empty())
     {
-      lines.push_back(newLine);
-      newLine = "";
+      wrappedLines.push_back(newLine);
     }
-    
   }
 
-  return lines;
+  return wrappedLines;
 }
-

@@ -5,6 +5,8 @@
 TextField::TextField(std::string text, int fontSize, SDL_Rect location, Renderer *renderer)
 {
   std::vector<std::string> lines = Utility::HandleControlCharacters(text);
+  lines = Utility::WrapLines(lines, location.w, FontManager::Instance().GetFontWidth(fontSize));
+
   int spaceBetweenLines = 3;
   int distanceToLeftEdge = 3;
   int fontHeight = FontManager::Instance().GetFontHeight(fontSize);
