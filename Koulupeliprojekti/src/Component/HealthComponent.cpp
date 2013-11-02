@@ -22,32 +22,12 @@ HealthComponent::~HealthComponent()
 
 void HealthComponent::OnAttatchingToEntity()
 {
-  GetOwner()->RegisterMessageHandler(MessageType::COLLISION,  Priority::HIGHEST, 
-    [&](Message *msg){ return this->HandleCollisionMessage(msg); });
-}
-
-bool HealthComponent::HandleCollisionMessage(Message *msg)
-{
-  if (msg->GetType() != MessageType::COLLISION)
+  GetOwner()->RegisterMessageHandler(MessageType::TAKE_DAMAGE, Priority::NORMAL, [&](Message *msg) 
   {
-    LoggerManager::GetLog(COMPONENT_LOG).AddLine(LogLevel::WARNING, "Invalid message type received in HealthComponent::HandleCollisionMessage() - ignoring");
-    return true;
+    this->TakeDamage();
+    return false;
   }
-
-
-  auto colMsg = static_cast<CollisionMessage *> (msg);
-  auto myFaction = static_cast<FactionComponent *>(GetOwner()->GetComponent(ComponentType::FACTION));
-  auto otherFaction = static_cast<FactionComponent *>(colMsg->GetEntity()->GetComponent(ComponentType::FACTION));
-
-  if (myFaction != nullptr && otherFaction != nullptr && myFaction->GetFaction() == otherFaction->GetFaction())
-  {
-    return true;
-  }
-
-
-  TakeDamage();
-
-  return true;
+  );
 }
 
 void HealthComponent::TakeDamage()
@@ -64,6 +44,7 @@ void HealthComponent::TakeDamage()
     {
       --m_lives;
       m_hitpoints = m_maxHitpoints;
+      // send location reset message
     }
   }
 }

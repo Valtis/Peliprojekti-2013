@@ -50,6 +50,12 @@ void Entity::AddComponent(ComponentType type, std::unique_ptr<Component> c)
   }
 }
 
+void Entity::AddScript(std::unique_ptr<Component> script)
+{
+  script->Attach(this);
+  m_scripts.push_back(std::move(script));
+}
+
 Component *Entity::GetComponent(ComponentType type)
 {
   if (m_components.count(type) == 0)
@@ -65,5 +71,10 @@ void Entity::Update(double ticksPassed)
   for (auto &component : m_components)
   {
     component.second->Update(ticksPassed);
+  }
+
+  for (auto &script : m_scripts)
+  {
+    script->Update(ticksPassed);
   }
 }

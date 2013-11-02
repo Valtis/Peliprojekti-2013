@@ -19,6 +19,7 @@
     <ClInclude Include="include\Component\HealthComponent.h" />
     <ClInclude Include="include\Component\InputComponent.h" />
     <ClInclude Include="include\Component\LocationComponent.h" />
+    <ClInclude Include="include\Component\Scripts\BulletScriptComponent.h" />
     <ClInclude Include="include\Component\VelocityComponent.h" />
     <ClInclude Include="include\Entity\Entity.h" />
     <ClInclude Include="include\Entity\EntityFactory.h" />
@@ -40,6 +41,7 @@
     <ClInclude Include="include\Message\Commands\Command.h" />
     <ClInclude Include="include\Message\Commands\ControlCommand.h" />
     <ClInclude Include="include\Message\Commands\MouseCommand.h" />
+    <ClInclude Include="include\Message\GenericMessageWithNoData.h" />
     <ClInclude Include="include\Message\LocationChangeMessage.h" />
     <ClInclude Include="include\Message\Message.h" />
     <ClInclude Include="include\Message\MessageFactory.h" />
@@ -73,6 +75,7 @@
     <ClCompile Include="src\Component\HealthComponent.cpp" />
     <ClCompile Include="src\Component\InputComponent.cpp" />
     <ClCompile Include="src\Component\LocationComponent.cpp" />
+    <ClCompile Include="src\Component\Scripts\BulletScriptComponent.cpp" />
     <ClCompile Include="src\Component\VelocityComponent.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Entity\EntityFactory.cpp" />

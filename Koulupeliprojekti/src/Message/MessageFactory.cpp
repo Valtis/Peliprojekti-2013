@@ -5,6 +5,7 @@
 #include "Message/CollisionMessage.h"
 #include "Message/SpawnEntityMessage.h"
 #include "Message/TerminateEntityMessage.h"
+#include "Message/GenericMessageWithNoData.h"
 
 
 std::unique_ptr<Message> MessageFactory::CreateLocationChangeMessage(double x, double y)
@@ -35,4 +36,9 @@ std::unique_ptr<Message> MessageFactory::CreateSpawnEntityMessage(EntityType typ
 std::unique_ptr<Message> MessageFactory::CreateTerminateEntityMessage(Entity *spawner)
 {
   return std::unique_ptr<Message>(new TerminateEntityMessage(spawner));
+}
+
+std::unique_ptr<Message> MessageFactory::CreateTakeDamageMessage()
+{
+  return std::unique_ptr<Message>(new GenericMessageWithNoData(MessageType::TAKE_DAMAGE));
 }

@@ -13,4 +13,6 @@ namespace MessageFactory
   std::unique_ptr<Message> CreateCollisionMessage(Entity *entity, SDL_Rect &intersection);
   std::unique_ptr<Message> CreateSpawnEntityMessage(EntityType type, Entity *spawner);
   std::unique_ptr<Message> CreateTerminateEntityMessage(Entity *entity);
+  std::unique_ptr<Message> CreateTakeDamageMessage();
+
 }

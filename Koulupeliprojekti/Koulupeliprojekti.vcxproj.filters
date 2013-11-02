@@ -85,6 +85,12 @@
     <Filter Include="Source Files\Graphics\Camera">
       <UniqueIdentifier>{d0a3f00a-9900-4f11-8b33-f84d5385ba8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Component\Scripts">
+      <UniqueIdentifier>{2ee4519a-318d-4aa2-b181-96731123e642}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Component\Scripts">
+      <UniqueIdentifier>{356733ef-9b57-47c0-b1a6-e86783cfaafc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -240,6 +246,12 @@
     <ClInclude Include="include\Message\TerminateEntityMessage.h">
       <Filter>Header Files\Message</Filter>
     </ClInclude>
+    <ClInclude Include="include\Component\Scripts\BulletScriptComponent.h">
+      <Filter>Header Files\Component\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\GenericMessageWithNoData.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -364,6 +376,9 @@
     </ClCompile>
     <ClCompile Include="src\Component\HealthComponent.cpp">
       <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Scripts\BulletScriptComponent.cpp">
+      <Filter>Source Files\Component\Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

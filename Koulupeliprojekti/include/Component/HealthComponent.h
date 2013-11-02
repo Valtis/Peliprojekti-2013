@@ -19,13 +19,9 @@ public:
   void SetLives(int lives) { m_lives = lives; }
 
   void TakeDamage();
-
 protected:
-  void OnAttatchingToEntity() override;
+  void OnAttatchingToEntity() override; 
 private:
-  bool HandleCollisionMessage(Message *msg);
-
-
 
   int m_hitpoints;
   int m_maxHitpoints;
