@@ -50,20 +50,22 @@ std::vector<std::string> Utility::HandleControlCharacters(std::string line)
   for (auto token: tokens)
   {
     std::string newLine;
-    for (unsigned int i = 0; i < token.length(); ++i)
+    auto tabTokens = Tokenize(token, "\t");
+    for (auto tabToken : tabTokens)
     {
-      if (token[i] == '\t')
+      newLine += tabToken;
+      for (int i = (newLine.length() % tabSize); i < tabSize; ++i)
       {
-        for (int j = (newLine.length() % tabSize); j < tabSize; ++j)
-          newLine += " ";
+        newLine += " ";
       }
-      else
-        newLine += token[i];
     }
 
-    if (newLine.length() > 0)
+    if (!newLine.empty())
+    {
       lines.push_back(newLine);
-    newLine = "";
+      newLine = "";
+    }
+    
   }
 
   return lines;
