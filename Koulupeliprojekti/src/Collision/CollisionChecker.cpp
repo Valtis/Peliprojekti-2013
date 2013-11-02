@@ -38,8 +38,8 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
             MessageFactory::CreateCollisionMessage(entity.get(), intersectRect);
           auto collisionMessage2 =
             MessageFactory::CreateCollisionMessage((*e).get(), intersectRect);
-          entity->SendMessage(collisionMessage1.get());
-          (*e)->SendMessage(collisionMessage2.get());
+          entity->SendMessage(collisionMessage2.get());
+          (*e)->SendMessage(collisionMessage1.get());
         }
       }
     }

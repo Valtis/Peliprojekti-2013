@@ -27,5 +27,6 @@ void KeyboardController::LoadBinds()
 	m_binds[SDLK_LEFT] = Action::LEFT;
 	m_binds[SDLK_RIGHT] = Action::RIGHT;
 	m_binds[SDLK_SPACE] = Action::JUMP;
+  m_binds[SDLK_LSHIFT] = Action::FIRE;
 	m_binds[SDLK_ESCAPE] = Action::EXIT;
 }

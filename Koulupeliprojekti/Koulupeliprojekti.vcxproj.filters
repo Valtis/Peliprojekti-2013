@@ -85,6 +85,12 @@
     <Filter Include="Source Files\Graphics\Camera">
       <UniqueIdentifier>{d0a3f00a-9900-4f11-8b33-f84d5385ba8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Component\Scripts">
+      <UniqueIdentifier>{35edfeb9-b41c-44c3-9f6a-436c52a3f275}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Component\Scripts">
+      <UniqueIdentifier>{55d73ab4-038c-4ba1-927d-0a7cff8979ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -228,6 +234,27 @@
     <ClInclude Include="include\Component\PhysicsComponent.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="include\Component\Scripts\BulletScriptComponent.h">
+      <Filter>Header Files\Component\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\GenericMessageWithNoData.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\AiComponent.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\FactionComponent.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\FollowingAiComponent.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\HealthComponent.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Entity\EntityFactory.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -346,6 +373,24 @@
     </ClCompile>
     <ClCompile Include="src\Component\PhysicsComponent.cpp">
       <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Scripts\BulletScriptComponent.cpp">
+      <Filter>Source Files\Component\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\AiComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\FactionComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\FollowingAiComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\HealthComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entity\EntityFactory.cpp">
+      <Filter>Source Files\Entity</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

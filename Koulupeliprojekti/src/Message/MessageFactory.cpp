@@ -3,7 +3,10 @@
 #include "Message/VelocityChangeMessage.h"
 #include "Message/SetVelocityMessage.h"
 #include "Message/CollisionMessage.h"
-#include "Entity/Entity.h"
+#include "Message/SpawnEntityMessage.h"
+#include "Message/TerminateEntityMessage.h"
+#include "Message/GenericMessageWithNoData.h"
+
 
 std::unique_ptr<Message> MessageFactory::CreateLocationChangeMessage(double x, double y)
 {
@@ -25,3 +28,17 @@ std::unique_ptr<Message> MessageFactory::CreateCollisionMessage(Entity *entity, 
   return std::unique_ptr<Message>(new CollisionMessage(entity,intersection));
 }
 
+std::unique_ptr<Message> MessageFactory::CreateSpawnEntityMessage(EntityType type, Entity *spawner)
+{
+  return std::unique_ptr<Message>(new SpawnEntityMessage(type, spawner));
+}
+
+std::unique_ptr<Message> MessageFactory::CreateTerminateEntityMessage(Entity *spawner)
+{
+  return std::unique_ptr<Message>(new TerminateEntityMessage(spawner));
+}
+
+std::unique_ptr<Message> MessageFactory::CreateTakeDamageMessage()
+{
+  return std::unique_ptr<Message>(new GenericMessageWithNoData(MessageType::TAKE_DAMAGE));
+}

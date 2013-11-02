@@ -3,7 +3,8 @@
 #include "Entity/Entity.h"
 #include "Message/MessageFactory.h"
 #include "UI/InputManager.h"
-InputComponent::InputComponent()
+#include <SDL.h>
+InputComponent::InputComponent() : m_debugLastFireTick(0)
 {
 
 }
@@ -59,6 +60,9 @@ bool InputComponent::HandleInput( Command *msg )
   case Action::DOWN:
     newYVelocity = yVel;
     break;
+  case Action::FIRE:
+    Fire();
+    break;
   default:
     return false; // not handling anything
     break;
@@ -68,4 +72,17 @@ bool InputComponent::HandleInput( Command *msg )
   GetOwner()->SendMessage(message.get());
 
   return true;
+}
+
+void InputComponent::Fire()
+{
+  if (m_debugLastFireTick + 500 >= SDL_GetTicks())
+  {
+    return;
+  }
+ 
+  m_debugLastFireTick = SDL_GetTicks();
+
+  auto msg = MessageFactory::CreateSpawnEntityMessage(EntityType::BULLET, GetOwner());
+  GetOwner()->SendMessage(msg.get());
 }
