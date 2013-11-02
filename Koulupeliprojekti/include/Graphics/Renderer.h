@@ -44,6 +44,9 @@ private:
   void DrawWindow(std::vector<std::pair<SDL_Rect, SDL_Texture *>>);
 
   std::vector<std::pair<SDL_Point, Sprite *>> GetDataForDrawing(SDL_Point topleft, const std::vector<std::unique_ptr<Entity>> &entities);
+
+  void DebugDrawCollisionBoxes(const std::vector<std::unique_ptr<Entity>> &entities, SDL_Point topleft);
+
   bool CullEntity(SDL_Point topleft, Sprite *sprite, LocationComponent *location);
   void SortEntitiesByDrawPriority(std::vector<std::pair<SDL_Point, Sprite *>> &drawData);
   void PerformEntityDraw(std::vector<std::pair<SDL_Point, Sprite *>> drawdata, SDL_Point point);

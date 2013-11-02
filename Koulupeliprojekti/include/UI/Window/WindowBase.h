@@ -30,7 +30,7 @@ public:
   int GetHeight() { return m_location.h; }
 
   SDL_Rect GetRect() { return m_location; }
-  void SetRect(SDL_Rect rect) { m_location = rect; }
+  void SetLocation(SDL_Rect rect) { m_location = rect; }
 
   void SetParent(WindowBase *parent) { m_parent = parent; }
 

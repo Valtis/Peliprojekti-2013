@@ -56,7 +56,9 @@
     <ClInclude Include="include\UI\Controller\MouseController.h" />
     <ClInclude Include="include\UI\InputManager.h" />
     <ClInclude Include="include\UI\Window\Button.h" />
+    <ClInclude Include="include\UI\Window\TextBox.h" />
     <ClInclude Include="include\UI\Window\TextElement.h" />
+    <ClInclude Include="include\UI\Window\TextField.h" />
     <ClInclude Include="include\UI\Window\Window.h" />
     <ClInclude Include="include\UI\Window\WindowBase.h" />
     <ClInclude Include="include\UI\Window\WindowManager.h" />
@@ -104,7 +106,9 @@
     <ClCompile Include="src\UI\Controller\MouseController.cpp" />
     <ClCompile Include="src\UI\InputManager.cpp" />
     <ClCompile Include="src\UI\Window\Button.cpp" />
+    <ClCompile Include="src\UI\Window\TextBox.cpp" />
     <ClCompile Include="src\UI\Window\TextElement.cpp" />
+    <ClCompile Include="src\UI\Window\TextField.cpp" />
     <ClCompile Include="src\UI\Window\Window.cpp" />
     <ClCompile Include="src\UI\Window\WindowBase.cpp" />
     <ClCompile Include="src\UI\Window\WindowManager.cpp" />
