@@ -258,6 +258,9 @@
     <ClInclude Include="include\UI\Window\TextBox.h">
       <Filter>Header Files\UI\Window</Filter>
     </ClInclude>
+    <ClInclude Include="include\UI\Window\TextField.h">
+      <Filter>Header Files\UI\Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -396,6 +399,9 @@
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\Window\TextBox.cpp">
+      <Filter>Source Files\UI\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Window\TextField.cpp">
       <Filter>Source Files\UI\Window</Filter>
     </ClCompile>
   </ItemGroup>
