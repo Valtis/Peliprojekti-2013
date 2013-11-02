@@ -61,7 +61,11 @@ std::vector<std::string> Utility::WrapLines(std::vector<std::string> lines, doub
     {
       if ((newLine + " " + token).length()*characterWidth < lineWidth)
       {
-        newLine += " " + token;
+        if (!newLine.empty())
+        {
+          newLine += " ";
+        }
+        newLine += token;
       }
       else
       {
