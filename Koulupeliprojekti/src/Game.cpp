@@ -67,7 +67,37 @@ void Game::Initialize()
   LoggerManager::SetLogFolder("logs");
 
   FontManager::Instance().Initialize("data/fonts/FreeMono.otf");
+  m_inputManager.Initialize();
+  m_inputManager.RegisterInputHandler([&](Command* cmd) { return m_windowManager.HandleInput(cmd); }, 10);
 
+  TestWindowCreation();
+  TestAddLevelAndEntities();
+
+}
+
+
+
+void Game::HandleInput() {
+  SDL_Event event;
+  while (SDL_PollEvent(&event))
+  {
+     if (event.type == SDL_QUIT)
+     {
+       m_running = false;
+       return;
+     }
+     m_inputManager.HandleInput(event);
+  }
+}
+
+// for testing only - can be removed!
+void Game::ShutDownGame()
+{
+  m_running = false;
+}
+
+void Game::TestWindowCreation()
+{
   SDL_Rect location;
   SDL_Color color;
 
@@ -80,10 +110,10 @@ void Game::Initialize()
   color.g = 240;
   color.b = 248;
   color.a = 255;
+
+
   std::unique_ptr<Window> window(new Window(location, color, &m_renderer));
   window->Activate();
-  
-  m_inputManager.Initialize();
 
   location.w = 140;
   location.h = 30;
@@ -94,15 +124,15 @@ void Game::Initialize()
   window->AddWindow(std::move(button));
 
   m_windowManager.AddWindow(std::move(window));
-  m_inputManager.RegisterInputHandler([&](Command* cmd) { return m_windowManager.HandleInput(cmd); }, 10);
+}
 
-
-
+void Game::TestAddLevelAndEntities()
+{
   std::unique_ptr<Level> level(new Level);
   std::unique_ptr<Entity> e(new Entity);
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
   g->AddFrame(0, 200002);
- 
+
 
   e->AddComponent(ComponentType::GRAPHICS, std::move(g));
   std::unique_ptr<LocationComponent> l(new LocationComponent);
@@ -139,34 +169,13 @@ void Game::Initialize()
   c.reset(new CollisionComponent());
   c->AddHitbox(0, 0, 50, 50, HitboxType::OBJECT);
   e->AddComponent(ComponentType::COLLISION, std::move(c));
-  
+
 
 
   level->AddEntity(std::move(e));
 
   m_levelManager.AddLevel(std::move(level));
   m_levelManager.SetCurrentLevel(0);
-}
-
-
-
-void Game::HandleInput() {
-  SDL_Event event;
-  while (SDL_PollEvent(&event))
-  {
-     if (event.type == SDL_QUIT)
-     {
-       m_running = false;
-       return;
-     }
-     m_inputManager.HandleInput(event);
-  }
-}
-
-// for testing only - can be removed!
-void Game::ShutDownGame()
-{
-  m_running = false;
 }
 
 

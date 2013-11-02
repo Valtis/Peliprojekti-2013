@@ -19,6 +19,10 @@ public:
 private:
   void Initialize();
 
+  void TestAddLevelAndEntities();
+
+  void TestWindowCreation();
+
   void UpdateGameState();
   void Draw();
   void HandleInput();
