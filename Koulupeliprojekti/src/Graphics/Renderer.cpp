@@ -4,13 +4,16 @@
 #include "Graphics/Camera/Camera.h"
 #include "Component/GraphicsComponent.h"
 #include "Component/LocationComponent.h"
-
+// collision is for debugging - can be removed
+#include "Component/CollisionComponent.h"
 #include "UI/Window/Window.h"
 #include "Entity/Entity.h"
 
 #include <stdexcept>
 #include <string>
 #include <algorithm>
+
+
 
 Renderer::Renderer()
 {
@@ -73,6 +76,9 @@ void Renderer::DrawEntities(Camera *camera, const std::vector<std::unique_ptr<En
   std::vector<std::pair<SDL_Point, Sprite *>> spriteIds = GetDataForDrawing(topleft, entities);
   SortEntitiesByDrawPriority(spriteIds);
   PerformEntityDraw(spriteIds, topleft);
+  
+  DebugDrawCollisionBoxes(entities, topleft);
+
 }
 
 std::vector<std::pair<SDL_Point, Sprite *>> Renderer::GetDataForDrawing(SDL_Point topleft, const std::vector<std::unique_ptr<Entity>> &entities)
@@ -92,6 +98,7 @@ std::vector<std::pair<SDL_Point, Sprite *>> Renderer::GetDataForDrawing(SDL_Poin
     {
       continue;
     }
+ 
     SDL_Point loc = { (int)location->GetX(), (int)location->GetY() };
     retval.push_back(std::make_pair(loc, sprite));
   }
@@ -153,5 +160,29 @@ void Renderer::DrawWindow(std::vector<std::pair<SDL_Rect, SDL_Texture *>> window
   for (auto texture : windowTextures)
   {
     SDL_RenderCopy(m_renderer, texture.second, nullptr, &(texture.first));
+  }
+}
+
+void Renderer::DebugDrawCollisionBoxes( const std::vector<std::unique_ptr<Entity>> &entities, SDL_Point topleft )
+{
+
+    SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
+    for (auto &entity : entities)
+    {
+
+    auto collisionComponent = static_cast<CollisionComponent *>(entity->GetComponent(ComponentType::COLLISION));
+    if (collisionComponent == nullptr)
+    {
+      return;
+    }
+    auto hitboxes =  collisionComponent->GetHitboxes(HitboxType::OBJECT);
+  
+    for (auto hitbox : hitboxes)
+    {
+      hitbox.x -= topleft.x;
+      hitbox.y -= topleft.y;
+
+      SDL_assert(SDL_RenderDrawRect(m_renderer, &hitbox) == 0);
+    }
   }
 }
