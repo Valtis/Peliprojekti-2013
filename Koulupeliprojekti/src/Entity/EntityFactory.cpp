@@ -8,9 +8,12 @@
 #include "Component/VelocityComponent.h"
 #include "Component/FactionComponent.h"
 #include "Component/HealthComponent.h"
+#include "Component/Scripts/BulletScriptComponent.h"
 #include <string>
 #include <SDL.h>
 
+
+// todo - clean up
 void CreateBullet(Entity *e, SpawnEntityMessage *msg)
 {
   Entity *spawner = msg->Spawner();
@@ -53,6 +56,7 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   std::unique_ptr<FactionComponent> faction(new FactionComponent(bulletFaction)); 
   std::unique_ptr<HealthComponent> health(new HealthComponent(1, 1, 0));
 
+  std::unique_ptr<BulletScriptComponent> script(new BulletScriptComponent);
 
   e->AddComponent(ComponentType::COLLISION, std::move(collision));
   e->AddComponent(ComponentType::GRAPHICS, std::move(graphics));
@@ -60,6 +64,7 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   e->AddComponent(ComponentType::VELOCITY, std::move(velocity));
   e->AddComponent(ComponentType::FACTION, std::move(faction));
   e->AddComponent(ComponentType::HEALTH, std::move(health));
+  e->AddScript(std::move(script));
 }
 
 std::unique_ptr<Entity> EntityFactory::CreateEntity(SpawnEntityMessage *msg)
