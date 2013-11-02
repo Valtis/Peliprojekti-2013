@@ -45,6 +45,13 @@ bool HealthComponent::HandleCollisionMessage(Message *msg)
   }
 
 
+  TakeDamage();
+
+  return true;
+}
+
+void HealthComponent::TakeDamage()
+{
   --m_hitpoints;
   if (m_hitpoints <= 0)
   {
@@ -59,6 +66,4 @@ bool HealthComponent::HandleCollisionMessage(Message *msg)
       m_hitpoints = m_maxHitpoints;
     }
   }
-  
-  return true;
 }
