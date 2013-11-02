@@ -32,8 +32,6 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   double y = spawnerLocation->GetY();
   Direction direction = spawnerLocation->GetDirection();
   
-
-
   std::unique_ptr<LocationComponent> location(new LocationComponent());
   location->SetLocation(x, y);
   location->SetDirection(spawnerLocation->GetDirection());
@@ -42,8 +40,8 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   graphics->AddFrame(0, 200007);
 
   std::unique_ptr<CollisionComponent> collision(new CollisionComponent(20, 20));
-
   std::unique_ptr<VelocityComponent> velocity(new VelocityComponent);
+
   y = 0;
   x = 5;
 
@@ -55,7 +53,6 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
 
   std::unique_ptr<FactionComponent> faction(new FactionComponent(bulletFaction)); 
   std::unique_ptr<HealthComponent> health(new HealthComponent(1, 1, 0));
-
   std::unique_ptr<BulletScriptComponent> script(new BulletScriptComponent);
 
   e->AddComponent(ComponentType::COLLISION, std::move(collision));
@@ -78,7 +75,7 @@ std::unique_ptr<Entity> EntityFactory::CreateEntity(SpawnEntityMessage *msg)
     break;
   default:
     throw std::runtime_error("Default case reached in EntityFactory::CreateEntity() - EntityType " + std::to_string((int)msg->GetEntityType()) + 
-      "received");
+      " received");
     break;
   }
 
