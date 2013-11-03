@@ -19,8 +19,6 @@ public:
 private:
   void Initialize();
 
-  void TestAddLevelAndEntities();
-
   void TestWindowCreation();
 
   void UpdateGameState();
@@ -39,6 +37,6 @@ private:
   bool m_running;
 
   std::unique_ptr<Camera> m_testDebugCamera;
- 
+
 };
 

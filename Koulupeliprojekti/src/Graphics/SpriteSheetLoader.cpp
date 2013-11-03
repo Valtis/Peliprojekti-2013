@@ -3,6 +3,7 @@
 #include "Utility/StringUtility.h"
 #include "Utility/LoggerManager.h"
 #include <fstream>
+#include <stdexcept>
 
 std::unordered_map<int, SDL_Texture *> SpriteSheetLoader::LoadSpriteSheets(Renderer *renderer, std::string datafilePath)
 {
@@ -62,6 +63,6 @@ SDL_Texture *SpriteSheetLoader::LoadSpriteSheet(Renderer *renderer, std::pair<in
     throw std::runtime_error("Failed to create texture");
   }
 
-  return texture;        
+  return texture;
 }
 

@@ -12,6 +12,7 @@
 #define BMASK  0x00ff0000
 #define AMASK  0xff000000
 #endif
+#include <stdexcept>
 
 void DrawBox(SDL_Rect rect, SDL_Color color, SDL_Surface *surface)
 {
@@ -32,7 +33,7 @@ void ColorArea(SDL_Rect rect, SDL_Color color, SDL_Surface *surface)
 {
   for (int y = rect.y; y < rect.h; ++y)
   {
-    for (int x = rect.x; x < rect.w; ++x) 
+    for (int x = rect.x; x < rect.w; ++x)
     {
       SetColor(x, y, color, surface);
     }
@@ -74,7 +75,7 @@ SDL_Texture *TextureFactory::CreateButton(int width, int height, Renderer *rende
     throw std::runtime_error("Button size too small for texture creation!");
   }
   SDL_Surface *surface = CreateSurface(width, height);
-  
+
   SDL_Rect rect = { 0, 0, width, height };
   SDL_Color color = { 195, 195, 195, 255};
   ColorArea(rect, color, surface);
@@ -85,7 +86,7 @@ SDL_Texture *TextureFactory::CreateButton(int width, int height, Renderer *rende
   color.b = 177;
 
   ColorArea(rect, color, surface);
-  
+
 
   color.r = 0;
   color.g = 0;
@@ -104,7 +105,7 @@ SDL_Texture *TextureFactory::CreateButton(int width, int height, Renderer *rende
   color.g = 214;
   color.b = 214;
   DrawBox(rect, color, surface);
-  
+
   return CreateTexture(renderer, surface);
 }
 
