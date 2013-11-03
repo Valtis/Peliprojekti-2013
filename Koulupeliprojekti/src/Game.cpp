@@ -73,6 +73,12 @@ void Game::Initialize()
   m_inputManager.Initialize();
   m_inputManager.RegisterInputHandler([&](Command* cmd) { return m_windowManager.HandleInput(cmd); }, 10);
 
+  std::unique_ptr<EntityTrackingCamera> camera(new EntityTrackingCamera);
+
+  m_levelManager.Initialize(m_inputManager, camera);
+
+  m_testDebugCamera = std::move(camera);
+
   TestWindowCreation();
 
 }
@@ -132,10 +138,7 @@ void Game::TestWindowCreation()
   window->AddWindow(std::move(textBox));
 
   m_windowManager.AddWindow(std::move(window));
-  std::unique_ptr<EntityTrackingCamera> camera(new EntityTrackingCamera);
 
-  m_levelManager.Initialize(m_inputManager, camera);
-  m_testDebugCamera = std::move(camera);
 
 }
 
