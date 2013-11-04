@@ -8,6 +8,7 @@
 #include "Component/VelocityComponent.h"
 #include "Component/CollisionComponent.h"
 #include "Component/FactionComponent.h"
+#include "Component/WalkingAiComponent.h"
 #include <stdlib.h>
 #include <time.h>
 
@@ -54,6 +55,25 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   camera->SetEntity(e.get());
 
   level->AddEntity(std::move(e));
+
+  // Monster creation:
+  std::unique_ptr<Entity> monster(new Entity);
+  g.reset(new GraphicsComponent);
+  g->AddFrame(0,200007);
+  monster->AddComponent(ComponentType::GRAPHICS, std::move(g));
+  l.reset(new LocationComponent);
+  l->SetLocation(500,400);
+  monster->AddComponent(ComponentType::LOCATION, std::move(l));
+  ci.reset(new InputComponent(-1));
+  monster->AddComponent(ComponentType::INPUT, std::move(ci));
+  v.reset(new VelocityComponent);
+  monster->AddComponent(ComponentType::VELOCITY, std::move(v));
+  std::unique_ptr<AiComponent> ai(new WalkingAiComponent);
+  monster->AddComponent(ComponentType::AI, std::move(ai));
+  c.reset(new CollisionComponent);
+  c->AddHitbox(0,0,50,50, HitboxType::OBJECT);
+  monster->AddComponent(ComponentType::COLLISION, std::move(c));
+  level->AddEntity(std::move(monster));
 
   // Below is simple random level generation for testing purposes.
   int steps [3][2][2] = { { {1,0}, {0,0} }, { {1,-1}, {1,0} }, { {0,1},{1,1} }};
