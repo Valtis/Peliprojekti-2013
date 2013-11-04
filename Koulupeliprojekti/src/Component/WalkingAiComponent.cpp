@@ -33,5 +33,5 @@ bool WalkingAiComponent::HandleCollisionMessage(Message *msg)
 		m_direction = !m_direction;
 		m_lastTick = ticks;
 	}
-	return true;
+	return false;
 }
