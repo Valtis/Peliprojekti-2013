@@ -4,7 +4,12 @@
 #include "Message/MessageFactory.h"
 #include "UI/InputManager.h"
 #include <SDL.h>
-InputComponent::InputComponent() : m_debugLastFireTick(0)
+InputComponent::InputComponent() : m_debugLastFireTick(0), m_id(0)
+{
+
+}
+
+InputComponent::InputComponent(int id) : m_id(id), m_debugLastFireTick(0)
 {
 
 }
@@ -33,6 +38,11 @@ bool InputComponent::HandleInput( Command *msg )
   }
 
   auto *command = static_cast<ControlCommand *>(msg);
+
+  // check if AI connected and got a non-AI command
+  if (m_id == -1 && command->GetController() != -1)
+	return false;
+
   double xVel = 2;
   double yVel = 2;
   if (command->GetState() == false)

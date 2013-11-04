@@ -8,6 +8,7 @@ class InputComponent : public Component
 {
 public:
   InputComponent();
+  InputComponent(int id);
   ~InputComponent();
 
   void OnAttatchingToEntity() override;
@@ -18,5 +19,6 @@ private:
   bool HandleInput(Command *msg);
   void Fire();
   Uint32 m_debugLastFireTick;
+  int m_id;
 
 };

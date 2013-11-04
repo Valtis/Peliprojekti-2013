@@ -11,6 +11,7 @@
 #include "Component/CollisionComponent.h"
 #include "Component/FactionComponent.h"
 #include "Graphics/Camera/EntityTrackingCamera.h"
+#include "Component/WalkingAiComponent.h"
 
 
 // for testing purposes - testing windows -  feel free to remove
@@ -170,13 +171,29 @@ void Game::TestAddLevelAndEntities()
   g->AddFrame(0, 200000);
   e->AddComponent(ComponentType::GRAPHICS, std::move(g));
   l.reset(new LocationComponent);
-  l->SetLocation(600, 600);
+  l->SetLocation(600, 400);
   e->AddComponent(ComponentType::LOCATION, std::move(l));
   c.reset(new CollisionComponent());
   c->AddHitbox(0, 0, 50, 50, HitboxType::OBJECT);
   e->AddComponent(ComponentType::COLLISION, std::move(c));
 
-
+  std::unique_ptr<Entity> monster(new Entity);
+  g.reset(new GraphicsComponent);
+  g->AddFrame(0,200007);
+  monster->AddComponent(ComponentType::GRAPHICS, std::move(g));
+  l.reset(new LocationComponent);
+  l->SetLocation(500,400);
+  monster->AddComponent(ComponentType::LOCATION, std::move(l));
+  i.reset(new InputComponent(-1));
+  monster->AddComponent(ComponentType::INPUT, std::move(i));
+  v.reset(new VelocityComponent);
+  monster->AddComponent(ComponentType::VELOCITY, std::move(v));
+  std::unique_ptr<AiComponent> ai(new WalkingAiComponent);
+  monster->AddComponent(ComponentType::AI, std::move(ai));
+  c.reset(new CollisionComponent);
+  c->AddHitbox(0,0,50,50, HitboxType::OBJECT);
+  monster->AddComponent(ComponentType::COLLISION, std::move(c));
+  level->AddEntity(std::move(monster));
 
   level->AddEntity(std::move(e));
 

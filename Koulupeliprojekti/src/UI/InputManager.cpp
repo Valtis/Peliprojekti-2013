@@ -57,5 +57,5 @@ void InputManager::RegisterInputHandler(InputHandler handler, int priority)
 
 void InputManager::SortHandlers()
 {
-	std::stable_sort(mInputHandlers.begin(),mInputHandlers.end(),[&]( const std::pair<int, InputHandler> & a, const std::pair<int, InputHandler>& b) { return a.first > b.first; });
+	std::stable_sort(mInputHandlers.begin(),mInputHandlers.end(),[&]( const std::pair<int, InputHandler> & a, const std::pair<int, InputHandler>& b) { return a.first >= b.first; });
 }

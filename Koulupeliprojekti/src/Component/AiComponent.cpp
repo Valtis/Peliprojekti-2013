@@ -4,8 +4,8 @@
 AiComponent::AiComponent()
 {
 }
-void AiComponent::OnAttachingToEntity()
+void AiComponent::OnAttatchingToEntity()
 {
-	GetOwner()->RegisterMessageHandler(MessageType::COLLISION, Priority::HIGH,
+	GetOwner()->RegisterMessageHandler(MessageType::COLLISION, Priority::HIGHEST,
 		[&](Message *msg) { return this->HandleCollisionMessage(msg); });
 }
