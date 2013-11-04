@@ -1,10 +1,11 @@
 #include "Graphics/SpriteLoader.h"
 #include "Graphics/Sprite.h"
+#include <stdexcept>
 
 std::vector<std::unique_ptr<Sprite>> SpriteLoader::LoadSprites(std::string datafilePath)
 {
   std::vector<SpriteDataFileLine> spriteData = LoadSpriteDetails(datafilePath);
-  
+
   std::vector<std::unique_ptr<Sprite>> sprites;
   for (auto &helper : spriteData)
   {

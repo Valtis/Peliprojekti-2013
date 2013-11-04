@@ -3,6 +3,7 @@
 #include "Utility/LoggerManager.h"
 #include "Graphics/FontManager.h"
 // for testing purposes until level manager actually contains levels - feel free to remove
+/*
 #include "Entity/Entity.h"
 #include "Component/InputComponent.h"
 #include "Component/GraphicsComponent.h"
@@ -10,6 +11,7 @@
 #include "Component/VelocityComponent.h"
 #include "Component/CollisionComponent.h"
 #include "Component/FactionComponent.h"
+*/
 #include "Graphics/Camera/EntityTrackingCamera.h"
 #include "Component/WalkingAiComponent.h"
 
@@ -64,16 +66,22 @@ void Game::Initialize()
   SDL_JoystickEventState(SDL_ENABLE);
   // test code - lots of stuff hard coded
   m_renderer.CreateWindow("Title", 800, 600);
-  m_renderer.LoadSprites("data/sprites/");
+  m_renderer.LoadSprites("../data/sprites/");
   LoggerManager::SetGlobalLogLevel(LogLevel::ALL);
   LoggerManager::SetLogFolder("logs");
 
-  FontManager::Instance().Initialize("data/fonts/FreeMono.otf");
+  FontManager::Instance().Initialize("../data/fonts/FreeMono.otf");
   m_inputManager.Initialize();
   m_inputManager.RegisterInputHandler([&](Command* cmd) { return m_windowManager.HandleInput(cmd); }, 10);
 
+  std::unique_ptr<EntityTrackingCamera> camera(new EntityTrackingCamera);
+
+  m_levelManager.Initialize(m_inputManager, camera);
+
+  m_testDebugCamera = std::move(camera);
+
   TestWindowCreation();
-  TestAddLevelAndEntities();
+
 }
 
 
@@ -131,74 +139,7 @@ void Game::TestWindowCreation()
   window->AddWindow(std::move(textBox));
 
   m_windowManager.AddWindow(std::move(window));
+
+
 }
-
-void Game::TestAddLevelAndEntities()
-{
-  std::unique_ptr<Level> level(new Level);
-  std::unique_ptr<Entity> e(new Entity);
-  std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
-  g->AddFrame(0, 200002);
-
-
-  e->AddComponent(ComponentType::GRAPHICS, std::move(g));
-  std::unique_ptr<LocationComponent> l(new LocationComponent);
-  l->SetLocation(400, 400);
-  e->AddComponent(ComponentType::LOCATION, std::move(l));
-  std::unique_ptr<InputComponent> i(new InputComponent);
-  i->RegisterInputHandler(m_inputManager);  
-
-  e->AddComponent(ComponentType::INPUT, std::move(i));
-
-  std::unique_ptr<VelocityComponent> v(new VelocityComponent);
-  e->AddComponent(ComponentType::VELOCITY, std::move(v));
-
-  std::unique_ptr<CollisionComponent> c(new CollisionComponent());
-  c->AddHitbox(0, 0, 50, 50, HitboxType::OBJECT);
-  e->AddComponent(ComponentType::COLLISION, std::move(c));
-  std::unique_ptr<FactionComponent> f(new FactionComponent(Faction::PLAYER));
-  e->AddComponent(ComponentType::FACTION, std::move(f));
-
-
-  std::unique_ptr<EntityTrackingCamera> camera(new EntityTrackingCamera);
-  camera->SetEntity(e.get());
-  m_testDebugCamera = std::move(camera);
-  level->AddEntity(std::move(e));
-
-
-  e.reset(new Entity);
-  g.reset(new GraphicsComponent);
-  g->AddFrame(0, 200000);
-  e->AddComponent(ComponentType::GRAPHICS, std::move(g));
-  l.reset(new LocationComponent);
-  l->SetLocation(600, 400);
-  e->AddComponent(ComponentType::LOCATION, std::move(l));
-  c.reset(new CollisionComponent());
-  c->AddHitbox(0, 0, 50, 50, HitboxType::OBJECT);
-  e->AddComponent(ComponentType::COLLISION, std::move(c));
-
-  std::unique_ptr<Entity> monster(new Entity);
-  g.reset(new GraphicsComponent);
-  g->AddFrame(0,200007);
-  monster->AddComponent(ComponentType::GRAPHICS, std::move(g));
-  l.reset(new LocationComponent);
-  l->SetLocation(500,400);
-  monster->AddComponent(ComponentType::LOCATION, std::move(l));
-  i.reset(new InputComponent(-1));
-  monster->AddComponent(ComponentType::INPUT, std::move(i));
-  v.reset(new VelocityComponent);
-  monster->AddComponent(ComponentType::VELOCITY, std::move(v));
-  std::unique_ptr<AiComponent> ai(new WalkingAiComponent);
-  monster->AddComponent(ComponentType::AI, std::move(ai));
-  c.reset(new CollisionComponent);
-  c->AddHitbox(0,0,50,50, HitboxType::OBJECT);
-  monster->AddComponent(ComponentType::COLLISION, std::move(c));
-  level->AddEntity(std::move(monster));
-
-  level->AddEntity(std::move(e));
-
-  m_levelManager.AddLevel(std::move(level));
-  m_levelManager.SetCurrentLevel(0);
-}
-
 

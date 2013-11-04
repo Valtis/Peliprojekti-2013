@@ -1,6 +1,7 @@
 #pragma once
 #include "UI/Window/WindowBase.h"
 #include <SDL.h>
+#include <string>
 enum class DragStatus { Not_Dragging, Failed_Drag, Dragging };
 
 class Renderer;
