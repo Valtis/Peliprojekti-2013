@@ -62,7 +62,7 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   g->AddFrame(0,200007);
   monster->AddComponent(ComponentType::GRAPHICS, std::move(g));
   l.reset(new LocationComponent);
-  l->SetLocation(500,400);
+  l->SetLocation(700,700);
   monster->AddComponent(ComponentType::LOCATION, std::move(l));
   ci.reset(new InputComponent(-1));
   monster->AddComponent(ComponentType::INPUT, std::move(ci));

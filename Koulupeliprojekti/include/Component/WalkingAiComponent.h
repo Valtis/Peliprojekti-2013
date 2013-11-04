@@ -8,6 +8,7 @@ public:
 	void Update(double ticksPassed) override;
 	WalkingAiComponent();
 private:
+	bool m_commandSent;
 	bool m_direction;
 	bool HandleCollisionMessage(Message *msg);
 	Uint32 m_lastTick;
