@@ -26,29 +26,22 @@ void FlyingAiComponent::Update(double ticksPassed)
 	double distance = sqrt(pow(player_x - x,2) + pow(player_y - y,2));
 	
 
-	if (distance > 200)
+	if (!m_attacking)
 	{
 		m_player_x = player_x;
 		m_player_y = player_y;
-		Move(ticksPassed);
 		Follow(x,y);
-	}
-	else if (!m_attacking)
-	{
-		m_player_x = player_x;
-		m_player_y = player_y;
-		m_attacking = true;
+		Move(ticksPassed);
 	}
 	else
 	{
-		Move(ticksPassed);
 		Attack(x,y);
 	}
 }
 
 void FlyingAiComponent::Move(double ticksPassed)
 {
-	if (ticksPassed - m_last_tick < 0.3)
+	if (ticksPassed - m_last_tick < 0.5)
 		return;
 	m_last_tick = ticksPassed;
 	if (y_direction)
