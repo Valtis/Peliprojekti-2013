@@ -39,12 +39,12 @@ void FlyingAiComponent::Update(double ticksPassed)
 		Follow(x,y);
 		if (abs(player_x - x) < 200 && player_y - y < 230)
 		{
-			if (m_attack_tick > 80)
+			if (m_attack_tick > 150)
 			{
 				m_attack_tick = 0;
 				m_attacking = true;
 				m_following = false;
-				wiggle = 30;
+				wiggle = 50;
 			}
 		}
 	}
