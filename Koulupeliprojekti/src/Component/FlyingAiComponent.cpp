@@ -68,7 +68,7 @@ void FlyingAiComponent::Attack(double x, double y)
 
 void FlyingAiComponent::Follow(double x, double y)
 {
-	if (x > m_player_x + 50)
+	if (x > m_player_x + 200)
 	{
 		GetOwner()->SendMessage(new ControlCommand(Action::RIGHT,false,-1));
 		GetOwner()->SendMessage(new ControlCommand(Action::LEFT,true,-1));
@@ -78,12 +78,12 @@ void FlyingAiComponent::Follow(double x, double y)
 		GetOwner()->SendMessage(new ControlCommand(Action::LEFT,false,-1));
 		GetOwner()->SendMessage(new ControlCommand(Action::RIGHT,true,-1));
 	}
-	if (m_player_y - y < 200)
+	if (m_player_y - y < 250)
 	{
 		GetOwner()->SendMessage(new ControlCommand(Action::DOWN,false,-1));
 		GetOwner()->SendMessage(new ControlCommand(Action::UP,true,-1));
 	}
-	else if (m_player_y - y > 300)
+	else if (m_player_y - y > 320)
 	{
 		GetOwner()->SendMessage(new ControlCommand(Action::UP,false,-1));
 		GetOwner()->SendMessage(new ControlCommand(Action::DOWN,true,-1));
