@@ -66,11 +66,11 @@ void Game::Initialize()
   SDL_JoystickEventState(SDL_ENABLE);
   // test code - lots of stuff hard coded
   m_renderer.CreateWindow("Title", 800, 600);
-  m_renderer.LoadSprites("../data/sprites/");
+  m_renderer.LoadSprites("data/sprites/");
   LoggerManager::SetGlobalLogLevel(LogLevel::ALL);
   LoggerManager::SetLogFolder("logs");
 
-  FontManager::Instance().Initialize("../data/fonts/FreeMono.otf");
+  FontManager::Instance().Initialize("data/fonts/FreeMono.otf");
   m_inputManager.Initialize();
   m_inputManager.RegisterInputHandler([&](Command* cmd) { return m_windowManager.HandleInput(cmd); }, 10);
 
