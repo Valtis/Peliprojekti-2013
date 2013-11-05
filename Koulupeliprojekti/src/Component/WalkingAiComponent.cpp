@@ -22,7 +22,7 @@ void WalkingAiComponent::Update(double ticksPassed)
 bool WalkingAiComponent::HandleCollisionMessage(Message *msg)
 {
 	if (msg->GetType() != MessageType::COLLISION)
-		return true;
+		return false;
 	Uint32 ticks = SDL_GetTicks();
 	if (ticks >= m_lastTick + 100)
 	{

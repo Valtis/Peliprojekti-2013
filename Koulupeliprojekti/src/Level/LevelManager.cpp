@@ -8,7 +8,9 @@
 #include "Component/VelocityComponent.h"
 #include "Component/CollisionComponent.h"
 #include "Component/FactionComponent.h"
+#include "Component/FlyingAiComponent.h"
 #include "Component/WalkingAiComponent.h"
+#include "Component/FollowingAiComponent.h"
 #include <stdlib.h>
 #include <time.h>
 
@@ -54,6 +56,8 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
 
   camera->SetEntity(e.get());
 
+  std::unique_ptr<AiComponent> ai(new FlyingAiComponent(e.get()));
+
   level->AddEntity(std::move(e));
 
   // Monster creation:
@@ -68,7 +72,6 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   monster->AddComponent(ComponentType::INPUT, std::move(ci));
   v.reset(new VelocityComponent);
   monster->AddComponent(ComponentType::VELOCITY, std::move(v));
-  std::unique_ptr<AiComponent> ai(new WalkingAiComponent);
   monster->AddComponent(ComponentType::AI, std::move(ai));
   c.reset(new CollisionComponent);
   c->AddHitbox(0,0,50,50, HitboxType::OBJECT);

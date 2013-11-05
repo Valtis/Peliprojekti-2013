@@ -20,7 +20,19 @@ std::unique_ptr<Message> MessageFactory::CreateVelocityChangeMessage(double x, d
 
 std::unique_ptr<Message> MessageFactory::CreateSetVelocityMessage(double x, double y)
 {
-  return std::unique_ptr<Message>(new SetVelocityMessage(x, y));
+  return std::unique_ptr<Message>(new SetVelocityMessage(x, y, Velocity::XY));
+}
+
+std::unique_ptr<Message> MessageFactory::CreateSetVelocityMessage(double vel, Velocity dir)
+{
+  if (dir == Velocity::X)
+  {
+    return std::unique_ptr<Message>(new SetVelocityMessage(vel,0,dir));
+  }
+  else
+  {
+    return std::unique_ptr<Message>(new SetVelocityMessage(0, vel, dir));
+  }
 }
 
 std::unique_ptr<Message> MessageFactory::CreateCollisionMessage(Entity *entity, SDL_Rect &intersection)

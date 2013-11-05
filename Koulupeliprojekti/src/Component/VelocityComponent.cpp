@@ -57,7 +57,18 @@ bool VelocityComponent::HandleSetVelocityMessage(Message *msg)
 
   auto *velocityMessage = static_cast<SetVelocityMessage *>(msg);
 
-  m_xVelocity = velocityMessage->GetXVelocity();
-  m_yVelocity = velocityMessage->GetYVelocity();
+  if (velocityMessage->GetDirection() == Velocity::XY)
+  {
+    m_xVelocity = velocityMessage->GetXVelocity();
+    m_yVelocity = velocityMessage->GetYVelocity();
+  }
+  else if (velocityMessage->GetDirection() == Velocity::X)
+  {
+    m_xVelocity = velocityMessage->GetXVelocity();
+  }
+  else
+  {
+    m_yVelocity = velocityMessage->GetYVelocity();
+  }
   return false;
 }

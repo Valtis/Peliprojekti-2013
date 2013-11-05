@@ -2,6 +2,7 @@
 #include "Message/Commands/ControlCommand.h"
 #include "Entity/Entity.h"
 #include "Message/MessageFactory.h"
+#include "Message/SetVelocityMessage.h"
 #include "UI/InputManager.h"
 #include <SDL.h>
 InputComponent::InputComponent() : m_debugLastFireTick(0), m_id(0)
@@ -53,12 +54,12 @@ bool InputComponent::HandleInput( Command *msg )
   // kinda ugly, probably needs to be refactored
   double newXVelocity = 0;
   double newYVelocity = 0;
+  Velocity dir = Velocity::X;
   // TODO: clean up this
   switch (command->GetCommand())
   {
   case Action::LEFT:
     newXVelocity = -xVel;
-
     break;
   case Action::RIGHT:
     newXVelocity = xVel;
@@ -66,9 +67,11 @@ bool InputComponent::HandleInput( Command *msg )
 
   case Action::UP:
     newYVelocity = -yVel;
+    dir = Velocity::Y;
     break;
   case Action::DOWN:
     newYVelocity = yVel;
+    dir = Velocity::Y;
     break;
   case Action::FIRE:
     Fire();
@@ -78,8 +81,17 @@ bool InputComponent::HandleInput( Command *msg )
     break;
   }
 
-  auto message = MessageFactory::CreateSetVelocityMessage(newXVelocity, newYVelocity);
-  GetOwner()->SendMessage(message.get());
+  if (dir == Velocity::X)
+  {
+    auto message = MessageFactory::CreateSetVelocityMessage(newXVelocity, Velocity::X);
+    GetOwner()->SendMessage(message.get());
+  }
+  else
+  {
+    auto message = MessageFactory::CreateSetVelocityMessage(newYVelocity, Velocity::Y);
+    GetOwner()->SendMessage(message.get());
+  }
+
 
   return true;
 }
