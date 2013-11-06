@@ -2,6 +2,7 @@
 #include "Entity/Entity.h"
 #include "Entity/EntityFactory.h"
 #include "Collision/CollisionChecker.h"
+#include "Physics/PhysicsHandler.h"
 #include "Utility/LoggerManager.h"
 
 #include "Message/TerminateEntityMessage.h"
@@ -39,6 +40,7 @@ void Level::Update(double ticksPassed)
 
   // physics check
 
+  Physics::HandlePhysics(m_entities);
   for (auto &entity : m_entities)
   {
     entity->Update(ticksPassed);

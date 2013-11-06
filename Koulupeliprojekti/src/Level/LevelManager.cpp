@@ -12,6 +12,7 @@
 #include "Component/WalkingAiComponent.h"
 #include "Component/FollowingAiComponent.h"
 #include "Component/Scripts/EndLevelScriptComponent.h"
+#include "Component/PhysicsComponent.h"
 #include <stdlib.h>
 #include <time.h>
 
@@ -35,7 +36,6 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
   g->AddFrame(0, 200002);
 
-
   e->AddComponent(ComponentType::GRAPHICS, std::move(g));
   std::unique_ptr<LocationComponent> l(new LocationComponent);
   l->SetLocation(70, 600);
@@ -53,7 +53,9 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   e->AddComponent(ComponentType::COLLISION, std::move(c));
   std::unique_ptr<FactionComponent> f(new FactionComponent(Faction::PLAYER));
   e->AddComponent(ComponentType::FACTION, std::move(f));
-
+  
+  std::unique_ptr<PhysicsComponent> p(new PhysicsComponent);
+  e->AddComponent(ComponentType::PHYSICS,std::move(p));
 
 
   camera->SetEntity(e.get());
@@ -78,6 +80,10 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   c.reset(new CollisionComponent);
   c->AddHitbox(0,0,70,35, HitboxType::OBJECT);
   monster->AddComponent(ComponentType::COLLISION, std::move(c));
+  p.reset(new PhysicsComponent);
+  monster->AddComponent(ComponentType::PHYSICS,std::move(p));
+  f.reset(new FactionComponent(Faction::ENEMY));
+  monster->AddComponent(ComponentType::FACTION, std::move(f));
   level->AddEntity(std::move(monster));
 
   // Below is simple random level generation for testing purposes.
@@ -87,7 +93,7 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   // Different tile sprites:
   int tileSprites [5] = {200013, 200017,
                           200018, 200024, 200026};
-  srand (time(NULL));
+  srand (static_cast<unsigned int>(time(NULL)));
 
   int startX = 50;
   int startY = 700;

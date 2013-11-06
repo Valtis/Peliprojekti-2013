@@ -35,9 +35,11 @@ std::unique_ptr<Message> MessageFactory::CreateSetVelocityMessage(double vel, Ve
   }
 }
 
-std::unique_ptr<Message> MessageFactory::CreateCollisionMessage(Entity *entity, SDL_Rect &intersection)
+std::unique_ptr<Message> MessageFactory::CreateCollisionMessage(Entity *entity,
+                                                                SDL_Rect &intersection,
+                                                                CollisionSide side)
 {
-  return std::unique_ptr<Message>(new CollisionMessage(entity,intersection));
+  return std::unique_ptr<Message>(new CollisionMessage(entity,intersection,side));
 }
 
 std::unique_ptr<Message> MessageFactory::CreateSpawnEntityMessage(EntityType type, Entity *spawner)

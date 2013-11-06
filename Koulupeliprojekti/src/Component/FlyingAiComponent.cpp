@@ -53,7 +53,7 @@ void FlyingAiComponent::Update(double ticksPassed)
 		if (m_attacking)
 		{
 			Attack(x,y);
-			wiggle -= ticksPassed/100;
+			wiggle -= static_cast<int>(ticksPassed / 100.0);
 		}
 	}
 }
