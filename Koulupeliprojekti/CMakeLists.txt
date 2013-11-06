@@ -19,6 +19,7 @@ set (
   "src/Component/VelocityComponent.cpp"
   "src/Component/WalkingAiComponent.cpp"
   "src/Component/Scripts/BulletScriptComponent.cpp"
+  "src/Component/Scripts/EndLevelScriptComponent.cpp"
   "src/Entity/Entity.cpp"
   "src/Entity/EntityFactory.cpp"
   "src/Graphics/FontManager.cpp"
@@ -56,37 +57,54 @@ set (
 )
 
 set (
-  SDL_LIBRARY
-  "C:\\Libs\\SDL\\SDL2-2.0.0\\lib\\x64\\SDL2.dll"
-)
-set (
-  SDL_INCLUDE_DIR
+  PC_SDL2_INCLUDE_DIRS
   "C:\\Libs\\SDL\\SDL2-2.0.0\\include"
 )
+set (
+  PC_SDL2_TTF_INCLUDE_DIRS
+  "C:\\Libs\\SDL\\SDL2_ttf\\SDL2_ttf-2.0.12\\include"
+)
 
 set (
-  SDL_TTF_LIBRARIES
+  PC_SDL2_LIBRARY_DIRS
+  "C:\\Libs\\SDL\\SDL2-2.0.0\\lib"
+)
+set (
+  PC_SDL2_TTF_LIBRARY_DIRS
   "C:\\Libs\\SDL\\SDL2_ttf\\SDL2_ttf-2.0.12\\lib"
 )
-set (
-  SDL_TTF_LIBRARY
-  "C:\\Libs\\SDL\\SDL2_ttf\\SDL2_ttf-2.0.12\\lib\\x64\\SDL2_ttf.dll"
-)
-set (
-  SDL_TTF_INCLUDE_DIR
-  "C:\\Libs\\SDL\\SDL2_ttf\\SDL2_ttf-2.0.12\\include"
-)
-set (
-  SDL_TTF_INCLUDE_DIRS
-  "C:\\Libs\\SDL\\SDL2_ttf\\SDL2_ttf-2.0.12\\include"
+
+link_directories(
+  ${PC_SDL2_LIBRARY_DIRS}
+  ${PC_SDL2_TTF_LIBRARY_DIRS}
 )
 
-Find_Package ( SDL REQUIRED )
-Find_Package ( SDL_TTF REQUIRED )
+find_library (SDL2
+  NAMES SDL2
+  HINTS
+    ${PC_SDL2_LIBRARY_DIRS}
+  PATH_SUFFIXES x86
+)
 
-if ( NOT SDL_FOUND )
-  message ( FATAL_ERROR "SDL not found!" )
-endif ( NOT SDL_FOUND )
+find_library (SDL2_TTF 
+  NAMES SDL2_ttf
+  HINTS
+    ${PC_SDL2_TTF_LIBRARY_DIRS}
+  PATH_SUFFIXES x86
+)
+
+find_library(SDL2_MAIN
+  NAMES SDL2main
+  HINTS
+    ${PC_SDL2_LIBRARY_DIRS}
+  PATH_SUFFIXES x86
+)
+
+set(SDL2_LIBRARIES
+  ${SDL2_MAIN} #"SDL2main"
+  ${SDL2} #"SDL2"
+  ${SDL2_TTF} #"SDL2_ttf"
+)
 
 list(
   APPEND
@@ -94,20 +112,37 @@ list(
   "-std=c++0x ${CMAKE_CXX_FLAGS} -g"
 )
 
-link_libraries (
-  ${SDL_LIBRARY}
-  ${SDL_TTF_LIBRARY}
-  SDLmain # Sadly not included in SDL_LIBRARY variable
+find_path(SDL2_INCLUDE_DIR
+  NAMES SDL.h
+  HINTS
+    ${PC_SDL2_INCLUDE_DIRS}
+  PATH_SUFFIXES SDL2
+)
+
+find_path(SDL2_TTF_INCLUDE_DIR
+  NAMES SDL_ttf.h
+  HINTS
+    ${PC_SDL2_TTF_INCLUDE_DIRS}
+  PATH_SUFFIXES SDL2
+)
+
+set(SDL2_INCLUDE_DIRS
+  ${SDL2_INCLUDE_DIR}
+  ${SDL2_TTF_INCLUDE_DIR}
 )
 
 include_directories (
+  ${SDL2_INCLUDE_DIRS}
   ${PELI_SOURCE_DIR}/include
-  ${SDL_INCLUDE_DIR}
-  ${SDL_TTF_INCLUDE_DIR}
 )
 
 add_executable (
   Peli
   WIN32
   ${SOURCES}
+)
+
+target_link_libraries (
+  Peli
+  ${SDL2_LIBRARIES}
 )
