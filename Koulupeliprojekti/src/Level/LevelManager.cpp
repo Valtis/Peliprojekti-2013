@@ -14,7 +14,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-
+const int NUMBEROFBLOCKS = 50;
+const int TILESIZE = 30;
 const int NO_ACTIVE_LEVEL = -1;
 LevelManager::LevelManager() : m_currentLevel(NO_ACTIVE_LEVEL)
 {
@@ -63,7 +64,7 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   // Monster creation:
   std::unique_ptr<Entity> monster(new Entity);
   g.reset(new GraphicsComponent);
-  g->AddFrame(0,200007);
+  g->AddFrame(0,200028);
   monster->AddComponent(ComponentType::GRAPHICS, std::move(g));
   l.reset(new LocationComponent);
   l->SetLocation(220,600);
@@ -74,7 +75,7 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   monster->AddComponent(ComponentType::VELOCITY, std::move(v));
   monster->AddComponent(ComponentType::AI, std::move(ai));
   c.reset(new CollisionComponent);
-  c->AddHitbox(0,0,50,50, HitboxType::OBJECT);
+  c->AddHitbox(0,0,70,35, HitboxType::OBJECT);
   monster->AddComponent(ComponentType::COLLISION, std::move(c));
   level->AddEntity(std::move(monster));
 
@@ -82,11 +83,14 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   int steps [3][3][2] = { { {1,0}, {1,0}, {1,0} }, // straight
                           { {0,-1}, {0,0}, {1,0} }, // up
                           { {0,1}, {0,0}, {1,0} }}; // down
+  // Different tile sprites:
+  int tileSprites [5] = {200013, 200017,
+                          200018, 200024, 200026};
   srand (time(NULL));
 
   int startX = 50;
   int startY = 700;
-  for (int i = 0; i < 40; ++i) {
+  for (int i = 0; i < NUMBEROFBLOCKS; ++i) {
     // pick up/down/straight on random
     int ran = rand() % 3;
     // foreach step
@@ -95,15 +99,15 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
       int sY = steps[ran][j][1];
       e.reset(new Entity);
       g.reset(new GraphicsComponent);
-      g->AddFrame(0, 200000);
+      g->AddFrame(0, tileSprites[rand() % 5]);
       e->AddComponent(ComponentType::GRAPHICS, std::move(g));
       l.reset(new LocationComponent);
-      startX = startX + (sX * 50);
-      startY = startY + (sY * 50);
+      startX = startX + (sX * TILESIZE);
+      startY = startY + (sY * TILESIZE);
       l->SetLocation(startX, startY);
       e->AddComponent(ComponentType::LOCATION, std::move(l));
       c.reset(new CollisionComponent());
-      c->AddHitbox(0, 0, 50, 50, HitboxType::OBJECT);
+      c->AddHitbox(0, 0, TILESIZE, TILESIZE, HitboxType::OBJECT);
       e->AddComponent(ComponentType::COLLISION, std::move(c));
 
       level->AddEntity(std::move(e));

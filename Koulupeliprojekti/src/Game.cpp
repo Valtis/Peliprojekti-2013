@@ -81,6 +81,7 @@ void Game::Initialize()
   m_testDebugCamera = std::move(camera);
 
   TestWindowCreation();
+  m_running = true;
 
 }
 
