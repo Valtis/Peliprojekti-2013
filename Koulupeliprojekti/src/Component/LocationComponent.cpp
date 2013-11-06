@@ -69,8 +69,8 @@ bool LocationComponent::HandleCollisionMessage(Message *msg)
 
   side = colMsg->GetSide();
 
-if (side == CollisionSide::DOWN && m_collision)
-	return false;
+  if (side == CollisionSide::DOWN && m_collision)
+    return false;
 
   if (side == CollisionSide::RIGHT)
     m_x -= colMsg->GetIntersection().w;
@@ -80,7 +80,8 @@ if (side == CollisionSide::DOWN && m_collision)
     m_y += colMsg->GetIntersection().h;
   else if (side == CollisionSide::DOWN)
     m_y -= colMsg->GetIntersection().h;
-  m_collision = true;
+  if (side == CollisionSide::DOWN)
+    m_collision = true;
 
   return false;
 }
