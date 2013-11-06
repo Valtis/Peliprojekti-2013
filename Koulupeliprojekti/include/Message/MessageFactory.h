@@ -16,5 +16,6 @@ namespace MessageFactory
   std::unique_ptr<Message> CreateSpawnEntityMessage(EntityType type, Entity *spawner);
   std::unique_ptr<Message> CreateTerminateEntityMessage(Entity *entity);
   std::unique_ptr<Message> CreateTakeDamageMessage();
+  std::unique_ptr<Message> CreateEndLevelMessage();
 
 }
