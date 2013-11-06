@@ -9,7 +9,7 @@ TextField::TextField(std::string text, int fontSize, SDL_Rect location, Renderer
 
   int spaceBetweenLines = 3;
   int distanceToLeftEdge = 3;
-  int fontHeight = FontManager::Instance().GetFontHeight(fontSize);
+  int fontHeight = static_cast<int>(FontManager::Instance().GetFontHeight(fontSize));
   
   auto lineIter = lines.begin();
   for (int y = 0; y < location.h - fontHeight && lineIter != lines.end(); y += fontHeight + spaceBetweenLines, ++lineIter)
