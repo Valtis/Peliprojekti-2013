@@ -24,6 +24,7 @@
     <ClInclude Include="include\Component\LocationComponent.h" />
     <ClInclude Include="include\Component\PhysicsComponent.h" />
     <ClInclude Include="include\Component\Scripts\BulletScriptComponent.h" />
+    <ClInclude Include="include\Component\Scripts\EndLevelScriptComponent.h" />
     <ClInclude Include="include\Component\VelocityComponent.h" />
     <ClInclude Include="include\Component\WalkingAiComponent.h" />
     <ClInclude Include="include\Entity\Entity.h" />
@@ -86,6 +87,7 @@
     <ClCompile Include="src\Component\LocationComponent.cpp" />
     <ClCompile Include="src\Component\PhysicsComponent.cpp" />
     <ClCompile Include="src\Component\Scripts\BulletScriptComponent.cpp" />
+    <ClCompile Include="src\Component\Scripts\EndLevelScriptComponent.cpp" />
     <ClCompile Include="src\Component\VelocityComponent.cpp" />
     <ClCompile Include="src\Component\WalkingAiComponent.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />

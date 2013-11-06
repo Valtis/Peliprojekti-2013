@@ -1,3 +1,4 @@
+#include <cmath>
 #include "Collision/CollisionChecker.h"
 #include "Component/CollisionComponent.h"
 #include "Component/VelocityComponent.h"
@@ -168,9 +169,9 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
           }
 
           auto collisionMessage1 =
-            MessageFactory::CreateCollisionMessage(entity.get(), intersectRect, side1);
+            MessageFactory::CreateCollisionMessage(entity.get(), intersectRect, side2);
           auto collisionMessage2 =
-            MessageFactory::CreateCollisionMessage((*e).get(), intersectRect, side2);
+            MessageFactory::CreateCollisionMessage((*e).get(), intersectRect, side1);
           entity->SendMessage(collisionMessage2.get());
           (*e)->SendMessage(collisionMessage1.get());
         }

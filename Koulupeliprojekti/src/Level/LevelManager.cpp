@@ -11,6 +11,7 @@
 #include "Component/FlyingAiComponent.h"
 #include "Component/WalkingAiComponent.h"
 #include "Component/FollowingAiComponent.h"
+#include "Component/Scripts/EndLevelScriptComponent.h"
 #include "Component/PhysicsComponent.h"
 #include <stdlib.h>
 #include <time.h>
@@ -79,8 +80,8 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   c.reset(new CollisionComponent);
   c->AddHitbox(0,0,70,35, HitboxType::OBJECT);
   monster->AddComponent(ComponentType::COLLISION, std::move(c));
-  p.reset(new PhysicsComponent);
-  monster->AddComponent(ComponentType::PHYSICS,std::move(p));
+//  p.reset(new PhysicsComponent);
+//  monster->AddComponent(ComponentType::PHYSICS,std::move(p));
   f.reset(new FactionComponent(Faction::ENEMY));
   monster->AddComponent(ComponentType::FACTION, std::move(f));
   level->AddEntity(std::move(monster));
@@ -119,6 +120,20 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
       level->AddEntity(std::move(e));
     }
   }
+  // Create Level End Entity
+  e.reset(new Entity);
+  g.reset(new GraphicsComponent);
+  g->AddFrame(0,200001);
+  e->AddComponent(ComponentType::GRAPHICS,std::move(g));
+  l.reset(new LocationComponent);
+  l->SetLocation(startX,startY - 50);
+  e->AddComponent(ComponentType::LOCATION, std::move(l));
+  c.reset(new CollisionComponent);
+  c->AddHitbox(0,0,50,50,HitboxType::OBJECT);
+  e->AddComponent(ComponentType::COLLISION, std::move(c));
+  std::unique_ptr<Component> sc(new EndLevelScriptComponent);
+  e->AddScript(std::move(sc));
+  level->AddEntity(std::move(e));
 
   AddLevel(std::move(level));
   SetCurrentLevel(0);

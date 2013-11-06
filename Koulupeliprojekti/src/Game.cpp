@@ -113,7 +113,7 @@ void Game::TestWindowCreation()
 
   location.x = 20;
   location.y = 20;
-  location.w = 300;
+  location.w = 230;
   location.h = 300;
 
   color.r = 201;
@@ -124,23 +124,54 @@ void Game::TestWindowCreation()
 
   std::unique_ptr<Window> window(new Window(location, color, &m_renderer));
   window->Activate();
-
+  location.x = 10;
+  location.y = 250;
   location.w = 140;
   location.h = 30;
-  std::unique_ptr<Button> button(new Button(location, "Close program", &m_renderer));
+  std::unique_ptr<Button> button(new Button(location, "Close window", &m_renderer));
 
-  button->AddHandler([&]{ this->ShutDownGame(); });
+  button->AddHandler([&]{ this->m_windowManager.GetWindows()[0]->Deactivate(); });
   window->AddWindow(std::move(button));
 
-  location.x = 20;
-  location.y = 60;
+  location.x = 10;
+  location.y = 10;
   location.w = 200;
   location.h = 230;
-  std::unique_ptr<TextBox> textBox(new TextBox("Add a disclaimer here by demo deadline where it's stated that this is badly unfinished game", location, &m_renderer));
+  std::unique_ptr<TextBox> textBox(new TextBox("DUE TO MISREADING THE DEADLINE THIS IS KINDA BROKEN. Just pretend we have fixed the collision detection, added health and added level end point", location, &m_renderer));
   window->AddWindow(std::move(textBox));
 
   m_windowManager.AddWindow(std::move(window));
 
+
+  location.x = 300;
+  location.y = 300;
+  location.w = 300;
+  location.h = 300;
+
+  window.reset(new Window(location, color, &m_renderer));
+  window->Deactivate();
+
+  location.x = 10;
+  location.y = 10;
+  location.w = 280;
+  location.h = 240;
+  textBox.reset(new TextBox("Congratulations! You have finished the demo version of this game!", location, &m_renderer));
+  window->AddWindow(std::move(textBox));
+  
+
+  location.x = 10;
+  location.y = 260;
+  location.w = 140;
+  location.h = 30;
+
+  button.reset(new Button(location, "Close game", &m_renderer));
+
+  button->AddHandler([&]{ this->ShutDownGame(); });
+  window->AddWindow(std::move(button));
+
+
+  m_levelManager.GetCurrentLevel()->debugVictoryWindow = window.get();
+  m_windowManager.AddWindow(std::move(window));
 
 }
 

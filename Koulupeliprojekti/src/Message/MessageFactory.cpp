@@ -56,3 +56,8 @@ std::unique_ptr<Message> MessageFactory::CreateTakeDamageMessage()
 {
   return std::unique_ptr<Message>(new GenericMessageWithNoData(MessageType::TAKE_DAMAGE));
 }
+
+std::unique_ptr<Message> MessageFactory::CreateEndLevelMessage()
+{
+  return std::unique_ptr<Message>(new GenericMessageWithNoData(MessageType::END_LEVEL));
+}
