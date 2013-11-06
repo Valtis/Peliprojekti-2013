@@ -80,8 +80,8 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
 
   // Below is simple random level generation for testing purposes.
   int steps [3][3][2] = { { {1,0}, {1,0}, {1,0} }, // straight
-                          { {0,-1}, {0,-1}, {1,0} }, // up
-                          { {0,1}, {0,1}, {1,0} }}; // down
+                          { {0,-1}, {0,0}, {1,0} }, // up
+                          { {0,1}, {0,0}, {1,0} }}; // down
   srand (time(NULL));
 
   int startX = 50;
