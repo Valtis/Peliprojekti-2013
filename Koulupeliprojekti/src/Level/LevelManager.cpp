@@ -36,7 +36,7 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
 
   e->AddComponent(ComponentType::GRAPHICS, std::move(g));
   std::unique_ptr<LocationComponent> l(new LocationComponent);
-  l->SetLocation(600, 500);
+  l->SetLocation(70, 600);
   e->AddComponent(ComponentType::LOCATION, std::move(l));
   std::unique_ptr<InputComponent> ci(new InputComponent);
   ci->RegisterInputHandler(m_inputManager);
@@ -66,7 +66,7 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   g->AddFrame(0,200007);
   monster->AddComponent(ComponentType::GRAPHICS, std::move(g));
   l.reset(new LocationComponent);
-  l->SetLocation(500,400);
+  l->SetLocation(220,600);
   monster->AddComponent(ComponentType::LOCATION, std::move(l));
   ci.reset(new InputComponent(-1));
   monster->AddComponent(ComponentType::INPUT, std::move(ci));
@@ -79,20 +79,18 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   level->AddEntity(std::move(monster));
 
   // Below is simple random level generation for testing purposes.
-  int steps [3][2][2] = { { {1,0}, {0,0} }, { {1,-1}, {1,0} }, { {0,1},{1,1} }};
+  int steps [3][3][2] = { { {1,0}, {1,0}, {1,0} }, // straight
+                          { {0,-1}, {0,-1}, {1,0} }, // up
+                          { {0,1}, {0,1}, {1,0} }}; // down
   srand (time(NULL));
 
-  int startX = 500;
-  int startY = 600;
+  int startX = 50;
+  int startY = 700;
   for (int i = 0; i < 40; ++i) {
+    // pick up/down/straight on random
     int ran = rand() % 3;
-    /*
-    int sX = steps[ran][0][0];
-    int sY = steps[ran][0][1];
-    int sX2 = steps[ran][1][0];
-    int sY2 = steps[ran][1][1];
-    */
-    for (int j = 0; j < 2; ++j) {
+    // foreach step
+    for (int j = 0; j < 3; ++j) {
       int sX = steps[ran][j][0];
       int sY = steps[ran][j][1];
       e.reset(new Entity);
