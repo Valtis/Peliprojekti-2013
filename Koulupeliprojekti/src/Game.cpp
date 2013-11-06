@@ -137,7 +137,7 @@ void Game::TestWindowCreation()
   location.y = 10;
   location.w = 200;
   location.h = 230;
-  std::unique_ptr<TextBox> textBox(new TextBox("DUE TO MISREADING THE DEADLINE THIS IS KINDA BROKEN. Just pretend we have fixed the collision detection, added health and added level end point", location, &m_renderer));
+  std::unique_ptr<TextBox> textBox(new TextBox("THIS IS UNFINISHED. Just pretend we have fixed the issues with collision detection, that the triangle is animated player and shooting actually does something", location, &m_renderer));
   window->AddWindow(std::move(textBox));
 
   m_windowManager.AddWindow(std::move(window));
