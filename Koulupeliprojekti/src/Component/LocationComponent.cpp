@@ -30,7 +30,6 @@ bool LocationComponent::HandleLocationChangeMessage(Message *msg)
     LoggerManager::GetLog(COMPONENT_LOG).AddLine(LogLevel::WARNING, "Invalid message type received in LocationComponent::HandleLocationChangeMessage() - ignoring");
     return true;
   }
-
   auto *locationMessage = static_cast<LocationChangeMessage *>(msg);
   
   m_x += locationMessage->GetXChange();
@@ -55,16 +54,20 @@ bool LocationComponent::HandleCollisionMessage(Message *msg)
   CollisionSide side;
   if (v == nullptr)
 	  return true;
-
   side = colMsg->GetSide();
+
+if (side == CollisionSide::DOWN && m_collision)
+	return false;
+
   if (side == CollisionSide::RIGHT)
     m_x -= colMsg->GetIntersection().w;
   else if (side == CollisionSide::LEFT)
     m_x += colMsg->GetIntersection().w;
   else if (side == CollisionSide::UP)
-    m_y -= colMsg->GetIntersection().h;
-  else if (side == CollisionSide::DOWN)
     m_y += colMsg->GetIntersection().h;
+  else if (side == CollisionSide::DOWN)
+    m_y -= colMsg->GetIntersection().h;
+  m_collision = true;
 
   return false;
 }
