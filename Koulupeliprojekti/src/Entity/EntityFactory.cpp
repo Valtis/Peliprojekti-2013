@@ -12,6 +12,7 @@
 #include <string>
 #include <SDL.h>
 #include <stdexcept>
+#include <sstream>
 
 // todo - clean up
 void CreateBullet(Entity *e, SpawnEntityMessage *msg)
@@ -67,6 +68,8 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
 
 std::unique_ptr<Entity> EntityFactory::CreateEntity(SpawnEntityMessage *msg)
 {
+  std::stringstream ss;
+  ss << (int)(msg->GetEntityType());
   std::unique_ptr<Entity> e(new Entity);
 
   switch (msg->GetEntityType())
@@ -75,8 +78,8 @@ std::unique_ptr<Entity> EntityFactory::CreateEntity(SpawnEntityMessage *msg)
     CreateBullet(e.get(), msg);
     break;
   default:
-    throw std::runtime_error("Default case reached in EntityFactory::CreateEntity() - EntityType " + std::to_string((int)msg->GetEntityType()) +
-      " received");
+    throw std::runtime_error("Default case reached in EntityFactory::CreateEntity() - EntityType " +
+      ss.str() + " received");
     break;
   }
 

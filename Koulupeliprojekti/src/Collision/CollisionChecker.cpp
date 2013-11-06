@@ -74,7 +74,7 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
     }
     else
     {
-      if (std::abs(y) > std::abs(x))
+      if (SDL_fabs(y) > SDL_fabs(x))
       {
         // Moves faster vertically
         if (y < 0.0)
@@ -127,10 +127,10 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
             {
               // No default, use whichever side is nearest
               int leftDist, rightDist, upDist, downDist, min;
-              leftDist = abs(cc_hitbox.x - (cc2_hitbox.x + cc2_hitbox.w));
-              rightDist = abs((cc_hitbox.x + cc_hitbox.w) - cc2_hitbox.x);
-              upDist = abs(cc_hitbox.y - (cc2_hitbox.y + cc2_hitbox.h));
-              downDist = abs((cc_hitbox.y + cc_hitbox.h) - cc2_hitbox.y);
+              leftDist = SDL_fabs(cc_hitbox.x - (cc2_hitbox.x + cc2_hitbox.w));
+              rightDist = SDL_fabs((cc_hitbox.x + cc_hitbox.w) - cc2_hitbox.x);
+              upDist = SDL_fabs(cc_hitbox.y - (cc2_hitbox.y + cc2_hitbox.h));
+              downDist = SDL_fabs((cc_hitbox.y + cc_hitbox.h) - cc2_hitbox.y);
               min = std::min(leftDist,rightDist);
               min = std::min(min,upDist);
               min = std::min(min,downDist);

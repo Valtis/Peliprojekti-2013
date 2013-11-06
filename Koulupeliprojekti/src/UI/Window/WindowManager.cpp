@@ -29,6 +29,8 @@ bool WindowManager::HandleInput(Command *command)
 
 bool  WindowManager::HandleEvent(const SDL_Event &event)
 {
+  std::stringstream ss;
+  ss << event.type;
   switch (event.type)
   {
   case SDL_MOUSEMOTION:
@@ -45,7 +47,8 @@ bool  WindowManager::HandleEvent(const SDL_Event &event)
     break;
 
   default:
-    LoggerManager::GetLog(WINDOW_MANAGER_LOG).AddLine(LogLevel::WARNING, "Non-mouse event in WindowManager - shouldn't happen (event type: " + std::to_string(event.type) + ")");
+    LoggerManager::GetLog(WINDOW_MANAGER_LOG).AddLine(LogLevel::WARNING, "Non-mouse event in WindowManager - shouldn't happen (event type: " +
+      ss.str() + ")");
   }
   return false;
 }

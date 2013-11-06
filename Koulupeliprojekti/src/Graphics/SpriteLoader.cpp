@@ -1,6 +1,7 @@
 #include "Graphics/SpriteLoader.h"
 #include "Graphics/Sprite.h"
 #include <stdexcept>
+#include <sstream>
 
 std::vector<std::unique_ptr<Sprite>> SpriteLoader::LoadSprites(std::string datafilePath)
 {
@@ -36,18 +37,28 @@ SpriteDataFileLine SpriteLoader::ParseSpriteLine(std::string line, std::string d
   {
     throw std::runtime_error("Malformed sprite data file: Line " + line + " encountered");
   }
-
   SpriteDataFileLine dataLine;
+  
+  std::istringstream(tokens[0]) >> dataLine.x;
+  std::istringstream(tokens[1]) >> dataLine.y;
+  std::istringstream(tokens[2]) >> dataLine.width;
+  std::istringstream(tokens[3]) >> dataLine.height;
+  std::istringstream(tokens[4]) >> dataLine.spriteSheetID;
+  std::istringstream(tokens[5]) >> dataLine.spriteID;
+
+  /*
   dataLine.x = std::stoi(tokens[0]);
   dataLine.y = std::stoi(tokens[1]);
   dataLine.width = std::stoi(tokens[2]);
   dataLine.height = std::stoi(tokens[3]);
   dataLine.spriteSheetID = std::stoi(tokens[4]);
   dataLine.spriteID = std::stoi(tokens[5]);
+  */
   if (tokens.size() >= 7)
   {
 
-    dataLine.drawPriority = std::stoi(tokens[6]);
+    //dataLine.drawPriority = std::stoi(tokens[6]);
+    std::istringstream(tokens[6]) >> dataLine.drawPriority;
   }
   else
   {

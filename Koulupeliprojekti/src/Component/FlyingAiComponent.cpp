@@ -28,7 +28,7 @@ void FlyingAiComponent::Update(double ticksPassed)
 	double y = own_loc->GetY();
 
 	double distance = sqrt(pow(player_x - x,2) + pow(player_y - y,2));
-	if (abs(m_player_y - y) > 230)
+	if (SDL_fabs(m_player_y - y) > 230)
 		m_following = true;
 	
 
@@ -37,7 +37,7 @@ void FlyingAiComponent::Update(double ticksPassed)
 		m_player_x = player_x;
 		m_player_y = player_y;
 		Follow(x,y);
-		if (abs(player_x - x) < 200 && player_y - y < 230)
+		if (SDL_fabs(player_x - x) < 200 && player_y - y < 230)
 		{
 			if (m_attack_tick > 150)
 			{
@@ -72,7 +72,7 @@ bool FlyingAiComponent::HandleCollisionMessage(Message *msg)
 
 void FlyingAiComponent::Attack(double x, double y)
 {
-	if (abs(m_player_x - x) < 20 && abs(m_player_y - y) < 20)
+	if (SDL_fabs(m_player_x - x) < 20 && SDL_fabs(m_player_y - y) < 20)
 	{
 	GetOwner()->SendMessage(new ControlCommand(Action::UP,true,-1));
 	m_attacking = false;

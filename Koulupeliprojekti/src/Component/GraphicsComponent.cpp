@@ -20,10 +20,12 @@ void GraphicsComponent::SetAnimation(int id)
   }
   else
   {
+    std::stringstream ss;
+    ss << id;
     LoggerManager::GetLog(COMPONENT_LOG)
       .AddLine(LogLevel::WARNING, 
       "Invalid animation id given to GraphicsComponent::SetAnimation (id "
-      + std::to_string(id) + ") - ignoring");
+      + ss.str() + ") - ignoring");
   }
 }
 

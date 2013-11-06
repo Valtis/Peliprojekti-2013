@@ -13,7 +13,10 @@ std::unordered_map<int, SDL_Texture *> SpriteSheetLoader::LoadSpriteSheets(Rende
   {
     if (textures.count(sheet.first) != 0)
     {
-      LoggerManager::GetLog(GRAPHICS_LOG).AddLine(LogLevel::WARNING, "Sprite sheet with id " + std::to_string(sheet.first) + " already exists - skipping"  );
+      std::stringstream ss;
+      ss << sheet.first;
+      LoggerManager::GetLog(GRAPHICS_LOG).AddLine(LogLevel::WARNING, "Sprite sheet with id " +
+        ss.str() + " already exists - skipping"  );
       continue;
     }
 
@@ -42,7 +45,9 @@ std::pair<int, std::string> SpriteSheetLoader::ParseSpriteSheetLine(std::string 
   {
     throw std::runtime_error("Malformed sprite sheet data file: Line " + line + " encountered");
   }
-  return std::make_pair(std::stoi(tokens[1]), datafilePath + tokens[0]);
+  int tokenV;
+  std::istringstream(tokens[1]) >> tokenV;
+  return std::make_pair(tokenV, datafilePath + tokens[0]);
 }
 
 SDL_Texture *SpriteSheetLoader::LoadSpriteSheet(Renderer *renderer, std::pair<int, std::string> sheet)
