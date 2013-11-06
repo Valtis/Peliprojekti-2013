@@ -143,5 +143,35 @@ void Game::TestWindowCreation()
   m_windowManager.AddWindow(std::move(window));
 
 
+  location.x = 300;
+  location.y = 300;
+  location.w = 300;
+  location.h = 300;
+
+  window.reset(new Window(location, color, &m_renderer));
+  window->Deactivate();
+
+  location.x = 10;
+  location.y = 10;
+  location.w = 280;
+  location.h = 240;
+  textBox.reset(new TextBox("Congratulations! You have finished the demo version of this game!", location, &m_renderer));
+  window->AddWindow(std::move(textBox));
+  
+
+  location.x = 10;
+  location.y = 260;
+  location.w = 140;
+  location.h = 30;
+
+  button.reset(new Button(location, "Close game", &m_renderer));
+
+  button->AddHandler([&]{ this->ShutDownGame(); });
+  window->AddWindow(std::move(button));
+
+
+  m_levelManager.GetCurrentLevel()->debugVictoryWindow = window.get();
+  m_windowManager.AddWindow(std::move(window));
+
 }
 

@@ -4,6 +4,8 @@
 #include "Message/LocationChangeMessage.h"
 #include "Component/VelocityComponent.h"
 #include "Message/CollisionMessage.h"
+#include "Component/FactionComponent.h"
+
 LocationComponent::LocationComponent() : m_x(0), m_y(0), m_direction(Direction::RIGHT)
 {
 
@@ -19,7 +21,7 @@ void LocationComponent::OnAttatchingToEntity()
   GetOwner()->RegisterMessageHandler(MessageType::LOCATION_CHANGE, Priority::NORMAL, 
     [&](Message *msg) { return this->HandleLocationChangeMessage(msg); });
   GetOwner()->RegisterMessageHandler(MessageType::COLLISION, Priority::NORMAL, 
-	  [&](Message *msg) { return this->HandleCollisionMessage(msg); });
+    [&](Message *msg) { return this->HandleCollisionMessage(msg); });
 
 }
 
@@ -31,7 +33,7 @@ bool LocationComponent::HandleLocationChangeMessage(Message *msg)
     return true;
   }
   auto *locationMessage = static_cast<LocationChangeMessage *>(msg);
-  
+
   m_x += locationMessage->GetXChange();
   m_y += locationMessage->GetYChange();
 
@@ -52,8 +54,19 @@ bool LocationComponent::HandleCollisionMessage(Message *msg)
   CollisionMessage *colMsg = static_cast<CollisionMessage *>(msg);
   VelocityComponent *v = static_cast<VelocityComponent *>(GetOwner()->GetComponent(ComponentType::VELOCITY));
   CollisionSide side;
+  Entity *collider = colMsg->GetEntity();
+
+  auto *myFac = static_cast<FactionComponent *>(GetOwner()->GetComponent(ComponentType::FACTION));
+  auto *colFac = static_cast<FactionComponent *>(collider->GetComponent(ComponentType::FACTION));
+
+  if (myFac != nullptr && colFac != nullptr && myFac->GetFaction() == colFac->GetFaction())
+  {
+    return true;
+  }
+
   if (v == nullptr)
-	  return true;
+    return true;
+
   side = colMsg->GetSide();
 
 if (side == CollisionSide::DOWN && m_collision)
