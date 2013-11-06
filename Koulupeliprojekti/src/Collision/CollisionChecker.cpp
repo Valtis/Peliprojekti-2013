@@ -40,7 +40,7 @@ void CheckEntityCollision(const std::unique_ptr<Entity> &entity,
     cc2 = static_cast<CollisionComponent *>((*e)->GetComponent(ComponentType::COLLISION));
     if (cc2 == nullptr)
       continue;
-    if (vc == nullptr)
+    if (vc == nullptr || (x == 0.0 && y == 0.0))
       vc2 = static_cast<VelocityComponent *>((*e)->GetComponent(ComponentType::VELOCITY));
     
     if (vc2 != nullptr)
