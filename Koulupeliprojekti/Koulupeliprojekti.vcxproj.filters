@@ -276,6 +276,9 @@
     <ClInclude Include="include\Component\FlyingAiComponent.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="include\Component\Scripts\EndLevelScriptComponent.h">
+      <Filter>Header Files\Component\Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -427,6 +430,9 @@
     </ClCompile>
     <ClCompile Include="src\Component\FlyingAiComponent.cpp">
       <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Scripts\EndLevelScriptComponent.cpp">
+      <Filter>Source Files\Component\Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
