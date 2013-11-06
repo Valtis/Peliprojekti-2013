@@ -273,6 +273,9 @@
     <ClInclude Include="include\Physics\PhysicsHandler.h">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Component\FlyingAiComponent.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -421,6 +424,9 @@
     </ClCompile>
     <ClCompile Include="src\Physics\PhysicsHandler.cpp">
       <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\FlyingAiComponent.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

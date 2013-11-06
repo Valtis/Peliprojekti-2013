@@ -16,6 +16,7 @@
     <ClInclude Include="include\Component\Component.h" />
     <ClInclude Include="include\Component\CollisionComponent.h" />
     <ClInclude Include="include\Component\FactionComponent.h" />
+    <ClInclude Include="include\Component\FlyingAiComponent.h" />
     <ClInclude Include="include\Component\FollowingAiComponent.h" />
     <ClInclude Include="include\Component\GraphicsComponent.h" />
     <ClInclude Include="include\Component\HealthComponent.h" />
@@ -77,6 +78,7 @@
     <ClCompile Include="src\Component\Component.cpp" />
     <ClCompile Include="src\Component\CollisionComponent.cpp" />
     <ClCompile Include="src\Component\FactionComponent.cpp" />
+    <ClCompile Include="src\Component\FlyingAiComponent.cpp" />
     <ClCompile Include="src\Component\FollowingAiComponent.cpp" />
     <ClCompile Include="src\Component\GraphicsComponent.cpp" />
     <ClCompile Include="src\Component\HealthComponent.cpp" />
