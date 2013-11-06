@@ -52,6 +52,7 @@
     <ClInclude Include="include\Message\MessageProcessor.h" />
     <ClInclude Include="include\Message\SetVelocityMessage.h" />
     <ClInclude Include="include\Message\VelocityChangeMessage.h" />
+    <ClInclude Include="include\Physics\PhysicsHandler.h" />
     <ClInclude Include="include\UI\Controller\Controller.h" />
     <ClInclude Include="include\UI\Controller\KeyboardController.h" />
     <ClInclude Include="include\UI\Controller\MouseController.h" />
@@ -103,6 +104,7 @@
     <ClCompile Include="src\Message\Message.cpp" />
     <ClCompile Include="src\Message\MessageFactory.cpp" />
     <ClCompile Include="src\Message\MessageProcessor.cpp" />
+    <ClCompile Include="src\Physics\PhysicsHandler.cpp" />
     <ClCompile Include="src\UI\Controller\JoystickController.cpp" />
     <ClCompile Include="src\UI\Controller\KeyboardController.cpp" />
     <ClCompile Include="src\UI\Controller\MouseController.cpp" />
