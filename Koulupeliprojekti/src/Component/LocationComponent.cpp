@@ -52,11 +52,19 @@ bool LocationComponent::HandleCollisionMessage(Message *msg)
 {
   CollisionMessage *colMsg = static_cast<CollisionMessage *>(msg);
   VelocityComponent *v = static_cast<VelocityComponent *>(GetOwner()->GetComponent(ComponentType::VELOCITY));
+  CollisionSide side;
   if (v == nullptr)
-  {
 	  return true;
-  }
-  m_x -= colMsg->GetIntersection().w;
+
+  side = colMsg->GetSide();
+  if (side == CollisionSide::RIGHT)
+    m_x -= colMsg->GetIntersection().w;
+  else if (side == CollisionSide::LEFT)
+    m_x += colMsg->GetIntersection().w;
+  else if (side == CollisionSide::DOWN)
+    m_x -= colMsg->GetIntersection().h;
+  else if (side == CollisionSide::UP)
+    m_x += colMsg->GetIntersection().h;
 
   return false;
 }
