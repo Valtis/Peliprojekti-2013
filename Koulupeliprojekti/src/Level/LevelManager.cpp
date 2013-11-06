@@ -80,8 +80,8 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   c.reset(new CollisionComponent);
   c->AddHitbox(0,0,70,35, HitboxType::OBJECT);
   monster->AddComponent(ComponentType::COLLISION, std::move(c));
-  p.reset(new PhysicsComponent);
-  monster->AddComponent(ComponentType::PHYSICS,std::move(p));
+//  p.reset(new PhysicsComponent);
+//  monster->AddComponent(ComponentType::PHYSICS,std::move(p));
   f.reset(new FactionComponent(Faction::ENEMY));
   monster->AddComponent(ComponentType::FACTION, std::move(f));
   level->AddEntity(std::move(monster));
