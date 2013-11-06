@@ -18,6 +18,7 @@ public:
 private:
   bool HandleInput(Command *msg);
   void Fire();
+  void Jump();
   Uint32 m_debugLastFireTick;
   int m_id;
 

@@ -3,6 +3,7 @@
 #include "Entity/Entity.h"
 #include "Message/MessageFactory.h"
 #include "Message/SetVelocityMessage.h"
+#include "Component/LocationComponent.h"
 #include "UI/InputManager.h"
 #include <SDL.h>
 InputComponent::InputComponent() : m_debugLastFireTick(0), m_id(0)
@@ -44,8 +45,8 @@ bool InputComponent::HandleInput( Command *msg )
   if (m_id == -1 && command->GetController() != -1)
 	return false;
 
-  double xVel = 2;
-  double yVel = 2;
+  double xVel = 3;
+  double yVel = 3;
   if (command->GetState() == false)
   {
     xVel = yVel = 0;
@@ -73,6 +74,10 @@ bool InputComponent::HandleInput( Command *msg )
     newYVelocity = yVel;
     dir = Velocity::Y;
     break;
+  case Action::JUMP:
+    if (command->GetState() == true)
+    	Jump();
+    return true;
   case Action::FIRE:
     Fire();
     break;
@@ -94,6 +99,18 @@ bool InputComponent::HandleInput( Command *msg )
 
 
   return true;
+}
+
+void InputComponent::Jump()
+{
+  auto loc = static_cast<LocationComponent*>(GetOwner()->GetComponent(ComponentType::LOCATION));
+  if (loc == nullptr)
+	return;
+  if (!loc->CanIJump())
+	return;
+
+  auto message = MessageFactory::CreateSetVelocityMessage(-13, Velocity::Y);
+  GetOwner()->SendMessage(message.get());
 }
 
 void InputComponent::Fire()

@@ -77,7 +77,7 @@ void Renderer::DrawEntities(Camera *camera, const std::vector<std::unique_ptr<En
   SortEntitiesByDrawPriority(spriteIds);
   PerformEntityDraw(spriteIds, topleft);
 
-  DebugDrawCollisionBoxes(entities, topleft);
+  //DebugDrawCollisionBoxes(entities, topleft);
 
 }
 

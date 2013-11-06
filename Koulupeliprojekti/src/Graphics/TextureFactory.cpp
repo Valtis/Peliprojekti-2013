@@ -62,8 +62,8 @@ SDL_Texture *TextureFactory::CreateWindowTexture(int width, int height, SDL_Colo
 
   ColorArea(rect, color, surface);
 
-  SDL_Color red = { 255, 0, 0, 255 };
-  DrawBox(rect, red, surface);
+  SDL_Color black = { 0, 0, 0, 255 };
+  DrawBox(rect, black, surface);
 
   return CreateTexture(renderer, surface);
 }
