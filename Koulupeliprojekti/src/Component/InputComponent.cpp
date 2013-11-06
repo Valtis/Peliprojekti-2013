@@ -45,8 +45,8 @@ bool InputComponent::HandleInput( Command *msg )
   if (m_id == -1 && command->GetController() != -1)
 	return false;
 
-  double xVel = 2;
-  double yVel = 2;
+  double xVel = 3;
+  double yVel = 3;
   if (command->GetState() == false)
   {
     xVel = yVel = 0;
@@ -109,7 +109,7 @@ void InputComponent::Jump()
   if (!loc->CanIJump())
 	return;
 
-  auto message = MessageFactory::CreateSetVelocityMessage(-12, Velocity::Y);
+  auto message = MessageFactory::CreateSetVelocityMessage(-13, Velocity::Y);
   GetOwner()->SendMessage(message.get());
 }
 
