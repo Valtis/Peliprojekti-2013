@@ -22,8 +22,8 @@ Command* KeyboardController::HandleInput(SDL_Event event)
 }
 void KeyboardController::LoadBinds()
 {
-	m_binds[SDLK_DOWN] = Action::DOWN;
-	m_binds[SDLK_UP] = Action::UP;
+//	m_binds[SDLK_DOWN] = Action::DOWN;
+//	m_binds[SDLK_UP] = Action::UP;
 	m_binds[SDLK_LEFT] = Action::LEFT;
 	m_binds[SDLK_RIGHT] = Action::RIGHT;
 	m_binds[SDLK_SPACE] = Action::JUMP;
