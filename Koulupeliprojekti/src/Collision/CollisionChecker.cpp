@@ -1,3 +1,4 @@
+#include <cmath>
 #include "Collision/CollisionChecker.h"
 #include "Component/CollisionComponent.h"
 #include "Component/VelocityComponent.h"
