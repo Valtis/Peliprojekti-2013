@@ -149,7 +149,7 @@ void Game::TestWindowCreation()
   location.h = 300;
 
   window.reset(new Window(location, color, &m_renderer));
-  window->Activate();
+  window->Deactivate();
 
   location.x = 10;
   location.y = 10;
@@ -169,6 +169,8 @@ void Game::TestWindowCreation()
   button->AddHandler([&]{ this->ShutDownGame(); });
   window->AddWindow(std::move(button));
 
+
+  m_levelManager.GetCurrentLevel()->debugVictoryWindow = window.get();
   m_windowManager.AddWindow(std::move(window));
 
 }
