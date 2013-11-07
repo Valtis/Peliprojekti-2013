@@ -117,9 +117,6 @@
     <ClInclude Include="include\Message\Message.h">
       <Filter>Header Files\Message</Filter>
     </ClInclude>
-    <ClInclude Include="include\Entity\EntityParent.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="include\Message\MessageProcessor.h">
       <Filter>Header Files\Message</Filter>
     </ClInclude>

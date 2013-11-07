@@ -29,7 +29,6 @@
     <ClInclude Include="include\Component\WalkingAiComponent.h" />
     <ClInclude Include="include\Entity\Entity.h" />
     <ClInclude Include="include\Entity\EntityFactory.h" />
-    <ClInclude Include="include\Entity\EntityParent.h" />
     <ClInclude Include="include\Game.h" />
     <ClInclude Include="include\Graphics\Camera\Camera.h" />
     <ClInclude Include="include\Graphics\Camera\EntityTrackingCamera.h" />

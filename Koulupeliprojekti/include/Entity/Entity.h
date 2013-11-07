@@ -1,7 +1,6 @@
 #pragma once
 #include <map>
 
-#include "Entity/EntityParent.h"
 #include "Component/Component.h"
 #include "Message/MessageProcessor.h"
 
