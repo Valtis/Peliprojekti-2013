@@ -6,7 +6,14 @@ bool MessageProcessor::SendMessage(Message *message)
 
   if (handlers.empty())
   {
-    return false;
+    if (m_parent == false)
+    {
+      return false;
+    }
+    else
+    {
+      return m_parent->SendMessage(message);
+    }
   }
 
   PassMessageToHandlers(handlers, message);
