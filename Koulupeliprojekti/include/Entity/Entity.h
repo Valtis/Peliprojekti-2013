@@ -13,9 +13,7 @@ class Entity : public MessageProcessor
 public:
   Entity();
   ~Entity();
-  void RegisterMessageHandler(MessageType type, Priority priority, MessageCallback callback) override;
-  void SendMessageToParent(Message *message); 
-  void SendMessageToChildren(Message *message);
+  
   void AddComponent(ComponentType type, std::unique_ptr<Component> c);
   void AddScript(std::unique_ptr<Component> script);
   Component *GetComponent(ComponentType type);

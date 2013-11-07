@@ -25,7 +25,7 @@ void HealthComponent::OnAttatchingToEntity()
   GetOwner()->RegisterMessageHandler(MessageType::TAKE_DAMAGE, Priority::NORMAL, [&](Message *msg) 
   {
     this->TakeDamage();
-    return false;
+    return MessageHandling::STOP_HANDLING;
   }
   );
 }

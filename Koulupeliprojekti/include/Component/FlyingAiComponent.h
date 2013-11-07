@@ -8,7 +8,7 @@ public:
 	void Update(double ticksPassed);
 	FlyingAiComponent(Entity* player);
 private:
-	MessageHandling HandleCollisionMessage(Message* msg);
+	MessageHandling HandleCollisionMessage(Message* msg) override;
 	void Attack(double x, double y);
 	void Follow(double x, double y);
 	bool m_attacking, m_following;

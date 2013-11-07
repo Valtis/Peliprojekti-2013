@@ -23,7 +23,7 @@ public:
   Window *debugVictoryWindow; // temporary!
 private:
 
-  MessageHandling HandleHandleEntitySpawning(Message *msg);
+  MessageHandling HandleEntitySpawning(Message *msg);
   MessageHandling HandleEntityTermination(Message *msg);
   std::vector<std::unique_ptr<Entity>> m_entities;
   std::vector<std::unique_ptr<Entity>> m_ground; // potentially more than ground, rename if needed

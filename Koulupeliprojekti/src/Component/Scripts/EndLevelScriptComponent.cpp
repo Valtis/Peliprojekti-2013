@@ -15,7 +15,7 @@ void EndLevelScriptComponent::OnAttatchingToEntity()
 MessageHandling EndLevelScriptComponent::HandleCollisionMessage(Message *msg)
 {
 	if (msg->GetType() != MessageType::COLLISION)
-		return false;
+		return MessageHandling::STOP_HANDLING;
 	
 	CollisionMessage* col = static_cast<CollisionMessage*>(msg);
 	FactionComponent* faction = static_cast<FactionComponent*>(col->GetEntity()->GetComponent(ComponentType::FACTION));

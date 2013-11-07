@@ -29,7 +29,7 @@ void InputComponent::OnAttatchingToEntity()
 
 void InputComponent::RegisterInputHandler(InputManager &manager)
 {
-  manager.RegisterInputHandler([&](Command *cmd) { return this->HandleInput(cmd); }, 5);
+  manager.RegisterInputHandler([&](Command *cmd) { MessageHandling h = this->HandleInput(cmd); return (h == MessageHandling::PASS_FORWARD); }, 5);
 }
 
 MessageHandling InputComponent::HandleInput( Command *msg )
@@ -77,10 +77,10 @@ MessageHandling InputComponent::HandleInput( Command *msg )
   case Action::JUMP:
     if (command->GetState() == true)
       Jump();
-    return true;
+    return MessageHandling::STOP_HANDLING;
   case Action::FIRE:
     Fire();
-    break;
+    MessageHandling::STOP_HANDLING;
   default:
     return MessageHandling::STOP_HANDLING; // not handling anything
     break;
