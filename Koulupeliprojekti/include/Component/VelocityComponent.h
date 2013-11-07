@@ -27,8 +27,8 @@ public:
     return m_yVelocity;
   }
 private:
-  bool HandleVelocityChangeMessage(Message *msg);
-  bool HandleSetVelocityMessage(Message *msg);
+  MessageHandling HandleVelocityChangeMessage(Message *msg);
+  MessageHandling HandleSetVelocityMessage(Message *msg);
 
   double m_xVelocity;
   double m_yVelocity;

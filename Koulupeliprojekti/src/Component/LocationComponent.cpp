@@ -25,12 +25,12 @@ void LocationComponent::OnAttatchingToEntity()
 
 }
 
-bool LocationComponent::HandleLocationChangeMessage(Message *msg)
+MessageHandling LocationComponent::HandleLocationChangeMessage(Message *msg)
 {
   if (msg->GetType() != MessageType::LOCATION_CHANGE)
   {
     LoggerManager::GetLog(COMPONENT_LOG).AddLine(LogLevel::WARNING, "Invalid message type received in LocationComponent::HandleLocationChangeMessage() - ignoring");
-    return true;
+    return MessageHandling::PASS_FORWARD;
   }
   auto *locationMessage = static_cast<LocationChangeMessage *>(msg);
 
@@ -46,10 +46,10 @@ bool LocationComponent::HandleLocationChangeMessage(Message *msg)
     m_direction = Direction::LEFT;
   }
 
-  return false;
+  return MessageHandling::STOP_HANDLING;
 }
 
-bool LocationComponent::HandleCollisionMessage(Message *msg)
+MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
 {
   CollisionMessage *colMsg = static_cast<CollisionMessage *>(msg);
   VelocityComponent *v = static_cast<VelocityComponent *>(GetOwner()->GetComponent(ComponentType::VELOCITY));
@@ -61,16 +61,16 @@ bool LocationComponent::HandleCollisionMessage(Message *msg)
 
   if (myFac != nullptr && colFac != nullptr && myFac->GetFaction() == colFac->GetFaction())
   {
-    return true;
+    return MessageHandling::PASS_FORWARD;
   }
 
   if (v == nullptr)
-    return true;
+    return MessageHandling::PASS_FORWARD;
 
   side = colMsg->GetSide();
 
   if (side == CollisionSide::DOWN && m_collision)
-    return false;
+    return MessageHandling::STOP_HANDLING;
 
   if (side == CollisionSide::RIGHT)
     m_x -= colMsg->GetIntersection().w;
@@ -83,5 +83,5 @@ bool LocationComponent::HandleCollisionMessage(Message *msg)
   if (side == CollisionSide::DOWN)
     m_collision = true;
 
-  return false;
+  return MessageHandling::STOP_HANDLING;
 }

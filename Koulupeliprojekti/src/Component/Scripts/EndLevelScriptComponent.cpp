@@ -12,7 +12,7 @@ void EndLevelScriptComponent::OnAttatchingToEntity()
 	GetOwner()->RegisterMessageHandler(MessageType::COLLISION, Priority::HIGH,[&] (Message *msg) { return this->HandleCollisionMessage(msg); });
 }
 
-bool EndLevelScriptComponent::HandleCollisionMessage(Message *msg)
+MessageHandling EndLevelScriptComponent::HandleCollisionMessage(Message *msg)
 {
 	if (msg->GetType() != MessageType::COLLISION)
 		return false;
@@ -20,11 +20,11 @@ bool EndLevelScriptComponent::HandleCollisionMessage(Message *msg)
 	CollisionMessage* col = static_cast<CollisionMessage*>(msg);
 	FactionComponent* faction = static_cast<FactionComponent*>(col->GetEntity()->GetComponent(ComponentType::FACTION));
 	if (faction == nullptr)
-		return true;
+		return MessageHandling::PASS_FORWARD;
 
 	if (faction->GetFaction() != Faction::PLAYER)
-		return true;
+		return MessageHandling::PASS_FORWARD;
 
 	GetOwner()->SendMessage(MessageFactory::CreateEndLevelMessage().release());
-	return false;
+	return MessageHandling::STOP_HANDLING;
 }

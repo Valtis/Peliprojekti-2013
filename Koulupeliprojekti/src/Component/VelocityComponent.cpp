@@ -32,27 +32,27 @@ void VelocityComponent::OnAttatchingToEntity()
     [&](Message *msg) { return this->HandleSetVelocityMessage(msg); });
 }
 
-bool VelocityComponent::HandleVelocityChangeMessage(Message *msg)
+MessageHandling VelocityComponent::HandleVelocityChangeMessage(Message *msg)
 {
   if (msg->GetType() != MessageType::VELOCITY_CHANGE)
   {
     LoggerManager::GetLog(COMPONENT_LOG).AddLine(LogLevel::WARNING, "Invalid message type received in VelocityComponent::HandleVelocityChangeMessage() - ignoring");
-    return true;
+    return MessageHandling::PASS_FORWARD;
   }
 
   auto *velocityMessage = static_cast<VelocityChangeMessage *>(msg);
 
   m_xVelocity += velocityMessage->GetXChange();
   m_yVelocity += velocityMessage->GetYChange();
-  return false;
+  return MessageHandling::STOP_HANDLING;
 }
 
-bool VelocityComponent::HandleSetVelocityMessage(Message *msg)
+MessageHandling VelocityComponent::HandleSetVelocityMessage(Message *msg)
 {
   if (msg->GetType() != MessageType::SET_VELOCITY)
   {
     LoggerManager::GetLog(COMPONENT_LOG).AddLine(LogLevel::WARNING, "Invalid message type received in VelocityComponent::HandleSetVelocityMessage() - ignoring");
-    return true;
+    return MessageHandling::PASS_FORWARD;
   }
 
   auto *velocityMessage = static_cast<SetVelocityMessage *>(msg);
@@ -70,5 +70,5 @@ bool VelocityComponent::HandleSetVelocityMessage(Message *msg)
   {
     m_yVelocity = velocityMessage->GetYVelocity();
   }
-  return false;
+  return MessageHandling::STOP_HANDLING;
 }

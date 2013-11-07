@@ -32,18 +32,18 @@ void InputComponent::RegisterInputHandler(InputManager &manager)
   manager.RegisterInputHandler([&](Command *cmd) { return this->HandleInput(cmd); }, 5);
 }
 
-bool InputComponent::HandleInput( Command *msg )
+MessageHandling InputComponent::HandleInput( Command *msg )
 {
   if (msg->GetType() != MessageType::CONTROL_COMMAND)
   {
-    return false;
+    return MessageHandling::PASS_FORWARD;
   }
 
   auto *command = static_cast<ControlCommand *>(msg);
 
   // check if AI connected and got a non-AI command
   if (m_id == -1 && command->GetController() != -1)
-	return false;
+    return MessageHandling::PASS_FORWARD;
 
   double xVel = 3;
   double yVel = 3;
@@ -76,13 +76,13 @@ bool InputComponent::HandleInput( Command *msg )
     break;
   case Action::JUMP:
     if (command->GetState() == true)
-    	Jump();
+      Jump();
     return true;
   case Action::FIRE:
     Fire();
     break;
   default:
-    return false; // not handling anything
+    return MessageHandling::STOP_HANDLING; // not handling anything
     break;
   }
 
@@ -98,16 +98,16 @@ bool InputComponent::HandleInput( Command *msg )
   }
 
 
-  return true;
+  return MessageHandling::PASS_FORWARD;
 }
 
 void InputComponent::Jump()
 {
   auto loc = static_cast<LocationComponent*>(GetOwner()->GetComponent(ComponentType::LOCATION));
   if (loc == nullptr)
-	return;
+    return;
   if (!loc->CanIJump())
-	return;
+    return;
 
   auto message = MessageFactory::CreateSetVelocityMessage(-13, Velocity::Y);
   GetOwner()->SendMessage(message.get());
@@ -119,7 +119,7 @@ void InputComponent::Fire()
   {
     return;
   }
- 
+
   m_debugLastFireTick = SDL_GetTicks();
 
   auto msg = MessageFactory::CreateSpawnEntityMessage(EntityType::BULLET, GetOwner());

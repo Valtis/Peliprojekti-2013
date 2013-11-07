@@ -19,10 +19,11 @@ void WalkingAiComponent::Update(double ticksPassed)
 		GetOwner()->SendMessage(new ControlCommand(Action::LEFT,true,-1));
 }
 
-bool WalkingAiComponent::HandleCollisionMessage(Message *msg)
+MessageHandling WalkingAiComponent::HandleCollisionMessage(Message *msg)
 {
 	if (msg->GetType() != MessageType::COLLISION)
-		return false;
+		return MessageHandling::STOP_HANDLING;
+
 	Uint32 ticks = SDL_GetTicks();
 	if (ticks >= m_lastTick + 100)
 	{
@@ -33,5 +34,5 @@ bool WalkingAiComponent::HandleCollisionMessage(Message *msg)
 		m_direction = !m_direction;
 		m_lastTick = ticks;
 	}
-	return false;
+	return MessageHandling::STOP_HANDLING;
 }

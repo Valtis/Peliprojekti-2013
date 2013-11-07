@@ -58,16 +58,16 @@ void FlyingAiComponent::Update(double ticksPassed)
 	}
 }
 
-bool FlyingAiComponent::HandleCollisionMessage(Message *msg)
+MessageHandling FlyingAiComponent::HandleCollisionMessage(Message *msg)
 {
 
 	if (msg->GetType() != MessageType::COLLISION)
-		return false;
+		return MessageHandling::STOP_HANDLING;
 
 	m_attacking = false;
 	GetOwner()->SendMessage(new ControlCommand(Action::UP,true,-1));
 
-	return true;
+	return MessageHandling::PASS_FORWARD;
 }
 
 void FlyingAiComponent::Attack(double x, double y)

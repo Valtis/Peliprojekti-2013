@@ -16,7 +16,7 @@ public:
   void RegisterInputHandler(InputManager &manager);
 
 private:
-  bool HandleInput(Command *msg);
+  MessageHandling HandleInput(Command *msg);
   void Fire();
   void Jump();
   Uint32 m_debugLastFireTick;

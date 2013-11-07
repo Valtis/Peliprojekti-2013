@@ -7,5 +7,5 @@ public:
 	EndLevelScriptComponent();
 private:
 	void OnAttatchingToEntity() override;
-	bool HandleCollisionMessage(Message* msg);
+	MessageHandling HandleCollisionMessage(Message* msg);
 };
