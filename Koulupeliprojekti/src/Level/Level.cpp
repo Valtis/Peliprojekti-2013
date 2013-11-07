@@ -8,17 +8,12 @@
 #include "Message/TerminateEntityMessage.h"
 #include "Message/SpawnEntityMessage.h"
 
-#include "UI/Window/Window.h"
-
 Level::Level()
 {
   RegisterMessageHandler(MessageType::SPAWN_ENTITY, Priority::HIGHEST, 
     [&](Message *msg) { return this->HandleEntitySpawning(msg); });
   RegisterMessageHandler(MessageType::TERMINATE_ENTITY, Priority::HIGHEST, 
     [&](Message *msg) { return this->HandleEntityTermination(msg); });
-  RegisterMessageHandler(MessageType::END_LEVEL, Priority::HIGHEST,
-    [&](Message *msg) { this->debugVictoryWindow->Activate(); return MessageHandling::STOP_HANDLING; });
-
 }
 
 Level::~Level()

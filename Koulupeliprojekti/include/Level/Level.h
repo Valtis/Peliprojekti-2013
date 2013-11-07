@@ -20,7 +20,6 @@ public:
   const std::vector<std::unique_ptr<Entity>> &GetEntities();
   void AddEntity(std::unique_ptr<Entity> e);
 
-  Window *debugVictoryWindow; // temporary!
 private:
 
   MessageHandling HandleEntitySpawning(Message *msg);

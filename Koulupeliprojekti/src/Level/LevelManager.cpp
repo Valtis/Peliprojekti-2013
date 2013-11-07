@@ -2,6 +2,7 @@
 #include "Level/Level.h"
 #include <stdexcept>
 #include "Entity/Entity.h"
+#include "Message/MessageFactory.h"
 #include "Component/InputComponent.h"
 #include "Component/GraphicsComponent.h"
 #include "Component/LocationComponent.h"
@@ -21,7 +22,12 @@ const int TILESIZE = 30;
 const int NO_ACTIVE_LEVEL = -1;
 LevelManager::LevelManager() : m_currentLevel(NO_ACTIVE_LEVEL)
 {
-
+  RegisterMessageHandler(MessageType::END_LEVEL, Priority::HIGHEST, 
+    [&](Message *msg)
+    {
+      return this->HandleEndLevelMessage(msg);
+    }
+  );
 }
 
 LevelManager::~LevelManager()
@@ -53,7 +59,7 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   e->AddComponent(ComponentType::COLLISION, std::move(c));
   std::unique_ptr<FactionComponent> f(new FactionComponent(Faction::PLAYER));
   e->AddComponent(ComponentType::FACTION, std::move(f));
-  
+
   std::unique_ptr<PhysicsComponent> p(new PhysicsComponent);
   e->AddComponent(ComponentType::PHYSICS,std::move(p));
 
@@ -80,19 +86,19 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   c.reset(new CollisionComponent);
   c->AddHitbox(0,0,70,35, HitboxType::OBJECT);
   monster->AddComponent(ComponentType::COLLISION, std::move(c));
-//  p.reset(new PhysicsComponent);
-//  monster->AddComponent(ComponentType::PHYSICS,std::move(p));
+  //  p.reset(new PhysicsComponent);
+  //  monster->AddComponent(ComponentType::PHYSICS,std::move(p));
   f.reset(new FactionComponent(Faction::ENEMY));
   monster->AddComponent(ComponentType::FACTION, std::move(f));
   level->AddEntity(std::move(monster));
 
   // Below is simple random level generation for testing purposes.
   int steps [3][3][2] = { { {1,0}, {1,0}, {1,0} }, // straight
-                          { {0,-1}, {0,0}, {1,0} }, // up
-                          { {0,1}, {0,0}, {1,0} }}; // down
+  { {0,-1}, {0,0}, {1,0} }, // up
+  { {0,1}, {0,0}, {1,0} }}; // down
   // Different tile sprites:
   int tileSprites [5] = {200013, 200017,
-                          200018, 200024, 200026};
+    200018, 200024, 200026};
   srand (static_cast<unsigned int>(time(NULL)));
 
   int startX = 50;
@@ -141,6 +147,7 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
 
 void LevelManager::AddLevel(std::unique_ptr<Level> level)
 {
+  level->SetParent(this);
   m_levels.push_back(std::move(level));
 }
 
@@ -167,4 +174,17 @@ void LevelManager::Update(double ticksPassed)
 Level *LevelManager::GetCurrentLevel()
 {
   return m_levels[m_currentLevel].get();
+}
+
+MessageHandling LevelManager::HandleEndLevelMessage(Message *msg)
+{
+  // add player position reset here
+  ++m_currentLevel;
+  if (m_currentLevel >= m_levels.size())
+  {
+    --m_currentLevel;
+    auto msg = MessageFactory::CreateEndGameMessage();
+    SendMessage(msg.get());
+  }
+  return  MessageHandling::STOP_HANDLING;
 }

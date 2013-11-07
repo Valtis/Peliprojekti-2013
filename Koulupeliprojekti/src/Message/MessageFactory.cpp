@@ -61,3 +61,8 @@ std::unique_ptr<Message> MessageFactory::CreateEndLevelMessage()
 {
   return std::unique_ptr<Message>(new GenericMessageWithNoData(MessageType::END_LEVEL));
 }
+
+std::unique_ptr<Message> MessageFactory::CreateEndGameMessage()
+{
+  return std::unique_ptr<Message>(new GenericMessageWithNoData(MessageType::END_GAME));
+}

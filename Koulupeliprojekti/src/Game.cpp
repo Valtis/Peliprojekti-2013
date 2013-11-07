@@ -24,6 +24,13 @@
 
 Game::Game() : m_gameTick(30), m_drawTick(30)
 {
+  RegisterMessageHandler(MessageType::END_GAME, Priority::HIGHEST, [&](Message *msg)
+    {
+      this->m_windowManager.GetWindows()[1]->Activate();
+      return MessageHandling::STOP_HANDLING;
+    }
+  );
+
 }
 
 
@@ -77,6 +84,7 @@ void Game::Initialize()
   std::unique_ptr<EntityTrackingCamera> camera(new EntityTrackingCamera);
 
   m_levelManager.Initialize(m_inputManager, camera);
+  m_levelManager.SetParent(this);
 
   m_testDebugCamera = std::move(camera);
 
@@ -168,9 +176,6 @@ void Game::TestWindowCreation()
 
   button->AddHandler([&]{ this->ShutDownGame(); });
   window->AddWindow(std::move(button));
-
-
-  m_levelManager.GetCurrentLevel()->debugVictoryWindow = window.get();
   m_windowManager.AddWindow(std::move(window));
 
 }

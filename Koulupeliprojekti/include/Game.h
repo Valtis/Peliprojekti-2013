@@ -4,11 +4,11 @@
 #include "Level/LevelManager.h"
 #include "UI/Window/WindowManager.h"
 #include "Graphics/Renderer.h"
-
+#include "Message/MessageProcessor.h"
 #include "Utility/Tick.h"
 
 class Camera;
-class Game
+class Game : public MessageProcessor
 {
 public:
   Game();
