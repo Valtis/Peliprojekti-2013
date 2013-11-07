@@ -1,19 +1,18 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include "Entity/EntityParent.h"
+
 #include "Message/MessageProcessor.h"
+
 class Entity;
 class Window;
 
-class Level : public EntityParent
+class Level : public MessageProcessor
 {
 public:
   Level();
   ~Level();
 
-  void SendMessage(Message *message) override;
-  void RegisterMessageHandler(MessageType type, Priority priority, MessageCallback callback) override; 
   void Update(double ticksPassed);
 
   void HandlePendingDeletions();
@@ -24,11 +23,10 @@ public:
   Window *debugVictoryWindow; // temporary!
 private:
 
-  bool HandleEntitySpawning(Message *msg);
-  bool HandleEntityTermination(Message *msg);
+  MessageHandling HandleHandleEntitySpawning(Message *msg);
+  MessageHandling HandleEntityTermination(Message *msg);
   std::vector<std::unique_ptr<Entity>> m_entities;
   std::vector<std::unique_ptr<Entity>> m_ground; // potentially more than ground, rename if needed
-  MessageProcessor m_messageProcessor;
   std::vector<Entity *> m_deletionList;
 
 };
