@@ -10,5 +10,5 @@ public:
 protected:
   void OnAttatchingToEntity() override;
 private:
-  bool HandleCollisionMessage(Message *msg);
+  MessageHandling HandleCollisionMessage(Message *msg);
 };

@@ -63,7 +63,7 @@ void Renderer::Draw(Camera *camera, const std::vector<std::unique_ptr<Entity>> &
 
 void Renderer::ClearScreen()
 {
-  SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
+  SDL_SetRenderDrawColor(m_renderer, 174, 234, 255, 255);
   SDL_RenderClear(m_renderer);
 }
 
@@ -76,8 +76,8 @@ void Renderer::DrawEntities(Camera *camera, const std::vector<std::unique_ptr<En
   std::vector<std::pair<SDL_Point, Sprite *>> spriteIds = GetDataForDrawing(topleft, entities);
   SortEntitiesByDrawPriority(spriteIds);
   PerformEntityDraw(spriteIds, topleft);
-  
-  DebugDrawCollisionBoxes(entities, topleft);
+
+  //DebugDrawCollisionBoxes(entities, topleft);
 
 }
 
@@ -98,7 +98,7 @@ std::vector<std::pair<SDL_Point, Sprite *>> Renderer::GetDataForDrawing(SDL_Poin
     {
       continue;
     }
- 
+
     SDL_Point loc = { (int)location->GetX(), (int)location->GetY() };
     retval.push_back(std::make_pair(loc, sprite));
   }
@@ -121,7 +121,7 @@ bool Renderer::CullEntity(SDL_Point topleft, Sprite *sprite, LocationComponent *
 
 void Renderer::SortEntitiesByDrawPriority(std::vector<std::pair<SDL_Point, Sprite *>> &drawData)
 {
-  std::stable_sort(drawData.begin(), drawData.end(), [&](std::pair<SDL_Point, Sprite *> first, std::pair<SDL_Point, Sprite *> second) 
+  std::stable_sort(drawData.begin(), drawData.end(), [&](std::pair<SDL_Point, Sprite *> first, std::pair<SDL_Point, Sprite *> second)
   {
     return (first.second->GetDrawPriority() < second.second->GetDrawPriority());
   }
@@ -133,12 +133,12 @@ void Renderer::PerformEntityDraw(std::vector<std::pair<SDL_Point, Sprite *>> dra
   for (auto data : drawdata)
   {
     SDL_Texture *texture = m_spriteManager.GetSpriteSheet(data.second->GetSpriteSheetID());
-  
+
     SDL_Rect locationOnScreen = data.second->GetLocation(); // need w/h-values. XY-values must be updated though
     locationOnScreen.x = data.first.x - topleft.x;
     locationOnScreen.y = data.first.y - topleft.y;
     SDL_Rect loc = data.second->GetLocation();
-   
+
     SDL_RenderCopy(m_renderer, texture, &loc, &locationOnScreen);
   }
 }
@@ -176,7 +176,7 @@ void Renderer::DebugDrawCollisionBoxes( const std::vector<std::unique_ptr<Entity
       return;
     }
     auto hitboxes =  collisionComponent->GetHitboxes(HitboxType::OBJECT);
-  
+
     for (auto hitbox : hitboxes)
     {
       hitbox.x -= topleft.x;

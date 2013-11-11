@@ -9,6 +9,6 @@ public:
 	WalkingAiComponent();
 private:
 	bool m_direction;
-	bool HandleCollisionMessage(Message *msg);
+	MessageHandling HandleCollisionMessage(Message *msg) override;
 	Uint32 m_lastTick;
 };

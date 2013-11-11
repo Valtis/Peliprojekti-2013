@@ -29,11 +29,11 @@ void FollowingAiComponent::Update(double ticksPassed)
 	}
 }
 
-bool FollowingAiComponent::HandleCollisionMessage(Message *msg)
+MessageHandling FollowingAiComponent::HandleCollisionMessage(Message *msg)
 {
 	if (msg->GetType() != MessageType::COLLISION)
 	{
-		return false;
+		return MessageHandling::STOP_HANDLING;
 	}
 	CollisionMessage *collision = static_cast<CollisionMessage*>(msg);
 
@@ -41,5 +41,5 @@ bool FollowingAiComponent::HandleCollisionMessage(Message *msg)
 	if (faction == nullptr)
 		GetOwner()->SendMessage(new ControlCommand(Action::JUMP, true, -1));
 
-	return false;
+	return MessageHandling::STOP_HANDLING;
 }

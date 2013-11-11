@@ -3,6 +3,7 @@
 #include "Utility/LoggerManager.h"
 #include "Graphics/FontManager.h"
 // for testing purposes until level manager actually contains levels - feel free to remove
+/*
 #include "Entity/Entity.h"
 #include "Component/InputComponent.h"
 #include "Component/GraphicsComponent.h"
@@ -10,6 +11,7 @@
 #include "Component/VelocityComponent.h"
 #include "Component/CollisionComponent.h"
 #include "Component/FactionComponent.h"
+*/
 #include "Graphics/Camera/EntityTrackingCamera.h"
 #include "Component/WalkingAiComponent.h"
 
@@ -22,6 +24,13 @@
 
 Game::Game() : m_gameTick(30), m_drawTick(30)
 {
+  RegisterMessageHandler(MessageType::END_GAME, Priority::HIGHEST, [&](Message *msg)
+    {
+      this->m_windowManager.GetWindows()[1]->Activate();
+      return MessageHandling::STOP_HANDLING;
+    }
+  );
+
 }
 
 
@@ -72,8 +81,16 @@ void Game::Initialize()
   m_inputManager.Initialize();
   m_inputManager.RegisterInputHandler([&](Command* cmd) { return m_windowManager.HandleInput(cmd); }, 10);
 
+  std::unique_ptr<EntityTrackingCamera> camera(new EntityTrackingCamera);
+
+  m_levelManager.Initialize(m_inputManager, camera);
+  m_levelManager.SetParent(this);
+
+  m_testDebugCamera = std::move(camera);
+
   TestWindowCreation();
-  TestAddLevelAndEntities();
+  m_running = true;
+
 }
 
 
@@ -104,7 +121,7 @@ void Game::TestWindowCreation()
 
   location.x = 20;
   location.y = 20;
-  location.w = 300;
+  location.w = 230;
   location.h = 300;
 
   color.r = 201;
@@ -115,90 +132,51 @@ void Game::TestWindowCreation()
 
   std::unique_ptr<Window> window(new Window(location, color, &m_renderer));
   window->Activate();
-
+  location.x = 10;
+  location.y = 250;
   location.w = 140;
   location.h = 30;
-  std::unique_ptr<Button> button(new Button(location, "Close program", &m_renderer));
+  std::unique_ptr<Button> button(new Button(location, "Close window", &m_renderer));
 
-  button->AddHandler([&]{ this->ShutDownGame(); });
+  button->AddHandler([&]{ this->m_windowManager.GetWindows()[0]->Deactivate(); });
   window->AddWindow(std::move(button));
 
-  location.x = 20;
-  location.y = 60;
+  location.x = 10;
+  location.y = 10;
   location.w = 200;
   location.h = 230;
-  std::unique_ptr<TextBox> textBox(new TextBox("Add a disclaimer here by demo deadline where it's stated that this is badly unfinished game", location, &m_renderer));
+  std::unique_ptr<TextBox> textBox(new TextBox("THIS IS UNFINISHED. Just pretend we have fixed the issues with collision detection, that the triangle is animated player and shooting actually does something", location, &m_renderer));
   window->AddWindow(std::move(textBox));
 
   m_windowManager.AddWindow(std::move(window));
+
+
+  location.x = 300;
+  location.y = 300;
+  location.w = 300;
+  location.h = 300;
+
+  window.reset(new Window(location, color, &m_renderer));
+  window->Deactivate();
+
+  location.x = 10;
+  location.y = 10;
+  location.w = 280;
+  location.h = 240;
+  textBox.reset(new TextBox("Congratulations! You have finished the demo version of this game!", location, &m_renderer));
+  window->AddWindow(std::move(textBox));
+  
+
+  location.x = 10;
+  location.y = 260;
+  location.w = 140;
+  location.h = 30;
+
+  button.reset(new Button(location, "Close game", &m_renderer));
+
+  button->AddHandler([&]{ this->ShutDownGame(); });
+  window->AddWindow(std::move(button));
+  m_windowManager.AddWindow(std::move(window));
+
 }
-
-void Game::TestAddLevelAndEntities()
-{
-  std::unique_ptr<Level> level(new Level);
-  std::unique_ptr<Entity> e(new Entity);
-  std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
-  g->AddFrame(0, 200002);
-
-
-  e->AddComponent(ComponentType::GRAPHICS, std::move(g));
-  std::unique_ptr<LocationComponent> l(new LocationComponent);
-  l->SetLocation(400, 400);
-  e->AddComponent(ComponentType::LOCATION, std::move(l));
-  std::unique_ptr<InputComponent> i(new InputComponent);
-  i->RegisterInputHandler(m_inputManager);  
-
-  e->AddComponent(ComponentType::INPUT, std::move(i));
-
-  std::unique_ptr<VelocityComponent> v(new VelocityComponent);
-  e->AddComponent(ComponentType::VELOCITY, std::move(v));
-
-  std::unique_ptr<CollisionComponent> c(new CollisionComponent());
-  c->AddHitbox(0, 0, 50, 50, HitboxType::OBJECT);
-  e->AddComponent(ComponentType::COLLISION, std::move(c));
-  std::unique_ptr<FactionComponent> f(new FactionComponent(Faction::PLAYER));
-  e->AddComponent(ComponentType::FACTION, std::move(f));
-
-
-  std::unique_ptr<EntityTrackingCamera> camera(new EntityTrackingCamera);
-  camera->SetEntity(e.get());
-  m_testDebugCamera = std::move(camera);
-  level->AddEntity(std::move(e));
-
-
-  e.reset(new Entity);
-  g.reset(new GraphicsComponent);
-  g->AddFrame(0, 200000);
-  e->AddComponent(ComponentType::GRAPHICS, std::move(g));
-  l.reset(new LocationComponent);
-  l->SetLocation(600, 400);
-  e->AddComponent(ComponentType::LOCATION, std::move(l));
-  c.reset(new CollisionComponent());
-  c->AddHitbox(0, 0, 50, 50, HitboxType::OBJECT);
-  e->AddComponent(ComponentType::COLLISION, std::move(c));
-
-  std::unique_ptr<Entity> monster(new Entity);
-  g.reset(new GraphicsComponent);
-  g->AddFrame(0,200007);
-  monster->AddComponent(ComponentType::GRAPHICS, std::move(g));
-  l.reset(new LocationComponent);
-  l->SetLocation(500,400);
-  monster->AddComponent(ComponentType::LOCATION, std::move(l));
-  i.reset(new InputComponent(-1));
-  monster->AddComponent(ComponentType::INPUT, std::move(i));
-  v.reset(new VelocityComponent);
-  monster->AddComponent(ComponentType::VELOCITY, std::move(v));
-  std::unique_ptr<AiComponent> ai(new WalkingAiComponent);
-  monster->AddComponent(ComponentType::AI, std::move(ai));
-  c.reset(new CollisionComponent);
-  c->AddHitbox(0,0,50,50, HitboxType::OBJECT);
-  monster->AddComponent(ComponentType::COLLISION, std::move(c));
-  level->AddEntity(std::move(monster));
-
-  level->AddEntity(std::move(e));
-
-  m_levelManager.AddLevel(std::move(level));
-  m_levelManager.SetCurrentLevel(0);
-}
-
 

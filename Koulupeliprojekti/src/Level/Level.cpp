@@ -2,17 +2,17 @@
 #include "Entity/Entity.h"
 #include "Entity/EntityFactory.h"
 #include "Collision/CollisionChecker.h"
+#include "Physics/PhysicsHandler.h"
 #include "Utility/LoggerManager.h"
 
 #include "Message/TerminateEntityMessage.h"
 #include "Message/SpawnEntityMessage.h"
 
-
 Level::Level()
 {
-  m_messageProcessor.RegisterMessageHandler(MessageType::SPAWN_ENTITY, Priority::HIGHEST, 
+  RegisterMessageHandler(MessageType::SPAWN_ENTITY, Priority::HIGHEST, 
     [&](Message *msg) { return this->HandleEntitySpawning(msg); });
-  m_messageProcessor.RegisterMessageHandler(MessageType::TERMINATE_ENTITY, Priority::HIGHEST, 
+  RegisterMessageHandler(MessageType::TERMINATE_ENTITY, Priority::HIGHEST, 
     [&](Message *msg) { return this->HandleEntityTermination(msg); });
 }
 
@@ -21,22 +21,13 @@ Level::~Level()
 
 }
 
-void Level::SendMessage(Message *message)
-{
-  m_messageProcessor.SendMessage(message);
-}
-
-
-void Level::RegisterMessageHandler(MessageType type, Priority priority, MessageCallback callback)
-{
-  m_messageProcessor.RegisterMessageHandler(type, priority, callback);
-}
-
 
 void Level::Update(double ticksPassed)
 {
   HandlePendingDeletions();
 
+  // physics check
+  Physics::HandlePhysics(m_entities);
 
   for (auto &entity : m_entities)
   {
@@ -57,30 +48,30 @@ void Level::AddEntity(std::unique_ptr<Entity> e)
   m_entities.push_back(std::move(e));
 }
 
-bool Level::HandleEntitySpawning(Message *msg)
+MessageHandling Level::HandleEntitySpawning(Message *msg)
 {
   if (msg->GetType() != MessageType::SPAWN_ENTITY)
   {
     LoggerManager::GetLog(LEVEL_LOG).AddLine(LogLevel::WARNING, "Invalid message type received in Level::HandleEntitySpawning() - ignoring");
-    return true;
+    return MessageHandling::PASS_FORWARD;
   }
 
   AddEntity(EntityFactory::CreateEntity(static_cast<SpawnEntityMessage *>(msg)));
-  return false;
+  return MessageHandling::STOP_HANDLING;
 }
 
 
-bool Level::HandleEntityTermination(Message *msg)
+MessageHandling Level::HandleEntityTermination(Message *msg)
 {
   if (msg->GetType() != MessageType::TERMINATE_ENTITY)
   {
     LoggerManager::GetLog(LEVEL_LOG).AddLine(LogLevel::WARNING, "Invalid message type received in Level::HandleEntityTermination() - ignoring");
-    return true;
+    return MessageHandling::PASS_FORWARD;
   }
-  
+
   auto terminateMsg = static_cast<TerminateEntityMessage *>(msg);
   m_deletionList.push_back(terminateMsg->GetTerminateEntity());  
-  return false;
+  return MessageHandling::STOP_HANDLING;
 }
 
 void Level::HandlePendingDeletions()

@@ -8,5 +8,5 @@ public:
 protected:
 	AiComponent();
 	virtual void OnAttatchingToEntity();
-	virtual bool HandleCollisionMessage(Message *msg) = 0;
+	virtual MessageHandling HandleCollisionMessage(Message *msg) = 0;
 };

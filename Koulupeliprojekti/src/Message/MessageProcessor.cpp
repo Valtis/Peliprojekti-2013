@@ -6,7 +6,14 @@ bool MessageProcessor::SendMessage(Message *message)
 
   if (handlers.empty())
   {
-    return false;
+    if (m_parent == false)
+    {
+      return false;
+    }
+    else
+    {
+      return m_parent->SendMessage(message);
+    }
   }
 
   PassMessageToHandlers(handlers, message);
@@ -17,7 +24,7 @@ void MessageProcessor::PassMessageToHandlers(const std::vector<PrioritizedCallba
 {
   for (auto &handler : handlers)
   {
-    if (!handler.second(message))
+    if (handler.second(message) == MessageHandling::STOP_HANDLING)
     {
       return;
     }

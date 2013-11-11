@@ -91,6 +91,12 @@
     <Filter Include="Source Files\Component\Scripts">
       <UniqueIdentifier>{55d73ab4-038c-4ba1-927d-0a7cff8979ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{f24ba431-952f-4413-a544-6e5bad9e5fb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{76732070-0e13-4a91-8c60-17d782209b60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -110,9 +116,6 @@
     </ClInclude>
     <ClInclude Include="include\Message\Message.h">
       <Filter>Header Files\Message</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Entity\EntityParent.h">
-      <Filter>Header Files\Entity</Filter>
     </ClInclude>
     <ClInclude Include="include\Message\MessageProcessor.h">
       <Filter>Header Files\Message</Filter>
@@ -264,6 +267,15 @@
     <ClInclude Include="include\Component\WalkingAiComponent.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="include\Physics\PhysicsHandler.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\FlyingAiComponent.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\Scripts\EndLevelScriptComponent.h">
+      <Filter>Header Files\Component\Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -408,7 +420,16 @@
       <Filter>Source Files\UI\Window</Filter>
     </ClCompile>
     <ClCompile Include="src\Component\WalkingAiComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\PhysicsHandler.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\FlyingAiComponent.cpp">
       <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Scripts\EndLevelScriptComponent.cpp">
+      <Filter>Source Files\Component\Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

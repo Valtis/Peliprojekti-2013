@@ -20,12 +20,26 @@ std::unique_ptr<Message> MessageFactory::CreateVelocityChangeMessage(double x, d
 
 std::unique_ptr<Message> MessageFactory::CreateSetVelocityMessage(double x, double y)
 {
-  return std::unique_ptr<Message>(new SetVelocityMessage(x, y));
+  return std::unique_ptr<Message>(new SetVelocityMessage(x, y, Velocity::XY));
 }
 
-std::unique_ptr<Message> MessageFactory::CreateCollisionMessage(Entity *entity, SDL_Rect &intersection)
+std::unique_ptr<Message> MessageFactory::CreateSetVelocityMessage(double vel, Velocity dir)
 {
-  return std::unique_ptr<Message>(new CollisionMessage(entity,intersection));
+  if (dir == Velocity::X)
+  {
+    return std::unique_ptr<Message>(new SetVelocityMessage(vel,0,dir));
+  }
+  else
+  {
+    return std::unique_ptr<Message>(new SetVelocityMessage(0, vel, dir));
+  }
+}
+
+std::unique_ptr<Message> MessageFactory::CreateCollisionMessage(Entity *entity,
+                                                                SDL_Rect &intersection,
+                                                                CollisionSide side)
+{
+  return std::unique_ptr<Message>(new CollisionMessage(entity,intersection,side));
 }
 
 std::unique_ptr<Message> MessageFactory::CreateSpawnEntityMessage(EntityType type, Entity *spawner)
@@ -41,4 +55,14 @@ std::unique_ptr<Message> MessageFactory::CreateTerminateEntityMessage(Entity *sp
 std::unique_ptr<Message> MessageFactory::CreateTakeDamageMessage()
 {
   return std::unique_ptr<Message>(new GenericMessageWithNoData(MessageType::TAKE_DAMAGE));
+}
+
+std::unique_ptr<Message> MessageFactory::CreateEndLevelMessage()
+{
+  return std::unique_ptr<Message>(new GenericMessageWithNoData(MessageType::END_LEVEL));
+}
+
+std::unique_ptr<Message> MessageFactory::CreateEndGameMessage()
+{
+  return std::unique_ptr<Message>(new GenericMessageWithNoData(MessageType::END_GAME));
 }

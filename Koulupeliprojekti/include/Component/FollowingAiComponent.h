@@ -7,6 +7,6 @@ public:
 	FollowingAiComponent(Entity *player);
 	void Update(double ticksPassed) override;
 private:
-	bool HandleCollisionMessage(Message *msg) override;
+	MessageHandling HandleCollisionMessage(Message *msg) override;
 	Entity* m_player;
 };

@@ -21,12 +21,12 @@ void BulletScriptComponent::OnAttatchingToEntity()
     [&](Message *msg){ return this->HandleCollisionMessage(msg); });
 }
 
-bool BulletScriptComponent::HandleCollisionMessage(Message *msg)
+MessageHandling BulletScriptComponent::HandleCollisionMessage(Message *msg)
 {
   if (msg->GetType() != MessageType::COLLISION)
   {
     LoggerManager::GetLog(COMPONENT_LOG).AddLine(LogLevel::WARNING, "Invalid message type received in BulletScriptComponent::HandleCollisionMessage() - ignoring");
-    return true;
+    return MessageHandling::PASS_FORWARD;
   }
 
 
@@ -36,11 +36,11 @@ bool BulletScriptComponent::HandleCollisionMessage(Message *msg)
 
   if (myFaction != nullptr && otherFaction != nullptr && myFaction->GetFaction() == otherFaction->GetFaction())
   {
-    return true;
+    return MessageHandling::PASS_FORWARD;
   }
 
   auto takeDamageMsg = MessageFactory::CreateTakeDamageMessage();
   GetOwner()->SendMessage(takeDamageMsg.get());
 
-  return true;
+  return MessageHandling::PASS_FORWARD;
 }

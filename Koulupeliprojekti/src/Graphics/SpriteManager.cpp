@@ -45,7 +45,10 @@ void SpriteManager::LoadSprites(std::string datafilePath)
   {
     if (m_sprites.count(sprite->GetID()) != 0)
     {
-      LoggerManager::GetLog(GRAPHICS_LOG).AddLine(LogLevel::WARNING, "Sprite with id " + std::to_string(sprite->GetID()) + " already exists - skipping");
+      std::stringstream ss;
+      ss << (int)(sprite->GetID());
+      LoggerManager::GetLog(GRAPHICS_LOG).AddLine(LogLevel::WARNING, "Sprite with id " +
+        ss.str() + " already exists - skipping");
       continue;
     }
     m_sprites[sprite->GetID()] = std::move(sprite);
