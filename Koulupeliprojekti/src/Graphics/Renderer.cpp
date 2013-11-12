@@ -59,7 +59,7 @@ void Renderer::Draw(
 {
   SDL_assert(camera != nullptr);
   ClearScreen();
-  
+
   DrawEntities(camera, entities, staticEntities);
   DrawWindows(windows);
   SDL_RenderPresent(m_renderer);
@@ -183,10 +183,9 @@ void Renderer::DrawWindow(std::vector<std::pair<SDL_Rect, SDL_Texture *>> window
 
 void Renderer::DebugDrawCollisionBoxes( const std::vector<std::unique_ptr<Entity>> &entities, SDL_Point topleft )
 {
-
-    SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
-    for (auto &entity : entities)
-    {
+  SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
+  for (auto &entity : entities)
+  {
 
     auto collisionComponent = static_cast<CollisionComponent *>(entity->GetComponent(ComponentType::COLLISION));
     if (collisionComponent == nullptr)
