@@ -1,4 +1,9 @@
 #pragma once
+
+#if (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ <= 6))
+  #define override
+#endif
+
 enum class MessageHandling : int { PASS_FORWARD, STOP_HANDLING };
 enum class MessageType : int { NONE, LOCATION_CHANGE, VELOCITY_CHANGE, SET_VELOCITY,  MOUSE_COMMAND, 
   CONTROL_COMMAND, COLLISION, SPAWN_ENTITY, TERMINATE_ENTITY, TAKE_DAMAGE, END_LEVEL, END_GAME };

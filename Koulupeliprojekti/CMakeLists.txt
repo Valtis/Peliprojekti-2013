@@ -1,6 +1,14 @@
 cmake_minimum_required (VERSION 2.6)
 project (PELI)
 
+set (ENV{PKG_CONFIG_PATH}
+  "/home/jtpakari/Software/lib/pkgconfig"
+)
+
+SET(EXECUTABLE_OUTPUT_PATH "bin")
+SET(LIBRARY_OUTPUT_PATH "bin")
+SET(CMAKE_CACHEFILE_DIR "cmake")
+
 set (
   SOURCES
   "src/Game.cpp"
@@ -56,84 +64,29 @@ set (
   "main.cpp"
 )
 
-set (
-  PC_SDL2_INCLUDE_DIRS
-  "C:\\Libs\\SDL\\SDL2-2.0.0\\include"
-)
-set (
-  PC_SDL2_TTF_INCLUDE_DIRS
-  "C:\\Libs\\SDL\\SDL2_ttf\\SDL2_ttf-2.0.12\\include"
-)
-
-set (
-  PC_SDL2_LIBRARY_DIRS
-  "C:\\Libs\\SDL\\SDL2-2.0.0\\lib"
-)
-set (
-  PC_SDL2_TTF_LIBRARY_DIRS
-  "C:\\Libs\\SDL\\SDL2_ttf\\SDL2_ttf-2.0.12\\lib"
-)
-
-link_directories(
-  ${PC_SDL2_LIBRARY_DIRS}
-  ${PC_SDL2_TTF_LIBRARY_DIRS}
-)
-
-find_library (SDL2
-  NAMES SDL2
-  HINTS
-    ${PC_SDL2_LIBRARY_DIRS}
-  PATH_SUFFIXES x86
-)
-
-find_library (SDL2_TTF 
-  NAMES SDL2_ttf
-  HINTS
-    ${PC_SDL2_TTF_LIBRARY_DIRS}
-  PATH_SUFFIXES x86
-)
-
-find_library(SDL2_MAIN
-  NAMES SDL2main
-  HINTS
-    ${PC_SDL2_LIBRARY_DIRS}
-  PATH_SUFFIXES x86
-)
-
-set(SDL2_LIBRARIES
-  ${SDL2_MAIN} #"SDL2main"
-  ${SDL2} #"SDL2"
-  ${SDL2_TTF} #"SDL2_ttf"
-)
+find_package(PkgConfig)
+pkg_check_modules(SDL2 REQUIRED sdl2)
+pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
+pkg_check_modules(SDL2_MIXER REQUIRED SDL2_mixer)
 
 list(
   APPEND
   CMAKE_CXX_FLAGS
-  "-std=c++0x ${CMAKE_CXX_FLAGS} -g"
-)
-
-find_path(SDL2_INCLUDE_DIR
-  NAMES SDL.h
-  HINTS
-    ${PC_SDL2_INCLUDE_DIRS}
-  PATH_SUFFIXES SDL2
-)
-
-find_path(SDL2_TTF_INCLUDE_DIR
-  NAMES SDL_ttf.h
-  HINTS
-    ${PC_SDL2_TTF_INCLUDE_DIRS}
-  PATH_SUFFIXES SDL2
-)
-
-set(SDL2_INCLUDE_DIRS
-  ${SDL2_INCLUDE_DIR}
-  ${SDL2_TTF_INCLUDE_DIR}
+  "-std=c++0x ${CMAKE_CXX_FLAGS} -g -O3"
 )
 
 include_directories (
+  SYSTEM
   ${SDL2_INCLUDE_DIRS}
+  ${SDL2_TTF_INCLUDE_DIRS}
+  ${SDL2_MIXER_INCLUDE_DIRS}
   ${PELI_SOURCE_DIR}/include
+)
+
+link_directories (
+  ${SDL2_LIBRARY_DIRS}
+  ${SDL2_TTF_LIBRARY_DIRS}
+  ${SDL2_MIXER_LIBRARY_DIRS}
 )
 
 add_executable (
@@ -145,4 +98,6 @@ add_executable (
 target_link_libraries (
   Peli
   ${SDL2_LIBRARIES}
+  ${SDL2_TTF_LIBRARIES}
+  ${SDL2_MIXER_LIBRARIES}
 )
