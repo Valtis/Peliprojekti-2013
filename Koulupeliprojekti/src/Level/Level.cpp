@@ -33,7 +33,7 @@ void Level::Update(double ticksPassed)
   {
     entity->Update(ticksPassed);
   }
-  Collision::CheckCollisions(m_entities);
+  Collision::CheckCollisions(m_entities,m_staticEntities);
 }
 
 
