@@ -42,10 +42,21 @@ const std::vector<std::unique_ptr<Entity>> &Level::GetEntities()
   return m_entities;
 }
 
+const std::vector<std::unique_ptr<Entity>> &Level::GetStaticEntities()
+{
+  return m_staticEntities;
+}
+
 void Level::AddEntity(std::unique_ptr<Entity> e)
 {
   e->SetParent(this);
   m_entities.push_back(std::move(e));
+}
+
+void Level::AddStaticEntity(std::unique_ptr<Entity> e)
+{
+  e->SetParent(this);
+  m_staticEntities.push_back(std::move(e));
 }
 
 MessageHandling Level::HandleEntitySpawning(Message *msg)

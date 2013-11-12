@@ -1,16 +1,17 @@
 #pragma once
 #include "Component.h"
-enum class Direction : int { LEFT, RIGHT };
+#include <map>
+enum class Direction : int { LEFT, RIGHT, UP, DOWN };
 
 class LocationComponent : public Component
 {
 public:
   LocationComponent();
   ~LocationComponent();
-  void Update(double ticksPassed) { m_collision = false; }
+  void Update(double ticksPassed) override;
   double GetX() { return m_x; }
   double GetY() { return m_y; }
-  bool CanIJump() { return m_collision; }
+  bool CanIJump();
   void SetLocation(double x, double y) { m_x = x; m_y = y;}
   Direction GetDirection() { return m_direction; }
   void SetDirection(Direction d) { m_direction = d; }
@@ -25,5 +26,5 @@ private:
   double m_x;
   double m_y;
   Direction m_direction;
-  bool m_collision;
+  std::map<CollisionSide, bool> m_collision;
 };

@@ -123,7 +123,7 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
       c->AddHitbox(0, 0, TILESIZE, TILESIZE, HitboxType::OBJECT);
       e->AddComponent(ComponentType::COLLISION, std::move(c));
 
-      level->AddEntity(std::move(e));
+      level->AddStaticEntity(std::move(e));
     }
   }
   // Create Level End Entity

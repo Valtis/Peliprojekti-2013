@@ -25,6 +25,14 @@ void LocationComponent::OnAttatchingToEntity()
 
 }
 
+void LocationComponent::Update(double ticksPassed)
+{
+   for (auto &collision : m_collision)
+   {
+     collision.second = false;
+   }
+}
+
 MessageHandling LocationComponent::HandleLocationChangeMessage(Message *msg)
 {
   if (msg->GetType() != MessageType::LOCATION_CHANGE)
@@ -49,6 +57,11 @@ MessageHandling LocationComponent::HandleLocationChangeMessage(Message *msg)
   return MessageHandling::STOP_HANDLING;
 }
 
+bool LocationComponent::CanIJump()
+{
+  return m_collision[CollisionSide::DOWN];
+}
+
 MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
 {
   CollisionMessage *colMsg = static_cast<CollisionMessage *>(msg);
@@ -69,8 +82,12 @@ MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
 
   side = colMsg->GetSide();
 
-  if (side == CollisionSide::DOWN && m_collision)
+  if (m_collision[side])
+  {
     return MessageHandling::STOP_HANDLING;
+  }
+
+  m_collision[side] = true;
 
   if (side == CollisionSide::RIGHT)
     m_x -= colMsg->GetIntersection().w;
@@ -81,7 +98,6 @@ MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
   else if (side == CollisionSide::DOWN)
     m_y -= colMsg->GetIntersection().h;
   if (side == CollisionSide::DOWN)
-    m_collision = true;
-
+  
   return MessageHandling::STOP_HANDLING;
 }

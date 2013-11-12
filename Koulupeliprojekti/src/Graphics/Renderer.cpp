@@ -51,11 +51,16 @@ void Renderer::LoadSprites(std::string datafilePath)
   m_spriteManager.Initialize(this, datafilePath);
 }
 
-void Renderer::Draw(Camera *camera, const std::vector<std::unique_ptr<Entity>> &entities, const std::deque<std::unique_ptr<Window>> &windows)
+void Renderer::Draw( 
+  Camera *camera,
+  const std::vector<std::unique_ptr<Entity>> &entities, 
+  const std::vector<std::unique_ptr<Entity>> &staticEntities, 
+  const std::deque<std::unique_ptr<Window>> &windows )
 {
   SDL_assert(camera != nullptr);
   ClearScreen();
-  DrawEntities(camera, entities);
+  
+  DrawEntities(camera, entities, staticEntities);
   DrawWindows(windows);
   SDL_RenderPresent(m_renderer);
 }
@@ -67,23 +72,35 @@ void Renderer::ClearScreen()
   SDL_RenderClear(m_renderer);
 }
 
-void Renderer::DrawEntities(Camera *camera, const std::vector<std::unique_ptr<Entity>> &entities)
+void Renderer::DrawEntities( 
+  Camera *camera, 
+  const std::vector<std::unique_ptr<Entity>> &entities, 
+  const std::vector<std::unique_ptr<Entity>> &staticEntities )
 {
   SDL_Point topleft;
   topleft.x = camera->GetX() - m_windowSize.first/2;
   topleft.y = camera->GetY() - m_windowSize.second/2;
 
-  std::vector<std::pair<SDL_Point, Sprite *>> spriteIds = GetDataForDrawing(topleft, entities);
+  std::vector<std::pair<SDL_Point, Sprite *>> spriteIds = GetDataForDrawing(topleft, entities, staticEntities);
   SortEntitiesByDrawPriority(spriteIds);
   PerformEntityDraw(spriteIds, topleft);
 
   //DebugDrawCollisionBoxes(entities, topleft);
-
 }
 
-std::vector<std::pair<SDL_Point, Sprite *>> Renderer::GetDataForDrawing(SDL_Point topleft, const std::vector<std::unique_ptr<Entity>> &entities)
+std::vector<std::pair<SDL_Point, Sprite *>> Renderer::GetDataForDrawing( SDL_Point topleft, 
+  const std::vector<std::unique_ptr<Entity>> &entities, 
+  const std::vector<std::unique_ptr<Entity>> &staticEntities )
 {
   std::vector<std::pair<SDL_Point, Sprite *>> retval;
+  GetEntityData(entities, topleft, retval);
+  GetEntityData(staticEntities, topleft, retval);
+
+  return retval;
+}
+
+void Renderer::GetEntityData( const std::vector<std::unique_ptr<Entity>> & entities, SDL_Point topleft, std::vector<std::pair<SDL_Point, Sprite *>> &retval )
+{
   for (auto &entity : entities)
   {
     auto location = static_cast<LocationComponent *>(entity->GetComponent(ComponentType::LOCATION));
@@ -102,8 +119,9 @@ std::vector<std::pair<SDL_Point, Sprite *>> Renderer::GetDataForDrawing(SDL_Poin
     SDL_Point loc = { (int)location->GetX(), (int)location->GetY() };
     retval.push_back(std::make_pair(loc, sprite));
   }
-  return retval;
 }
+
+
 
 bool Renderer::CullEntity(SDL_Point topleft, Sprite *sprite, LocationComponent *location)
 {
@@ -186,3 +204,4 @@ void Renderer::DebugDrawCollisionBoxes( const std::vector<std::unique_ptr<Entity
     }
   }
 }
+
