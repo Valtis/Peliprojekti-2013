@@ -16,10 +16,12 @@ public:
   Level *GetCurrentLevel();
   void SetCurrentLevel(int level);
   void Initialize(InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera);
+  void CreateEndLevelEntity(int frame, int x, int y, int size, std::unique_ptr<Level>& level);
+  void CreateBlock(int frame, int x, int y, int size, std::unique_ptr<Level>& level);
 
 private:
   MessageHandling HandleEndLevelMessage(Message *msg);
-  
+
   int m_currentLevel;
   std::vector<std::unique_ptr<Level>> m_levels;
 };

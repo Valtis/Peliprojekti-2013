@@ -16,13 +16,15 @@
 #include "Component/PhysicsComponent.h"
 #include <stdlib.h>
 #include <time.h>
+#include "Level/LevelGenerator.h"
 
-const int NUMBEROFBLOCKS = 50;
+
+const int NUMBEROFBLOCKS = 100;
 const int TILESIZE = 30;
 const int NO_ACTIVE_LEVEL = -1;
 LevelManager::LevelManager() : m_currentLevel(NO_ACTIVE_LEVEL)
 {
-  RegisterMessageHandler(MessageType::END_LEVEL, Priority::HIGHEST, 
+  RegisterMessageHandler(MessageType::END_LEVEL, Priority::HIGHEST,
     [&](Message *msg)
     {
       return this->HandleEndLevelMessage(msg);
@@ -37,6 +39,8 @@ LevelManager::~LevelManager()
 
 void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera)
 {
+  LevelGenerator lg;
+
   std::unique_ptr<Level> level(new Level);
   std::unique_ptr<Entity> e(new Entity);
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
@@ -110,13 +114,16 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
     for (int j = 0; j < 3; ++j) {
       int sX = steps[ran][j][0];
       int sY = steps[ran][j][1];
+      startX = startX + (sX * TILESIZE);
+      startY = startY + (sY * TILESIZE);
+      CreateBlock(200013, startX, startY, TILESIZE, level);
+      /*
       e.reset(new Entity);
       g.reset(new GraphicsComponent);
       g->AddFrame(0, tileSprites[rand() % 5]);
       e->AddComponent(ComponentType::GRAPHICS, std::move(g));
       l.reset(new LocationComponent);
-      startX = startX + (sX * TILESIZE);
-      startY = startY + (sY * TILESIZE);
+
       l->SetLocation(startX, startY);
       e->AddComponent(ComponentType::LOCATION, std::move(l));
       c.reset(new CollisionComponent());
@@ -124,9 +131,11 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
       e->AddComponent(ComponentType::COLLISION, std::move(c));
 
       level->AddStaticEntity(std::move(e));
+      */
     }
   }
   // Create Level End Entity
+  /*
   e.reset(new Entity);
   g.reset(new GraphicsComponent);
   g->AddFrame(0,200001);
@@ -141,8 +150,54 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   e->AddScript(std::move(sc));
   level->AddEntity(std::move(e));
 
+  */
+  CreateEndLevelEntity(200001, startX, startY-50, 50, level);
   AddLevel(std::move(level));
   SetCurrentLevel(0);
+}
+
+void LevelManager::CreateBlock(int frame, int x, int y, int size, std::unique_ptr<Level>& level)
+{
+  std::unique_ptr<Entity> e(new Entity);
+  std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
+  std::unique_ptr<LocationComponent> l(new LocationComponent);
+  std::unique_ptr<CollisionComponent> c(new CollisionComponent());
+
+  g->AddFrame(0, frame);
+  e->AddComponent(ComponentType::GRAPHICS, std::move(g));
+
+  l->SetLocation(x, y);
+  e->AddComponent(ComponentType::LOCATION, std::move(l));
+
+  c->AddHitbox(0, 0, size, size, HitboxType::OBJECT);
+  e->AddComponent(ComponentType::COLLISION, std::move(c));
+
+  level->AddStaticEntity(std::move(e));
+
+}
+
+void LevelManager::CreateEndLevelEntity(int frame, int x, int y, int size, std::unique_ptr<Level>& level)
+{
+  /*
+  e.reset(new Entity);
+  g.reset(new GraphicsComponent);
+  */
+  std::unique_ptr<Entity> e(new Entity);
+  std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
+  std::unique_ptr<LocationComponent> l(new LocationComponent);
+  std::unique_ptr<CollisionComponent> c(new CollisionComponent());
+
+  g->AddFrame(0,frame);
+  e->AddComponent(ComponentType::GRAPHICS,std::move(g));
+  l.reset(new LocationComponent);
+  l->SetLocation(x,y);
+  e->AddComponent(ComponentType::LOCATION, std::move(l));
+  c.reset(new CollisionComponent);
+  c->AddHitbox(0,0,size,size,HitboxType::OBJECT);
+  e->AddComponent(ComponentType::COLLISION, std::move(c));
+  std::unique_ptr<Component> sc(new EndLevelScriptComponent);
+  e->AddScript(std::move(sc));
+  level->AddEntity(std::move(e));
 }
 
 void LevelManager::AddLevel(std::unique_ptr<Level> level)
