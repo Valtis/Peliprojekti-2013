@@ -22,6 +22,7 @@ public:
   void CreateBlock(int frame, int x, int y, int size, std::unique_ptr<Level>& level);
   void CreateEnemy(int frame, int x, int y, int size, std::unique_ptr<Level>& level,
                                std::unique_ptr<AiComponent>& ai, std::unique_ptr<InputComponent>& ci);
+  std::unique_ptr<Entity> CreatePlayer(int frame, int x, int y, int size, std::unique_ptr<InputComponent>& ci);
 
 private:
   MessageHandling HandleEndLevelMessage(Message *msg);

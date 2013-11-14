@@ -42,31 +42,9 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   LevelGenerator lg;
 
   std::unique_ptr<Level> level(new Level);
-  std::unique_ptr<Entity> e(new Entity);
-  std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
-  g->AddFrame(0, 200002);
-
-  e->AddComponent(ComponentType::GRAPHICS, std::move(g));
-  std::unique_ptr<LocationComponent> l(new LocationComponent);
-  l->SetLocation(70, 600);
-  e->AddComponent(ComponentType::LOCATION, std::move(l));
   std::unique_ptr<InputComponent> ci(new InputComponent);
   ci->RegisterInputHandler(m_inputManager);
-
-  e->AddComponent(ComponentType::INPUT, std::move(ci));
-
-  std::unique_ptr<VelocityComponent> v(new VelocityComponent);
-  e->AddComponent(ComponentType::VELOCITY, std::move(v));
-
-  std::unique_ptr<CollisionComponent> c(new CollisionComponent());
-  c->AddHitbox(0, 0, 50, 50, HitboxType::OBJECT);
-  e->AddComponent(ComponentType::COLLISION, std::move(c));
-  std::unique_ptr<FactionComponent> f(new FactionComponent(Faction::PLAYER));
-  e->AddComponent(ComponentType::FACTION, std::move(f));
-
-  std::unique_ptr<PhysicsComponent> p(new PhysicsComponent);
-  e->AddComponent(ComponentType::PHYSICS,std::move(p));
-
+  std::unique_ptr<Entity> e = CreatePlayer(200002, 70, 60, 50, ci);
 
   camera->SetEntity(e.get());
 
@@ -106,6 +84,28 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   CreateEndLevelEntity(200001, startX, startY-50, 50, level);
   AddLevel(std::move(level));
   SetCurrentLevel(0);
+}
+
+std::unique_ptr<Entity> LevelManager::CreatePlayer(int frame, int x, int y, int size, std::unique_ptr<InputComponent>& ci)
+{
+  std::unique_ptr<Entity> e(new Entity);
+  std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
+  std::unique_ptr<LocationComponent> l(new LocationComponent);
+  std::unique_ptr<VelocityComponent> v(new VelocityComponent);
+  std::unique_ptr<CollisionComponent> c(new CollisionComponent());
+  std::unique_ptr<FactionComponent> f(new FactionComponent(Faction::PLAYER));
+  std::unique_ptr<PhysicsComponent> p(new PhysicsComponent);
+  g->AddFrame(0, frame);
+  e->AddComponent(ComponentType::GRAPHICS, std::move(g));
+  l->SetLocation(x, y);
+  e->AddComponent(ComponentType::LOCATION, std::move(l));
+  e->AddComponent(ComponentType::INPUT, std::move(ci));
+  e->AddComponent(ComponentType::VELOCITY, std::move(v));
+  c->AddHitbox(0, 0, size, size, HitboxType::OBJECT);
+  e->AddComponent(ComponentType::COLLISION, std::move(c));
+  e->AddComponent(ComponentType::FACTION, std::move(f));
+  e->AddComponent(ComponentType::PHYSICS,std::move(p));
+  return e;
 }
 
 void LevelManager::CreateEnemy(int frame, int x, int y, int size, std::unique_ptr<Level>& level,
