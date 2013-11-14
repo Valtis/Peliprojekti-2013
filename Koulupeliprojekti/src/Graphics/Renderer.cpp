@@ -51,10 +51,10 @@ void Renderer::LoadSprites(std::string datafilePath)
   m_spriteManager.Initialize(this, datafilePath);
 }
 
-void Renderer::Draw( 
+void Renderer::Draw(
   Camera *camera,
-  const std::vector<std::unique_ptr<Entity>> &entities, 
-  const std::vector<std::unique_ptr<Entity>> &staticEntities, 
+  const std::vector<std::unique_ptr<Entity>> &entities,
+  const std::vector<std::unique_ptr<Entity>> &staticEntities,
   const std::deque<std::unique_ptr<Window>> &windows )
 {
   SDL_assert(camera != nullptr);
@@ -72,14 +72,14 @@ void Renderer::ClearScreen()
   SDL_RenderClear(m_renderer);
 }
 
-void Renderer::DrawEntities( 
-  Camera *camera, 
-  const std::vector<std::unique_ptr<Entity>> &entities, 
+void Renderer::DrawEntities(
+  Camera *camera,
+  const std::vector<std::unique_ptr<Entity>> &entities,
   const std::vector<std::unique_ptr<Entity>> &staticEntities )
 {
   SDL_Point topleft;
   topleft.x = camera->GetX() - m_windowSize.first/2;
-  topleft.y = camera->GetY() - m_windowSize.second/2;
+  topleft.y = camera->GetY() - m_windowSize.second/1.5;
 
   std::vector<std::pair<SDL_Point, Sprite *>> spriteIds = GetDataForDrawing(topleft, entities, staticEntities);
   SortEntitiesByDrawPriority(spriteIds);
@@ -88,8 +88,8 @@ void Renderer::DrawEntities(
   //DebugDrawCollisionBoxes(entities, topleft);
 }
 
-std::vector<std::pair<SDL_Point, Sprite *>> Renderer::GetDataForDrawing( SDL_Point topleft, 
-  const std::vector<std::unique_ptr<Entity>> &entities, 
+std::vector<std::pair<SDL_Point, Sprite *>> Renderer::GetDataForDrawing( SDL_Point topleft,
+  const std::vector<std::unique_ptr<Entity>> &entities,
   const std::vector<std::unique_ptr<Entity>> &staticEntities )
 {
   std::vector<std::pair<SDL_Point, Sprite *>> retval;
