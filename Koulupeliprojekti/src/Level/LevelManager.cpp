@@ -70,31 +70,13 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
 
   camera->SetEntity(e.get());
 
-  std::unique_ptr<AiComponent> ai(new FlyingAiComponent(e.get()));
 
+  std::unique_ptr<AiComponent> ai(new FlyingAiComponent(e.get()));
+  // Näiden kahden järjestyksellä väliä, ratkaise
   level->AddEntity(std::move(e));
 
-  // Monster creation:
-  std::unique_ptr<Entity> monster(new Entity);
-  g.reset(new GraphicsComponent);
-  g->AddFrame(0,200028);
-  monster->AddComponent(ComponentType::GRAPHICS, std::move(g));
-  l.reset(new LocationComponent);
-  l->SetLocation(220,600);
-  monster->AddComponent(ComponentType::LOCATION, std::move(l));
-  ci.reset(new InputComponent(-1));
-  monster->AddComponent(ComponentType::INPUT, std::move(ci));
-  v.reset(new VelocityComponent);
-  monster->AddComponent(ComponentType::VELOCITY, std::move(v));
-  monster->AddComponent(ComponentType::AI, std::move(ai));
-  c.reset(new CollisionComponent);
-  c->AddHitbox(0,0,70,35, HitboxType::OBJECT);
-  monster->AddComponent(ComponentType::COLLISION, std::move(c));
-  //  p.reset(new PhysicsComponent);
-  //  monster->AddComponent(ComponentType::PHYSICS,std::move(p));
-  f.reset(new FactionComponent(Faction::ENEMY));
-  monster->AddComponent(ComponentType::FACTION, std::move(f));
-  level->AddEntity(std::move(monster));
+
+  CreateEnemy(200028, 220, 600, 0, level, ai, ci);
 
   // Below is simple random level generation for testing purposes.
   int steps [3][3][2] = { { {1,0}, {1,0}, {1,0} }, // straight
@@ -117,43 +99,41 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
       startX = startX + (sX * TILESIZE);
       startY = startY + (sY * TILESIZE);
       CreateBlock(200013, startX, startY, TILESIZE, level);
-      /*
-      e.reset(new Entity);
-      g.reset(new GraphicsComponent);
-      g->AddFrame(0, tileSprites[rand() % 5]);
-      e->AddComponent(ComponentType::GRAPHICS, std::move(g));
-      l.reset(new LocationComponent);
 
-      l->SetLocation(startX, startY);
-      e->AddComponent(ComponentType::LOCATION, std::move(l));
-      c.reset(new CollisionComponent());
-      c->AddHitbox(0, 0, TILESIZE, TILESIZE, HitboxType::OBJECT);
-      e->AddComponent(ComponentType::COLLISION, std::move(c));
-
-      level->AddStaticEntity(std::move(e));
-      */
     }
   }
-  // Create Level End Entity
-  /*
-  e.reset(new Entity);
-  g.reset(new GraphicsComponent);
-  g->AddFrame(0,200001);
-  e->AddComponent(ComponentType::GRAPHICS,std::move(g));
-  l.reset(new LocationComponent);
-  l->SetLocation(startX,startY - 50);
-  e->AddComponent(ComponentType::LOCATION, std::move(l));
-  c.reset(new CollisionComponent);
-  c->AddHitbox(0,0,50,50,HitboxType::OBJECT);
-  e->AddComponent(ComponentType::COLLISION, std::move(c));
-  std::unique_ptr<Component> sc(new EndLevelScriptComponent);
-  e->AddScript(std::move(sc));
-  level->AddEntity(std::move(e));
 
-  */
   CreateEndLevelEntity(200001, startX, startY-50, 50, level);
   AddLevel(std::move(level));
   SetCurrentLevel(0);
+}
+
+void LevelManager::CreateEnemy(int frame, int x, int y, int size, std::unique_ptr<Level>& level,
+                               std::unique_ptr<AiComponent>& ai, std::unique_ptr<InputComponent>& ci)
+{
+  std::unique_ptr<Entity> monster(new Entity);
+  std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
+  std::unique_ptr<LocationComponent> l(new LocationComponent);
+  std::unique_ptr<CollisionComponent> c(new CollisionComponent());
+  std::unique_ptr<VelocityComponent> v(new VelocityComponent);
+  std::unique_ptr<FactionComponent> f(new FactionComponent(Faction::ENEMY));
+
+  g->AddFrame(0,frame);
+  monster->AddComponent(ComponentType::GRAPHICS, std::move(g));
+
+  l->SetLocation(x,y);
+  monster->AddComponent(ComponentType::LOCATION, std::move(l));
+  ci.reset(new InputComponent(-1));
+  monster->AddComponent(ComponentType::INPUT, std::move(ci));
+
+  monster->AddComponent(ComponentType::VELOCITY, std::move(v));
+  monster->AddComponent(ComponentType::AI, std::move(ai));
+
+  c->AddHitbox(0,0,70,35, HitboxType::OBJECT);
+  monster->AddComponent(ComponentType::COLLISION, std::move(c));
+
+  monster->AddComponent(ComponentType::FACTION, std::move(f));
+  level->AddEntity(std::move(monster));
 }
 
 void LevelManager::CreateBlock(int frame, int x, int y, int size, std::unique_ptr<Level>& level)
