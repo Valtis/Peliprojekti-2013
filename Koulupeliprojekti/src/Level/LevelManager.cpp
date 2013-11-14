@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "Level/LevelGenerator.h"
+#include <vector>
 
 
 const int NUMBEROFBLOCKS = 100;
@@ -40,6 +41,7 @@ LevelManager::~LevelManager()
 void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera)
 {
   LevelGenerator lg;
+  std::vector<int> map = lg.generateLevel(100, 100);
 
   std::unique_ptr<Level> level(new Level);
   std::unique_ptr<InputComponent> ci(new InputComponent);
@@ -56,32 +58,16 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
 
   CreateEnemy(200028, 220, 600, 0, level, ai, ci);
 
-  // Below is simple random level generation for testing purposes.
-  int steps [3][3][2] = { { {1,0}, {1,0}, {1,0} }, // straight
-  { {0,-1}, {0,0}, {1,0} }, // up
-  { {0,1}, {0,0}, {1,0} }}; // down
-  // Different tile sprites:
-  int tileSprites [5] = {200013, 200017,
-    200018, 200024, 200026};
-  srand (static_cast<unsigned int>(time(NULL)));
 
-  int startX = 50;
-  int startY = 700;
-  for (int i = 0; i < NUMBEROFBLOCKS; ++i) {
-    // pick up/down/straight on random
-    int ran = rand() % 3;
-    // foreach step
-    for (int j = 0; j < 3; ++j) {
-      int sX = steps[ran][j][0];
-      int sY = steps[ran][j][1];
-      startX = startX + (sX * TILESIZE);
-      startY = startY + (sY * TILESIZE);
-      CreateBlock(200013, startX, startY, TILESIZE, level);
-
+  for (int i = 0; i < 100; ++i) {
+    for (int j = 0; j < 100; ++j) {
+      if (map[100 * i + j] == 1) {
+        CreateBlock(200031, i*16, j*16, 16, level);
+      }
     }
   }
 
-  CreateEndLevelEntity(200001, startX, startY-50, 50, level);
+  CreateEndLevelEntity(200001, 100, 100, 50, level);
   AddLevel(std::move(level));
   SetCurrentLevel(0);
 }
