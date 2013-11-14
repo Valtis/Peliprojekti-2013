@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <cmath>
+#include <memory>
 #include "Component/LocationComponent.h"
 #include "Entity/Entity.h"
 #include "Message/CollisionMessage.h"
@@ -65,7 +66,8 @@ MessageHandling FlyingAiComponent::HandleCollisionMessage(Message *msg)
     return MessageHandling::STOP_HANDLING;
 
   m_attacking = false;
-  GetOwner()->SendMessage(new ControlCommand(Action::UP,true,-1));
+  std::unique_ptr<ControlCommand> command(new ControlCommand(Action::UP,true,-1));
+  GetOwner()->SendMessage(command.get());
 
   return MessageHandling::PASS_FORWARD;
 }
