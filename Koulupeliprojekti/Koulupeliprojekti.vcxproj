@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="data\sprites\spritesheet.bmp" />
+    <Image Include="data\sprites\tiilit.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="data\fonts\FreeMono.otf" />
