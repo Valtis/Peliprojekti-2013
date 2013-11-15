@@ -14,12 +14,29 @@ public:
   void SetAnimation(int id);
   void NextFrame();
   void PreviousFrame();
-  void AddFrame(int animationID, int spriteID);
-  void SetFrames(int animationID, std::vector<int> animationFrames);
+  void AddFrame(int animationID, int spriteID, double m_frameDelay);
+  void AddFrame(int animationID, int spriteID) 
+  {
+    AddFrame(animationID, spriteID, 1);
+  }
+  //void SetFrames(int animationID, std::vector<int> animationFrames);
   int GetSpriteID();
+  void Update(double m_ticksPassed) override;
+
+
 
 private:
+  void UpdateAnimation( double ticksPassed );
+
+  struct AnimationData
+  {
+    int m_spriteID;
+    double m_frameDelay;
+  };
+
+  double m_ticksPassed;
+  
   int m_animationID;
   int m_frameID;
-  std::unordered_map<int, std::vector<int>> m_animations;
+  std::unordered_map<int, std::vector<AnimationData>> m_animations;
 };
