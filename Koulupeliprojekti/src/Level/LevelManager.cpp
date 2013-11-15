@@ -46,7 +46,7 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   std::unique_ptr<Level> level(new Level);
   std::unique_ptr<InputComponent> ci(new InputComponent);
   ci->RegisterInputHandler(m_inputManager);
-  std::unique_ptr<Entity> e = CreatePlayer(200002, 70, 60, 50, ci);
+  std::unique_ptr<Entity> e = CreatePlayer(200002, 70, 60, 35, ci);
 
   camera->SetEntity(e.get());
 
@@ -62,12 +62,14 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   for (int i = 0; i < 100; ++i) {
     for (int j = 0; j < 100; ++j) {
       if (map[100 * i + j] == 1) {
-        CreateBlock(200031, i*16, j*16, 16, level);
+        CreateBlock(200031, i*16, j*16, 16, level, true);
+      } else {
+        CreateBlock(200029, i*16, j*16, 16, level, false);
       }
     }
   }
 
-  CreateEndLevelEntity(200001, 100, 100, 50, level);
+  CreateEndLevelEntity(200001, 200, 100, 50, level);
   AddLevel(std::move(level));
   SetCurrentLevel(0);
 }
@@ -122,12 +124,12 @@ void LevelManager::CreateEnemy(int frame, int x, int y, int size, std::unique_pt
   level->AddEntity(std::move(monster));
 }
 
-void LevelManager::CreateBlock(int frame, int x, int y, int size, std::unique_ptr<Level>& level)
+void LevelManager::CreateBlock(int frame, int x, int y, int size, std::unique_ptr<Level>& level, bool hitbox)
 {
   std::unique_ptr<Entity> e(new Entity);
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
   std::unique_ptr<LocationComponent> l(new LocationComponent);
-  std::unique_ptr<CollisionComponent> c(new CollisionComponent());
+
 
   g->AddFrame(0, frame);
   e->AddComponent(ComponentType::GRAPHICS, std::move(g));
@@ -135,9 +137,11 @@ void LevelManager::CreateBlock(int frame, int x, int y, int size, std::unique_pt
   l->SetLocation(x, y);
   e->AddComponent(ComponentType::LOCATION, std::move(l));
 
-  c->AddHitbox(0, 0, size, size, HitboxType::OBJECT);
-  e->AddComponent(ComponentType::COLLISION, std::move(c));
-
+  if (hitbox) {
+    std::unique_ptr<CollisionComponent> c(new CollisionComponent());
+    c->AddHitbox(0, 0, size, size, HitboxType::OBJECT);
+    e->AddComponent(ComponentType::COLLISION, std::move(c));
+  }
   level->AddStaticEntity(std::move(e));
 
 }
