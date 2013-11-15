@@ -97,7 +97,7 @@ MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
     m_y += colMsg->GetIntersection().h;
   else if (side == CollisionSide::DOWN)
     m_y -= colMsg->GetIntersection().h;
-  if (side == CollisionSide::DOWN)
+ // if (side == CollisionSide::DOWN)
   
   return MessageHandling::STOP_HANDLING;
 }
