@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <memory>
 #include "Component/WalkingAiComponent.h"
 #include "Entity/Entity.h"
 #include "Message/CollisionMessage.h"
@@ -13,24 +14,38 @@ void WalkingAiComponent::Update(double ticksPassed)
 {
 	if (GetOwner() == nullptr)
 		return;
+	std::unique_ptr<ControlCommand> command;
 	if (m_direction)
-		GetOwner()->SendMessage(new ControlCommand(Action::RIGHT,true,-1));
+	{
+		command.reset(new ControlCommand(Action::RIGHT,true,-1));
+		GetOwner()->SendMessage(command.get());
+	}
 	else
-		GetOwner()->SendMessage(new ControlCommand(Action::LEFT,true,-1));
+	{
+		command.reset(new ControlCommand(Action::LEFT,true,-1));
+		GetOwner()->SendMessage(command.get());
+	}
 }
 
 MessageHandling WalkingAiComponent::HandleCollisionMessage(Message *msg)
 {
 	if (msg->GetType() != MessageType::COLLISION)
 		return MessageHandling::STOP_HANDLING;
+	std::unique_ptr<ControlCommand> command;
 
 	Uint32 ticks = SDL_GetTicks();
 	if (ticks >= m_lastTick + 100)
 	{
 		if (m_direction)
-			GetOwner()->SendMessage(new ControlCommand(Action::RIGHT,false,-1));
+		{
+			command.reset(new ControlCommand(Action::RIGHT,false,-1));
+			GetOwner()->SendMessage(command.get());
+		}
 		else
-			GetOwner()->SendMessage(new ControlCommand(Action::LEFT,false,-1));
+		{
+			command.reset(new ControlCommand(Action::RIGHT,false,-1));
+			GetOwner()->SendMessage(command.get());
+		}
 		m_direction = !m_direction;
 		m_lastTick = ticks;
 	}

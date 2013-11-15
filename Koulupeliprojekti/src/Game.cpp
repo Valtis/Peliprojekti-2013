@@ -63,7 +63,10 @@ void Game::Draw()
 {
   if (m_drawTick.TickHasPassed())
   {
-    m_renderer.Draw(m_testDebugCamera.get(), m_levelManager.GetCurrentLevel()->GetEntities(), m_windowManager.GetWindows());
+    m_renderer.Draw(
+      m_testDebugCamera.get(), m_levelManager.GetCurrentLevel()->GetEntities(), 
+      m_levelManager.GetCurrentLevel()->GetStaticEntities(),
+      m_windowManager.GetWindows());
   }
 }
 
