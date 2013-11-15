@@ -1,13 +1,17 @@
 #include "Utility/Tick.h"
 
-Tick::Tick( Uint32 tickLength ) : m_lastTick(0), m_lastTickLength(0), m_tickLength(tickLength)
+#ifndef min
+#define min(a, b) (a) < (b) ? (a) : (b)
+#endif
+
+Tick::Tick( Uint32 tickLength ) : m_maxTickLength(2), m_lastTick(0), m_lastTickLength(0), m_tickLength(tickLength)
 {
 
 }
 
 double Tick::TicksPassed()
 {
-  return m_lastTickLength/m_tickLength;
+  return min(m_lastTickLength/m_tickLength, m_maxTickLength);
 }
 
 bool Tick::TickHasPassed()
