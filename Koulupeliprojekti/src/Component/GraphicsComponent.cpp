@@ -2,7 +2,7 @@
 #include "Utility/LoggerManager.h"
 const int NO_VALUE = -1;
 
-GraphicsComponent::GraphicsComponent() : m_animationID(NO_VALUE), m_frameID(NO_VALUE)
+GraphicsComponent::GraphicsComponent() : m_ticksPassed(0), m_animationID(NO_VALUE), m_frameID(NO_VALUE)
 {
 
 }
@@ -11,6 +11,30 @@ GraphicsComponent::~GraphicsComponent()
 {
 
 }
+
+
+
+void GraphicsComponent::Update(double ticksPassed)
+{
+  if (m_animationID == NO_VALUE || m_frameID == NO_VALUE)
+  {
+    return;
+  }
+
+  UpdateAnimation(ticksPassed);
+}
+
+void GraphicsComponent::UpdateAnimation( double ticksPassed )
+{
+  m_ticksPassed += ticksPassed;
+  if (m_ticksPassed > m_animations[m_animationID][m_frameID].m_frameDelay)
+  {
+    
+    m_ticksPassed = 0;
+    NextFrame();
+  }
+}
+
 
 void GraphicsComponent::SetAnimation(int id)
 {
@@ -29,9 +53,14 @@ void GraphicsComponent::SetAnimation(int id)
   }
 }
 
-void GraphicsComponent::AddFrame(int animationID, int spriteID)
+void GraphicsComponent::AddFrame(int animationID, int spriteID, double frameDelay)
 {
-  m_animations[animationID].push_back(spriteID);
+  AnimationData data;
+  data.m_spriteID = spriteID;
+  data.m_frameDelay = frameDelay;
+
+  m_animations[animationID].push_back(data);
+  
   if (m_animationID == NO_VALUE)
   {
     m_animationID = animationID;
@@ -42,7 +71,7 @@ void GraphicsComponent::AddFrame(int animationID, int spriteID)
     m_frameID = 0;
   }
 }
-
+/*
 void GraphicsComponent::SetFrames(int animationID, std::vector<int> animationFrames)
 {
   m_animations[animationID] = animationFrames;
@@ -55,7 +84,7 @@ void GraphicsComponent::SetFrames(int animationID, std::vector<int> animationFra
   {
     m_frameID = 0;
   }
-}
+}*/
 
 int GraphicsComponent::GetSpriteID()
 {
@@ -63,7 +92,7 @@ int GraphicsComponent::GetSpriteID()
   {
     return NO_VALUE;
   }
-  return m_animations[m_animationID][m_frameID];
+  return m_animations[m_animationID][m_frameID].m_spriteID;
 }
 
 void GraphicsComponent::NextFrame()

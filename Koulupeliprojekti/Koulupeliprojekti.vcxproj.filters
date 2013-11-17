@@ -276,6 +276,9 @@
     <ClInclude Include="include\Component\Scripts\EndLevelScriptComponent.h">
       <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="include\Level\LevelGenerator.h">
+      <Filter>Header Files\Level</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -431,6 +434,9 @@
     <ClCompile Include="src\Component\Scripts\EndLevelScriptComponent.cpp">
       <Filter>Source Files\Component\Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="src\Level\LevelGenerator.cpp">
+      <Filter>Source Files\Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore">
@@ -451,6 +457,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="data\sprites\spritesheet.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="data\sprites\tiilit.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

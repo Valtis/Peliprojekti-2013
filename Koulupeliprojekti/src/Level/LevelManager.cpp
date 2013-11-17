@@ -20,6 +20,8 @@
 #include <vector>
 
 
+
+
 const int NUMBEROFBLOCKS = 100;
 const int TILESIZE = 30;
 const int NO_ACTIVE_LEVEL = -1;
@@ -70,8 +72,10 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
   }
 
   CreateEndLevelEntity(200001, 200, 100, 50, level);
+  
   AddLevel(std::move(level));
   SetCurrentLevel(0);
+
 }
 
 std::unique_ptr<Entity> LevelManager::CreatePlayer(int frame, int x, int y, int size, std::unique_ptr<InputComponent>& ci)
@@ -83,7 +87,13 @@ std::unique_ptr<Entity> LevelManager::CreatePlayer(int frame, int x, int y, int 
   std::unique_ptr<CollisionComponent> c(new CollisionComponent());
   std::unique_ptr<FactionComponent> f(new FactionComponent(Faction::PLAYER));
   std::unique_ptr<PhysicsComponent> p(new PhysicsComponent);
-  g->AddFrame(0, frame);
+  
+  g->AddFrame(0, frame, 20);
+  g->AddFrame(0, frame + 1, 20);
+  g->AddFrame(0, frame + 2, 0);
+  g->AddFrame(0, frame + 3, 20);
+
+
   e->AddComponent(ComponentType::GRAPHICS, std::move(g));
   l->SetLocation(x, y);
   e->AddComponent(ComponentType::LOCATION, std::move(l));
@@ -148,10 +158,7 @@ void LevelManager::CreateBlock(int frame, int x, int y, int size, std::unique_pt
 
 void LevelManager::CreateEndLevelEntity(int frame, int x, int y, int size, std::unique_ptr<Level>& level)
 {
-  /*
-  e.reset(new Entity);
-  g.reset(new GraphicsComponent);
-  */
+
   std::unique_ptr<Entity> e(new Entity);
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
   std::unique_ptr<LocationComponent> l(new LocationComponent);
