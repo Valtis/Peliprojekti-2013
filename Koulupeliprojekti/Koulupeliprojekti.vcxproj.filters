@@ -97,6 +97,12 @@
     <Filter Include="Source Files\Physics">
       <UniqueIdentifier>{76732070-0e13-4a91-8c60-17d782209b60}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Sound">
+      <UniqueIdentifier>{5170db3e-cea5-4bfe-83e1-77c68c1cf8de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sound">
+      <UniqueIdentifier>{e0e47dac-c586-474e-a709-894f356be1e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -279,6 +285,15 @@
     <ClInclude Include="include\Level\LevelGenerator.h">
       <Filter>Header Files\Level</Filter>
     </ClInclude>
+    <ClInclude Include="include\Sound\Music.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Sound\SoundEffects.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Sound\SoundManager.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -436,6 +451,15 @@
     </ClCompile>
     <ClCompile Include="src\Level\LevelGenerator.cpp">
       <Filter>Source Files\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sound\Music.cpp">
+      <Filter>Source Files\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sound\SoundEffects.cpp">
+      <Filter>Source Files\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sound\SoundManager.cpp">
+      <Filter>Source Files\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
