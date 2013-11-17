@@ -10,6 +10,7 @@
 #include "Graphics/Renderer.h"
 #include "Message/MessageProcessor.h"
 #include "Utility/Tick.h"
+#include "Sound/SoundManager.h"
 
 class Camera;
 class Game : public MessageProcessor

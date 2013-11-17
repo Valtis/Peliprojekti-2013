@@ -136,6 +136,9 @@
     <None Include="..\.gitignore" />
     <None Include="..\LICENSE" />
     <None Include="..\README.md" />
+    <None Include="data\music\music.dat" />
+    <None Include="data\music\Purple Motion - Charts overdrive.ogg" />
+    <None Include="data\sound\soundeffects.dat" />
     <None Include="data\sprites\sprites.dat" />
     <None Include="data\sprites\spritesheets.dat" />
   </ItemGroup>

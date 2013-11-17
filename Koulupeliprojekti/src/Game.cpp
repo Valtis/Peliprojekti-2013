@@ -56,6 +56,7 @@ void Game::UpdateGameState()
   {
     HandleInput();
     m_levelManager.Update(m_gameTick.TicksPassed());
+    SoundManager::Instance().Update(m_gameTick.TicksPassed());
   }
 }
 
@@ -76,6 +77,9 @@ void Game::Initialize()
   LoggerManager::SetLogFolder("logs");
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
   SDL_JoystickEventState(SDL_ENABLE);
+
+  SoundManager::Instance().Play();
+
   // test code - lots of stuff hard coded
   m_renderer.CreateWindow("Title", 800, 600);
   m_renderer.LoadSprites("data/sprites/");

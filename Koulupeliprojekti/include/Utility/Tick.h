@@ -10,7 +10,7 @@ public:
   bool TickHasPassed();
   double SetMaxTixLength(double length) { m_maxTickLength = length; }
 private:
-  Uint32 m_maxTickLength;
+  double m_maxTickLength;
   Uint32 m_lastTick;
   Uint32 m_lastTickLength;
 
