@@ -72,13 +72,14 @@ void Game::Draw()
 
 void Game::Initialize()
 {
+  LoggerManager::SetGlobalLogLevel(LogLevel::ALL);
+  LoggerManager::SetLogFolder("logs");
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
   SDL_JoystickEventState(SDL_ENABLE);
   // test code - lots of stuff hard coded
   m_renderer.CreateWindow("Title", 800, 600);
   m_renderer.LoadSprites("data/sprites/");
-  LoggerManager::SetGlobalLogLevel(LogLevel::ALL);
-  LoggerManager::SetLogFolder("logs");
+
 
   FontManager::Instance().Initialize("data/fonts/FreeMono.otf");
   m_inputManager.Initialize();
