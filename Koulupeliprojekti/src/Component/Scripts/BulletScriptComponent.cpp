@@ -5,7 +5,7 @@
 #include "Component/FactionComponent.h"
 #include "Message/MessageFactory.h"
 
-BulletScriptComponent::BulletScriptComponent()
+BulletScriptComponent::BulletScriptComponent() : m_lifeTimeRemaining(100)
 {
 
 }
@@ -15,6 +15,17 @@ BulletScriptComponent::~BulletScriptComponent()
 
 }
                             
+
+void BulletScriptComponent::Update(double ticksPassed)
+{
+  m_lifeTimeRemaining -= ticksPassed;
+  if (m_lifeTimeRemaining <= 0)
+  {
+    auto takeDamageMsg = MessageFactory::CreateTakeDamageMessage();
+    GetOwner()->SendMessage(takeDamageMsg.get());
+  }
+}
+
 void BulletScriptComponent::OnAttatchingToEntity()
 {
   GetOwner()->RegisterMessageHandler(MessageType::COLLISION,  Priority::HIGHEST, 
