@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL_mixer.h>
 #include <unordered_map>
+#include <string>
 
 class SoundEffects
 {
