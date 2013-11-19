@@ -63,7 +63,7 @@ void Level::AddStaticEntity(std::unique_ptr<Entity> e)
 {
   e->SetParent(this);
   Component* collision = e->GetComponent(ComponentType::COLLISION);
-  if(collision == nullptr)
+  if(collision != nullptr)
   {
     m_staticCollidables.push_back(std::move(e));
   }
