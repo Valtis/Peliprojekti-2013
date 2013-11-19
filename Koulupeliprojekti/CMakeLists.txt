@@ -5,15 +5,9 @@ set (ENV{PKG_CONFIG_PATH}
   "/home/jtpakari/Software/lib/pkgconfig"
 )
 
-SET(EXECUTABLE_OUTPUT_PATH "bin")
-SET(LIBRARY_OUTPUT_PATH "bin")
-SET(CMAKE_CACHEFILE_DIR "cmake")
-
-list(
-  APPEND
-  CMAKE_CXX_FLAGS
-  "-std=c++0x ${CMAKE_CXX_FLAGS} -g -O3"
-)
+set(EXECUTABLE_OUTPUT_PATH "bin")
+set(LIBRARY_OUTPUT_PATH "bin")
+set(CMAKE_CACHEFILE_DIR "cmake")
 
 set (
   SOURCES
@@ -78,6 +72,16 @@ find_package(PkgConfig)
 pkg_check_modules(SDL2 REQUIRED sdl2)
 pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
 pkg_check_modules(SDL2_MIXER REQUIRED SDL2_mixer)
+
+set(
+  CMAKE_CXX_FLAGS
+  "${CMAKE_CXX_FLAGS}-std=c++0x -g -O3"
+)
+
+message (
+  STATUS
+  "${CMAKE_CXX_FLAGS}"
+)
 
 include_directories (
   SYSTEM
