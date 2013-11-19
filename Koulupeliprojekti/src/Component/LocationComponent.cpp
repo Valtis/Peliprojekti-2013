@@ -65,17 +65,19 @@ bool LocationComponent::CanIJump()
 MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
 {
   CollisionMessage *colMsg = static_cast<CollisionMessage *>(msg);
-  VelocityComponent *v = static_cast<VelocityComponent *>(GetOwner()->GetComponent(ComponentType::VELOCITY));
+  VelocityComponent *v =
+    static_cast<VelocityComponent *>(GetOwner()->GetComponent(ComponentType::VELOCITY));
   CollisionSide side;
   Entity *collider = colMsg->GetEntity();
 
-  auto *myFac = static_cast<FactionComponent *>(GetOwner()->GetComponent(ComponentType::FACTION));
-  auto *colFac = static_cast<FactionComponent *>(collider->GetComponent(ComponentType::FACTION));
+  FactionComponent *myFac =
+    static_cast<FactionComponent *>(GetOwner()->GetComponent(ComponentType::FACTION));
+  FactionComponent *colFac = 
+    static_cast<FactionComponent *>(collider->GetComponent(ComponentType::FACTION));
 
-  if (myFac != nullptr && colFac != nullptr && myFac->GetFaction() == colFac->GetFaction())
-  {
+  if (myFac != nullptr && colFac != nullptr &&
+      myFac->GetFaction() == colFac->GetFaction())
     return MessageHandling::PASS_FORWARD;
-  }
 
   if (v == nullptr)
     return MessageHandling::PASS_FORWARD;
@@ -83,20 +85,18 @@ MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
   side = colMsg->GetSide();
 
   if (m_collision[side])
-  {
     return MessageHandling::STOP_HANDLING;
-  }
 
   m_collision[side] = true;
 
   if (side == CollisionSide::RIGHT)
-    m_x -= colMsg->GetIntersection().w;
+    m_x -= (colMsg->GetIntersection().w + 1);
   else if (side == CollisionSide::LEFT)
-    m_x += colMsg->GetIntersection().w;
+    m_x += (colMsg->GetIntersection().w + 1);
   else if (side == CollisionSide::UP)
-    m_y += colMsg->GetIntersection().h;
+    m_y += (colMsg->GetIntersection().h + 1);
   else if (side == CollisionSide::DOWN)
-    m_y -= colMsg->GetIntersection().h;
+    m_y -= (colMsg->GetIntersection().h + 1);
  // if (side == CollisionSide::DOWN)
   
   return MessageHandling::STOP_HANDLING;
