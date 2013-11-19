@@ -32,18 +32,24 @@ public:
   void CreateWindow(std::string title, int width, int height);
 
   void AddEntity(int id);
-  void Draw(Camera *camera, const std::vector<std::unique_ptr<Entity>> &entities, const std::vector<std::unique_ptr<Entity>> &staticEntities, const std::deque<std::unique_ptr<Window>> &windows);
+  typedef const std::vector<std::unique_ptr<Entity>> EntityVector;
+  void Draw(
+    Camera *camera, 
+    EntityVector &entities, 
+    EntityVector &staticEntities, 
+    EntityVector &staticCollidables,
+    const std::deque<std::unique_ptr<Window>> &windows);
 
 protected:
 private:
   
 
   void ClearScreen();
-  void DrawEntities(Camera *camera, const std::vector<std::unique_ptr<Entity>> &entities, const std::vector<std::unique_ptr<Entity>> &staticEntities);
+  void DrawEntities(Camera *camera, EntityVector  &entities, EntityVector &staticEntities, EntityVector &staticCollidables);
   void DrawWindows(const std::deque<std::unique_ptr<Window>> &windows);
   void DrawWindow(std::vector<std::pair<SDL_Rect, SDL_Texture *>>);
 
-  std::vector<std::pair<SDL_Point, Sprite *>> GetDataForDrawing(SDL_Point topleft, const std::vector<std::unique_ptr<Entity>> &entities, const std::vector<std::unique_ptr<Entity>> &staticEntities);
+  std::vector<std::pair<SDL_Point, Sprite *>> GetDataForDrawing(SDL_Point topleft, EntityVector  &entities, EntityVector  &staticEntities, EntityVector &staticCollidables);
 
   void GetEntityData( const std::vector<std::unique_ptr<Entity>> & entities, SDL_Point topleft, std::vector<std::pair<SDL_Point, Sprite *>> &retval );
 

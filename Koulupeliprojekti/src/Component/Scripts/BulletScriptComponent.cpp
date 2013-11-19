@@ -51,7 +51,10 @@ MessageHandling BulletScriptComponent::HandleCollisionMessage(Message *msg)
   }
 
   auto takeDamageMsg = MessageFactory::CreateTakeDamageMessage();
+
   GetOwner()->SendMessage(takeDamageMsg.get());
+  colMsg->GetEntity()->SendMessage(takeDamageMsg.get());
+
 
   return MessageHandling::PASS_FORWARD;
 }
