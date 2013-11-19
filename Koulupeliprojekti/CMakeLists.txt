@@ -9,6 +9,12 @@ SET(EXECUTABLE_OUTPUT_PATH "bin")
 SET(LIBRARY_OUTPUT_PATH "bin")
 SET(CMAKE_CACHEFILE_DIR "cmake")
 
+list(
+  APPEND
+  CMAKE_CXX_FLAGS
+  "-std=c++0x ${CMAKE_CXX_FLAGS} -g -O3"
+)
+
 set (
   SOURCES
   "src/Game.cpp"
@@ -41,11 +47,15 @@ set (
   "src/Graphics/Camera/EntityTrackingCamera.cpp"
   "src/Level/Level.cpp"
   "src/Level/LevelManager.cpp"
+  "src/Level/LevelGenerator.cpp"
   "src/Message/Message.cpp"
   "src/Message/MessageFactory.cpp"
   "src/Message/MessageProcessor.cpp"
   "src/Message/Commands/ControlCommand.cpp"
   "src/Physics/PhysicsHandler.cpp"
+  "src/Sound/Music.cpp"
+  "src/Sound/SoundEffects.cpp"
+  "src/Sound/SoundManager.cpp"
   "src/UI/InputManager.cpp"
   "src/UI/Controller/JoystickController.cpp"
   "src/UI/Controller/KeyboardController.cpp"
@@ -68,12 +78,6 @@ find_package(PkgConfig)
 pkg_check_modules(SDL2 REQUIRED sdl2)
 pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
 pkg_check_modules(SDL2_MIXER REQUIRED SDL2_mixer)
-
-list(
-  APPEND
-  CMAKE_CXX_FLAGS
-  "-std=c++0x ${CMAKE_CXX_FLAGS} -g -O3"
-)
 
 include_directories (
   SYSTEM

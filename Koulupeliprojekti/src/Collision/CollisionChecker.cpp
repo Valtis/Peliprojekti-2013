@@ -99,7 +99,15 @@ void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
         isUp = (intersectRect.y == cc_hitbox.y);
         isDown = ((intersectRect.y + intersectRect.h) == (cc_hitbox.y + cc_hitbox.h));
 
-        if ((!isRight && !isLeft && !isUp && !isDown) ||
+        if (isRight && isUp && isDown && !isLeft)
+          side1 = CollisionSide::RIGHT;
+        else if (isLeft && isUp && isDown && !isRight)
+          side1 = CollisionSide::LEFT;
+        else if (isLeft && isRight && isUp && !isDown)
+          side1 = CollisionSide::UP;
+        else if (isLeft && isRight && isDown && !isUp)
+          side1 = CollisionSide::DOWN;
+        else if ((!isRight && !isLeft && !isUp && !isDown) ||
             (isRight && isLeft) || (isUp && isDown) ||
             (isLeft && isUp) || (isLeft && isDown) ||
             (isRight && isUp) || (isRight && isDown))

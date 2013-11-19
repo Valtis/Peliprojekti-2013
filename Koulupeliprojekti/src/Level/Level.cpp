@@ -2,6 +2,7 @@
 #include "Entity/Entity.h"
 #include "Entity/EntityFactory.h"
 #include "Collision/CollisionChecker.h"
+#include "Message/Commands/Command.h"
 #include "Physics/PhysicsHandler.h"
 #include "Utility/LoggerManager.h"
 
@@ -47,6 +48,11 @@ const std::vector<std::unique_ptr<Entity>> &Level::GetStaticEntities()
   return m_staticEntities;
 }
 
+const std::vector<std::unique_ptr<Entity>> &Level::GetStaticCollidables()
+{
+  return m_staticCollidables;
+}
+
 void Level::AddEntity(std::unique_ptr<Entity> e)
 {
   e->SetParent(this);
@@ -56,7 +62,15 @@ void Level::AddEntity(std::unique_ptr<Entity> e)
 void Level::AddStaticEntity(std::unique_ptr<Entity> e)
 {
   e->SetParent(this);
-  m_staticEntities.push_back(std::move(e));
+  Component* collision = e->GetComponent(ComponentType::COLLISION);
+  if(collision != nullptr)
+  {
+    m_staticCollidables.push_back(std::move(e));
+  }
+  else
+  {
+    m_staticEntities.push_back(std::move(e));
+  }
 }
 
 MessageHandling Level::HandleEntitySpawning(Message *msg)

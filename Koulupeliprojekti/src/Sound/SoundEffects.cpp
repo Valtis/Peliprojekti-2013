@@ -2,7 +2,6 @@
 #include "Utility/StringUtility.h"
 #include "Utility/LoggerManager.h"
 #include <fstream>
-#include <string>
 #include <stdexcept>
 
 SoundEffects::SoundEffects() : m_effects()
