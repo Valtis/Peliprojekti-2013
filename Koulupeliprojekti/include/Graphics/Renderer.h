@@ -49,15 +49,28 @@ private:
   void DrawWindows(const std::deque<std::unique_ptr<Window>> &windows);
   void DrawWindow(std::vector<std::pair<SDL_Rect, SDL_Texture *>>);
 
-  std::vector<std::pair<SDL_Point, Sprite *>> GetDataForDrawing(SDL_Point topleft, EntityVector  &entities, EntityVector  &staticEntities, EntityVector &staticCollidables);
+  struct SpriteData
+  {
+    SpriteData() : location(), sprite(nullptr), flip(false)
+    {
 
-  void GetEntityData( const std::vector<std::unique_ptr<Entity>> & entities, SDL_Point topleft, std::vector<std::pair<SDL_Point, Sprite *>> &retval );
+    }
+
+    SDL_Point location;
+    Sprite *sprite;
+    bool flip;
+  };
+    
+  std::vector<SpriteData> GetDataForDrawing(SDL_Point topleft, EntityVector  &entities, EntityVector  &staticEntities, EntityVector &staticCollidables);
+
+
+  void GetEntityData( const std::vector<std::unique_ptr<Entity>> & entities, SDL_Point topleft, std::vector<SpriteData> &retval );
 
   void DebugDrawCollisionBoxes(const std::vector<std::unique_ptr<Entity>> &entities, SDL_Point topleft);
 
   bool CullEntity(SDL_Point topleft, Sprite *sprite, LocationComponent *location);
-  void SortEntitiesByDrawPriority(std::vector<std::pair<SDL_Point, Sprite *>> &drawData);
-  void PerformEntityDraw(std::vector<std::pair<SDL_Point, Sprite *>> drawdata, SDL_Point point);
+  void SortEntitiesByDrawPriority(std::vector<SpriteData> &drawData);
+  void PerformEntityDraw(std::vector<SpriteData> drawdata, SDL_Point point);
 
 
   std::pair<int, int> m_windowSize; // width/height

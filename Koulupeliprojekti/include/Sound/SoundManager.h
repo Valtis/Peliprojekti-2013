@@ -20,26 +20,25 @@ public:
 
   virtual ~SoundManager();
 
-  void UninitializeSDLAudio();
-
-  void ShutdownMix();
-
-  void UninitializeMix();
   static void Release();
 
   static SoundManager &Instance();
 
   void Play();
-  void PlaySoundEffect(int id);
   void Pause();
   void Resume();
   void Stop();
   void Next();
   void Previous();
+  
+  void PlaySoundEffect(int id);
   void Update(double ticks_passed);
 
 private:
   SoundManager(int frequency, int chunckSize);
+  void UninitializeSDLAudio();
+  void ShutdownMix();
+  void UninitializeMix();
 
   void LoadSoundEffects();
 
