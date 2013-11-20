@@ -3,7 +3,7 @@
 LevelGenerator::LevelGenerator() {}
 LevelGenerator::~LevelGenerator() {}
 
-std::vector<std::unique_ptr<Level>> LevelGenerator::generateLevel(InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera)
+std::vector<std::unique_ptr<Level>> LevelGenerator::generateLevels(InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera)
 {
   std::vector<std::unique_ptr<Level>> levels;
   std::unique_ptr<Level> level(new Level);

@@ -29,7 +29,7 @@ class LevelGenerator {
   public:
     LevelGenerator();
     ~LevelGenerator();
-    std::vector<std::unique_ptr<Level>> generateLevel(InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera);
+    std::vector<std::unique_ptr<Level>> generateLevels(InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera);
     std::unique_ptr<Entity> CreatePlayer(int frame, int x, int y, int size, std::unique_ptr<InputComponent>& ci);
     void CreateEnemy(int frame, int x, int y, int size, std::unique_ptr<Level>& level, std::unique_ptr<AiComponent>& ai, std::unique_ptr<InputComponent>& ci);
     void CreateBlock(int frame, int x, int y, int size, std::unique_ptr<Level>& level, bool hitbox);

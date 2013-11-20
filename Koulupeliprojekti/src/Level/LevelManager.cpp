@@ -19,7 +19,7 @@ LevelManager::~LevelManager()
 void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera)
 {
   LevelGenerator lg;
-  std::vector<std::unique_ptr<Level>> levels = lg.generateLevel(m_inputManager, camera);
+  std::vector<std::unique_ptr<Level>> levels = lg.generateLevels(m_inputManager, camera);
   for (int i = 0; i < levels.size(); ++i) {
     AddLevel(std::move(levels[i]));
   }
