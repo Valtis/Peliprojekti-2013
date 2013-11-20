@@ -65,7 +65,7 @@ void Game::Draw()
   if (m_drawTick.TickHasPassed())
   {
     m_renderer.Draw(
-      m_testDebugCamera.get(), m_levelManager.GetCurrentLevel()->GetEntities(), 
+      m_testDebugCamera.get(), m_levelManager.GetCurrentLevel()->GetEntities(),
       m_levelManager.GetCurrentLevel()->GetStaticEntities(),
       m_levelManager.GetCurrentLevel()->GetStaticCollidables(),
       m_windowManager.GetWindows());
@@ -174,7 +174,7 @@ void Game::TestWindowCreation()
   location.h = 240;
   textBox.reset(new TextBox("Congratulations! You have finished the demo version of this game!", location, &m_renderer));
   window->AddWindow(std::move(textBox));
-  
+
 
   location.x = 10;
   location.y = 260;
