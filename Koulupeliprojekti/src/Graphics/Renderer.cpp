@@ -4,6 +4,8 @@
 #include "Graphics/Camera/Camera.h"
 #include "Component/GraphicsComponent.h"
 #include "Component/LocationComponent.h"
+#include "Message/MessageProcessor.h"
+#include "Message/NewTiledSpriteMessage.h"
 // collision is for debugging - can be removed
 #include "Component/CollisionComponent.h"
 #include "UI/Window/Window.h"
@@ -15,7 +17,7 @@
 
 
 
-Renderer::Renderer()
+Renderer::Renderer() : m_window(nullptr), m_renderer(nullptr), m_parentProcessor(nullptr)
 {
 
 }
@@ -26,6 +28,13 @@ Renderer::~Renderer()
   SDL_DestroyWindow(m_window);
 }
 
+void Renderer::RegisterMessageHandlers(MessageProcessor *processor)
+{
+  m_parentProcessor = processor;
+  m_parentProcessor->RegisterMessageHandler(MessageType::CREATE_NEW_TILED_SPRITE, Priority::HIGHEST, 
+    [&](Message *message) { return this->HandleTiledSpriteCreation(message); }
+  );
+}
 
 
 void Renderer::CreateWindow(std::string title, int width, int height)
@@ -205,3 +214,7 @@ void Renderer::DebugDrawCollisionBoxes( const std::vector<std::unique_ptr<Entity
   }
 }
 
+MessageHandling Renderer::HandleTiledSpriteCreation(Message *message)
+{
+  return MessageHandling::STOP_HANDLING;
+}

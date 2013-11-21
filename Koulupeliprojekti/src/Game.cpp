@@ -82,6 +82,7 @@ void Game::Initialize()
   SoundManager::Instance().Play();
 
   // test code - lots of stuff hard coded
+  m_renderer.RegisterMessageHandlers(this);
   m_renderer.CreateWindow("Title", 800, 600);
   m_renderer.LoadSprites("data/sprites/");
 

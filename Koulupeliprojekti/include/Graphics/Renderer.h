@@ -11,14 +11,15 @@
 
 #include "SpriteManager.h"
 
+enum class MessageHandling;
 class Camera;
 class Window;
 class Entity;
 class Sprite;
 class GraphicsComponent;
 class LocationComponent;
-
-
+class Message;
+class MessageProcessor;
 class Renderer
 {
 public:
@@ -28,7 +29,7 @@ public:
   SDL_Renderer *GetRenderingContext() { return m_renderer; }
   void LoadSprites(std::string datafilePath);
   
-
+  void RegisterMessageHandlers(MessageProcessor *processor);
   void CreateWindow(std::string title, int width, int height);
 
   void AddEntity(int id);
@@ -42,6 +43,8 @@ public:
 
 protected:
 private:
+
+  MessageHandling HandleTiledSpriteCreation(Message *message);
   
 
   void ClearScreen();
@@ -78,5 +81,6 @@ private:
   SDL_Window *m_window;
   SDL_Renderer *m_renderer;
   SpriteManager m_spriteManager;
+  MessageProcessor *m_parentProcessor;
 };
 
