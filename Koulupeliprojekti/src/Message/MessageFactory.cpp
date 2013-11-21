@@ -6,7 +6,7 @@
 #include "Message/SpawnEntityMessage.h"
 #include "Message/TerminateEntityMessage.h"
 #include "Message/GenericMessageWithNoData.h"
-
+#include "Message/NewTiledSpriteMessage.h"
 
 std::unique_ptr<Message> MessageFactory::CreateLocationChangeMessage(double x, double y)
 {
@@ -50,6 +50,11 @@ std::unique_ptr<Message> MessageFactory::CreateSpawnEntityMessage(EntityType typ
 std::unique_ptr<Message> MessageFactory::CreateTerminateEntityMessage(Entity *spawner)
 {
   return std::unique_ptr<Message>(new TerminateEntityMessage(spawner));
+}
+
+std::unique_ptr<Message> MessageFactory::CreateNewTiledSpriteMessage(int baseID, int newID, int width, int height)
+{
+  return std::unique_ptr<Message>(new NewTiledSpriteMessage(baseID, newID, width, height));
 }
 
 std::unique_ptr<Message> MessageFactory::CreateTakeDamageMessage()

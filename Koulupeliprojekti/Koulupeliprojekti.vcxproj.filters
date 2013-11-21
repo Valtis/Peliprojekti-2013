@@ -294,7 +294,7 @@
     <ClInclude Include="include\Sound\SoundManager.h">
       <Filter>Header Files\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\CreateNewTiledSpriteMessage.h">
+    <ClInclude Include="include\Message\NewTiledSpriteMessage.h">
       <Filter>Header Files\Message</Filter>
     </ClInclude>
   </ItemGroup>

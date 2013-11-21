@@ -18,6 +18,7 @@ namespace MessageFactory
                                                   CollisionSide side);
   std::unique_ptr<Message> CreateSpawnEntityMessage(EntityType type, Entity *spawner);
   std::unique_ptr<Message> CreateTerminateEntityMessage(Entity *entity);
+  std::unique_ptr<Message> CreateNewTiledSpriteMessage(int baseID, int newID, int width, int height);
   std::unique_ptr<Message> CreateTakeDamageMessage();
   std::unique_ptr<Message> CreateEndLevelMessage();
   std::unique_ptr<Message> CreateEndGameMessage();
