@@ -47,6 +47,7 @@
     <ClInclude Include="include\Message\Commands\Command.h" />
     <ClInclude Include="include\Message\Commands\ControlCommand.h" />
     <ClInclude Include="include\Message\Commands\MouseCommand.h" />
+    <ClInclude Include="include\Message\CreateNewTiledSpriteMessage.h" />
     <ClInclude Include="include\Message\GenericMessageWithNoData.h" />
     <ClInclude Include="include\Message\LocationChangeMessage.h" />
     <ClInclude Include="include\Message\Message.h" />
