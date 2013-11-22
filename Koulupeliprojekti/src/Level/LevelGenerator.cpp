@@ -26,7 +26,6 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::generateLevels(InputManager&
     }
   }
   CreateEndLevelEntity(200001, 200, 100, 50, level);
-
   levels.push_back(std::move(level));
   return levels;
 }
