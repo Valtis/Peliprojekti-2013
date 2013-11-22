@@ -1,5 +1,7 @@
 #include "Level/LevelGenerator.h"
 
+
+
 LevelGenerator::LevelGenerator() {}
 LevelGenerator::~LevelGenerator() {}
 
@@ -15,6 +17,8 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::generateLevels(InputManager&
   // Näiden kahden järjestyksellä väliä, ratkaise
   level->AddEntity(std::move(e));
   CreateEnemy(200028, 220, 600, 0, level, ai, ci);
+
+  /*
   std::vector<int> map = generateGrid(100, 100);
   for (int i = 0; i < 100; ++i) {
     for (int j = 0; j < 100; ++j) {
@@ -25,15 +29,53 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::generateLevels(InputManager&
       }
     }
   }
-  CreateEndLevelEntity(200001, 200, 100, 50, level);
+  */
+  std::vector<MapRect> map = generateGrid(100, 100);
+  for (MapRect r : map) {
+    for (int i = r.x; i < (r.x + r.w); ++i) {
+      for (int j = r.y; j < (r.y + r.h); ++j) {
+        CreateBlock(200031, i*16, j*16, 16, level, true);
+      }
+    }
+  }
 
+  CreateEndLevelEntity(200001, 200, 100, 50, level);
   levels.push_back(std::move(level));
   return levels;
 }
 
-std::vector<int> LevelGenerator::generateGrid(int a, int b)
+std::vector<MapRect> LevelGenerator::generateGrid(int a, int b)
 {
-  std::vector<int> p(a*b, 0);
+  std::vector<MapRect> p(a*b);
+  MapRect r;
+  MapRect r1;
+  MapRect r2;
+  MapRect r3;
+  r.x = 0;
+  r.y = 0;
+  r.w = a;
+  r.h = 1;
+
+  r1.x = a;
+  r1.y = 0;
+  r1.w = 1;
+  r1.h = b;
+
+  r2.x = 0;
+  r2.y = b;
+  r2.w = a;
+  r2.h = 1;
+
+  r3.x = 0;
+  r3.y = 0;
+  r3.w = 1;
+  r3.h = b;
+
+  p.push_back(r);
+  p.push_back(r1);
+  p.push_back(r2);
+  p.push_back(r3);
+  /*
   for (int i = 0; i < b; ++i) {
     p[b * 0 + i] = 1;
     p[b * (a-1) + i] = 1;
@@ -42,6 +84,8 @@ std::vector<int> LevelGenerator::generateGrid(int a, int b)
     p[b * i + 0] = 1;
     p[b * i + (b-1)] = 1;
   }
+  */
+
   return p;
 }
 
