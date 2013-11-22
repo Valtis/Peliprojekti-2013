@@ -112,9 +112,11 @@ void Renderer::GetEntityData( const std::vector<std::unique_ptr<Entity>> & entit
 
     auto location = static_cast<LocationComponent *>(entity->GetComponent(ComponentType::LOCATION));
     auto graphics = static_cast<GraphicsComponent *>(entity->GetComponent(ComponentType::GRAPHICS));
-    SDL_assert_release(location != nullptr);
-    SDL_assert_release(graphics != nullptr);
-
+    if (location == nullptr || graphics == nullptr)
+    {
+      continue;
+    }
+    
     data.sprite = m_spriteManager.GetSprite(graphics->GetSpriteID());
     SDL_assert_release(data.sprite != nullptr);
 

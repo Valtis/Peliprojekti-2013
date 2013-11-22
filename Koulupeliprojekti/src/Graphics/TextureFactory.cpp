@@ -122,8 +122,7 @@ SDL_Texture* TextureFactory::CreateTiledSprite(Renderer *renderer,
   SDL_Texture *texture = SDL_CreateTexture(renderer->GetRenderingContext(), 
     format, SDL_TEXTUREACCESS_TARGET, newWidth*baseLocation.w, newHeight*baseLocation.h);
   SDL_SetRenderTarget(renderer->GetRenderingContext(), texture);
-
-
+  
   SDL_Rect dstLocation;
   dstLocation.w = baseLocation.w;
   dstLocation.h = baseLocation.h;
