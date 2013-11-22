@@ -6,9 +6,16 @@
 #include "Entity/Entity.h"
 #include <SDL.h>
 
+#include "Utility/LoggerManager.h"
+
+int calls_per_frame_entity;
+
+int calls_per_frame_entity_entity;
+
 void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
                                 const std::unique_ptr<Entity> &target_entity)
 {
+  ++calls_per_frame_entity_entity;
   double x,y;
   VelocityComponent *vc, *vc2;
   CollisionComponent *cc, *cc2;
@@ -184,6 +191,7 @@ void CheckEntityCollisions(const std::unique_ptr<Entity> &entity,
                            const std::vector<std::unique_ptr<Entity>>::const_iterator _e,
                            const std::vector<std::unique_ptr<Entity>> &entities)
 {
+  ++calls_per_frame_entity;
   for (auto e = _e; e != entities.end(); e++)
   {
     if (entity == (*e))
@@ -195,11 +203,17 @@ void CheckEntityCollisions(const std::unique_ptr<Entity> &entity,
 void Collision::CheckCollisions(const std::vector<std::unique_ptr<Entity>> &entities,
                                 const std::vector<std::unique_ptr<Entity>> &staticEntities)
 {
+  calls_per_frame_entity = 0;
+  calls_per_frame_entity_entity = 0;
   for (auto e = entities.begin(); e != entities.end(); e++)
   {
     CheckEntityCollisions((*e), e, entities);
     for (auto s_e = staticEntities.begin(); s_e != staticEntities.end(); s_e++)
       CheckEntityEntityCollision((*e),(*s_e));
   }
+
+  LoggerManager::GetLog("Debug.log").AddLine(LogLevel::DEBUG, "CheckEntityCollisions per frame: " + std::to_string(calls_per_frame_entity));
+  LoggerManager::GetLog("Debug.log").AddLine(LogLevel::DEBUG, "CheckEntityEntityCollision per frame: " + std::to_string(calls_per_frame_entity_entity));
+
 }
 
