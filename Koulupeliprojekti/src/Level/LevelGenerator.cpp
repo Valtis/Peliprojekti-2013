@@ -153,9 +153,9 @@ void LevelGenerator::CreateCollisionBlock(int x, int y, int w, int h, std::uniqu
   std::unique_ptr<Entity> e(new Entity);
   std::unique_ptr<LocationComponent> l(new LocationComponent);
   std::unique_ptr<CollisionComponent> c(new CollisionComponent());
-  std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
-  g->AddFrame(0, 200013);
-  e->AddComponent(ComponentType::GRAPHICS, std::move(g));
+  //std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
+  //g->AddFrame(0, 200013);
+  //e->AddComponent(ComponentType::GRAPHICS, std::move(g));
   l->SetLocation(x, y);
   c->AddHitbox(0, 0, w, h, HitboxType::OBJECT);
   e->AddComponent(ComponentType::COLLISION, std::move(c));
