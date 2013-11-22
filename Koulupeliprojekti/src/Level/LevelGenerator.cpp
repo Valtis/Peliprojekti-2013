@@ -18,25 +18,15 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::generateLevels(InputManager&
   level->AddEntity(std::move(e));
   CreateEnemy(200028, 220, 600, 0, level, ai, ci);
 
-  /*
-  std::vector<int> map = generateGrid(100, 100);
-  for (int i = 0; i < 100; ++i) {
-    for (int j = 0; j < 100; ++j) {
-      if (map[100 * i + j] == 1) {
-          CreateBlock(200031, i*16, j*16, 16, level, true);
-      } else {
-        CreateBlock(200029, i*16, j*16, 16, level, false);
-      }
-    }
-  }
-  */
+
   std::vector<MapRect> map = generateGrid(100, 100);
   for (MapRect r : map) {
     for (int i = r.x; i < (r.x + r.w); ++i) {
       for (int j = r.y; j < (r.y + r.h); ++j) {
-        CreateBlock(200031, i*16, j*16, 16, level, true);
+        CreateBlock(200031, i*16, j*16, 16, level, false);
       }
     }
+    CreateCollisionBlock(r.x*16, r.y*16, r.w*16, r.h*16, level);
   }
 
   CreateEndLevelEntity(200001, 200, 100, 50, level);
@@ -75,16 +65,6 @@ std::vector<MapRect> LevelGenerator::generateGrid(int a, int b)
   p.push_back(r1);
   p.push_back(r2);
   p.push_back(r3);
-  /*
-  for (int i = 0; i < b; ++i) {
-    p[b * 0 + i] = 1;
-    p[b * (a-1) + i] = 1;
-  }
-  for (int i = 0; i < a; ++i) {
-    p[b * i + 0] = 1;
-    p[b * i + (b-1)] = 1;
-  }
-  */
 
   return p;
 }
@@ -164,6 +144,22 @@ void LevelGenerator::CreateBlock(int frame, int x, int y, int size, std::unique_
     c->AddHitbox(0, 0, size, size, HitboxType::OBJECT);
     e->AddComponent(ComponentType::COLLISION, std::move(c));
   }
+  level->AddStaticEntity(std::move(e));
+
+}
+
+void LevelGenerator::CreateCollisionBlock(int x, int y, int w, int h, std::unique_ptr<Level>& level)
+{
+  std::unique_ptr<Entity> e(new Entity);
+  std::unique_ptr<LocationComponent> l(new LocationComponent);
+  std::unique_ptr<CollisionComponent> c(new CollisionComponent());
+  std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
+  g->AddFrame(0, 200013);
+  e->AddComponent(ComponentType::GRAPHICS, std::move(g));
+  l->SetLocation(x, y);
+  c->AddHitbox(0, 0, w, h, HitboxType::OBJECT);
+  e->AddComponent(ComponentType::COLLISION, std::move(c));
+  e->AddComponent(ComponentType::LOCATION, std::move(l));
   level->AddStaticEntity(std::move(e));
 
 }

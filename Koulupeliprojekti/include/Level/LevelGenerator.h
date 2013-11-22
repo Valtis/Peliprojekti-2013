@@ -41,5 +41,6 @@ class LevelGenerator {
     void CreateBlock(int frame, int x, int y, int size, std::unique_ptr<Level>& level, bool hitbox);
     void CreateEndLevelEntity(int frame, int x, int y, int size, std::unique_ptr<Level>& level);
     std::vector<MapRect> generateGrid(int a, int b);
+    void CreateCollisionBlock(int x, int y, int w, int h, std::unique_ptr<Level>& level);
 
 };
