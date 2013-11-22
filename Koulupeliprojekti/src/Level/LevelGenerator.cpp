@@ -36,7 +36,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::generateLevels(InputManager&
 
 std::vector<MapRect> LevelGenerator::generateGrid(int a, int b)
 {
-  std::vector<MapRect> p(a*b);
+  std::vector<MapRect> p(4);
   MapRect r;
   MapRect r1;
   MapRect r2;
