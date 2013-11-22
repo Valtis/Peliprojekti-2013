@@ -110,3 +110,37 @@ SDL_Texture *TextureFactory::CreateButton(int width, int height, Renderer *rende
 }
 
 
+SDL_Texture* TextureFactory::CreateTiledSprite(Renderer *renderer, 
+                                               SDL_Texture *base, 
+                                               SDL_Rect baseLocation,
+                                               int newWidth,
+                                               int newHeight
+                                               )
+{
+  int access;
+  Uint32 format;
+  SDL_QueryTexture(base, &format, &access, nullptr, nullptr);
+
+  SDL_Texture *texture = SDL_CreateTexture(renderer->GetRenderingContext(), 
+    format, access, newWidth*baseLocation.w, newHeight*baseLocation.h);
+  SDL_SetRenderTarget(renderer->GetRenderingContext(), texture);
+
+
+  SDL_Rect dstLocation;
+  dstLocation.w = baseLocation.w;
+  dstLocation.h = baseLocation.h;
+
+  for (int x = 0; x < newWidth; ++x)
+  {
+    for (int y = 0; y < newHeight; ++y)
+    {
+      dstLocation.x = x*baseLocation.w;
+      dstLocation.y = y*baseLocation.h;
+      SDL_RenderCopy(renderer->GetRenderingContext(), base, &baseLocation, &dstLocation);
+    }
+  }
+
+  SDL_SetRenderTarget(renderer->GetRenderingContext(), nullptr);
+
+  return texture;
+}

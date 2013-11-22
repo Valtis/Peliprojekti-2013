@@ -216,5 +216,7 @@ void Renderer::DebugDrawCollisionBoxes( const std::vector<std::unique_ptr<Entity
 
 MessageHandling Renderer::HandleTiledSpriteCreation(Message *message)
 {
+  auto msg = static_cast<NewTiledSpriteMessage *>(message);
+  m_spriteManager.CreateTiledSprite(this, msg->GetBaseID(), msg->GetNewID(), msg->GetWidth(), msg->GetHeight());
   return MessageHandling::STOP_HANDLING;
 }

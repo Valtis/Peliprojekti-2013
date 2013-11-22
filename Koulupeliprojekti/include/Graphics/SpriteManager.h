@@ -17,9 +17,9 @@ public:
   void Initialize(Renderer *renderer, std::string datafilePath);
 
   Sprite *GetSprite(int id);
-
   SDL_Texture *GetSpriteSheet(int spriteSheetID);
 
+  void CreateTiledSprite(Renderer *renderer, int baseID, int newID, int width, int height);
 
 private:
 
