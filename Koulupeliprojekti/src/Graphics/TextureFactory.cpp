@@ -87,7 +87,6 @@ SDL_Texture *TextureFactory::CreateButton(int width, int height, Renderer *rende
 
   ColorArea(rect, color, surface);
 
-
   color.r = 0;
   color.g = 0;
   color.b = 0;
@@ -117,12 +116,11 @@ SDL_Texture* TextureFactory::CreateTiledSprite(Renderer *renderer,
                                                int newHeight
                                                )
 {
-  int access;
   Uint32 format;
-  SDL_QueryTexture(base, &format, &access, nullptr, nullptr);
+  SDL_QueryTexture(base, &format, nullptr, nullptr, nullptr);
 
   SDL_Texture *texture = SDL_CreateTexture(renderer->GetRenderingContext(), 
-    format, access, newWidth*baseLocation.w, newHeight*baseLocation.h);
+    format, SDL_TEXTUREACCESS_TARGET, newWidth*baseLocation.w, newHeight*baseLocation.h);
   SDL_SetRenderTarget(renderer->GetRenderingContext(), texture);
 
 

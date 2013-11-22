@@ -67,7 +67,7 @@ void Renderer::Draw(
   EntityVector &staticCollidables,
   const std::deque<std::unique_ptr<Window>> &windows )
 {
-  SDL_assert(camera != nullptr);
+  SDL_assert_release(camera != nullptr);
   ClearScreen();
 
   DrawEntities(camera, entities, staticEntities, staticCollidables);
@@ -112,11 +112,11 @@ void Renderer::GetEntityData( const std::vector<std::unique_ptr<Entity>> & entit
 
     auto location = static_cast<LocationComponent *>(entity->GetComponent(ComponentType::LOCATION));
     auto graphics = static_cast<GraphicsComponent *>(entity->GetComponent(ComponentType::GRAPHICS));
-    SDL_assert(location != nullptr);
-    SDL_assert(graphics != nullptr);
+    SDL_assert_release(location != nullptr);
+    SDL_assert_release(graphics != nullptr);
 
     data.sprite = m_spriteManager.GetSprite(graphics->GetSpriteID());
-    SDL_assert(data.sprite != nullptr);
+    SDL_assert_release(data.sprite != nullptr);
 
     if (CullEntity(topleft, data.sprite, location))
     {

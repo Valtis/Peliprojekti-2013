@@ -93,10 +93,12 @@ void SpriteManager::CreateTiledSprite(Renderer *renderer, int baseID, int newID,
   }
   auto baseSprite = m_sprites[baseID].get(); 
   m_spriteSheets[newSpriteSheetID] = TextureFactory::CreateTiledSprite(renderer, m_spriteSheets[baseSprite->GetSpriteSheetID()], baseSprite->GetLocation(), width, height);
-  
+  SDL_assert_release(m_spriteSheets[newSpriteSheetID] != nullptr);
+
   std::unique_ptr<Sprite> newSprite(new Sprite(newID));
   newSprite->SetDrawPriority(baseSprite->GetDrawPriority());
   newSprite->SetSpriteSheetID(newSpriteSheetID);
   newSprite->SetLocation(0, 0, baseSprite->GetLocation().w*width, baseSprite->GetLocation().h*height);
   m_sprites[newID] = std::move(newSprite);
+  SDL_assert_release(m_sprites[newID] != nullptr);
 }

@@ -2,19 +2,8 @@
 #include "Level/Level.h"
 #include "Utility/LoggerManager.h"
 #include "Graphics/FontManager.h"
-// for testing purposes until level manager actually contains levels - feel free to remove
-/*
-#include "Entity/Entity.h"
-#include "Component/InputComponent.h"
-#include "Component/GraphicsComponent.h"
-#include "Component/LocationComponent.h"
-#include "Component/VelocityComponent.h"
-#include "Component/CollisionComponent.h"
-#include "Component/FactionComponent.h"
-*/
 #include "Graphics/Camera/EntityTrackingCamera.h"
 #include "Component/WalkingAiComponent.h"
-
 
 // for testing purposes - testing windows -  feel free to remove
 #include "UI/Window/Window.h"
@@ -93,9 +82,9 @@ void Game::Initialize()
 
   std::unique_ptr<EntityTrackingCamera> camera(new EntityTrackingCamera);
 
-  m_levelManager.Initialize(m_inputManager, camera);
   m_levelManager.SetParent(this);
-
+  m_levelManager.Initialize(m_inputManager, camera);
+  
   m_testDebugCamera = std::move(camera);
 
   TestWindowCreation();

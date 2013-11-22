@@ -27,7 +27,6 @@ void Level::Update(double ticksPassed)
 {
   HandlePendingDeletions();
 
-  // physics check
   Physics::HandlePhysics(m_entities);
 
   for (auto &entity : m_entities)
