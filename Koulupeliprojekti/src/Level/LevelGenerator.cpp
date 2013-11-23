@@ -109,6 +109,7 @@ void LevelGenerator::CreateEnemy(int frame, int x, int y, int size, std::unique_
   std::unique_ptr<FactionComponent> f(new FactionComponent(Faction::ENEMY));
 
   g->AddFrame(0,frame);
+  g->AddFrame(0, 200032);
   monster->AddComponent(ComponentType::GRAPHICS, std::move(g));
 
   l->SetLocation(x,y);
