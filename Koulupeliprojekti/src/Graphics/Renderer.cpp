@@ -204,7 +204,7 @@ void Renderer::DebugDrawCollisionBoxes( const std::vector<std::unique_ptr<Entity
     {
       return;
     }
-    auto hitboxes =  collisionComponent->GetHitboxes(HitboxType::OBJECT);
+    auto hitboxes =  collisionComponent->GetHitboxes(HitboxType::SOLID);
 
     for (auto hitbox : hitboxes)
     {

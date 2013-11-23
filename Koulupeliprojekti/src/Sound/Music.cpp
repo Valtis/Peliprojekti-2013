@@ -88,7 +88,7 @@ void Music::Stop()
 void Music::Next()
 {
   ++m_currentSong;
-  if (m_currentSong >= m_music.size())
+  if (m_currentSong >= static_cast<int>(m_music.size()))
   {
     m_currentSong = 0;
   }

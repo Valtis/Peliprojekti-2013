@@ -37,9 +37,14 @@ MessageHandling FollowingAiComponent::HandleCollisionMessage(Message *msg)
 	}
 	CollisionMessage *collision = static_cast<CollisionMessage*>(msg);
 
-	Component *faction = collision->GetEntity()->GetComponent(ComponentType::FACTION);
-	if (faction == nullptr)
-		GetOwner()->SendMessage(new ControlCommand(Action::JUMP, true, -1));
-
+  for (auto entity : collision->GetEntities())
+  {
+	  Component *faction = entity->GetComponent(ComponentType::FACTION);
+	  if (faction == nullptr)
+		{
+      GetOwner()->SendMessage(new ControlCommand(Action::JUMP, true, -1));
+      break;
+    }
+  }
 	return MessageHandling::STOP_HANDLING;
 }

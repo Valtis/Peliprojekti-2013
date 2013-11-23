@@ -67,37 +67,38 @@ MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
   CollisionMessage *colMsg = static_cast<CollisionMessage *>(msg);
   VelocityComponent *v =
     static_cast<VelocityComponent *>(GetOwner()->GetComponent(ComponentType::VELOCITY));
-  CollisionSide side;
-  Entity *collider = colMsg->GetEntity();
+  std::vector<Entity *> colliders = colMsg->GetEntities();
 
   FactionComponent *myFac =
     static_cast<FactionComponent *>(GetOwner()->GetComponent(ComponentType::FACTION));
-  FactionComponent *colFac = 
-    static_cast<FactionComponent *>(collider->GetComponent(ComponentType::FACTION));
+  for (auto collider : colliders)
+  {
+    FactionComponent *colFac = 
+      static_cast<FactionComponent *>(collider->GetComponent(ComponentType::FACTION));
 
-  if (myFac != nullptr && colFac != nullptr &&
-      myFac->GetFaction() == colFac->GetFaction())
-    return MessageHandling::PASS_FORWARD;
+    if (myFac != nullptr && colFac != nullptr &&
+        myFac->GetFaction() == colFac->GetFaction())
+      continue;
 
-  if (v == nullptr)
-    return MessageHandling::PASS_FORWARD;
+    if (v == nullptr)
+      continue;
+  }
+  CollisionSide h_side = colMsg->GetHorizontalSide();
+  CollisionSide v_side = colMsg->GetHorizontalSide();
 
-  side = colMsg->GetSide();
-
-  if (m_collision[side])
+  if (m_collision[h_side] && m_collision[h_side])
     return MessageHandling::STOP_HANDLING;
 
-  m_collision[side] = true;
+  m_collision[v_side] = true;
+  m_collision[h_side] = true;
 
-  if (side == CollisionSide::RIGHT)
-    m_x -= (colMsg->GetIntersection().w + 1);
-  else if (side == CollisionSide::LEFT)
-    m_x += (colMsg->GetIntersection().w + 1);
-  else if (side == CollisionSide::UP)
-    m_y += (colMsg->GetIntersection().h + 1);
-  else if (side == CollisionSide::DOWN)
-    m_y -= (colMsg->GetIntersection().h + 1);
- // if (side == CollisionSide::DOWN)
+  if (h_side == CollisionSide::LEFT)
+    m_x += colMsg->GetPoint().x;
+  else if (h_side == CollisionSide::RIGHT)
+    m_x -= colMsg->GetPoint().x;
+
+  if (v_side == CollisionSide::NONE)
+    m_y = colMsg->GetPoint().y;
   
   return MessageHandling::STOP_HANDLING;
 }

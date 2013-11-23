@@ -6,6 +6,7 @@ class Message;
 enum class CollisionSide;
 enum class EntityType;
 enum class Velocity;
+typedef struct _CollisionHit CollisionHit;
 
 namespace MessageFactory
 {
@@ -13,9 +14,7 @@ namespace MessageFactory
   std::unique_ptr<Message> CreateVelocityChangeMessage(double x, double y);
   std::unique_ptr<Message> CreateSetVelocityMessage(double x, double y);
   std::unique_ptr<Message> CreateSetVelocityMessage(double vel, Velocity dir);
-  std::unique_ptr<Message> CreateCollisionMessage(Entity *entity,
-                                                  SDL_Rect &intersection,
-                                                  CollisionSide side);
+  std::unique_ptr<Message> CreateCollisionMessage(CollisionHit &hit);
   std::unique_ptr<Message> CreateSpawnEntityMessage(EntityType type, Entity *spawner);
   std::unique_ptr<Message> CreateTerminateEntityMessage(Entity *entity);
   std::unique_ptr<Message> CreateNewTiledSpriteMessage(int baseID, int newID, int width, int height);

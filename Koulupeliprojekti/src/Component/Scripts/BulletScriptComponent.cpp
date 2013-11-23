@@ -40,21 +40,28 @@ MessageHandling BulletScriptComponent::HandleCollisionMessage(Message *msg)
     return MessageHandling::PASS_FORWARD;
   }
 
-
   auto colMsg = static_cast<CollisionMessage *> (msg);
   auto myFaction = static_cast<FactionComponent *>(GetOwner()->GetComponent(ComponentType::FACTION));
-  auto otherFaction = static_cast<FactionComponent *>(colMsg->GetEntity()->GetComponent(ComponentType::FACTION));
 
-  if (myFaction != nullptr && otherFaction != nullptr && myFaction->GetFaction() == otherFaction->GetFaction())
+  std::vector<Entity *> targets;
+  for (auto entity : colMsg->GetEntities())
   {
-    return MessageHandling::PASS_FORWARD;
+    auto otherFaction = static_cast<FactionComponent *>(entity->GetComponent(ComponentType::FACTION));
+
+    if (myFaction == nullptr || otherFaction == nullptr ||
+        myFaction->GetFaction() != otherFaction->GetFaction())
+      targets.push_back(entity);
   }
 
-  auto takeDamageMsg = MessageFactory::CreateTakeDamageMessage();
-
-  GetOwner()->SendMessage(takeDamageMsg.get());
-  colMsg->GetEntity()->SendMessage(takeDamageMsg.get());
-
+  if (targets.size() > 0)
+  {
+    for (auto target : targets)
+    {
+      auto takeDamageMsg = MessageFactory::CreateTakeDamageMessage();
+      GetOwner()->SendMessage(takeDamageMsg.get());
+      target->SendMessage(takeDamageMsg.get());
+    }
+  }
 
   return MessageHandling::PASS_FORWARD;
 }

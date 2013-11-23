@@ -18,11 +18,8 @@ void CollisionComponent::AddHitbox(SDL_Rect &box, const HitboxType type)
 {
   switch (type)
   {
-  case HitboxType::OBJECT:
+  case HitboxType::SOLID:
     m_object_hitboxes.push_back(box);
-    break;
-  case HitboxType::WALL:
-    m_wall_hitboxes.push_back(box);
     break;
   case HitboxType::TRIGGER:
     m_trigger_hitboxes.push_back(box);
@@ -46,12 +43,8 @@ const std::vector<SDL_Rect> CollisionComponent::GetHitboxes(const HitboxType typ
   
   switch (type)
   {
-  case HitboxType::OBJECT:
+  case HitboxType::SOLID:
     for (SDL_Rect box : m_object_hitboxes)
-      boxes.push_back(TransformHitbox(box));
-    break;
-  case HitboxType::WALL:
-    for (SDL_Rect box : m_wall_hitboxes)
       boxes.push_back(TransformHitbox(box));
     break;
   case HitboxType::TRIGGER:

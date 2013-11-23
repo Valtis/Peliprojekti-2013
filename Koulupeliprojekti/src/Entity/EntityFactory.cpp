@@ -41,7 +41,7 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   graphics->AddFrame(0, 200007);
 
   std::unique_ptr<CollisionComponent> collision(new CollisionComponent);
-  collision->AddHitbox(0, 0, 20, 20, HitboxType::OBJECT);
+  collision->AddHitbox(0, 0, 20, 20, HitboxType::TRIGGER);
   std::unique_ptr<VelocityComponent> velocity(new VelocityComponent);
 
   y = 0;

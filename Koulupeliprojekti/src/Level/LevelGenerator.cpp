@@ -91,7 +91,7 @@ std::unique_ptr<Entity> LevelGenerator::CreatePlayer(int frame, int x, int y, in
   e->AddComponent(ComponentType::LOCATION, std::move(l));
   e->AddComponent(ComponentType::INPUT, std::move(ci));
   e->AddComponent(ComponentType::VELOCITY, std::move(v));
-  c->AddHitbox(0, 0, size, size, HitboxType::OBJECT);
+  c->AddHitbox(0, 0, size, size, HitboxType::SOLID);
   e->AddComponent(ComponentType::COLLISION, std::move(c));
   e->AddComponent(ComponentType::FACTION, std::move(f));
   e->AddComponent(ComponentType::PHYSICS,std::move(p));
@@ -119,7 +119,8 @@ void LevelGenerator::CreateEnemy(int frame, int x, int y, int size, std::unique_
   monster->AddComponent(ComponentType::VELOCITY, std::move(v));
   monster->AddComponent(ComponentType::AI, std::move(ai));
 
-  c->AddHitbox(0,0,70,35, HitboxType::OBJECT);
+  c->AddHitbox(0,0,70,35, HitboxType::SOLID);
+  c->AddHitbox(0,0,70,35, HitboxType::TRIGGER);
   monster->AddComponent(ComponentType::COLLISION, std::move(c));
 
   monster->AddComponent(ComponentType::FACTION, std::move(f));
@@ -141,7 +142,7 @@ void LevelGenerator::CreateBlock(int frame, int x, int y, int size, std::unique_
 
   if (hitbox) {
     std::unique_ptr<CollisionComponent> c(new CollisionComponent());
-    c->AddHitbox(0, 0, size, size, HitboxType::OBJECT);
+    c->AddHitbox(0, 0, size, size, HitboxType::SOLID);
     e->AddComponent(ComponentType::COLLISION, std::move(c));
   }
   level->AddStaticEntity(std::move(e));
@@ -157,7 +158,7 @@ void LevelGenerator::CreateCollisionBlock(int x, int y, int w, int h, std::uniqu
   //g->AddFrame(0, 200013);
   //e->AddComponent(ComponentType::GRAPHICS, std::move(g));
   l->SetLocation(x, y);
-  c->AddHitbox(0, 0, w, h, HitboxType::OBJECT);
+  c->AddHitbox(0, 0, w, h, HitboxType::SOLID);
   e->AddComponent(ComponentType::COLLISION, std::move(c));
   e->AddComponent(ComponentType::LOCATION, std::move(l));
   level->AddStaticEntity(std::move(e));
@@ -178,7 +179,7 @@ void LevelGenerator::CreateEndLevelEntity(int frame, int x, int y, int size, std
   l->SetLocation(x,y);
   e->AddComponent(ComponentType::LOCATION, std::move(l));
   c.reset(new CollisionComponent);
-  c->AddHitbox(0,0,size,size,HitboxType::OBJECT);
+  c->AddHitbox(0,0,size,size,HitboxType::TRIGGER);
   e->AddComponent(ComponentType::COLLISION, std::move(c));
   std::unique_ptr<Component> sc(new EndLevelScriptComponent);
   e->AddScript(std::move(sc));

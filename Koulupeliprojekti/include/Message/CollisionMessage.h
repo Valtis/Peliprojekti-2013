@@ -1,21 +1,31 @@
 #pragma once
 #include "Message/Message.h"
+#include <vector>
+enum class HitboxType;
 
 enum class CollisionSide : int { NONE, UP, DOWN, LEFT, RIGHT };
+
+typedef struct _CollisionHit
+{
+  SDL_Point point;
+  CollisionSide v_side;
+  CollisionSide h_side;
+  HitboxType hit_type;
+  std::vector<Entity *> entities;
+} CollisionHit;
 
 class CollisionMessage : public Message
 {
 public:
-  CollisionMessage(Entity *entity,SDL_Rect &intersection,CollisionSide side)
-    : m_entity(entity), m_intersection(intersection), m_side(side) { }
+  CollisionMessage(CollisionHit &hit) : m_hit(hit) { }
   MessageType GetType() const override { return MessageType::COLLISION; }
 
-  SDL_Rect GetIntersection() const { return m_intersection; }
-  Entity * GetEntity() const { return m_entity; }
-  CollisionSide GetSide() const { return m_side; }
+  std::vector<Entity *> GetEntities() const { return m_hit.entities; }
+  CollisionSide GetHorizontalSide() const { return m_hit.h_side; }
+  CollisionSide GetVerticalSide() const { return m_hit.v_side; }
+  SDL_Point GetPoint() const { return m_hit.point; }
+  HitboxType GetHitType() const { return m_hit.hit_type; }
 
 private:
-  CollisionSide m_side;
-  SDL_Rect m_intersection;
-  Entity *m_entity;
+  const CollisionHit m_hit;
 };
