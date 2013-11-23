@@ -20,7 +20,7 @@ void LevelManager::Initialize(InputManager& m_inputManager, std::unique_ptr<Enti
 {
   LevelGenerator lg;
   std::vector<std::unique_ptr<Level>> levels = lg.generateLevels(m_inputManager, camera);
-  for (int i = 0; i < levels.size(); ++i) {
+  for (int i = 0; i < static_cast<int>(levels.size()); ++i) {
     AddLevel(std::move(levels[i]));
   }
   SetCurrentLevel(0);
@@ -62,7 +62,7 @@ MessageHandling LevelManager::HandleEndLevelMessage(Message *msg)
 {
   // add player position reset here
   ++m_currentLevel;
-  if (m_currentLevel >= m_levels.size())
+  if (m_currentLevel >= static_cast<int>(m_levels.size()))
   {
     --m_currentLevel;
     auto msg = MessageFactory::CreateEndGameMessage();
