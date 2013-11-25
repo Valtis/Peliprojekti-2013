@@ -17,7 +17,7 @@ Hud::~Hud()
 
 }
 
-std::vector<std::pair<int, SDL_Point>> Hud::GetTextureIdsANdPositions( int screenWidth, int screenHeight )
+std::vector<std::pair<int, SDL_Point>> Hud::GetTextureIdsAndPositions( int screenWidth, int screenHeight )
 {
   SDL_assert_release(m_player != nullptr);
   HudElements elements;

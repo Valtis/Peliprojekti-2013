@@ -20,6 +20,7 @@ class GraphicsComponent;
 class LocationComponent;
 class Message;
 class MessageProcessor;
+class Hud;
 class Renderer
 {
 public:
@@ -34,12 +35,7 @@ public:
 
   void AddEntity(int id);
   typedef const std::vector<std::unique_ptr<Entity>> EntityVector;
-  void Draw(
-    Camera *camera, 
-    EntityVector &entities, 
-    EntityVector &staticEntities, 
-    EntityVector &staticCollidables,
-    const std::deque<std::unique_ptr<Window>> &windows);
+  void Draw( Camera *camera, EntityVector &entities, EntityVector &staticEntities, EntityVector &staticCollidables, const std::deque<std::unique_ptr<Window>> &windows, Hud &hud);
 
 protected:
 private:
@@ -74,7 +70,7 @@ private:
   bool CullEntity(SDL_Point topleft, Sprite *sprite, LocationComponent *location);
   void SortEntitiesByDrawPriority(std::vector<SpriteData> &drawData);
   void PerformEntityDraw(std::vector<SpriteData> drawdata, SDL_Point point);
-
+  void DrawHud(Hud &hud);
 
   std::pair<int, int> m_windowSize; // width/height
 

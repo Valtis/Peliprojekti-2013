@@ -57,7 +57,9 @@ void Game::Draw()
       m_testDebugCamera.get(), m_levelManager.GetCurrentLevel()->GetEntities(),
       m_levelManager.GetCurrentLevel()->GetStaticEntities(),
       m_levelManager.GetCurrentLevel()->GetStaticCollidables(),
-      m_windowManager.GetWindows());
+      m_windowManager.GetWindows(),
+      m_hud
+      );
   }
 }
 

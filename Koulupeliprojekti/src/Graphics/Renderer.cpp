@@ -9,6 +9,7 @@
 // collision is for debugging - can be removed
 #include "Component/CollisionComponent.h"
 #include "UI/Window/Window.h"
+#include "UI/Hud.h"
 #include "Entity/Entity.h"
 
 #include <stdexcept>
@@ -60,17 +61,17 @@ void Renderer::LoadSprites(std::string datafilePath)
   m_spriteManager.Initialize(this, datafilePath);
 }
 
-void Renderer::Draw(
-  Camera *camera,
-  EntityVector &entities,
-  EntityVector &staticEntities,
-  EntityVector &staticCollidables,
-  const std::deque<std::unique_ptr<Window>> &windows )
+void Renderer::Draw( Camera *camera, EntityVector &entities, 
+                    EntityVector &staticEntities, 
+                    EntityVector &staticCollidables, 
+                    const std::deque<std::unique_ptr<Window>> &windows, 
+                    Hud &hud )
 {
   SDL_assert_release(camera != nullptr);
   ClearScreen();
 
   DrawEntities(camera, entities, staticEntities, staticCollidables);
+  DrawHud(hud);
   DrawWindows(windows);
   SDL_RenderPresent(m_renderer);
 }
@@ -166,10 +167,10 @@ void Renderer::PerformEntityDraw(std::vector<SpriteData> drawdata, SDL_Point top
     SDL_Rect locationOnScreen = data.sprite->GetLocation(); // need w/h-values. XY-values must be updated though
     locationOnScreen.x = data.location.x - topleft.x;
     locationOnScreen.y = data.location.y - topleft.y;
-    SDL_Rect loc = data.sprite->GetLocation();
+    SDL_Rect locationOnSpriteSheet = data.sprite->GetLocation();
     SDL_RendererFlip flip = data.flip ? SDL_FLIP_HORIZONTAL :  SDL_FLIP_NONE;
 
-    SDL_RenderCopyEx(m_renderer, texture, &loc, &locationOnScreen, 0, nullptr, flip);
+    SDL_RenderCopyEx(m_renderer, texture, &locationOnSpriteSheet, &locationOnScreen, 0, nullptr, flip);
   }
 }
 
@@ -221,4 +222,23 @@ MessageHandling Renderer::HandleTiledSpriteCreation(Message *message)
   auto msg = static_cast<NewTiledSpriteMessage *>(message);
   m_spriteManager.CreateTiledSprite(this, msg->GetBaseID(), msg->GetNewID(), msg->GetWidth(), msg->GetHeight());
   return MessageHandling::STOP_HANDLING;
+}
+
+void Renderer::DrawHud( Hud &hud )
+{
+  std::vector<std::pair<int, SDL_Point>> hudComponents = hud.GetTextureIdsAndPositions(m_windowSize.first, m_windowSize.second);
+  for (auto component : hudComponents)
+  {
+    auto sprite = m_spriteManager.GetSprite(component.first);
+    SDL_assert_release(sprite != nullptr);
+
+    SDL_Rect locationOnSpriteSheet =  sprite->GetLocation();
+    SDL_Rect locationOnScreen = locationOnSpriteSheet;
+    locationOnScreen.x = component.second.x;
+    locationOnScreen.y = component.second.y;
+    
+    SDL_RenderCopy(m_renderer, m_spriteManager.GetSpriteSheet(sprite->GetSpriteSheetID()), &locationOnSpriteSheet, &locationOnScreen);
+  }
+
+
 }

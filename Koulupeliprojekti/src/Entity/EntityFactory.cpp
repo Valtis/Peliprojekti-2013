@@ -99,6 +99,7 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int frame, int x, int y, int
   e->AddComponent(ComponentType::COLLISION, std::move(c));
   e->AddComponent(ComponentType::FACTION, std::move(f));
   e->AddComponent(ComponentType::PHYSICS,std::move(p));
+  e->AddComponent(ComponentType::HEALTH, std::move(h));
   return e;
 }
 
