@@ -146,6 +146,7 @@
     <None Include="data\sprites\spritesheets.dat" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="data\sprites\hud.bmp" />
     <Image Include="data\sprites\spritesheet.bmp" />
     <Image Include="data\sprites\tiilit.bmp" />
   </ItemGroup>

@@ -504,6 +504,9 @@
     <Image Include="data\sprites\tiilit.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="data\sprites\hud.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="data\fonts\FreeMono.otf">
