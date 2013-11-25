@@ -1,12 +1,14 @@
 #pragma once
 #include <vector>
-#include "Graphics/Camera/EntityTrackingCamera.h"
-#include "UI/InputManager.h"
-#include "Level/LevelGenerator.h"
-#include "Level/Level.h"
-#include <stdexcept>
+#include <memory>
 
+#include "Message/MessageProcessor.h"
+
+
+class EntityTrackingCamera;
 class Level;
+class InputManager;
+
 class LevelManager : public MessageProcessor
 {
 public:

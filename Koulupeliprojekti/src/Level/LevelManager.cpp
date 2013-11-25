@@ -1,4 +1,8 @@
 #include "Level/LevelManager.h"
+#include "Level/Level.h"
+
+#include "Message/MessageFactory.h"
+#include "Level/LevelGenerator.h"
 
 const int NO_ACTIVE_LEVEL = -1;
 LevelManager::LevelManager() : m_currentLevel(NO_ACTIVE_LEVEL)
