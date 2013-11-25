@@ -4,7 +4,7 @@
 #include "Entity/Entity.h"
 #include "Level/Level.h"
 #include "UI/Hud.h"
-class Entity;
+#include <ctime>
 
 #define PLAYER_FRAME 200002
 #define ENEMY_FRAME 200028
@@ -26,7 +26,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
   level->AddEntity(std::move(EntityFactory::CreateFlyingEnemy(ENEMY_FRAME, 220, 600, 0, e.get())));
   level->AddEntity(std::move(e));
  
-  std::vector<SDL_Rect> map = generateGrid(100, 100);
+  std::vector<SDL_Rect> map = GenerateGround(50);
   for (SDL_Rect r : map) {
     for (int i = r.x; i < (r.x + r.w); ++i) {
       for (int j = r.y; j < (r.y + r.h); ++j) {
@@ -43,7 +43,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
 
 
 
-std::vector<SDL_Rect> LevelGenerator::generateGrid(int a, int b)
+std::vector<SDL_Rect> LevelGenerator::GenerateBorders(int a, int b)
 {
   std::vector<SDL_Rect> p(4);
   SDL_Rect r;
@@ -58,7 +58,7 @@ std::vector<SDL_Rect> LevelGenerator::generateGrid(int a, int b)
   r1.x = a;
   r1.y = 0;
   r1.w = 1;
-  r1.h = b;
+  r1.h = b + 1;
 
   r2.x = 0;
   r2.y = b;
@@ -78,4 +78,68 @@ std::vector<SDL_Rect> LevelGenerator::generateGrid(int a, int b)
   return p;
 }
 
+std::vector<SDL_Rect> LevelGenerator::GenerateGround(int steps)
+{
+  srand(time(NULL));
+  int straight[2] = {1 , 0};
+  int changes[3][3][2] = {
+    {
+      {3, 2}, {1, 0}, {1, 0}
+    },
+    {
+      {1, -2}, {1, 0}, {1, 0}
+    },
+    {
+      {4, 3}, {1, 0}, {1, 0}
+    }
+  };
+  std::vector<SDL_Rect> p(0);
+  int startX = 1;
+  int startY = 40;
+  int widest = -10000;
+  int lowest = -10000;
 
+
+  for (int i = 0; i < steps; ++i) {
+
+    SDL_Rect a;
+    a.x = startX;
+    a.y = startY;
+    a.w = 1;
+    int r = rand() % 100;
+    if (r < 60) {
+      // lets go straight
+      for (int j = 0; j < 4; ++j) {
+        startX += straight[0];
+        startY += straight[1];
+        a.w += 1;
+      }
+      p.push_back(a);
+    } else {
+      auto& t = changes[rand()%3];
+      a.x = startX;
+      a.y = startY;
+      for (auto& t : changes[rand()%3]) {
+        startX += t[0];
+        startY += t[1];
+        a.x = startX;
+        a.y = startY;
+        a.w = + 1;
+        p.push_back(a);
+      }
+    }
+    if (startX > widest) {
+      widest = startX;
+    }
+    if (startY > lowest) {
+      lowest = startY;
+    }
+  }
+  lowest = lowest + 3;
+  for (auto& r : p) {
+    r.h = lowest - r.y;
+  }
+  std::vector<SDL_Rect> grid = GenerateBorders(widest, lowest);
+  p.insert( p.end(), grid.begin(), grid.end() );
+  return p;
+}

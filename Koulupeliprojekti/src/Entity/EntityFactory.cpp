@@ -114,8 +114,8 @@ std::unique_ptr<Entity> EntityFactory::CreateFlyingEnemy(int frame, int x, int y
   std::unique_ptr<FlyingAiComponent> ai(new FlyingAiComponent(target));
   std::unique_ptr<InputComponent> i(new InputComponent(-1));
 
-  g->AddFrame(0,frame);
-  g->AddFrame(0, 200032);
+  g->AddFrame(0,frame, 5);
+  g->AddFrame(0, 200032, 5);
   e->AddComponent(ComponentType::GRAPHICS, std::move(g));
 
   l->SetLocation(x,y);
