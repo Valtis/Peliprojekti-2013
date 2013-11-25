@@ -62,6 +62,7 @@
     <ClInclude Include="include\UI\Controller\Controller.h" />
     <ClInclude Include="include\UI\Controller\KeyboardController.h" />
     <ClInclude Include="include\UI\Controller\MouseController.h" />
+    <ClInclude Include="include\UI\Hud.h" />
     <ClInclude Include="include\UI\InputManager.h" />
     <ClInclude Include="include\UI\Window\Button.h" />
     <ClInclude Include="include\UI\Window\TextBox.h" />
@@ -120,6 +121,7 @@
     <ClCompile Include="src\UI\Controller\JoystickController.cpp" />
     <ClCompile Include="src\UI\Controller\KeyboardController.cpp" />
     <ClCompile Include="src\UI\Controller\MouseController.cpp" />
+    <ClCompile Include="src\UI\Hud.cpp" />
     <ClCompile Include="src\UI\InputManager.cpp" />
     <ClCompile Include="src\UI\Window\Button.cpp" />
     <ClCompile Include="src\UI\Window\TextBox.cpp" />
