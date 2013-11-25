@@ -4,9 +4,10 @@
   #define override
 #endif
 
-#include "UI/InputManager.h"
 #include "Level/LevelManager.h"
+#include "UI/InputManager.h"
 #include "UI/Window/WindowManager.h"
+#include "UI/Hud.h"
 #include "Graphics/Renderer.h"
 #include "Message/MessageProcessor.h"
 #include "Utility/Tick.h"
@@ -36,6 +37,7 @@ private:
   LevelManager m_levelManager;
   InputManager m_inputManager;
   WindowManager m_windowManager;
+  Hud m_hud;
   Renderer m_renderer;
   Tick m_gameTick;
   Tick m_drawTick;

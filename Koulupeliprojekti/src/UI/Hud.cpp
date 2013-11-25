@@ -33,6 +33,7 @@ std::vector<std::pair<int, SDL_Point>> Hud::GetTextureIdsANdPositions( int scree
 
   
   auto health = static_cast<HealthComponent *>(m_player->GetComponent(ComponentType::HEALTH));
+  SDL_assert_release(health != nullptr);
 
   point.y = hpStartPosHeight;
 

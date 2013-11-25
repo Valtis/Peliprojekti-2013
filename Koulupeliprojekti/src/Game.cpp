@@ -83,7 +83,7 @@ void Game::Initialize()
   std::unique_ptr<EntityTrackingCamera> camera(new EntityTrackingCamera);
 
   m_levelManager.SetParent(this);
-  m_levelManager.Initialize(m_inputManager, camera);
+  m_levelManager.Initialize(m_inputManager, camera, m_hud);
   
   m_testDebugCamera = std::move(camera);
 

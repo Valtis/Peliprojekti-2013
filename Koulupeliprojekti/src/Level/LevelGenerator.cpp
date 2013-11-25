@@ -3,6 +3,7 @@
 #include "Graphics/Camera/EntityTrackingCamera.h"
 #include "Entity/Entity.h"
 #include "Level/Level.h"
+#include "UI/Hud.h"
 class Entity;
 
 #define PLAYER_FRAME 200002
@@ -13,13 +14,14 @@ class Entity;
 LevelGenerator::LevelGenerator() {}
 LevelGenerator::~LevelGenerator() {}
 
-std::vector<std::unique_ptr<Level>> LevelGenerator::generateLevels(InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera)
+std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera, Hud &hud )
 {
   std::vector<std::unique_ptr<Level>> levels;
   std::unique_ptr<Level> level(new Level);
 
   std::unique_ptr<Entity> e = EntityFactory::CreatePlayer(PLAYER_FRAME, 60, 70, 35, m_inputManager);
   camera->SetEntity(e.get());
+  hud.SetPlayer(e.get());
 
   level->AddEntity(std::move(EntityFactory::CreateFlyingEnemy(ENEMY_FRAME, 220, 600, 0, e.get())));
   level->AddEntity(std::move(e));
