@@ -9,11 +9,8 @@ public:
   Hud();
   ~Hud();
 
-  std::vector<std::pair<int, SDL_Rect>> GetTextures();
+  std::vector<std::pair<int, SDL_Point>> GetTextureIdsANdPositions(int screenWidth, int screenHeight);
 
 private:
-  enum class HudTextures : int { NONE, HEALTH_COUNTER, LIFE_COUNTER };
-  std::map<HudTextures, int> m_textures;
   Entity *m_player;
-
 };
