@@ -80,6 +80,7 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int frame, int x, int y, int
   std::unique_ptr<FactionComponent> f(new FactionComponent(Faction::PLAYER));
   std::unique_ptr<PhysicsComponent> p(new PhysicsComponent);
   std::unique_ptr<InputComponent> i(new InputComponent);
+  std::unique_ptr<HealthComponent> h(new HealthComponent(4, 4, 3));
   i->RegisterInputHandler(input);
 
   g->AddFrame(0, frame, 20);
