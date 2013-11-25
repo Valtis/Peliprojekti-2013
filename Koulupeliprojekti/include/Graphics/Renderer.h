@@ -21,6 +21,7 @@ class LocationComponent;
 class Message;
 class MessageProcessor;
 class Hud;
+
 class Renderer
 {
 public:
@@ -65,7 +66,9 @@ private:
 
   void GetEntityData( const std::vector<std::unique_ptr<Entity>> & entities, SDL_Point topleft, std::vector<SpriteData> &retval );
 
-  void DebugDrawCollisionBoxes(const std::vector<std::unique_ptr<Entity>> &entities, SDL_Point topleft);
+  void DebugDrawCollisionBoxes(EntityVector  &entities, EntityVector &staticCollidables,  SDL_Point topleft);
+
+  void DrawSingleCollisionBox(const std::unique_ptr<Entity> &entity, SDL_Point &topleft );
 
   bool CullEntity(SDL_Point topleft, Sprite *sprite, LocationComponent *location);
   void SortEntitiesByDrawPriority(std::vector<SpriteData> &drawData);

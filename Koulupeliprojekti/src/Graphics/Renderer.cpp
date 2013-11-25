@@ -93,7 +93,7 @@ void Renderer::DrawEntities( Camera *camera, EntityVector &entities, EntityVecto
   SortEntitiesByDrawPriority(spriteIds);
   PerformEntityDraw(spriteIds, topleft);
 
-  //DebugDrawCollisionBoxes(entities, topleft);
+  DebugDrawCollisionBoxes(entities, staticCollidables, topleft);
 }
 
 std::vector<Renderer::SpriteData> Renderer::GetDataForDrawing( SDL_Point topleft, EntityVector &entities, EntityVector &staticEntities, EntityVector &staticCollidables )
@@ -194,28 +194,43 @@ void Renderer::DrawWindow(std::vector<std::pair<SDL_Rect, SDL_Texture *>> window
   }
 }
 
-void Renderer::DebugDrawCollisionBoxes( const std::vector<std::unique_ptr<Entity>> &entities, SDL_Point topleft )
+void Renderer::DebugDrawCollisionBoxes( EntityVector &entities, 
+                                       EntityVector &staticCollidables, 
+                                       SDL_Point topleft )
 {
   SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
-  for (auto &entity : entities)
+  for (const auto &entity : entities)
   {
+    DrawSingleCollisionBox(entity, topleft);
+  }
 
-    auto collisionComponent = static_cast<CollisionComponent *>(entity->GetComponent(ComponentType::COLLISION));
-    if (collisionComponent == nullptr)
-    {
-      return;
-    }
-    auto hitboxes =  collisionComponent->GetHitboxes(HitboxType::SOLID);
+  for (const auto &entity : staticCollidables)
+  {
+    DrawSingleCollisionBox(entity, topleft);
+  }
 
-    for (auto hitbox : hitboxes)
-    {
-      hitbox.x -= topleft.x;
-      hitbox.y -= topleft.y;
 
-      SDL_assert(SDL_RenderDrawRect(m_renderer, &hitbox) == 0);
-    }
+}
+
+
+void Renderer::DrawSingleCollisionBox( const std::unique_ptr<Entity> &entity, SDL_Point &topleft )
+{
+  auto collisionComponent = static_cast<CollisionComponent *>(entity->GetComponent(ComponentType::COLLISION));
+  if (collisionComponent == nullptr)
+  {
+    return;
+  }
+  auto hitboxes = collisionComponent->GetHitboxes(HitboxType::SOLID);
+
+  for (auto hitbox : hitboxes)
+  {
+    hitbox.x -= topleft.x;
+    hitbox.y -= topleft.y;
+
+    SDL_RenderDrawRect(m_renderer, &hitbox);
   }
 }
+
 
 MessageHandling Renderer::HandleTiledSpriteCreation(Message *message)
 {
