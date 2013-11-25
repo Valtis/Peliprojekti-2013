@@ -23,6 +23,7 @@
 #include "Level/LevelGenerator.h"
 #include <vector>
 
+
 struct MapRect {
     int x;
     int y;
@@ -40,7 +41,7 @@ class LevelGenerator {
     void CreateEnemy(int frame, int x, int y, int size, std::unique_ptr<Level>& level, std::unique_ptr<AiComponent>& ai, std::unique_ptr<InputComponent>& ci);
     void CreateBlock(int frame, int x, int y, int size, std::unique_ptr<Level>& level, bool hitbox);
     void CreateEndLevelEntity(int frame, int x, int y, int size, std::unique_ptr<Level>& level);
-    std::vector<MapRect> generateGrid(int a, int b);
+    std::vector<MapRect> generateBorders(int a, int b);
     void CreateCollisionBlock(int x, int y, int w, int h, std::unique_ptr<Level>& level);
-
+    std::vector<MapRect> generateGround(int steps);
 };

@@ -19,7 +19,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::generateLevels(InputManager&
   CreateEnemy(200028, 220, 600, 0, level, ai, ci);
 
 
-  std::vector<MapRect> map = generateGrid(100, 100);
+  std::vector<MapRect> map = generateGround(50);
   for (MapRect r : map) {
     for (int i = r.x; i < (r.x + r.w); ++i) {
       for (int j = r.y; j < (r.y + r.h); ++j) {
@@ -34,7 +34,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::generateLevels(InputManager&
   return levels;
 }
 
-std::vector<MapRect> LevelGenerator::generateGrid(int a, int b)
+std::vector<MapRect> LevelGenerator::generateBorders(int a, int b)
 {
   std::vector<MapRect> p(4);
   MapRect r;
@@ -49,7 +49,7 @@ std::vector<MapRect> LevelGenerator::generateGrid(int a, int b)
   r1.x = a;
   r1.y = 0;
   r1.w = 1;
-  r1.h = b;
+  r1.h = b+1;
 
   r2.x = 0;
   r2.y = b;
@@ -66,6 +66,71 @@ std::vector<MapRect> LevelGenerator::generateGrid(int a, int b)
   p.push_back(r2);
   p.push_back(r3);
 
+  return p;
+}
+std::vector<MapRect> LevelGenerator::generateGround(int steps)
+{
+  srand(time(NULL));
+  int straight[2] = {1 , 0};
+  int changes[3][3][2] = {
+    {
+      {3, 2}, {1, 0}, {1, 0}
+    },
+    {
+      {1, -2}, {1, 0}, {1, 0}
+    },
+    {
+      {4, 3}, {1, 0}, {1, 0}
+    }
+  };
+  std::vector<MapRect> p(0);
+  int startX = 1;
+  int startY = 40;
+  int widest = -10000;
+  int lowest = -10000;
+
+
+  for (int i = 0; i < steps; ++i) {
+
+     MapRect a;
+     a.x = startX;
+     a.y = startY;
+     a.w = 1;
+     int r = rand() % 100;
+     if (r < 60) {
+       // lets go straight
+       for (int j = 0; j < 4; ++j) {
+         startX += straight[0];
+         startY += straight[1];
+         a.w += 1;
+       }
+       p.push_back(a);
+     } else {
+       auto& t = changes[rand()%3];
+       a.x = startX;
+       a.y = startY;
+       for (auto& t : changes[rand()%3]) {
+         startX += t[0];
+         startY += t[1];
+         a.x = startX;
+         a.y = startY;
+         a.w = + 1;
+         p.push_back(a);
+       }
+     }
+     if (startX > widest) {
+       widest = startX;
+     }
+     if (startY > lowest) {
+       lowest = startY;
+     }
+  }
+  lowest = lowest + 3;
+  for (auto& r : p) {
+    r.h = lowest - r.y;
+  }
+  std::vector<MapRect> grid = generateBorders(widest, lowest);
+  p.insert( p.end(), grid.begin(), grid.end() );
   return p;
 }
 
