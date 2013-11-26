@@ -69,11 +69,6 @@ MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
   if (colMsg->GetHitType() != HitboxType::SOLID)
     return MessageHandling::PASS_FORWARD;
 
-  fprintf(stdout,"h: %d, v: %d, w: %d, h: %d, t: %d\n",
-      colMsg->GetHorizontalSide(),colMsg->GetVerticalSide(),
-      colMsg->GetPoint().x,colMsg->GetPoint().y,
-      colMsg->GetHitType());
-
   VelocityComponent *v =
     static_cast<VelocityComponent *>(GetOwner()->GetComponent(ComponentType::VELOCITY));
   if (v == nullptr)
@@ -98,12 +93,6 @@ MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
 
   if (m_collision[h_side] && m_collision[h_side])
     return handling;
-
-  double v_x = v->GetVelocityX();
-  double v_y = v->GetVelocityY();
-  double v_d = v_x + v_y;
-  v_x /= v_d;
-  v_y /= v_d;
 
   if (!m_collision[h_side])
   {
