@@ -71,34 +71,35 @@ MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
 
   FactionComponent *myFac =
     static_cast<FactionComponent *>(GetOwner()->GetComponent(ComponentType::FACTION));
+  MessageHandling handling = MessageHandling::STOP_HANDLING;
   for (auto collider : colliders)
   {
     FactionComponent *colFac = 
       static_cast<FactionComponent *>(collider->GetComponent(ComponentType::FACTION));
 
-    if (myFac != nullptr && colFac != nullptr &&
-        myFac->GetFaction() == colFac->GetFaction())
-      continue;
-
-    if (v == nullptr)
-      continue;
+    if (myFac == nullptr || colFac == nullptr ||
+        myFac->GetFaction() != colFac->GetFaction() ||
+        v == nullptr)
+      handling = MessageHandling::PASS_FORWARD;
   }
   CollisionSide h_side = colMsg->GetHorizontalSide();
-  CollisionSide v_side = colMsg->GetHorizontalSide();
+  CollisionSide v_side = colMsg->GetVerticalSide();
 
   if (m_collision[h_side] && m_collision[h_side])
-    return MessageHandling::STOP_HANDLING;
+    return handling;
+
+  if (h_side == CollisionSide::LEFT && !m_collision[h_side])
+    m_x += colMsg->GetPoint().x;
+  else if (h_side == CollisionSide::RIGHT && !m_collision[h_side])
+    m_x -= colMsg->GetPoint().x;
+
+  if (v_side == CollisionSide::UP && !m_collision[v_side])
+    m_y += colMsg->GetPoint().y;
+  else if (v_side == CollisionSide::DOWN && !m_collision[v_side])
+    m_y -= colMsg->GetPoint().y;
 
   m_collision[v_side] = true;
   m_collision[h_side] = true;
 
-  if (h_side == CollisionSide::LEFT)
-    m_x += colMsg->GetPoint().x;
-  else if (h_side == CollisionSide::RIGHT)
-    m_x -= colMsg->GetPoint().x;
-
-  if (v_side == CollisionSide::NONE)
-    m_y = colMsg->GetPoint().y;
-  
-  return MessageHandling::STOP_HANDLING;
+  return handling;
 }

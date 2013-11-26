@@ -50,6 +50,7 @@ set (
   "src/Sound/Music.cpp"
   "src/Sound/SoundEffects.cpp"
   "src/Sound/SoundManager.cpp"
+  "src/UI/Hud.cpp"
   "src/UI/InputManager.cpp"
   "src/UI/Controller/JoystickController.cpp"
   "src/UI/Controller/KeyboardController.cpp"

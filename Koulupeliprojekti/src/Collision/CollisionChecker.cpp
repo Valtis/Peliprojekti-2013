@@ -12,13 +12,7 @@ CollisionHit CheckHitboxes(const SDL_Rect &box1, const SDL_Rect &box2, const SDL
 
   bool isLeft = (box1.x == isect.x);
   bool isRight = (box1.x + box1.w == isect.x + isect.w);
-  if (isLeft && isRight)
-  {
-    // Intersect covers from both sides, find shortest way out
-    isLeft = (box1.x - box2.x > (box2.x + box2.w) - (box1.x + box1.w));
-    isRight = !isLeft;
-  }
-  else if (!isLeft && !isRight)
+  if (!isLeft && !isRight)
   {
     // Intersect is inside, find closest opposing side
     isLeft = (box1.x + box1.w - isect.x > isect.x - box1.x);
@@ -27,21 +21,21 @@ CollisionHit CheckHitboxes(const SDL_Rect &box1, const SDL_Rect &box2, const SDL
 
   bool isUp = (box1.y == isect.y);
   bool isDown = (box1.y + box1.h == isect.y + isect.h);
-  if (isUp && isDown)
-  {
-    // Intersect covers from both sides, find shortest way out
-    isUp = (box1.y - box2.y > (box2.y + box2.h) - (box1.y + box1.h));
-    isDown = !isUp;
-  }
-  else if (!isUp && !isDown)
+  if (!isUp && !isDown)
   {
     // Intersect is inside, find closest opposing side
     isUp = (box1.y + box1.h - isect.y > isect.y - box1.y);
     isDown = !isUp;
   }
   
-  hit.h_side = isLeft ? CollisionSide::LEFT : CollisionSide::RIGHT;
-  hit.v_side = isUp ? CollisionSide::UP : CollisionSide::DOWN;
+  if (isLeft && isRight)
+    hit.h_side = CollisionSide::NONE;
+  else
+    hit.h_side = isLeft ? CollisionSide::LEFT : CollisionSide::RIGHT;
+  if (isUp && isDown)
+    hit.v_side = CollisionSide::NONE;
+  else
+    hit.v_side = isUp ? CollisionSide::UP : CollisionSide::DOWN;
   hit.point.x = isect.w;
   hit.point.y = isect.h;
 
@@ -91,25 +85,32 @@ void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
         if (first_hit)
         {
           hit = new_hit;
+          first_hit = false;
         }
         else
         {
-          if (new_hit.h_side != hit.h_side)
+          if (new_hit.h_side != CollisionSide::NONE)
           {
-            hit.h_side = CollisionSide::NONE;
-          }
-          else if (hit.point.x < new_hit.point.x)
-          {
-            hit.point.x = new_hit.point.x;
+            if (new_hit.h_side != hit.h_side)
+            {
+              hit.h_side = CollisionSide::NONE;
+            }
+            else if (hit.point.x < new_hit.point.x)
+            {
+              hit.point.x = new_hit.point.x;
+            }
           }
 
-          if (new_hit.v_side != hit.v_side)
+          if (new_hit.v_side != CollisionSide::NONE)
           {
-            hit.v_side = CollisionSide::NONE;
-          }
-          else if (hit.point.y < new_hit.point.y)
-          {
-            hit.point.y = new_hit.point.y;
+            if (new_hit.v_side != hit.v_side)
+            {
+              hit.v_side = CollisionSide::NONE;
+            }
+            else if (hit.point.y < new_hit.point.y)
+            {
+              hit.point.y = new_hit.point.y;
+            }
           }
         }
         hit.entities.push_back(target_entity.get());
