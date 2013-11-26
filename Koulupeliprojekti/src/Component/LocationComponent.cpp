@@ -5,6 +5,7 @@
 #include "Component/VelocityComponent.h"
 #include "Message/CollisionMessage.h"
 #include "Component/FactionComponent.h"
+#include "Component/CollisionComponent.h"
 
 LocationComponent::LocationComponent() : m_x(0), m_y(0), m_direction(Direction::RIGHT)
 {
@@ -65,6 +66,9 @@ bool LocationComponent::CanIJump()
 MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
 {
   CollisionMessage *colMsg = static_cast<CollisionMessage *>(msg);
+//  if (colMsg->GetHitType() != HitboxType::SOLID)
+//    return MessageHandling::PASS_FORWARD;
+
   VelocityComponent *v =
     static_cast<VelocityComponent *>(GetOwner()->GetComponent(ComponentType::VELOCITY));
   std::vector<Entity *> colliders = colMsg->GetEntities();
@@ -88,15 +92,21 @@ MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
   if (m_collision[h_side] && m_collision[h_side])
     return handling;
 
-  if (h_side == CollisionSide::LEFT && !m_collision[h_side])
-    m_x += colMsg->GetPoint().x;
-  else if (h_side == CollisionSide::RIGHT && !m_collision[h_side])
-    m_x -= colMsg->GetPoint().x;
+  if (!m_collision[h_side])
+  {
+    if (h_side == CollisionSide::LEFT)
+      m_x += colMsg->GetPoint().x;
+    else if (h_side == CollisionSide::RIGHT)
+      m_x -= colMsg->GetPoint().x;
+  }
 
-  if (v_side == CollisionSide::UP && !m_collision[v_side])
-    m_y += colMsg->GetPoint().y;
-  else if (v_side == CollisionSide::DOWN && !m_collision[v_side])
-    m_y -= colMsg->GetPoint().y;
+  if (!m_collision[v_side])
+  {
+    if (v_side == CollisionSide::UP)
+      m_y += colMsg->GetPoint().y;
+    else if (v_side == CollisionSide::DOWN)
+      m_y -= colMsg->GetPoint().y;
+  }
 
   m_collision[v_side] = true;
   m_collision[h_side] = true;

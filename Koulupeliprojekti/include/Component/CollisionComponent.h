@@ -3,7 +3,7 @@
 #include "Component/Component.h"
 #include <SDL.h>
 
-enum class HitboxType : int { SOLID, TRIGGER };
+enum class HitboxType : int { SOLID = 0, TRIGGER };
 
 class CollisionComponent : public Component
 {

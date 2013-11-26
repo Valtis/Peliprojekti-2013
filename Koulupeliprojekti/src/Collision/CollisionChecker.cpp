@@ -15,7 +15,7 @@ CollisionHit CheckHitboxes(const SDL_Rect &box1, const SDL_Rect &box2, const SDL
   if (!isLeft && !isRight)
   {
     // Intersect is inside, find closest opposing side
-    isLeft = (box1.x + box1.w - isect.x > isect.x - box1.x);
+    isLeft = (box1.x + box1.w - isect.x > isect.x + isect.w - box1.x);
     isRight = !isLeft;
   }
 
@@ -24,18 +24,20 @@ CollisionHit CheckHitboxes(const SDL_Rect &box1, const SDL_Rect &box2, const SDL
   if (!isUp && !isDown)
   {
     // Intersect is inside, find closest opposing side
-    isUp = (box1.y + box1.h - isect.y > isect.y - box1.y);
+    isUp = (box1.y + box1.h - isect.y > isect.y + isect.h - box1.y);
     isDown = !isUp;
   }
-  
+
   if (isLeft && isRight)
     hit.h_side = CollisionSide::NONE;
   else
     hit.h_side = isLeft ? CollisionSide::LEFT : CollisionSide::RIGHT;
+  
   if (isUp && isDown)
     hit.v_side = CollisionSide::NONE;
   else
     hit.v_side = isUp ? CollisionSide::UP : CollisionSide::DOWN;
+
   hit.point.x = isect.w;
   hit.point.y = isect.h;
 
@@ -44,7 +46,6 @@ CollisionHit CheckHitboxes(const SDL_Rect &box1, const SDL_Rect &box2, const SDL
 
 void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
                                 const std::unique_ptr<Entity> &target_entity,
-                                HitboxType target_hitbox_type,
                                 CollisionHit &hit)
 {
   bool first_hit =
@@ -67,7 +68,7 @@ void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
   std::vector<SDL_Rect> cc_hitboxes = cc->GetHitboxes(HitboxType::SOLID);
   if (cc_hitboxes.size() == 0)
     cc_hitboxes = cc->GetHitboxes(HitboxType::TRIGGER);
-  std::vector<SDL_Rect> cc2_hitboxes = cc2->GetHitboxes(target_hitbox_type);
+  std::vector<SDL_Rect> cc2_hitboxes = cc2->GetHitboxes(hit.hit_type);
   if (cc_hitboxes.size() == 0 || cc2_hitboxes.size() == 0)
     return;
   
@@ -131,28 +132,33 @@ void Collision::CheckCollisions(const std::vector<std::unique_ptr<Entity>> &enti
     solid_hit.point.y = 0;
     solid_hit.hit_type = HitboxType::SOLID;
 
-    trigger_hit = solid_hit;
+    trigger_hit.h_side = CollisionSide::NONE;
+    trigger_hit.v_side = CollisionSide::NONE;
+    trigger_hit.point.x = 0;
+    trigger_hit.point.y = 0;
     trigger_hit.hit_type = HitboxType::TRIGGER;
 
     for (auto e2 = entities.begin(); e2 != entities.end(); e2++)
     {
-      CheckEntityEntityCollision((*e),(*e2),HitboxType::SOLID,solid_hit);
-      CheckEntityEntityCollision((*e),(*e2),HitboxType::TRIGGER,trigger_hit);
+      CheckEntityEntityCollision((*e),(*e2),solid_hit);
+      CheckEntityEntityCollision((*e),(*e2),trigger_hit);
     }
     for (auto s_e = staticEntities.begin(); s_e != staticEntities.end(); s_e++)
-      CheckEntityEntityCollision((*e),(*s_e),HitboxType::SOLID,solid_hit);
+      CheckEntityEntityCollision((*e),(*s_e),solid_hit);
 
     if (solid_hit.h_side != CollisionSide::NONE ||
         solid_hit.v_side != CollisionSide::NONE)
     {
-      auto msg = MessageFactory::CreateCollisionMessage(solid_hit);
+      CollisionHit *hit_ptr = new CollisionHit(solid_hit);
+      auto msg = MessageFactory::CreateCollisionMessage(hit_ptr);
       (*e)->SendMessage(msg.get());
     }
 
     if (trigger_hit.h_side != CollisionSide::NONE ||
         trigger_hit.v_side != CollisionSide::NONE)
     {
-      auto msg = MessageFactory::CreateCollisionMessage(trigger_hit);
+      CollisionHit *hit_ptr = new CollisionHit(trigger_hit);
+      auto msg = MessageFactory::CreateCollisionMessage(hit_ptr);
       (*e)->SendMessage(msg.get());
     }
   }

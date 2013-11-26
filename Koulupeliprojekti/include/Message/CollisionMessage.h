@@ -17,15 +17,17 @@ typedef struct _CollisionHit
 class CollisionMessage : public Message
 {
 public:
-  CollisionMessage(CollisionHit &hit) : m_hit(hit) { }
+  CollisionMessage(CollisionHit *hit) : m_hit(hit) { }
+  ~CollisionMessage() { delete m_hit; }
+
   MessageType GetType() const override { return MessageType::COLLISION; }
 
-  std::vector<Entity *> GetEntities() const { return m_hit.entities; }
-  CollisionSide GetHorizontalSide() const { return m_hit.h_side; }
-  CollisionSide GetVerticalSide() const { return m_hit.v_side; }
-  SDL_Point GetPoint() const { return m_hit.point; }
-  HitboxType GetHitType() const { return m_hit.hit_type; }
+  std::vector<Entity *> GetEntities() const { return m_hit->entities; }
+  CollisionSide GetHorizontalSide() const { return m_hit->h_side; }
+  CollisionSide GetVerticalSide() const { return m_hit->v_side; }
+  SDL_Point GetPoint() const { return m_hit->point; }
+  HitboxType GetHitType() const { return m_hit->hit_type; }
 
 private:
-  const CollisionHit m_hit;
+  const CollisionHit *m_hit;
 };

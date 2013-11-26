@@ -35,7 +35,7 @@ std::unique_ptr<Message> MessageFactory::CreateSetVelocityMessage(double vel, Ve
   }
 }
 
-std::unique_ptr<Message> MessageFactory::CreateCollisionMessage(CollisionHit &hit)
+std::unique_ptr<Message> MessageFactory::CreateCollisionMessage(CollisionHit *hit)
 {
   return std::unique_ptr<Message>(new CollisionMessage(hit));
 }
