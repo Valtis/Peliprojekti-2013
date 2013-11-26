@@ -48,8 +48,7 @@ CollisionHit CheckHitboxes(const SDL_Rect &box1, const SDL_Rect &box2, const SDL
 
 void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
                                 const std::unique_ptr<Entity> &target_entity,
-                                CollisionHit &hit,
-                                bool &first_hit)
+                                CollisionHit &hit, bool &first_hit)
 {
   if (entity == target_entity)
     return;
@@ -70,6 +69,7 @@ void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
   if (cc_hitboxes.size() == 0 || cc2_hitboxes.size() == 0)
     return;
   
+  bool hit_detected = false;
   for (SDL_Rect box1 : cc_hitboxes)
   {
     for (SDL_Rect box2 : cc2_hitboxes)
@@ -92,6 +92,7 @@ void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
                 (new_hit.h_side == hit.h_side ||
                  hit.h_side == CollisionSide::NONE))
             {
+              hit.h_side = new_hit.h_side;
               hit.point.x = new_hit.point.x;
             }
             else if (new_hit.h_side != hit.h_side)
@@ -100,13 +101,14 @@ void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
               hit.point.x = 0;
             }
           }
-
+            
           if (new_hit.v_side != CollisionSide::NONE)
           {
             if (hit.point.y < new_hit.point.y &&
                 (new_hit.v_side == hit.v_side || 
                  hit.v_side == CollisionSide::NONE))
             {
+              hit.v_side = new_hit.v_side;
               hit.point.y = new_hit.point.y;
             }
             else if (new_hit.v_side != hit.v_side)
@@ -116,10 +118,12 @@ void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
             }
           }
         }
-        hit.entities.push_back(target_entity.get());
+        hit_detected = true;
       }
     }
   }
+  if (hit_detected)
+    hit.entities.push_back(target_entity.get());
 }
 
 void Collision::CheckCollisions(const std::vector<std::unique_ptr<Entity>> &entities,
