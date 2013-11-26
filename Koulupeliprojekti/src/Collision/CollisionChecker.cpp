@@ -28,31 +28,29 @@ CollisionHit CheckHitboxes(const SDL_Rect &box1, const SDL_Rect &box2, const SDL
     isDown = !isUp;
   }
 
-  if (isLeft && isRight)
-    hit.h_side = CollisionSide::NONE;
-  else
+  hit.h_side = CollisionSide::NONE;
+  hit.v_side = CollisionSide::NONE;
+  hit.point.x = 0;
+  hit.point.y = 0;
+  if (isect.w < isect.h && isLeft != isRight)
+  {
     hit.h_side = isLeft ? CollisionSide::LEFT : CollisionSide::RIGHT;
-  
-  if (isUp && isDown)
-    hit.v_side = CollisionSide::NONE;
-  else
+    hit.point.x = isect.w;
+  }
+  else if (isUp != isDown)
+  {
     hit.v_side = isUp ? CollisionSide::UP : CollisionSide::DOWN;
-
-  hit.point.x = isect.w;
-  hit.point.y = isect.h;
+    hit.point.y = isect.h;
+  }
 
   return hit;
 }
 
 void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
                                 const std::unique_ptr<Entity> &target_entity,
-                                CollisionHit &hit)
+                                CollisionHit &hit,
+                                bool &first_hit)
 {
-  bool first_hit =
-    (hit.h_side == CollisionSide::NONE &&
-     hit.v_side == CollisionSide::NONE &&
-     hit.point.x == 0 && hit.point.y == 0);
-
   if (entity == target_entity)
     return;
 
@@ -72,9 +70,6 @@ void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
   if (cc_hitboxes.size() == 0 || cc2_hitboxes.size() == 0)
     return;
   
-  double x = vc->GetVelocityX();
-  double y = vc->GetVelocityY();
-
   for (SDL_Rect box1 : cc_hitboxes)
   {
     for (SDL_Rect box2 : cc2_hitboxes)
@@ -83,6 +78,7 @@ void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
       if (SDL_IntersectRect(&box1,&box2,&isect))
       {
         CollisionHit new_hit = CheckHitboxes(box1,box2,isect);
+        new_hit.hit_type = hit.hit_type;
         if (first_hit)
         {
           hit = new_hit;
@@ -92,25 +88,31 @@ void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
         {
           if (new_hit.h_side != CollisionSide::NONE)
           {
-            if (new_hit.h_side != hit.h_side)
-            {
-              hit.h_side = CollisionSide::NONE;
-            }
-            else if (hit.point.x < new_hit.point.x)
+            if (hit.point.x < new_hit.point.x &&
+                (new_hit.h_side == hit.h_side ||
+                 hit.h_side == CollisionSide::NONE))
             {
               hit.point.x = new_hit.point.x;
+            }
+            else if (new_hit.h_side != hit.h_side)
+            {
+              hit.h_side = CollisionSide::NONE;
+              hit.point.x = 0;
             }
           }
 
           if (new_hit.v_side != CollisionSide::NONE)
           {
-            if (new_hit.v_side != hit.v_side)
-            {
-              hit.v_side = CollisionSide::NONE;
-            }
-            else if (hit.point.y < new_hit.point.y)
+            if (hit.point.y < new_hit.point.y &&
+                (new_hit.v_side == hit.v_side || 
+                 hit.v_side == CollisionSide::NONE))
             {
               hit.point.y = new_hit.point.y;
+            }
+            else if (new_hit.v_side != hit.v_side)
+            {
+              hit.v_side = CollisionSide::NONE;
+              hit.point.y = 0;
             }
           }
         }
@@ -137,14 +139,15 @@ void Collision::CheckCollisions(const std::vector<std::unique_ptr<Entity>> &enti
     trigger_hit.point.x = 0;
     trigger_hit.point.y = 0;
     trigger_hit.hit_type = HitboxType::TRIGGER;
-
+    
+    bool first_hit = true;
     for (auto e2 = entities.begin(); e2 != entities.end(); e2++)
     {
-      CheckEntityEntityCollision((*e),(*e2),solid_hit);
-      CheckEntityEntityCollision((*e),(*e2),trigger_hit);
+      CheckEntityEntityCollision((*e),(*e2),solid_hit,first_hit);
+      CheckEntityEntityCollision((*e),(*e2),trigger_hit,first_hit);
     }
     for (auto s_e = staticEntities.begin(); s_e != staticEntities.end(); s_e++)
-      CheckEntityEntityCollision((*e),(*s_e),solid_hit);
+      CheckEntityEntityCollision((*e),(*s_e),solid_hit,first_hit);
 
     if (solid_hit.h_side != CollisionSide::NONE ||
         solid_hit.v_side != CollisionSide::NONE)

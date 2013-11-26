@@ -66,11 +66,19 @@ bool LocationComponent::CanIJump()
 MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
 {
   CollisionMessage *colMsg = static_cast<CollisionMessage *>(msg);
-//  if (colMsg->GetHitType() != HitboxType::SOLID)
-//    return MessageHandling::PASS_FORWARD;
+  if (colMsg->GetHitType() != HitboxType::SOLID)
+    return MessageHandling::PASS_FORWARD;
+
+  fprintf(stdout,"h: %d, v: %d, w: %d, h: %d, t: %d\n",
+      colMsg->GetHorizontalSide(),colMsg->GetVerticalSide(),
+      colMsg->GetPoint().x,colMsg->GetPoint().y,
+      colMsg->GetHitType());
 
   VelocityComponent *v =
     static_cast<VelocityComponent *>(GetOwner()->GetComponent(ComponentType::VELOCITY));
+  if (v == nullptr)
+    return MessageHandling::PASS_FORWARD;
+  
   std::vector<Entity *> colliders = colMsg->GetEntities();
 
   FactionComponent *myFac =
@@ -82,8 +90,7 @@ MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
       static_cast<FactionComponent *>(collider->GetComponent(ComponentType::FACTION));
 
     if (myFac == nullptr || colFac == nullptr ||
-        myFac->GetFaction() != colFac->GetFaction() ||
-        v == nullptr)
+        myFac->GetFaction() != colFac->GetFaction())
       handling = MessageHandling::PASS_FORWARD;
   }
   CollisionSide h_side = colMsg->GetHorizontalSide();
@@ -91,6 +98,12 @@ MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
 
   if (m_collision[h_side] && m_collision[h_side])
     return handling;
+
+  double v_x = v->GetVelocityX();
+  double v_y = v->GetVelocityY();
+  double v_d = v_x + v_y;
+  v_x /= v_d;
+  v_y /= v_d;
 
   if (!m_collision[h_side])
   {
