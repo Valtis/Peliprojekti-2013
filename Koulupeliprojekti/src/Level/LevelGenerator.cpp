@@ -81,17 +81,10 @@ std::vector<SDL_Rect> LevelGenerator::GenerateBorders(int a, int b)
 std::vector<SDL_Rect> LevelGenerator::GenerateGround(int steps)
 {
   srand(time(NULL));
-  int straight[2] = {1 , 0};
-  int changes[3][3][2] = {
-    {
-      {3, 2}, {1, 0}, {1, 0}
-    },
-    {
-      {1, -2}, {1, 0}, {1, 0}
-    },
-    {
-      {4, 3}, {1, 0}, {1, 0}
-    }
+  int changes[3][2] = {
+    {1, -2},
+    {2, 3},
+    {3, 4}
   };
   std::vector<SDL_Rect> p(0);
   int startX = 1;
@@ -99,34 +92,28 @@ std::vector<SDL_Rect> LevelGenerator::GenerateGround(int steps)
   int widest = -10000;
   int lowest = -10000;
 
-
+  SDL_Rect a;
+  a.x = startX;
+  a.y = startY;
+  a.w = 1;
   for (int i = 0; i < steps; ++i) {
-
-    SDL_Rect a;
-    a.x = startX;
-    a.y = startY;
-    a.w = 1;
+    
     int r = rand() % 100;
-    if (r < 60) {
+    if (r < 70) {
       // lets go straight
-      for (int j = 0; j < 4; ++j) {
-        startX += straight[0];
-        startY += straight[1];
-        a.w += 1;
-      }
-      p.push_back(a);
+      a.w += 3;
+      startX += 3;
     } else {
+      // push old block for return
+      p.push_back(a);
+      // we go up or down
       auto& t = changes[rand()%3];
+      startX += t[0];
+      startY += t[1];
+      // we start a new block here
       a.x = startX;
       a.y = startY;
-      for (auto& t : changes[rand()%3]) {
-        startX += t[0];
-        startY += t[1];
-        a.x = startX;
-        a.y = startY;
-        a.w = + 1;
-        p.push_back(a);
-      }
+      a.w = 1;
     }
     if (startX > widest) {
       widest = startX;
@@ -135,6 +122,9 @@ std::vector<SDL_Rect> LevelGenerator::GenerateGround(int steps)
       lowest = startY;
     }
   }
+  // The final may or may not be pushed to return
+  p.push_back(a);
+
   lowest = lowest + 3;
   for (auto& r : p) {
     r.h = lowest - r.y;
