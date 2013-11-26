@@ -74,12 +74,10 @@ MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
   if (v == nullptr)
     return MessageHandling::PASS_FORWARD;
   
-  std::vector<Entity *> colliders = colMsg->GetEntities();
-
   FactionComponent *myFac =
     static_cast<FactionComponent *>(GetOwner()->GetComponent(ComponentType::FACTION));
   MessageHandling handling = MessageHandling::STOP_HANDLING;
-  for (auto collider : colliders)
+  for (auto collider : colMsg->GetEntities())
   {
     FactionComponent *colFac = 
       static_cast<FactionComponent *>(collider->GetComponent(ComponentType::FACTION));

@@ -3,10 +3,9 @@
 bool MessageProcessor::SendMessage(Message *message)
 {
   auto handlers =  m_messageHandlers[message->GetType()];
-
   if (handlers.empty())
   {
-    if (m_parent == false)
+    if (m_parent == nullptr)
     {
       return false;
     }

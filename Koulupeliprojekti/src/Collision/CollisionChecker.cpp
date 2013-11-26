@@ -144,14 +144,14 @@ void Collision::CheckCollisions(const std::vector<std::unique_ptr<Entity>> &enti
     trigger_hit.point.y = 0;
     trigger_hit.hit_type = HitboxType::TRIGGER;
     
-    bool first_hit = true;
+    bool first_hit_s = true, first_hit_t = true;
     for (auto e2 = entities.begin(); e2 != entities.end(); e2++)
     {
-      CheckEntityEntityCollision((*e),(*e2),solid_hit,first_hit);
-      CheckEntityEntityCollision((*e),(*e2),trigger_hit,first_hit);
+      CheckEntityEntityCollision((*e),(*e2),solid_hit,first_hit_s);
+      CheckEntityEntityCollision((*e),(*e2),trigger_hit,first_hit_t);
     }
     for (auto s_e = staticEntities.begin(); s_e != staticEntities.end(); s_e++)
-      CheckEntityEntityCollision((*e),(*s_e),solid_hit,first_hit);
+      CheckEntityEntityCollision((*e),(*s_e),solid_hit,first_hit_s);
 
     if (solid_hit.h_side != CollisionSide::NONE ||
         solid_hit.v_side != CollisionSide::NONE)

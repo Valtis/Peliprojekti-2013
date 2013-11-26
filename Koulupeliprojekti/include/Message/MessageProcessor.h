@@ -18,7 +18,7 @@ public:
   void SetParent(MessageProcessor *parent) { m_parent = parent; }
   
 protected:
-  MessageProcessor() { }
+  MessageProcessor() : m_parent(nullptr) { }
 
 
 private:

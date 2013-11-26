@@ -46,6 +46,7 @@ MessageHandling BulletScriptComponent::HandleCollisionMessage(Message *msg)
   std::vector<Entity *> targets;
   for (auto entity : colMsg->GetEntities())
   {
+
     auto otherFaction = static_cast<FactionComponent *>(entity->GetComponent(ComponentType::FACTION));
 
     if (myFaction == nullptr || otherFaction == nullptr ||

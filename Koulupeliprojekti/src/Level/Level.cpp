@@ -89,7 +89,8 @@ MessageHandling Level::HandleEntityTermination(Message *msg)
 {
   if (msg->GetType() != MessageType::TERMINATE_ENTITY)
   {
-    LoggerManager::GetLog(LEVEL_LOG).AddLine(LogLevel::WARNING, "Invalid message type received in Level::HandleEntityTermination() - ignoring");
+    LoggerManager::GetLog(LEVEL_LOG).AddLine(LogLevel::WARNING,
+        "Invalid message type received in Level::HandleEntityTermination() - ignoring");
     return MessageHandling::PASS_FORWARD;
   }
 
