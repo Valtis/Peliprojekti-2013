@@ -66,8 +66,8 @@ SDL_Rect CollisionComponent::TransformHitbox(const SDL_Rect box)
   
   rect.w = box.w;
   rect.h = box.h;
-  rect.x = box.x + static_cast<int>(loc->GetX() + 0.5);
-  rect.y = box.y + static_cast<int>(loc->GetY() + 0.5);
+  rect.x = box.x + static_cast<int>(loc->GetX());
+  rect.y = box.y + static_cast<int>(loc->GetY());
 
   return rect;
 }

@@ -147,6 +147,9 @@ void Collision::CheckCollisions(const std::vector<std::unique_ptr<Entity>> &enti
     {
       auto msg = MessageFactory::CreateCollisionMessage(solid_hit);
       (*e)->SendMessage(msg.get());
+      fprintf(stdout,"x: %d, y: %d\nh: %d, v: %d\n\n",
+          solid_hit.point.x,solid_hit.point.y,
+          solid_hit.h_side,solid_hit.v_side);
     }
 
     if (trigger_hit.h_side != CollisionSide::NONE ||
