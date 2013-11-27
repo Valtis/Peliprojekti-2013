@@ -19,16 +19,17 @@ public:
   {
     AddFrame(animationID, spriteID, 1);
   }
-  //void SetFrames(int animationID, std::vector<int> animationFrames);
+
   int GetSpriteID();
   void Update(double m_ticksPassed) override;
 
   bool IsVisible() { return m_visible; }
-
+protected:
+  void OnAttatchingToEntity() override;
 
 private:
   void UpdateAnimation( double ticksPassed );
-
+  MessageHandling HandleSetGraphicsVisibilityMessage(Message *msg);
   struct AnimationData
   {
     int m_spriteID;

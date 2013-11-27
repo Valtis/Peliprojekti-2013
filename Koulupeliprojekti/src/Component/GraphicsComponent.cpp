@@ -1,5 +1,7 @@
 #include "Component/GraphicsComponent.h"
+#include "Entity/Entity.h"
 #include "Utility/LoggerManager.h"
+#include "Message/SetGraphicsVisibilityMessage.h"
 const int NO_VALUE = -1;
 
 GraphicsComponent::GraphicsComponent() : m_ticksPassed(0), m_animationID(NO_VALUE), m_frameID(NO_VALUE), m_visible(true)
@@ -11,8 +13,6 @@ GraphicsComponent::~GraphicsComponent()
 {
 
 }
-
-
 
 void GraphicsComponent::Update(double ticksPassed)
 {
@@ -71,20 +71,6 @@ void GraphicsComponent::AddFrame(int animationID, int spriteID, double frameDela
     m_frameID = 0;
   }
 }
-/*
-void GraphicsComponent::SetFrames(int animationID, std::vector<int> animationFrames)
-{
-  m_animations[animationID] = animationFrames;
-  if (m_animationID == NO_VALUE)
-  {
-    m_animationID = animationID;
-  }
-
-  if (m_frameID == NO_VALUE)
-  {
-    m_frameID = 0;
-  }
-}*/
 
 int GraphicsComponent::GetSpriteID()
 {
@@ -121,4 +107,20 @@ void GraphicsComponent::PreviousFrame()
   {
     m_frameID = m_animations[m_animationID].size() - 1;
   }
+}
+
+void GraphicsComponent::OnAttatchingToEntity()
+{
+  GetOwner()->RegisterMessageHandler(MessageType::SET_GRAPHICS_VISIBILITY, Priority::NORMAL, 
+    [=](Message *msg)
+    {
+      return this->HandleSetGraphicsVisibilityMessage(msg);
+    });
+}
+
+MessageHandling GraphicsComponent::HandleSetGraphicsVisibilityMessage(Message *msg)
+{
+  auto visMsg = static_cast<SetGraphicsVisibilityMessage *>(msg);
+  m_visible = visMsg->GetVisibility();
+  return MessageHandling::STOP_HANDLING;
 }
