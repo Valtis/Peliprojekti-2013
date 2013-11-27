@@ -13,12 +13,14 @@
 #include "Component/PhysicsComponent.h"
 #include "Component/Scripts/BulletScriptComponent.h"
 #include "Component/Scripts/EndLevelScriptComponent.h"
+#include "Component/Scripts/DamageColliderScript.h"
+#include "Component/Scripts/BlinkScript.h"
+#include "Component/Scripts/TempInvulnerabilityScript.h"
 #include <string>
 #include <SDL.h>
 #include <stdexcept>
 #include <sstream>
 
-// todo - clean up
 void CreateBullet(Entity *e, SpawnEntityMessage *msg)
 {
   Entity *spawner = msg->Spawner();
@@ -60,6 +62,7 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   std::unique_ptr<FactionComponent> faction(new FactionComponent(bulletFaction));
   std::unique_ptr<HealthComponent> health(new HealthComponent(1, 1, 0));
   std::unique_ptr<BulletScriptComponent> script(new BulletScriptComponent);
+ ;
 
   e->AddComponent(ComponentType::COLLISION, std::move(collision));
   e->AddComponent(ComponentType::GRAPHICS, std::move(graphics));
@@ -68,6 +71,7 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   e->AddComponent(ComponentType::FACTION, std::move(faction));
   e->AddComponent(ComponentType::HEALTH, std::move(health));
   e->AddScript(std::move(script));
+  e->AddScript(std::unique_ptr<DamageColliderScript>(new DamageColliderScript));
 }
 
 std::unique_ptr<Entity> EntityFactory::CreatePlayer(int frame, int x, int y, int size, InputManager &input)
@@ -100,6 +104,9 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int frame, int x, int y, int
   e->AddComponent(ComponentType::FACTION, std::move(f));
   e->AddComponent(ComponentType::PHYSICS,std::move(p));
   e->AddComponent(ComponentType::HEALTH, std::move(h));
+  e->AddScript(std::unique_ptr<Component>(new TempInvulnerabilityScript(100)));
+  e->AddScript(std::unique_ptr<Component>(new BlinkScript(10)));
+
   return e;
 }
 
@@ -113,6 +120,8 @@ std::unique_ptr<Entity> EntityFactory::CreateFlyingEnemy(int frame, int x, int y
   std::unique_ptr<FactionComponent> f(new FactionComponent(Faction::ENEMY));
   std::unique_ptr<FlyingAiComponent> ai(new FlyingAiComponent(target));
   std::unique_ptr<InputComponent> i(new InputComponent(-1));
+
+  e->AddComponent(ComponentType::HEALTH, std::unique_ptr<Component>(new HealthComponent(3, 3, 0)));
 
   g->AddFrame(0,frame, 5);
   g->AddFrame(0, 200032, 5);
@@ -131,6 +140,7 @@ std::unique_ptr<Entity> EntityFactory::CreateFlyingEnemy(int frame, int x, int y
   e->AddComponent(ComponentType::COLLISION, std::move(c));
 
   e->AddComponent(ComponentType::FACTION, std::move(f));
+  e->AddScript(std::unique_ptr<DamageColliderScript>(new DamageColliderScript));
   return e;
 }
 
