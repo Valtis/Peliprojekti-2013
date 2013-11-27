@@ -23,6 +23,7 @@
     <ClInclude Include="include\Component\InputComponent.h" />
     <ClInclude Include="include\Component\LocationComponent.h" />
     <ClInclude Include="include\Component\PhysicsComponent.h" />
+    <ClInclude Include="include\Component\Scripts\BlinkScript.h" />
     <ClInclude Include="include\Component\Scripts\BulletScriptComponent.h" />
     <ClInclude Include="include\Component\Scripts\EndLevelScriptComponent.h" />
     <ClInclude Include="include\Component\Scripts\TempInvulnerabilityScript.h" />
@@ -92,6 +93,7 @@
     <ClCompile Include="src\Component\InputComponent.cpp" />
     <ClCompile Include="src\Component\LocationComponent.cpp" />
     <ClCompile Include="src\Component\PhysicsComponent.cpp" />
+    <ClCompile Include="src\Component\Scripts\BlinkScript.cpp" />
     <ClCompile Include="src\Component\Scripts\BulletScriptComponent.cpp" />
     <ClCompile Include="src\Component\Scripts\EndLevelScriptComponent.cpp" />
     <ClCompile Include="src\Component\Scripts\TempInvulnerabilityScript.cpp" />

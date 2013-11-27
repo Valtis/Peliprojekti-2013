@@ -303,6 +303,9 @@
     <ClInclude Include="include\Component\Scripts\TempInvulnerabilityScript.h">
       <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="include\Component\Scripts\BlinkScript.h">
+      <Filter>Header Files\Component\Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -474,6 +477,9 @@
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\Component\Scripts\TempInvulnerabilityScript.cpp">
+      <Filter>Source Files\Component\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Scripts\BlinkScript.cpp">
       <Filter>Source Files\Component\Scripts</Filter>
     </ClCompile>
   </ItemGroup>
