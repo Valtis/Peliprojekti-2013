@@ -23,6 +23,7 @@ public:
   int GetSpriteID();
   void Update(double m_ticksPassed) override;
 
+  bool IsVisible() { return m_visible; }
 
 
 private:
@@ -38,5 +39,6 @@ private:
   
   int m_animationID;
   int m_frameID;
+  bool m_visible;
   std::unordered_map<int, std::vector<AnimationData>> m_animations;
 };

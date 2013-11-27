@@ -2,7 +2,7 @@
 #include "Utility/LoggerManager.h"
 const int NO_VALUE = -1;
 
-GraphicsComponent::GraphicsComponent() : m_ticksPassed(0), m_animationID(NO_VALUE), m_frameID(NO_VALUE)
+GraphicsComponent::GraphicsComponent() : m_ticksPassed(0), m_animationID(NO_VALUE), m_frameID(NO_VALUE), m_visible(true)
 {
 
 }
