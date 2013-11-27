@@ -44,7 +44,6 @@ void HealthComponent::TakeDamage()
     {
       --m_lives;
       m_hitpoints = m_maxHitpoints;
-      // send location reset message
     }
   }
 }

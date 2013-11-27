@@ -300,6 +300,9 @@
     <ClInclude Include="include\UI\Hud.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
+    <ClInclude Include="include\Component\Scripts\TempInvulnerabilityScript.h">
+      <Filter>Header Files\Component\Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -469,6 +472,9 @@
     </ClCompile>
     <ClCompile Include="src\UI\Hud.cpp">
       <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Scripts\TempInvulnerabilityScript.cpp">
+      <Filter>Source Files\Component\Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
