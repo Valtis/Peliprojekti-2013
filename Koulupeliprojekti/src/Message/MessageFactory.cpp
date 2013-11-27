@@ -8,6 +8,7 @@
 #include "Message/GenericMessageWithNoData.h"
 #include "Message/NewTiledSpriteMessage.h"
 #include "Message/StartBlinkingMessage.h"
+#include "Message/SetGraphicsVisibilityMessage.h"
 
 std::unique_ptr<Message> MessageFactory::CreateLocationChangeMessage(double x, double y)
 {
@@ -78,5 +79,5 @@ std::unique_ptr<Message> CreateStartBlinkingMessage(double duration)
 
 std::unique_ptr<Message> CreateSetGraphicsVisibilityMessage(bool visibility)
 {
-  return nullptr;
+  return std::unique_ptr<Message>(new SetGraphicsVisibilityMessage(visibility));
 }
