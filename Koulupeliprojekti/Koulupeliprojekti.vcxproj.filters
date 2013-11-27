@@ -491,6 +491,9 @@
     <ClCompile Include="src\Component\Scripts\BlinkScript.cpp">
       <Filter>Source Files\Component\Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="src\Component\Scripts\DamageColliderScript.cpp">
+      <Filter>Source Files\Component\Scripts</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore">

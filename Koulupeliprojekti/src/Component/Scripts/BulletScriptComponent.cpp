@@ -50,19 +50,12 @@ MessageHandling BulletScriptComponent::HandleCollisionMessage(Message *msg)
     auto otherFaction = static_cast<FactionComponent *>(entity->GetComponent(ComponentType::FACTION));
 
     if (myFaction == nullptr || otherFaction == nullptr ||
-        myFaction->GetFaction() != otherFaction->GetFaction())
-      targets.push_back(entity);
-  }
-
-  if (targets.size() > 0)
-  {
-    for (auto target : targets)
+      myFaction->GetFaction() != otherFaction->GetFaction())
     {
       auto takeDamageMsg = MessageFactory::CreateTakeDamageMessage();
       GetOwner()->SendMessage(takeDamageMsg.get());
-      target->SendMessage(takeDamageMsg.get());
     }
-  }
 
+  }
   return MessageHandling::PASS_FORWARD;
 }

@@ -98,6 +98,7 @@
     <ClCompile Include="src\Component\PhysicsComponent.cpp" />
     <ClCompile Include="src\Component\Scripts\BlinkScript.cpp" />
     <ClCompile Include="src\Component\Scripts\BulletScriptComponent.cpp" />
+    <ClCompile Include="src\Component\Scripts\DamageColliderScript.cpp" />
     <ClCompile Include="src\Component\Scripts\EndLevelScriptComponent.cpp" />
     <ClCompile Include="src\Component\Scripts\TempInvulnerabilityScript.cpp" />
     <ClCompile Include="src\Component\VelocityComponent.cpp" />
