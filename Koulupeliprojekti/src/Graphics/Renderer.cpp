@@ -113,7 +113,7 @@ void Renderer::GetEntityData( const std::vector<std::unique_ptr<Entity>> & entit
 
     auto location = static_cast<LocationComponent *>(entity->GetComponent(ComponentType::LOCATION));
     auto graphics = static_cast<GraphicsComponent *>(entity->GetComponent(ComponentType::GRAPHICS));
-    if (location == nullptr || graphics == nullptr)
+    if (location == nullptr || graphics == nullptr || !graphics->IsVisible())
     {
       continue;
     }
