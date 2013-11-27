@@ -72,12 +72,12 @@ std::unique_ptr<Message> MessageFactory::CreateEndGameMessage()
   return std::unique_ptr<Message>(new GenericMessageWithNoData(MessageType::END_GAME));
 }
 
-std::unique_ptr<Message> CreateStartBlinkingMessage(double duration)
+std::unique_ptr<Message> MessageFactory::CreateStartBlinkingMessage(double duration)
 {
   return std::unique_ptr<Message>(new StartBlinkingMessage(duration));
 }
 
-std::unique_ptr<Message> CreateSetGraphicsVisibilityMessage(bool visibility)
+std::unique_ptr<Message> MessageFactory::CreateSetGraphicsVisibilityMessage(bool visibility)
 {
   return std::unique_ptr<Message>(new SetGraphicsVisibilityMessage(visibility));
 }
