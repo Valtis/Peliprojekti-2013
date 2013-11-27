@@ -306,6 +306,9 @@
     <ClInclude Include="include\Component\Scripts\BlinkScript.h">
       <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="include\Message\StartBlinkingMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">

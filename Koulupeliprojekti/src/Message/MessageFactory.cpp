@@ -7,6 +7,7 @@
 #include "Message/TerminateEntityMessage.h"
 #include "Message/GenericMessageWithNoData.h"
 #include "Message/NewTiledSpriteMessage.h"
+#include "Message/StartBlinkingMessage.h"
 
 std::unique_ptr<Message> MessageFactory::CreateLocationChangeMessage(double x, double y)
 {
@@ -72,7 +73,7 @@ std::unique_ptr<Message> MessageFactory::CreateEndGameMessage()
 
 std::unique_ptr<Message> CreateStartBlinkingMessage(double duration)
 {
-  return nullptr;
+  return std::unique_ptr<Message>(new StartBlinkingMessage(duration));
 }
 
 std::unique_ptr<Message> CreateSetGraphicsVisibilityMessage(bool visibility)
