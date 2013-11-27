@@ -55,8 +55,6 @@ MessageHandling BlinkScript::HandleStartBlinkingMessage(Message *message)
 {
   auto blinkMsg = static_cast<StartBlinkingMessage *>(message);
   m_blinkDuration = blinkMsg->GetBlinkDuration();
-  m_lastState = false;
-  auto msg = MessageFactory::CreateSetGraphicsVisibilityMessage(m_lastState);
-  GetOwner()->SendMessage(msg.get());
+  m_lastState = true;
   return MessageHandling::STOP_HANDLING;
 }
