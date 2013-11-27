@@ -1,3 +1,4 @@
+#pragma once
 #include "Message/Message.h"
 
 class StartBlinkingMessage : public Message

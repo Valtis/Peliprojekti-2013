@@ -25,6 +25,7 @@
     <ClInclude Include="include\Component\PhysicsComponent.h" />
     <ClInclude Include="include\Component\Scripts\BlinkScript.h" />
     <ClInclude Include="include\Component\Scripts\BulletScriptComponent.h" />
+    <ClInclude Include="include\Component\Scripts\DamageColliderScript.h" />
     <ClInclude Include="include\Component\Scripts\EndLevelScriptComponent.h" />
     <ClInclude Include="include\Component\Scripts\TempInvulnerabilityScript.h" />
     <ClInclude Include="include\Component\VelocityComponent.h" />

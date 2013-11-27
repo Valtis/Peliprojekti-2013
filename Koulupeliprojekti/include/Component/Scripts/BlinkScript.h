@@ -1,3 +1,4 @@
+#pragma once
 #include "Component/Component.h"
 
 class BlinkScript : public Component
