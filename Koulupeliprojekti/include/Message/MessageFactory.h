@@ -21,6 +21,9 @@ namespace MessageFactory
   std::unique_ptr<Message> CreateTakeDamageMessage();
   std::unique_ptr<Message> CreateEndLevelMessage();
   std::unique_ptr<Message> CreateEndGameMessage();
+  std::unique_ptr<Message> CreateStartBlinkingMessage(double duration);
+  std::unique_ptr<Message> CreateSetGraphicsVisibilityMessage(bool visibility);
+
 
 
 }

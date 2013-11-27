@@ -69,3 +69,13 @@ std::unique_ptr<Message> MessageFactory::CreateEndGameMessage()
 {
   return std::unique_ptr<Message>(new GenericMessageWithNoData(MessageType::END_GAME));
 }
+
+std::unique_ptr<Message> CreateStartBlinkingMessage(double duration)
+{
+  return nullptr;
+}
+
+std::unique_ptr<Message> CreateSetGraphicsVisibilityMessage(bool visibility)
+{
+  return nullptr;
+}
