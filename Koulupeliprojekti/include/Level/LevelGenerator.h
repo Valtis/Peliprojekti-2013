@@ -15,8 +15,5 @@ class LevelGenerator {
     ~LevelGenerator();
     std::vector<std::unique_ptr<Level>> GenerateLevels(InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera, Hud &hud);
   private:
-    std::vector<SDL_Rect> GenerateGround(int steps);
-
-    std::vector<SDL_Rect> GenerateBorders(int a, int b);
     std::vector<SDL_Rect> GenerateRoom(int x, int y, int n);
 };
