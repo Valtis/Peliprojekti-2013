@@ -39,7 +39,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
   }
   */
   for (int i = 0; i < 10; ++i) {
-    std::vector<SDL_Rect> room = GenerateRoom(15*i,0,1); // hardcoded room width 15
+    std::vector<SDL_Rect> room = GenerateRoom((15*i)+i,0,1); // hardcoded room width 15
     for (SDL_Rect r: room) {
       for (int j = r.x; j < (r.x + r.w); ++j) {
         for (int k = r.y; k < (r.y + r.h); ++k) {
@@ -105,11 +105,11 @@ std::vector<SDL_Rect> LevelGenerator::GenerateRoom(int x, int y, int n)
       SDL_Rect p1; // Left wall
       p1.x = x; p1.y = y; p1.h = room_height - 4; p1.w = 1;
       SDL_Rect p2; // Ceiling
-      p2.x = x + 1; p2.y = y; p2.h = 1; p2.w = room_width -1;
+      p2.x = x + 1; p2.y = y; p2.h = 1; p2.w = room_width;
       SDL_Rect p3; // Right wall
       p3.x = x + room_width; p3.y = y +1; p3.h = room_height - 5; p3.w = 1;
       SDL_Rect p4; // Floor
-      p4.x = x; p4.y = y + room_height; p4.h = 1; p4.w = room_width;
+      p4.x = x; p4.y = y + room_height; p4.h = 1; p4.w = room_width+1;
       room.push_back(p1); room.push_back(p2); room.push_back(p3); room.push_back(p4);
       break;
     case 2:
