@@ -10,6 +10,7 @@
 #define ENEMY_FRAME 200028
 #define BLOCK_FRAME 200031
 #define END_FRAME 200001
+#define TILESIZE 16
 
 LevelGenerator::LevelGenerator() {}
 LevelGenerator::~LevelGenerator() {}
@@ -30,10 +31,10 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
   for (SDL_Rect r : map) {
     for (int i = r.x; i < (r.x + r.w); ++i) {
       for (int j = r.y; j < (r.y + r.h); ++j) {
-        level->AddStaticEntity(EntityFactory::CreateBlock(BLOCK_FRAME, i*16, j*16, 16));
+        level->AddStaticEntity(EntityFactory::CreateBlock(BLOCK_FRAME, i*TILESIZE, j*TILESIZE, TILESIZE));
       }
     }
-    level->AddStaticEntity(EntityFactory::CreateCollisionBlock(r.x*16, r.y*16, r.w*16, r.h*16));
+    level->AddStaticEntity(EntityFactory::CreateCollisionBlock(r.x*TILESIZE, r.y*TILESIZE, r.w*TILESIZE, r.h*TILESIZE));
   }
 
   level->AddEntity(EntityFactory::CreateEndLevelEntity(END_FRAME, 200, 100, 50));
