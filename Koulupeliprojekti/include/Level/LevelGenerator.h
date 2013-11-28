@@ -18,4 +18,5 @@ class LevelGenerator {
     std::vector<SDL_Rect> GenerateGround(int steps);
 
     std::vector<SDL_Rect> GenerateBorders(int a, int b);
+    std::vector<SDL_Rect> GenerateRoom(int x, int y, int n);
 };
