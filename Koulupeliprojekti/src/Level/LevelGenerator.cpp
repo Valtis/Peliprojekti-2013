@@ -8,9 +8,9 @@
 
 #define PLAYER_FRAME 200002
 #define ENEMY_FRAME 200028
-#define BLOCK_FRAME 200031
+#define BLOCK_FRAME 400002 // 200031
 #define END_FRAME 200001
-#define TILESIZE 16
+#define TILESIZE 32
 
 LevelGenerator::LevelGenerator() {}
 LevelGenerator::~LevelGenerator() {}
