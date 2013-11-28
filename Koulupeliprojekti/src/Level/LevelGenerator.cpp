@@ -45,34 +45,87 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
 
 std::vector<SDL_Rect> LevelGenerator::GenerateRoom(int x, int y, int n)
 {
-  // rooms always 30 width and 20 height
+  // rooms always 15 width and 10 height
   // x and y is the left corner
   // n is which type of room we generate
 
   int room_width = 15; int room_height = 10;
   std::vector<SDL_Rect> room(0);
+  SDL_Rect p1, p2, p3, p4, p5, p6;
   switch (n)
   {
-    case 1:
-      SDL_Rect p1; // Left wall
-      p1.x = x; p1.y = y; p1.h = room_height - 4; p1.w = 1;
-      SDL_Rect p2; // Ceiling
-      p2.x = x + 1; p2.y = y; p2.h = 1; p2.w = room_width;
-      SDL_Rect p3; // Right wall
-      p3.x = x + room_width; p3.y = y +1; p3.h = room_height - 5; p3.w = 1;
-      SDL_Rect p4; // Floor
-      p4.x = x; p4.y = y + room_height; p4.h = 1; p4.w = room_width+1;
-      room.push_back(p1); room.push_back(p2); room.push_back(p3); room.push_back(p4);
+    case 1: // room has opening to left and right
+      // Left wall
+      p1.x = x, p1.y = y, p1.h = room_height - 4, p1.w = 1;
+      // Ceiling
+      p2.x = x + 1, p2.y = y, p2.h = 1, p2.w = room_width;
+      // Right wall
+      p3.x = x + room_width, p3.y = y +1, p3.h = room_height - 5, p3.w = 1;
+      // Floor
+      p4.x = x, p4.y = y + room_height, p4.h = 1, p4.w = room_width+1;
+      room.push_back(p1), room.push_back(p2), room.push_back(p3), room.push_back(p4);
       break;
-    case 2:
+    case 2: // room has opening left, right and down
+      // Left wall
+      p1.x = x, p1.y = y, p1.h = room_height - 4, p1.w = 1;
+      // Ceiling
+      p2.x = x + 1, p2.y = y, p2.h = 1, p2.w = room_width;
+      // Right wall
+      p3.x = x + room_width, p3.y = y +1, p3.h = room_height - 5, p3.w = 1;
+      // Left floor
+      p4.x = x, p4.y = y + room_height, p4.h = 1, p4.w = 6;
+      // Right floor
+      p5.x = x + 8, p5.y = y + room_height, p5.h = 1, p5.w = 8;
+      room.push_back(p1), room.push_back(p2), room.push_back(p3);
+      room.push_back(p4), room.push_back(p5);
       break;
-    case 3:
+    case 3: // opening left, right and up
+      // Left ceiling
+      p1.x = x, p1.y = y, p1.h = 1, p1.w = 6;
+      // Right ceiling
+      p2.x = x + 8, p2.y = y, p2.h = 1, p2.w = 8;
+      // Right wall
+      p3.x = x + room_width, p3.y = y +1, p3.h = room_height - 5, p3.w = 1;
+      // Left wall
+      p4.x = x, p4.y = y+1, p4.h = room_height - 5, p4.w = 1;
+      // Floor
+      p5.x = x, p5.y = y + room_height, p5.h = 1, p5.w = room_width+1;
+      room.push_back(p1), room.push_back(p2), room.push_back(p3);
+      room.push_back(p4), room.push_back(p5);
       break;
-    case 4:
+    case 4: // opening to right
+      // Ceiling
+      p1.x = x, p1.y = y, p1.h = 1, p1.w = room_width+1;
+      // Left wall
+      p2.x = x, p2.y = y+1, p2.h = room_height-1, p2.w = 1;
+      // Floor
+      p3.x = x, p3.y = y + room_height, p3.h = 1, p3.w = room_width+1;
+      room.push_back(p1), room.push_back(p2), room.push_back(p3);
       break;
-    case 5:
+    case 5: // opening to left
+      // Ceiling
+      p1.x = x, p1.y = y, p1.h = 1, p1.w = room_width+1;
+      // Right wall
+      p2.x = x + room_width, p2.y = y+1, p2.h = room_height-1, p2.w = 1;
+      // Floor
+      p3.x = x, p3.y = y + room_height, p3.h = 1, p3.w = room_width+1;
+      room.push_back(p1), room.push_back(p2), room.push_back(p3);
       break;
-    default:
+    default: // room 6 opening to every direction
+      // Left ceiling
+      p1.x = x, p1.y = y, p1.h = 1, p1.w = 6;
+      // Right ceiling
+      p2.x = x + 8, p2.y = y, p2.h = 1, p2.w = 8;
+      // Right wall
+      p3.x = x + room_width, p3.y = y +1, p3.h = room_height - 5, p3.w = 1;
+      // Left wall
+      p4.x = x, p4.y = y+1, p4.h = room_height - 5, p4.w = 1;
+      // Left floor
+      p5.x = x, p5.y = y + room_height, p5.h = 1, p5.w = 6;
+      // Right floor
+      p6.x = x + 8, p6.y = y + room_height, p6.h = 1, p6.w = 8;
+      room.push_back(p1), room.push_back(p2), room.push_back(p3);
+      room.push_back(p4), room.push_back(p5), room.push_back(p6);
       break;
   }
   return room;

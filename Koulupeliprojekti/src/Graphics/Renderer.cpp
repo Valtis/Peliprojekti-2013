@@ -79,7 +79,7 @@ void Renderer::Draw( Camera *camera, EntityVector &entities,
 
 void Renderer::ClearScreen()
 {
-  SDL_SetRenderDrawColor(m_renderer, 174, 234, 255, 255);
+  SDL_SetRenderDrawColor(m_renderer, 204, 255, 255, 255);
   SDL_RenderClear(m_renderer);
 }
 
