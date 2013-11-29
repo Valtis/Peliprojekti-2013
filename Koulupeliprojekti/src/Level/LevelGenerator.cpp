@@ -24,7 +24,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
   camera->SetEntity(e.get());
   hud.SetPlayer(e.get());
 
-  level->AddEntity(std::move(EntityFactory::CreateFlyingEnemy(ENEMY_FRAME, 220, 600, 0, e.get())));
+  level->AddEntity(std::move(EntityFactory::CreateFlyingEnemy(ENEMY_FRAME, 100, 70, 0, e.get())));
   level->AddEntity(std::move(e));
  
   for (int i = 0; i < 10; ++i) {
