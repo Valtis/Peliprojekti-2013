@@ -8,6 +8,7 @@
 
 #include "Message/TerminateEntityMessage.h"
 #include "Message/SpawnEntityMessage.h"
+#include "Message/ResetEntityPositionMessage.h"
 
 Level::Level()
 {
@@ -17,6 +18,11 @@ Level::Level()
     [&](Message *msg) { return this->HandleEntitySpawning(msg); });
   RegisterMessageHandler(MessageType::TERMINATE_ENTITY, Priority::HIGHEST, 
     [&](Message *msg) { return this->HandleEntityTermination(msg); });
+
+  RegisterMessageHandler(MessageType::RESET_ENTITY_POSITION, Priority::HIGHEST, 
+    [&](Message *msg) { return this->HandleEntityPositionReset(msg); });
+
+
 }
 
 Level::~Level()
@@ -103,7 +109,10 @@ MessageHandling Level::HandleEntityTermination(Message *msg)
 
 MessageHandling Level::HandleEntityPositionReset(Message *msg)
 {
-  // todo - add code that sets entity location to level start point
+  auto resetMsg = static_cast<ResetEntityPositionMessage *>(msg);
+
+  auto locationMsg = MessageFactory::CreateSetLocationMessage(m_levelStartPoint.x, m_levelStartPoint.y);
+  resetMsg->GetEntity()->SendMessage(locationMsg.get());
   return MessageHandling::STOP_HANDLING;
 }
 

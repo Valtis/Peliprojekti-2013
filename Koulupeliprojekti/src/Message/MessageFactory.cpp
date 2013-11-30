@@ -1,4 +1,5 @@
 #include "Message/MessageFactory.h"
+#include "Message/SetLocationMessage.h"
 #include "Message/LocationChangeMessage.h"
 #include "Message/VelocityChangeMessage.h"
 #include "Message/SetVelocityMessage.h"
@@ -14,6 +15,11 @@
 std::unique_ptr<Message> MessageFactory::CreateLocationChangeMessage(double x, double y)
 {
   return std::unique_ptr<Message>(new LocationChangeMessage(x, y));
+}
+
+std::unique_ptr<Message> MessageFactory::CreateSetLocationMessage(double x, double y)
+{
+  return std::unique_ptr<Message>(new SetLocationMessage(x, y));
 }
 
 std::unique_ptr<Message> MessageFactory::CreateVelocityChangeMessage(double x, double y)

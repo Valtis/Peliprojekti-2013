@@ -10,6 +10,7 @@ typedef struct _CollisionHit CollisionHit;
 
 namespace MessageFactory
 {
+  std::unique_ptr<Message> CreateSetLocationMessage(double x, double y);
   std::unique_ptr<Message> CreateLocationChangeMessage(double x, double y);
   std::unique_ptr<Message> CreateVelocityChangeMessage(double x, double y);
   std::unique_ptr<Message> CreateSetVelocityMessage(double x, double y);
