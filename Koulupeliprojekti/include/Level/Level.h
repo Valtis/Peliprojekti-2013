@@ -24,11 +24,11 @@ public:
   void AddEntity(std::unique_ptr<Entity> e);
   void AddStaticEntity(std::unique_ptr<Entity> e);
 
-  void SetLevelStartPoint(SDL_Point point) { m_levelStartPoint = point; }
+  void SetLevelStartPoint(std::pair<double, double> point) { m_levelStartPoint = point; }
 
 private:
 
-  SDL_Point m_levelStartPoint;
+  std::pair<double, double> m_levelStartPoint;
 
   MessageHandling HandleEntitySpawning(Message *msg);
   MessageHandling HandleEntityTermination(Message *msg);

@@ -5,10 +5,10 @@ class SetLocationMessage : public Message
 {
 
 public:
-  SetLocationMessage(int x, int y) : m_x(x), m_y(y) { }
+  SetLocationMessage(double x, double y) : m_x(x), m_y(y) { }
   ~SetLocationMessage() { }
 
-  MessageType GetType() const override { MessageType::SET_LOCATION; }
+  MessageType GetType() const override { return MessageType::SET_LOCATION; }
   const double GetX() const { return m_x; }
   const double GetY() const { return m_y; }
 

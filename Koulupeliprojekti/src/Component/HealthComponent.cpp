@@ -45,7 +45,7 @@ void HealthComponent::TakeDamage()
       --m_lives;
       m_hitpoints = m_maxHitpoints;
       auto msg = MessageFactory::CreateResetEntityPositionMessage(GetOwner());
-      GetOwner->SendMessage(msg.get());
+      GetOwner()->SendMessage(msg.get());
     }
   }
 }

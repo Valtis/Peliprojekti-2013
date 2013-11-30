@@ -12,8 +12,8 @@
 
 Level::Level()
 {
-  m_levelStartPoint.x = 0;
-  m_levelStartPoint.y = 0;
+  m_levelStartPoint.first = 0;
+  m_levelStartPoint.second = 0;
   RegisterMessageHandler(MessageType::SPAWN_ENTITY, Priority::HIGHEST, 
     [&](Message *msg) { return this->HandleEntitySpawning(msg); });
   RegisterMessageHandler(MessageType::TERMINATE_ENTITY, Priority::HIGHEST, 
@@ -111,7 +111,7 @@ MessageHandling Level::HandleEntityPositionReset(Message *msg)
 {
   auto resetMsg = static_cast<ResetEntityPositionMessage *>(msg);
 
-  auto locationMsg = MessageFactory::CreateSetLocationMessage(m_levelStartPoint.x, m_levelStartPoint.y);
+  auto locationMsg = MessageFactory::CreateSetLocationMessage(m_levelStartPoint.first, m_levelStartPoint.second);
   resetMsg->GetEntity()->SendMessage(locationMsg.get());
   return MessageHandling::STOP_HANDLING;
 }
