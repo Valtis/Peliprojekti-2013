@@ -13,21 +13,20 @@ WindowManager::~WindowManager()
 }
 
 
-bool WindowManager::HandleInput(Command *command)
+MessageHandling WindowManager::HandleInput(Command *command)
 {
   // todo - catch keyboard events for menu etc
   if (command == nullptr || command->GetType() != MessageType::MOUSE_COMMAND)
   {
-    return false;
+    return MessageHandling::PASS_FORWARD;;
   }
 
   MouseCommand *mouseCommand = static_cast<MouseCommand *>(command);
   return HandleEvent(mouseCommand->GetEvent());
 
-
 }
 
-bool  WindowManager::HandleEvent(const SDL_Event &event)
+MessageHandling WindowManager::HandleEvent( const SDL_Event &event )
 {
   std::stringstream ss;
   ss << event.type;
@@ -50,14 +49,14 @@ bool  WindowManager::HandleEvent(const SDL_Event &event)
     LoggerManager::GetLog(WINDOW_MANAGER_LOG).AddLine(LogLevel::WARNING, "Non-mouse event in WindowManager - shouldn't happen (event type: " +
       ss.str() + ")");
   }
-  return false;
+  return MessageHandling::PASS_FORWARD;
 }
 
-bool  WindowManager::HandleMouseMotion(const SDL_Event &event)
+MessageHandling WindowManager::HandleMouseMotion( const SDL_Event &event )
 {
   if (!m_leftButtonDown || m_windows.empty())
   {
-    return false;
+    return MessageHandling::PASS_FORWARD;;
   }
 
   if (m_dragStatus == DragStatus::Not_Dragging)
@@ -76,13 +75,13 @@ bool  WindowManager::HandleMouseMotion(const SDL_Event &event)
   if (m_dragStatus == DragStatus::Dragging)
   {
     m_windows[0]->OnDrag(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
-    return true;
+    return  MessageHandling::STOP_HANDLING;
   }
 
-  return false;
+  return  MessageHandling::PASS_FORWARD;;
 }
 
-bool WindowManager::HandleDownButton(const SDL_Event &event)
+MessageHandling WindowManager::HandleDownButton( const SDL_Event &event )
 {
   if (event.button.button == SDL_BUTTON_LEFT)
   {
@@ -92,7 +91,7 @@ bool WindowManager::HandleDownButton(const SDL_Event &event)
   return NotifyWindowUnderCursorOnEvent([=](Window *window) { window->OnMouseButtonDown(event.button.button, event.button.x, event.button.y ); }, event.button.x, event.button.y);
 }
 
-bool  WindowManager::HandleUpButton(const SDL_Event &event)
+MessageHandling WindowManager::HandleUpButton( const SDL_Event &event )
 {
   if (event.button.button == SDL_BUTTON_LEFT)
   {
@@ -103,7 +102,7 @@ bool  WindowManager::HandleUpButton(const SDL_Event &event)
   return NotifyWindowUnderCursorOnEvent([=](Window *window) { window->OnMouseButtonUp(event.button.button, event.button.x, event.button.y ); }, event.button.x, event.button.y);
 }
 
-bool WindowManager::HandleMouseWheel(const SDL_Event &event)
+MessageHandling WindowManager::HandleMouseWheel( const SDL_Event &event )
 {
   int x, y;
   SDL_GetMouseState(&x, &y);
@@ -115,19 +114,19 @@ bool WindowManager::HandleMouseWheel(const SDL_Event &event)
   {
     return NotifyWindowUnderCursorOnEvent([=](Window *window) { window->OnMouseWheelScrollDown(x, y ); }, x, y);
   }
-  return false;
+  return MessageHandling::PASS_FORWARD;
 }
 
-bool WindowManager::NotifyWindowUnderCursorOnEvent(std::function<void(Window *)> f, int x, int y)
+MessageHandling WindowManager::NotifyWindowUnderCursorOnEvent( std::function<void(Window *)> f, int x, int y )
 {
   Window * window = GetWindowUnderCoordinates(x, y);
   if (window == nullptr)
   {
-    return false;
+     return MessageHandling::PASS_FORWARD;;
   }
 
   f(window);
-  return true;
+  return MessageHandling::STOP_HANDLING;;
 }
 
 

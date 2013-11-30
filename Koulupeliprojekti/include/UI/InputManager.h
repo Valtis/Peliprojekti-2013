@@ -10,7 +10,7 @@ class InputManager
 public:
 	InputManager();
 	~InputManager();
-	typedef std::function<bool(Command* command)> InputHandler;
+	typedef std::function<MessageHandling(Command* command)> InputHandler;
 	typedef std::pair<int, InputHandler> InputHandlerNode;
 	void HandleInput(const SDL_Event& event) const;
 	void RegisterInputHandler(InputHandler, int priority);

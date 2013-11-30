@@ -29,7 +29,7 @@ void InputComponent::OnAttatchingToEntity()
 
 void InputComponent::RegisterInputHandler(InputManager &manager)
 {
-  manager.RegisterInputHandler([&](Command *cmd) { MessageHandling h = this->HandleInput(cmd); return (h == MessageHandling::PASS_FORWARD); }, 5);
+  manager.RegisterInputHandler([&](Command *cmd) { return this->HandleInput(cmd); } , 5);
 }
 
 

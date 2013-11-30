@@ -31,7 +31,7 @@ private:
   void UpdateGameState();
   void Draw();
   void PollEvents();
-  bool HandleInput(Command *cmd);
+  MessageHandling HandleInput(Command *cmd);
 
   void ShutDownGame();
 

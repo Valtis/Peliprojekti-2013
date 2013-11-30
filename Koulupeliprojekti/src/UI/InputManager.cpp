@@ -33,7 +33,7 @@ void InputManager::HandleInput(const SDL_Event& event) const
 		{
 			for (const auto handler : mInputHandlers)
 			{
-				if( handler.second(command) )
+				if( handler.second(command) == MessageHandling::STOP_HANDLING )
 				{
 					break;
 				}

@@ -100,14 +100,12 @@ void Game::Initialize()
 
 }
 
-bool Game::HandleInput( Command *cmd )
+MessageHandling Game::HandleInput( Command *cmd )
 {
   if (cmd->GetType() != MessageType::CONTROL_COMMAND )
   {
-    return false;
+    return MessageHandling::PASS_FORWARD;
   }
-
-
 
   auto controlCmd = static_cast<ControlCommand *>(cmd);
   if (controlCmd->GetCommand() == Action::PAUSE && controlCmd->GetState() == KeyState::DOWN)
@@ -117,9 +115,9 @@ bool Game::HandleInput( Command *cmd )
 
   if (m_isPaused)
   {
-    return true;
+    return MessageHandling::STOP_HANDLING;
   }
-  return false;
+  return MessageHandling::PASS_FORWARD;
 }
 
 
