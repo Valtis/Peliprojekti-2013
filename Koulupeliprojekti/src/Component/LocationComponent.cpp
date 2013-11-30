@@ -2,6 +2,7 @@
 #include "Entity/Entity.h"
 #include "Utility/LoggerManager.h"
 #include "Message/LocationChangeMessage.h"
+#include "Message/SetLocationMessage.h"
 #include "Component/VelocityComponent.h"
 #include "Message/CollisionMessage.h"
 #include "Component/FactionComponent.h"
@@ -23,7 +24,8 @@ void LocationComponent::OnAttatchingToEntity()
     [&](Message *msg) { return this->HandleLocationChangeMessage(msg); });
   GetOwner()->RegisterMessageHandler(MessageType::COLLISION, Priority::NORMAL, 
     [&](Message *msg) { return this->HandleCollisionMessage(msg); });
-
+  GetOwner()->RegisterMessageHandler(MessageType::SET_LOCATION, Priority::NORMAL, 
+    [&](Message *msg) { return this->HandleSetLocationMessage(msg); });
 }
 
 void LocationComponent::Update(double ticksPassed)
@@ -58,10 +60,26 @@ MessageHandling LocationComponent::HandleLocationChangeMessage(Message *msg)
   return MessageHandling::STOP_HANDLING;
 }
 
+MessageHandling LocationComponent::HandleSetLocationMessage(Message *msg)
+{
+  if (msg->GetType() != MessageType::SET_LOCATION)
+  {
+    LoggerManager::GetLog(COMPONENT_LOG).AddLine(LogLevel::WARNING, "Invalid message type received in LocationComponent::HandleSetLocationMessage() - ignoring");
+    return MessageHandling::PASS_FORWARD;
+  }
+
+  auto locMsg = static_cast<SetLocationMessage *>(msg);
+  m_x = locMsg->GetX();
+  m_y = locMsg->GetY();
+  return MessageHandling::STOP_HANDLING;
+}
+
 bool LocationComponent::CanIJump()
 {
   return m_collision[CollisionSide::DOWN];
 }
+
+
 
 MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
 {

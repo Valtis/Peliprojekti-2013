@@ -22,6 +22,7 @@ private:
 
   MessageHandling HandleLocationChangeMessage(Message *message);
   MessageHandling HandleCollisionMessage(Message *message);
+  MessageHandling HandleSetLocationMessage(Message *message);
 
   double m_x;
   double m_y;
