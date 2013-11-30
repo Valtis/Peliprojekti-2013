@@ -2,7 +2,7 @@
 #include "Message/Message.h"
 #include "Message/Commands/ControlCommand.h"
 
-ControlCommand::ControlCommand(Action cmd, bool state, int controller) : m_command(cmd),m_state(state),m_controller(controller)
+ControlCommand::ControlCommand(Action cmd, KeyState state, int controller) : m_command(cmd),m_state(state),m_controller(controller)
 {
 }
 
@@ -11,7 +11,7 @@ MessageType ControlCommand::GetType() const
 	return MessageType::CONTROL_COMMAND;
 }
 
-bool ControlCommand::GetState() const
+KeyState ControlCommand::GetState() const
 {
 	return m_state;
 }

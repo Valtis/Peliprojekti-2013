@@ -17,12 +17,12 @@ void WalkingAiComponent::Update(double ticksPassed)
 	std::unique_ptr<ControlCommand> command;
 	if (m_direction)
 	{
-		command.reset(new ControlCommand(Action::RIGHT,true,-1));
+		command.reset(new ControlCommand(Action::RIGHT,KeyState::DOWN,-1));
 		GetOwner()->SendMessage(command.get());
 	}
 	else
 	{
-		command.reset(new ControlCommand(Action::LEFT,true,-1));
+		command.reset(new ControlCommand(Action::LEFT,KeyState::DOWN,-1));
 		GetOwner()->SendMessage(command.get());
 	}
 }
@@ -38,12 +38,12 @@ MessageHandling WalkingAiComponent::HandleCollisionMessage(Message *msg)
 	{
 		if (m_direction)
 		{
-			command.reset(new ControlCommand(Action::RIGHT,false,-1));
+			command.reset(new ControlCommand(Action::RIGHT,KeyState::UP,-1));
 			GetOwner()->SendMessage(command.get());
 		}
 		else
 		{
-			command.reset(new ControlCommand(Action::RIGHT,false,-1));
+			command.reset(new ControlCommand(Action::RIGHT,KeyState::UP,-1));
 			GetOwner()->SendMessage(command.get());
 		}
 		m_direction = !m_direction;

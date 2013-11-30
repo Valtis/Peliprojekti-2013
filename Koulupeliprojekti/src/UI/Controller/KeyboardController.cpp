@@ -13,10 +13,15 @@ Command* KeyboardController::HandleInput(SDL_Event event)
 	Command* cmd = nullptr;
 	if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
 	{
-		bool state = (event.type == SDL_KEYDOWN);
+		KeyState state = KeyState::UP; 
+    if (event.type == SDL_KEYDOWN)
+    {
+      state = KeyState::DOWN;
+    }
+    
 		SDL_Keycode key = event.key.keysym.sym;
 		if (m_binds.count(key))
-			cmd = new ControlCommand(m_binds[key],state,m_id);
+			cmd = new ControlCommand(m_binds[key], state,m_id);
 	}
 	return cmd;
 }

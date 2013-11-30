@@ -3,17 +3,18 @@
 #include "Message/Commands/Command.h"
 #include "Message/Message.h"
 enum class Action : int { NONE, LEFT, RIGHT, UP, DOWN, JUMP, FIRE, EXIT, PAUSE };
+enum class KeyState : int { DOWN, UP };
 
 class ControlCommand : public Command
 {
 public:
-	ControlCommand(Action cmd, bool state, int controller);
+	ControlCommand(Action cmd, KeyState state, int controller);
 	MessageType GetType() const;
-	bool GetState() const;
+	KeyState GetState() const;
 	Action GetCommand() const;
 	int GetController() const { return m_controller; }
 private:
-	bool m_state;
+	KeyState m_state;
 	Action m_command;
 	int m_controller;
 };

@@ -32,6 +32,9 @@ void InputComponent::RegisterInputHandler(InputManager &manager)
   manager.RegisterInputHandler([&](Command *cmd) { MessageHandling h = this->HandleInput(cmd); return (h == MessageHandling::PASS_FORWARD); }, 5);
 }
 
+
+// this is kinda terrible, needs to be refactored
+
 MessageHandling InputComponent::HandleInput( Command *msg )
 {
   if (msg->GetType() != MessageType::CONTROL_COMMAND)
@@ -47,12 +50,12 @@ MessageHandling InputComponent::HandleInput( Command *msg )
 
   double xVel = 3;
   double yVel = 3;
-  if (command->GetState() == false)
+  if (command->GetState() == KeyState::UP)
   {
     xVel = yVel = 0;
   }
 
-  // kinda ugly, probably needs to be refactored
+
   double newXVelocity = 0;
   double newYVelocity = 0;
   Velocity dir = Velocity::X;
@@ -75,7 +78,7 @@ MessageHandling InputComponent::HandleInput( Command *msg )
     dir = Velocity::Y;
     break;
   case Action::JUMP:
-    if (command->GetState() == true)
+    if (command->GetState() == KeyState::DOWN)
       Jump();
     return MessageHandling::STOP_HANDLING;
   case Action::FIRE:

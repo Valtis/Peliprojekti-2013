@@ -110,7 +110,7 @@ bool Game::HandleInput( Command *cmd )
 
 
   auto controlCmd = static_cast<ControlCommand *>(cmd);
-  if (controlCmd->GetCommand() == Action::PAUSE && controlCmd->GetState() == true)
+  if (controlCmd->GetCommand() == Action::PAUSE && controlCmd->GetState() == KeyState::DOWN)
   {
     m_isPaused = !m_isPaused;
   }

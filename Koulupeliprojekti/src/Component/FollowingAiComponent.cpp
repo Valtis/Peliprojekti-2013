@@ -20,11 +20,11 @@ void FollowingAiComponent::Update(double ticksPassed)
 	{
 		if (player_x - owner_x > 10)
 		{
-			GetOwner()->SendMessage(new ControlCommand(Action::RIGHT,true,-1));
+			GetOwner()->SendMessage(new ControlCommand(Action::RIGHT,KeyState::DOWN,-1));
 		}
 		else if (player_x - owner_x < -10)
 		{
-			GetOwner()->SendMessage(new ControlCommand(Action::LEFT,true,-1));
+			GetOwner()->SendMessage(new ControlCommand(Action::LEFT,KeyState::DOWN,-1));
 		}
 	}
 }
@@ -42,7 +42,7 @@ MessageHandling FollowingAiComponent::HandleCollisionMessage(Message *msg)
 	  Component *faction = entity->GetComponent(ComponentType::FACTION);
 	  if (faction == nullptr)
 		{
-      GetOwner()->SendMessage(new ControlCommand(Action::JUMP, true, -1));
+      GetOwner()->SendMessage(new ControlCommand(Action::JUMP, KeyState::DOWN, -1));
       break;
     }
   }

@@ -66,7 +66,7 @@ MessageHandling FlyingAiComponent::HandleCollisionMessage(Message *msg)
     return MessageHandling::STOP_HANDLING;
 
   m_attacking = false;
-  std::unique_ptr<ControlCommand> command(new ControlCommand(Action::UP,true,-1));
+  std::unique_ptr<ControlCommand> command(new ControlCommand(Action::UP, KeyState::DOWN,-1));
   GetOwner()->SendMessage(command.get());
 
   return MessageHandling::PASS_FORWARD;
@@ -78,7 +78,7 @@ void FlyingAiComponent::Attack(double x, double y)
 
   if (SDL_fabs(m_player_x - x) < 20 && SDL_fabs(m_player_y - y) < 20)
   {
-    command.reset(new ControlCommand(Action::UP,true,-1));
+    command.reset(new ControlCommand(Action::UP, KeyState::DOWN,-1));
     GetOwner()->SendMessage(command.get());
     m_attacking = false;
     return;
@@ -86,15 +86,15 @@ void FlyingAiComponent::Attack(double x, double y)
 
   if (x > m_player_x + wiggle)
   {
-    command.reset(new ControlCommand(Action::LEFT,true,-1));
+    command.reset(new ControlCommand(Action::LEFT,KeyState::DOWN,-1));
     GetOwner()->SendMessage(command.get());
   }
   else if (x < m_player_x - wiggle)
   {
-    command.reset(new ControlCommand(Action::RIGHT,true,-1));
+    command.reset(new ControlCommand(Action::RIGHT,KeyState::DOWN,-1));
     GetOwner()->SendMessage(command.get());
   }
-  command.reset(new ControlCommand(Action::DOWN,true,-1));
+  command.reset(new ControlCommand(Action::DOWN,KeyState::DOWN,-1));
 
   GetOwner()->SendMessage(command.get());
 
@@ -105,22 +105,22 @@ void FlyingAiComponent::Follow(double x, double y)
   std::unique_ptr<ControlCommand> command;
   if (x > m_player_x + 200)
   {
-    command.reset(new ControlCommand(Action::LEFT,true,-1));
+    command.reset(new ControlCommand(Action::LEFT,KeyState::DOWN,-1));
     GetOwner()->SendMessage(command.get());
   }
   else if (x < m_player_x - 50)
   {
-    command.reset(new ControlCommand(Action::RIGHT,true,-1));
+    command.reset(new ControlCommand(Action::RIGHT,KeyState::DOWN,-1));
     GetOwner()->SendMessage(command.get());
   }
   if (m_player_y - y < 200)
   {
-    command.reset(new ControlCommand(Action::UP,true,-1));
+    command.reset(new ControlCommand(Action::UP,KeyState::DOWN,-1));
     GetOwner()->SendMessage(command.get());
   }
   else if (m_player_y - y > 320)
   {
-    command.reset(new ControlCommand(Action::DOWN,true,-1));
+    command.reset(new ControlCommand(Action::DOWN,KeyState::DOWN,-1));
     GetOwner()->SendMessage(command.get());
   }
 }
