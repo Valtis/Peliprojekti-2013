@@ -56,8 +56,10 @@
     <ClInclude Include="include\Message\Message.h" />
     <ClInclude Include="include\Message\MessageFactory.h" />
     <ClInclude Include="include\Message\MessageProcessor.h" />
+    <ClInclude Include="include\Message\ResetEntityPositionMessage.h" />
     <ClInclude Include="include\Message\SetGraphicsVisibilityMessage.h" />
     <ClInclude Include="include\Message\SetVelocityMessage.h" />
+    <ClInclude Include="include\Message\SpawnEntityMessage.h" />
     <ClInclude Include="include\Message\StartBlinkingMessage.h" />
     <ClInclude Include="include\Message\VelocityChangeMessage.h" />
     <ClInclude Include="include\Physics\PhysicsHandler.h" />
