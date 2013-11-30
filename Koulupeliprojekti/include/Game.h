@@ -14,6 +14,7 @@
 #include "Sound/SoundManager.h"
 
 class Camera;
+class Command;
 class Game : public MessageProcessor
 {
 public:
@@ -29,7 +30,8 @@ private:
 
   void UpdateGameState();
   void Draw();
-  void HandleInput();
+  void PollEvents();
+  bool HandleInput(Command *cmd);
 
   void ShutDownGame();
 
@@ -41,8 +43,8 @@ private:
   Renderer m_renderer;
   Tick m_gameTick;
   Tick m_drawTick;
-  bool m_running;
-
+  bool m_isRunning;
+  bool m_isPaused;
   std::unique_ptr<Camera> m_testDebugCamera;
 
 };

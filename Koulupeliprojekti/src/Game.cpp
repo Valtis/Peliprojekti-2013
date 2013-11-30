@@ -9,9 +9,9 @@
 #include "UI/Window/Window.h"
 #include "UI/Window/Button.h"
 #include "UI/Window/TextBox.h"
-#include "Message/Commands/MouseCommand.h"
+#include "Message/Commands/ControlCommand.h"
 
-Game::Game() : m_gameTick(30), m_drawTick(30)
+Game::Game() : m_gameTick(30), m_drawTick(30), m_isRunning(false), m_isPaused(false)
 {
   RegisterMessageHandler(MessageType::END_GAME, Priority::HIGHEST, [&](Message *msg)
     {
@@ -32,7 +32,7 @@ void Game::Run()
 {
   Initialize();
 
-  while (m_running)
+  while (m_isRunning)
   {
     UpdateGameState();
     Draw();
@@ -43,9 +43,14 @@ void Game::UpdateGameState()
 {
   if (m_gameTick.TickHasPassed())
   {
-    HandleInput();
-    m_levelManager.Update(m_gameTick.TicksPassed());
     SoundManager::Instance().Update(m_gameTick.TicksPassed());
+    PollEvents();
+
+    if (!m_isPaused) 
+    {
+      m_levelManager.Update(m_gameTick.TicksPassed());
+    }
+    
   }
 }
 
@@ -81,6 +86,7 @@ void Game::Initialize()
   FontManager::Instance().Initialize("data/fonts/FreeMono.otf");
   m_inputManager.Initialize();
   m_inputManager.RegisterInputHandler([&](Command* cmd) { return m_windowManager.HandleInput(cmd); }, 10);
+  m_inputManager.RegisterInputHandler([&](Command *cmd) { return this->HandleInput(cmd); } , 10);
 
   std::unique_ptr<EntityTrackingCamera> camera(new EntityTrackingCamera);
 
@@ -90,19 +96,40 @@ void Game::Initialize()
   m_testDebugCamera = std::move(camera);
 
   TestWindowCreation();
-  m_running = true;
+  m_isRunning = true;
 
 }
 
+bool Game::HandleInput( Command *cmd )
+{
+  if (cmd->GetType() != MessageType::CONTROL_COMMAND )
+  {
+    return false;
+  }
 
 
-void Game::HandleInput() {
+
+  auto controlCmd = static_cast<ControlCommand *>(cmd);
+  if (controlCmd->GetCommand() == Action::PAUSE && controlCmd->GetState() == true)
+  {
+    m_isPaused = !m_isPaused;
+  }
+
+  if (m_isPaused)
+  {
+    return true;
+  }
+  return false;
+}
+
+
+void Game::PollEvents() {
   SDL_Event event;
   while (SDL_PollEvent(&event))
   {
      if (event.type == SDL_QUIT)
      {
-       m_running = false;
+       m_isRunning = false;
        return;
      }
      m_inputManager.HandleInput(event);
@@ -112,7 +139,7 @@ void Game::HandleInput() {
 // for testing only - can be removed!
 void Game::ShutDownGame()
 {
-  m_running = false;
+  m_isRunning = false;
 }
 
 void Game::TestWindowCreation()

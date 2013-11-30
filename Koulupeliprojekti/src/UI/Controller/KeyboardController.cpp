@@ -29,4 +29,6 @@ void KeyboardController::LoadBinds()
 	m_binds[SDLK_SPACE] = Action::JUMP;
  	m_binds[SDLK_LSHIFT] = Action::FIRE;
 	m_binds[SDLK_ESCAPE] = Action::EXIT;
+  m_binds[SDLK_p] = Action::PAUSE;
+  m_binds[SDLK_PAUSE] = Action::PAUSE;
 }

@@ -82,7 +82,7 @@ MessageHandling InputComponent::HandleInput( Command *msg )
     Fire();
     MessageHandling::STOP_HANDLING;
   default:
-    return MessageHandling::STOP_HANDLING; // not handling anything
+    return MessageHandling::PASS_FORWARD; 
     break;
   }
 
