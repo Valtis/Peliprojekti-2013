@@ -1,0 +1,7 @@
+[KEYBOARD]
+jump = space
+left = left
+right = right
+shoot = lshift
+exit = q
+pause = p
