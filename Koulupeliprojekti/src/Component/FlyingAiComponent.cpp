@@ -8,7 +8,7 @@
 #include "Component/FactionComponent.h"
 #include "Component/FlyingAiComponent.h"
 
-FlyingAiComponent::FlyingAiComponent(Entity* player) : AiComponent(), m_player(player), m_attacking(false), m_attack_tick(0), m_following(true)
+FlyingAiComponent::FlyingAiComponent(Entity* player) : AiComponent(), m_player(player), m_attacking(false), m_attack_tick(0), m_following(true), m_hit_a_wall(false), m_collision_tick(0)
 {
 
 }
@@ -29,7 +29,7 @@ void FlyingAiComponent::Update(double ticksPassed)
   double y = own_loc->GetY();
 
   double distance = sqrt(pow(player_x - x,2) + pow(player_y - y,2));
-  if (SDL_fabs(m_player_y - y) > 230)
+  if (distance > 260)
     m_following = true;
 
 
@@ -38,7 +38,7 @@ void FlyingAiComponent::Update(double ticksPassed)
     m_player_x = player_x;
     m_player_y = player_y;
     Follow(x,y);
-    if (SDL_fabs(player_x - x) < 200 && player_y - y < 230)
+    if (SDL_fabs(player_x - x) < 220 && player_y - y < 240)
     {
       if (m_attack_tick > 150)
       {
@@ -64,9 +64,29 @@ MessageHandling FlyingAiComponent::HandleCollisionMessage(Message *msg)
 
   if (msg->GetType() != MessageType::COLLISION)
     return MessageHandling::STOP_HANDLING;
+  if (m_attack_tick - m_collision_tick < 10)
+	m_hit_a_wall = true;
+  else
+	m_hit_a_wall = false;
 
-  m_attacking = false;
-  std::unique_ptr<ControlCommand> command(new ControlCommand(Action::UP, KeyState::DOWN,-1));
+  CollisionMessage* collision = static_cast<CollisionMessage*>(msg);
+  CollisionSide side = collision->GetVerticalSide();
+
+  Action action = Action::UP;
+  if (side == CollisionSide::UP)
+	action = Action::DOWN;
+  side = collision->GetHorizontalSide();
+  if (side == CollisionSide::LEFT)
+	action = Action::RIGHT;
+  if (side == CollisionSide::RIGHT)
+	action = Action::LEFT;
+
+  if (action == Action::UP || action == Action::DOWN)
+  	m_attacking = false;
+  else
+	m_collision_tick = m_attack_tick;
+
+  std::unique_ptr<ControlCommand> command(new ControlCommand(action, KeyState::DOWN,-1));
   GetOwner()->SendMessage(command.get());
 
   return MessageHandling::PASS_FORWARD;
@@ -113,6 +133,8 @@ void FlyingAiComponent::Follow(double x, double y)
     command.reset(new ControlCommand(Action::RIGHT,KeyState::DOWN,-1));
     GetOwner()->SendMessage(command.get());
   }
+  if (m_hit_a_wall)
+	return;
   if (m_player_y - y < 200)
   {
     command.reset(new ControlCommand(Action::UP,KeyState::DOWN,-1));
