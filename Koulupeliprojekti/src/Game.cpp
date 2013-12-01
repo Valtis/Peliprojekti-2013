@@ -111,6 +111,7 @@ MessageHandling Game::HandleInput( Command *cmd )
   if (controlCmd->GetCommand() == Action::PAUSE && controlCmd->GetState() == KeyState::DOWN)
   {
     m_isPaused = !m_isPaused;
+    m_hud.SetPauseStatus(m_isPaused);
   }
 
   if (m_isPaused)
