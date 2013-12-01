@@ -90,6 +90,8 @@ void KeyboardController::AddBind(std::string keycode, std::string actionstring)
 		code = SDLK_SPACE;
 	else if (keycode == "esc")
 		code = SDLK_ESCAPE;
+	else if (keycode == "pause")
+		code = SDLK_PAUSE;
 	else if (keycode.length() == 1)
 		code = static_cast<int>(keycode.c_str()[0]);
 	else

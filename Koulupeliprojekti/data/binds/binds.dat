@@ -5,3 +5,4 @@ right = right
 shoot = lshift
 exit = q
 pause = p
+pause = pause
