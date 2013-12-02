@@ -27,20 +27,79 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
   level->AddEntity(std::move(EntityFactory::CreateFlyingEnemy(ENEMY_FRAME, 100, 70, 0, e.get())));
   level->AddEntity(std::move(e));
  
-  for (int i = 0; i < 10; ++i) {
-    std::vector<SDL_Rect> room = GenerateRoom((15*i)+i,0,1); // hardcoded room width 15
-    for (SDL_Rect r: room) {
-      for (int j = r.x; j < (r.x + r.w); ++j) {
-        for (int k = r.y; k < (r.y + r.h); ++k) {
-	  level->AddStaticEntity(EntityFactory::CreateBlock(BLOCK_FRAME, j*TILESIZE, k*TILESIZE, TILESIZE));
-	}
-      }
-      level->AddStaticEntity(EntityFactory::CreateCollisionBlock(r.x*TILESIZE, r.y*TILESIZE, r.w*TILESIZE, r.h*TILESIZE));
+
+  int mapsize = 5;
+  std::vector<int> map = GenerateMap(mapsize);
+  for (int i = 0; i < mapsize; ++i) {
+    for (int j = 0; j < mapsize; ++j) {
+      // for each room in map
+      std::vector<SDL_Rect> room = GenerateRoom((i*15)+i,(j*10)+j,map[mapsize*j+i]); // hardcoded room width 15 length 10
+      for (SDL_Rect r: room) {
+        for (int k = r.x; k < (r.x + r.w); ++k) {
+          for (int l = r.y; l < (r.y + r.h); ++l) {
+	    level->AddStaticEntity(EntityFactory::CreateBlock(BLOCK_FRAME, k*TILESIZE, l*TILESIZE, TILESIZE));
+	  }
+        }
+        level->AddStaticEntity(EntityFactory::CreateCollisionBlock(r.x*TILESIZE, r.y*TILESIZE, r.w*TILESIZE, r.h*TILESIZE));
+      }   
     }
   }
   level->AddEntity(EntityFactory::CreateEndLevelEntity(END_FRAME, 200, 100, 50));
   levels.push_back(std::move(level));
+
   return levels;
+}
+
+std::vector<int> LevelGenerator::GenerateMap(int size)
+{
+  if (size < 4) {
+    // this random generation requires at least 4 by 4 rooms
+    // if size smaller, return no rooms 
+    std::vector<int> map(size*size,0);
+    return map;
+  }
+
+  // We represent 2d map as 1d int vector
+  // each integer represents certain type of room (see GenerateRooms)
+  // initial value zero means no room
+  std::vector<int> map(size*size, 0);
+
+  // The topmost row middle index is the starting room
+  int startingroom = size * 0 + (size/2);
+  map[startingroom] = 1;
+  
+  srand (time(NULL));
+  // iterate through map and create route down
+  int r;
+  bool set;
+  for (int i = 0; i < size-1; ++i) {
+    set = false;
+    r = (rand() % (size-2)) + 1; // random number between 1 and size-2
+    while (!set)
+    {
+      if (map[size * i + r] == 0) {
+        map[size * i + r] = 2; // route down
+        map[size * (i+1) + r] = 3; // catch the route down one level below
+        set = true; // exit loop
+      } else {
+        r = (rand() % (size-2)+1); // there was already a room, try new index
+      }
+    }
+  }
+  // create the edge pieces
+  for (int i = 0; i < size; ++i) {
+    map[size * i + 0] = 4; // opening to right
+    map[size * i + (size-1)] = 5; // opening to left
+  }
+
+  // fill rest with straights
+  for (int i = 0; i < map.size(); ++i) {
+    if (map[i] == 0) {
+      map[i] = 1;
+    }
+  }
+
+  return map;
 }
 
 std::vector<SDL_Rect> LevelGenerator::GenerateRoom(int x, int y, int n)
