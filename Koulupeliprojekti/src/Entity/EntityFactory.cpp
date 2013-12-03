@@ -188,25 +188,24 @@ std::unique_ptr<Entity> EntityFactory::CreateCollisionBlock(int x, int y, int w,
 
 }
 
+#include "Message/MessageFactory.h"
+
 
 std::unique_ptr<Entity> EntityFactory::CreateEndLevelEntity(int x, int y)
 {
 
   std::unique_ptr<Entity> e(new Entity);
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
-  std::unique_ptr<LocationComponent> l(new LocationComponent);
-  std::unique_ptr<CollisionComponent> c(new CollisionComponent());
-
   g->AddFrame(0, 200001);
   e->AddComponent(ComponentType::GRAPHICS,std::move(g));
-  l.reset(new LocationComponent);
-  l->SetLocation(x,y);
-  e->AddComponent(ComponentType::LOCATION, std::move(l));
-  c.reset(new CollisionComponent);
-  c->AddHitbox(0,0, 50, 50,HitboxType::SOLID);
+
+  std::unique_ptr<CollisionComponent> c(new CollisionComponent());
+  c->AddHitbox(0, 0, 50, 50,HitboxType::TRIGGER);
   e->AddComponent(ComponentType::COLLISION, std::move(c));
-  std::unique_ptr<Component> sc(new EndLevelScriptComponent);
-  e->AddScript(std::move(sc));
+
+  e->AddComponent(ComponentType::LOCATION, std::unique_ptr<LocationComponent>(new LocationComponent(x, y)));
+
+  e->AddScript(std::unique_ptr<Component>(new EndLevelScriptComponent));
   return e;
 }
 

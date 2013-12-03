@@ -53,7 +53,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
 
   int endEntityX = ((rand()%mapsize) * roomWidth * TILESIZE) + (7 * TILESIZE);
   int endEntityY = ((mapsize-1) * roomLength * TILESIZE) + (10 * TILESIZE);
-  level->AddStaticEntity(EntityFactory::CreateEndLevelEntity(endEntityX, endEntityY));
+  level->AddEntity(EntityFactory::CreateEndLevelEntity(endEntityX, endEntityY));
   levels.push_back(std::move(level));
 
   return levels;
