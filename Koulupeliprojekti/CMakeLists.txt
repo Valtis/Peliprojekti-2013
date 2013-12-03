@@ -79,7 +79,7 @@ pkg_check_modules(SDL2_MIXER REQUIRED SDL2_mixer)
 
 set(
   CMAKE_CXX_FLAGS
-  "${CMAKE_CXX_FLAGS}-std=c++0x -g -O3"
+  "${CMAKE_CXX_FLAGS}-std=c++0x -O3"
 )
 
 message (
