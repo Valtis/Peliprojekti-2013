@@ -110,9 +110,7 @@ MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
   if (m_collision[h_side] && m_collision[h_side])
     return handling;
 
-  if (!m_collision[h_side] &&
-      (v_side == CollisionSide::NONE ||
-       (v_side != CollisionSide::NONE && colMsg->GetPoint().y > 8)))
+  if (!m_collision[h_side])
   {
     if (h_side == CollisionSide::LEFT)
       m_x += colMsg->GetPoint().x;
