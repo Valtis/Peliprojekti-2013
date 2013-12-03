@@ -552,4 +552,15 @@
       <Filter>Resource Files</Filter>
     </Font>
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="data\sound\dsbarexp.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="data\sound\dspdiehi.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="data\sound\dsrlaunc.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+  </ItemGroup>
 </Project>

@@ -166,6 +166,11 @@
   <ItemGroup>
     <Font Include="data\fonts\FreeMono.otf" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="data\sound\dsbarexp.wav" />
+    <Media Include="data\sound\dspdiehi.wav" />
+    <Media Include="data\sound\dsrlaunc.wav" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8D1292B3-5DB4-4E8D-8A06-0170615C3DF3}</ProjectGuid>
     <RootNamespace>Koulupeliprojekti</RootNamespace>

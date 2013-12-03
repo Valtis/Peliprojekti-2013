@@ -203,7 +203,7 @@ std::unique_ptr<Entity> EntityFactory::CreateEndLevelEntity(int x, int y)
   l->SetLocation(x,y);
   e->AddComponent(ComponentType::LOCATION, std::move(l));
   c.reset(new CollisionComponent);
-  c->AddHitbox(0,0, 50, 50,HitboxType::TRIGGER);
+  c->AddHitbox(0,0, 50, 50,HitboxType::SOLID);
   e->AddComponent(ComponentType::COLLISION, std::move(c));
   std::unique_ptr<Component> sc(new EndLevelScriptComponent);
   e->AddScript(std::move(sc));
