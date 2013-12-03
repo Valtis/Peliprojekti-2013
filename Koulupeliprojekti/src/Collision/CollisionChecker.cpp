@@ -82,6 +82,7 @@ void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
         if (first_hit)
         {
           hit = new_hit;
+          hit.isect = isect;
           first_hit = false;
         }
         else
@@ -117,6 +118,16 @@ void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
               hit.point.y = 0;
             }
           }
+
+          if (isect.x < hit.isect.x)
+            hit.isect.x = isect.x;
+          if (isect.y < hit.isect.y)
+            hit.isect.y = isect.y;
+
+          if (isect.w > hit.isect.w)
+            hit.isect.w = isect.w;
+          if (isect.h > hit.isect.h)
+            hit.isect.h = isect.h;
         }
         hit_detected = true;
       }
