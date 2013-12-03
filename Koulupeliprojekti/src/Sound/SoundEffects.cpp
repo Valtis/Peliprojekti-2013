@@ -6,6 +6,7 @@
 
 SoundEffects::SoundEffects() : m_effects()
 {
+
 }
 
 SoundEffects::~SoundEffects()
@@ -17,12 +18,15 @@ void SoundEffects::Initialize()
 {
 
   std::ifstream inFile("data/sound/soundeffects.dat");
-
   std::string line;
+  std::getline(inFile, line);
+  Mix_Volume(-1, std::stoi(line));
+
   while (std::getline(inFile, line))
   {
     ParseLine(line);
   }
+ 
 }
 
 void SoundEffects::ParseLine( std::string &line )
