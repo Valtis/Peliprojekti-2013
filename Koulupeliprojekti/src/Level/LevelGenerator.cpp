@@ -29,14 +29,13 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
   camera->SetEntity(e.get());
   hud.SetPlayer(e.get());
 
-  level->AddEntity(std::move(EntityFactory::CreateFlyingEnemy(ENEMY_FRAME, 100, 70, 0, e.get())));
-  level->AddEntity(std::move(e));
- 
-
+  
+  int enemyX, enemyY;
   for (int i = 0; i < mapsize; ++i) {
     for (int j = 0; j < mapsize; ++j) {
       // for each room in map
       std::vector<SDL_Rect> room = GenerateRoom((i*15)+i,(j*10)+j,map[mapsize*j+i]); // hardcoded room width 15 length 10
+      // Create walls for room
       for (SDL_Rect r: room) {
         for (int k = r.x; k < (r.x + r.w); ++k) {
           for (int l = r.y; l < (r.y + r.h); ++l) {
@@ -44,9 +43,16 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
 	  }
         }
         level->AddStaticEntity(EntityFactory::CreateCollisionBlock(r.x*TILESIZE, r.y*TILESIZE, r.w*TILESIZE, r.h*TILESIZE));
-      }   
+      }
+      // Create enemy for room
+      enemyX = (i*15*TILESIZE) + (5*TILESIZE);
+      enemyY = (j*10*TILESIZE) + (5*TILESIZE);
+      level->AddEntity(std::move(EntityFactory::CreateFlyingEnemy(ENEMY_FRAME, enemyX, enemyY, 0, e.get())));
+ 
     }
   }
+  level->AddEntity(std::move(e));
+
   int endEntityX = ((rand()%mapsize) * 15 * TILESIZE) + (7 * TILESIZE);
   int endEntityY = ((mapsize-1) * 10 * TILESIZE) + (10 * TILESIZE);
   level->AddEntity(EntityFactory::CreateEndLevelEntity(END_FRAME, endEntityX, endEntityY, 50));
