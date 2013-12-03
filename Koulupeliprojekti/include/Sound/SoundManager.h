@@ -12,13 +12,15 @@
 
 class Music;
 class SoundEffects;
-
+class MessageProcessor;
+enum class MessageHandling;
 
 class SoundManager
 {
 public:
   SoundManager(int frequency, int chunckSize);
   virtual ~SoundManager();
+  void RegisterMessageHandlers(MessageProcessor *processor);
  
   void Play();
   void Pause();
@@ -31,7 +33,7 @@ public:
   void Update(double ticks_passed);
 
 private:
-  
+  MessageHandling HandlePlaySoundEffectMessage(Message *msg);
   void UninitializeSDLAudio();
   void ShutdownMix();
   void UninitializeMix();

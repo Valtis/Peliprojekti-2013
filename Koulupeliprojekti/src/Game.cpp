@@ -77,6 +77,7 @@ void Game::Initialize()
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
   SDL_JoystickEventState(SDL_ENABLE);
 
+  m_soundManager.RegisterMessageHandlers(this);
   m_soundManager.Play();
 
   // test code - lots of stuff hard coded
