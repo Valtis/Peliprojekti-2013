@@ -141,6 +141,7 @@ std::unique_ptr<Entity> EntityFactory::CreateFlyingEnemy(int frame, int x, int y
 
   e->AddComponent(ComponentType::FACTION, std::move(f));
   e->AddScript(std::unique_ptr<DamageColliderScript>(new DamageColliderScript));
+  e->AddScript(std::unique_ptr<TempInvulnerabilityScript>(new TempInvulnerabilityScript(2)));
   return e;
 }
 
