@@ -17,10 +17,13 @@ LevelGenerator::~LevelGenerator() {}
 
 std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera, Hud &hud )
 {
+  int mapsize = 5;
+  std::vector<int> map = GenerateMap(mapsize);
+
   std::vector<std::unique_ptr<Level>> levels;
   std::unique_ptr<Level> level(new Level);
 
-  std::unique_ptr<Entity> e = EntityFactory::CreatePlayer(PLAYER_FRAME, 60, 70, 35, m_inputManager);
+  std::unique_ptr<Entity> e = EntityFactory::CreatePlayer(PLAYER_FRAME, ((mapsize/2) * 15 * TILESIZE) + (7*TILESIZE), 8*TILESIZE, 35, m_inputManager);
   camera->SetEntity(e.get());
   hud.SetPlayer(e.get());
 
@@ -28,8 +31,6 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
   level->AddEntity(std::move(e));
  
 
-  int mapsize = 5;
-  std::vector<int> map = GenerateMap(mapsize);
   for (int i = 0; i < mapsize; ++i) {
     for (int j = 0; j < mapsize; ++j) {
       // for each room in map
