@@ -39,6 +39,7 @@ private:
   LevelManager m_levelManager;
   InputManager m_inputManager;
   WindowManager m_windowManager;
+  SoundManager m_soundManager;
   Hud m_hud;
   Renderer m_renderer;
   Tick m_gameTick;

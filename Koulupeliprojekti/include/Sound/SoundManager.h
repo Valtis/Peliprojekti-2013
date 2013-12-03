@@ -17,13 +17,9 @@ class SoundEffects;
 class SoundManager
 {
 public:
-
+  SoundManager(int frequency, int chunckSize);
   virtual ~SoundManager();
-
-  static void Release();
-
-  static SoundManager &Instance();
-
+ 
   void Play();
   void Pause();
   void Resume();
@@ -35,7 +31,7 @@ public:
   void Update(double ticks_passed);
 
 private:
-  SoundManager(int frequency, int chunckSize);
+  
   void UninitializeSDLAudio();
   void ShutdownMix();
   void UninitializeMix();
@@ -49,8 +45,6 @@ private:
   void OpenMixAudio( int frequency, int chunkSize );
 
   void InitializeSDLSoundSubsystem();
-
-  static SoundManager *m_instance;
 
   std::unique_ptr<Music> m_music;
   std::unique_ptr<SoundEffects> m_soundEffects;

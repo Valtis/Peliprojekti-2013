@@ -11,7 +11,9 @@
 #include "UI/Window/TextBox.h"
 #include "Message/Commands/ControlCommand.h"
 
-Game::Game() : m_gameTick(30), m_drawTick(30), m_isRunning(false), m_isPaused(false)
+Game::Game() : m_gameTick(30), m_drawTick(30), 
+  m_isRunning(false), m_isPaused(false), 
+  m_soundManager(44100, 1024) // todo: move the values to settings file instead of hardcoding
 {
   RegisterMessageHandler(MessageType::END_GAME, Priority::HIGHEST, [&](Message *msg)
     {
@@ -43,7 +45,7 @@ void Game::UpdateGameState()
 {
   if (m_gameTick.TickHasPassed())
   {
-    SoundManager::Instance().Update(m_gameTick.TicksPassed());
+    m_soundManager.Update(m_gameTick.TicksPassed());
     PollEvents();
 
     if (!m_isPaused) 
@@ -75,7 +77,7 @@ void Game::Initialize()
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
   SDL_JoystickEventState(SDL_ENABLE);
 
-  SoundManager::Instance().Play();
+  m_soundManager.Play();
 
   // test code - lots of stuff hard coded
   m_renderer.RegisterMessageHandlers(this);

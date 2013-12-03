@@ -3,7 +3,6 @@
 #include "Sound/Music.h"
 #include "Sound/SoundEffects.h"
 
-SoundManager *SoundManager::m_instance = nullptr;
 
 SoundManager::SoundManager(int frequency, int chunkSize) : m_music()
 {
@@ -85,25 +84,6 @@ void SoundManager::UninitializeSDLAudio()
   {
     SDL_QuitSubSystem(SDL_INIT_AUDIO);
   }
-}
-
-
-
-
-void SoundManager::Release()
-{
-  delete m_instance;
-  m_instance = nullptr;
-}
-
-SoundManager &SoundManager::Instance()
-{
-  if (m_instance == nullptr)
-  {
-    m_instance = new SoundManager(44100, 1024); // todo: move the values to settings file instead of hardcoding
-  }
-
-  return *m_instance;
 }
 
 
