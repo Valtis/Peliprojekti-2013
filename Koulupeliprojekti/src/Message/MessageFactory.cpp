@@ -64,7 +64,8 @@ std::unique_ptr<Message> MessageFactory::CreateResetEntityPositionMessage(Entity
   return std::unique_ptr<Message>(new ResetEntityPositionMessage(entity));
 }
 
-std::unique_ptr<Message> MessageFactory::CreateNewTiledSpriteMessage(int baseID, int newID, int width, int height)
+std::unique_ptr<Message> MessageFactory::CreateNewTiledSpriteMessage(int baseID, int newID, 
+                                                                     int width, int height)
 {
   return std::unique_ptr<Message>(new NewTiledSpriteMessage(baseID, newID, width, height));
 }
