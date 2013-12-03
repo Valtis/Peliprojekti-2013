@@ -74,7 +74,7 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   e->AddScript(std::unique_ptr<DamageColliderScript>(new DamageColliderScript));
 }
 
-std::unique_ptr<Entity> EntityFactory::CreatePlayer(int frame, int x, int y, int size, InputManager &input)
+std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &input)
 {
   std::unique_ptr<Entity> e(new Entity);
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
@@ -87,10 +87,10 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int frame, int x, int y, int
   std::unique_ptr<HealthComponent> h(new HealthComponent(4, 4, 3));
   i->RegisterInputHandler(input);
 
-  g->AddFrame(0, frame, 20);
-  g->AddFrame(0, frame + 1, 20);
-  g->AddFrame(0, frame + 2, 0);
-  g->AddFrame(0, frame + 3, 20);
+  g->AddFrame(0, 200002, 20);
+  g->AddFrame(0, 200002 + 1, 20);
+  g->AddFrame(0, 200002 + 2, 0);
+  g->AddFrame(0, 200002 + 3, 20);
 
 
   e->AddComponent(ComponentType::GRAPHICS, std::move(g));
@@ -99,7 +99,7 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int frame, int x, int y, int
   e->AddComponent(ComponentType::VELOCITY, std::move(v));
   e->AddComponent(ComponentType::INPUT, std::move(i));
   
-  c->AddHitbox(0, 0, size, size, HitboxType::SOLID);
+  c->AddHitbox(0, 0, 35, 35, HitboxType::SOLID);
   e->AddComponent(ComponentType::COLLISION, std::move(c));
   e->AddComponent(ComponentType::FACTION, std::move(f));
   e->AddComponent(ComponentType::PHYSICS,std::move(p));
@@ -110,49 +110,46 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int frame, int x, int y, int
   return e;
 }
 
-std::unique_ptr<Entity> EntityFactory::CreateFlyingEnemy(int frame, int x, int y, int size, Entity *target)
+std::unique_ptr<Entity> BaseEnemy(int x, int y)
 {
   std::unique_ptr<Entity> e(new Entity);
-  std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
-  std::unique_ptr<LocationComponent> l(new LocationComponent);
-  std::unique_ptr<CollisionComponent> c(new CollisionComponent());
-  std::unique_ptr<VelocityComponent> v(new VelocityComponent(3, 3));
-  std::unique_ptr<FactionComponent> f(new FactionComponent(Faction::ENEMY));
-  std::unique_ptr<FlyingAiComponent> ai(new FlyingAiComponent(target));
-  std::unique_ptr<InputComponent> i(new InputComponent(-1));
-
+  e->AddComponent(ComponentType::COLLISION,std::unique_ptr<CollisionComponent>(new CollisionComponent));
+  e->AddComponent(ComponentType::LOCATION,  std::unique_ptr<LocationComponent>(new LocationComponent(x, y)));
+  e->AddComponent(ComponentType::GRAPHICS, std::unique_ptr<GraphicsComponent>(new GraphicsComponent));
+  e->AddComponent(ComponentType::VELOCITY, std::unique_ptr<VelocityComponent>(new VelocityComponent(3, 3)));
   e->AddComponent(ComponentType::HEALTH, std::unique_ptr<Component>(new HealthComponent(3, 3, 0)));
-
-  g->AddFrame(0,frame, 5);
-  g->AddFrame(0, 200032, 5);
-  e->AddComponent(ComponentType::GRAPHICS, std::move(g));
-
-  l->SetLocation(x,y);
-  e->AddComponent(ComponentType::LOCATION, std::move(l));
-  i.reset(new InputComponent(-1));
-  e->AddComponent(ComponentType::INPUT, std::move(i));
-
-  e->AddComponent(ComponentType::VELOCITY, std::move(v));
-  e->AddComponent(ComponentType::AI, std::move(ai));
-
-  c->AddHitbox(0,0,70,35, HitboxType::SOLID);
-  c->AddHitbox(0,0,70,35, HitboxType::TRIGGER);
-  e->AddComponent(ComponentType::COLLISION, std::move(c));
-
-  e->AddComponent(ComponentType::FACTION, std::move(f));
+  e->AddComponent(ComponentType::INPUT,  std::unique_ptr<InputComponent>(new InputComponent(-1)));
+  e->AddComponent(ComponentType::FACTION, std::unique_ptr<FactionComponent>(new FactionComponent(Faction::ENEMY)));
   e->AddScript(std::unique_ptr<DamageColliderScript>(new DamageColliderScript));
   e->AddScript(std::unique_ptr<TempInvulnerabilityScript>(new TempInvulnerabilityScript(2)));
   return e;
 }
 
-std::unique_ptr<Entity> EntityFactory::CreateBlock(int frame, int x, int y, int size)
+std::unique_ptr<Entity> EntityFactory::CreateFlyingEnemy(int x, int y, Entity *target)
+{
+  
+  auto e = BaseEnemy(x, y);
+  e->AddComponent(ComponentType::AI, std::unique_ptr<FlyingAiComponent>(new FlyingAiComponent(target)));
+
+  auto g = static_cast<GraphicsComponent *>(e->GetComponent(ComponentType::GRAPHICS));
+  auto c = static_cast<CollisionComponent *>(e->GetComponent(ComponentType::COLLISION));
+  g->AddFrame(0, 200028, 5);
+  g->AddFrame(0, 200032, 5);
+
+  c->AddHitbox(0,0,70,35, HitboxType::SOLID);
+  c->AddHitbox(0,0,70,35, HitboxType::TRIGGER);
+  
+  return e;
+}
+
+std::unique_ptr<Entity> EntityFactory::CreateBlock(int x, int y)
 {
   std::unique_ptr<Entity> e(new Entity);
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
   std::unique_ptr<LocationComponent> l(new LocationComponent);
 
 
-  g->AddFrame(0, frame);
+  g->AddFrame(0, 400002);
   e->AddComponent(ComponentType::GRAPHICS, std::move(g));
 
   l->SetLocation(x, y);
@@ -177,7 +174,7 @@ std::unique_ptr<Entity> EntityFactory::CreateCollisionBlock(int x, int y, int w,
 }
 
 
-std::unique_ptr<Entity> EntityFactory::CreateEndLevelEntity(int frame, int x, int y, int size)
+std::unique_ptr<Entity> EntityFactory::CreateEndLevelEntity(int x, int y)
 {
 
   std::unique_ptr<Entity> e(new Entity);
@@ -185,13 +182,13 @@ std::unique_ptr<Entity> EntityFactory::CreateEndLevelEntity(int frame, int x, in
   std::unique_ptr<LocationComponent> l(new LocationComponent);
   std::unique_ptr<CollisionComponent> c(new CollisionComponent());
 
-  g->AddFrame(0,frame);
+  g->AddFrame(0, 200001);
   e->AddComponent(ComponentType::GRAPHICS,std::move(g));
   l.reset(new LocationComponent);
   l->SetLocation(x,y);
   e->AddComponent(ComponentType::LOCATION, std::move(l));
   c.reset(new CollisionComponent);
-  c->AddHitbox(0,0,size,size,HitboxType::TRIGGER);
+  c->AddHitbox(0,0, 50, 50,HitboxType::TRIGGER);
   e->AddComponent(ComponentType::COLLISION, std::move(c));
   std::unique_ptr<Component> sc(new EndLevelScriptComponent);
   e->AddScript(std::move(sc));

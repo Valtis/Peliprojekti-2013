@@ -7,6 +7,7 @@ class LocationComponent : public Component
 {
 public:
   LocationComponent();
+  LocationComponent(double x, double y);
   ~LocationComponent();
   void Update(double ticksPassed) override;
   double GetX() { return m_x; }

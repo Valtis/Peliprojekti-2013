@@ -13,6 +13,12 @@ LocationComponent::LocationComponent() : m_x(0), m_y(0), m_direction(Direction::
 
 }
 
+LocationComponent::LocationComponent(double x, double y) : m_x(x), m_y(y), m_direction(Direction::RIGHT)
+{
+
+}
+
+
 LocationComponent::~LocationComponent()
 {
 

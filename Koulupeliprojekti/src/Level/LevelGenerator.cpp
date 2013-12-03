@@ -6,10 +6,6 @@
 #include "UI/Hud.h"
 #include <ctime>
 
-#define PLAYER_FRAME 200002 // 200002
-#define ENEMY_FRAME 200028
-#define BLOCK_FRAME 400002 // 200031
-#define END_FRAME 200001
 #define TILESIZE 32
 
 LevelGenerator::LevelGenerator() {}
@@ -27,7 +23,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
 
   int playerStartX = ((mapsize/2) * roomWidth * TILESIZE) + (7 * TILESIZE);
   int playerStartY = 8*TILESIZE;
-  std::unique_ptr<Entity> e = EntityFactory::CreatePlayer(PLAYER_FRAME, playerStartX, playerStartY, 35, m_inputManager);
+  std::unique_ptr<Entity> e = EntityFactory::CreatePlayer(playerStartX, playerStartY, m_inputManager);
   camera->SetEntity(e.get());
   hud.SetPlayer(e.get());
 
@@ -41,7 +37,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
       for (SDL_Rect r: room) {
         for (int k = r.x; k < (r.x + r.w); ++k) {
           for (int l = r.y; l < (r.y + r.h); ++l) {
-	    level->AddStaticEntity(EntityFactory::CreateBlock(BLOCK_FRAME, k*TILESIZE, l*TILESIZE, TILESIZE));
+	    level->AddStaticEntity(EntityFactory::CreateBlock(k*TILESIZE, l*TILESIZE));
 	  }
         }
         level->AddStaticEntity(EntityFactory::CreateCollisionBlock(r.x*TILESIZE, r.y*TILESIZE, r.w*TILESIZE, r.h*TILESIZE));
@@ -49,7 +45,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
       // Create enemy for room
       enemyX = (i*roomWidth*TILESIZE) + (5*TILESIZE);
       enemyY = (j*roomLength*TILESIZE) + (5*TILESIZE);
-      level->AddEntity(std::move(EntityFactory::CreateFlyingEnemy(ENEMY_FRAME, enemyX, enemyY, 0, e.get())));
+      level->AddEntity(std::move(EntityFactory::CreateFlyingEnemy(enemyX, enemyY, e.get())));
  
     }
   }
@@ -57,7 +53,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
 
   int endEntityX = ((rand()%mapsize) * roomWidth * TILESIZE) + (7 * TILESIZE);
   int endEntityY = ((mapsize-1) * roomLength * TILESIZE) + (10 * TILESIZE);
-  level->AddEntity(EntityFactory::CreateEndLevelEntity(END_FRAME, endEntityX, endEntityY, 50));
+  level->AddStaticEntity(EntityFactory::CreateEndLevelEntity(endEntityX, endEntityY));
   levels.push_back(std::move(level));
 
   return levels;
