@@ -79,7 +79,7 @@ std::unique_ptr<Message> MessageFactory::CreateSetGraphicsVisibilityMessage(bool
   return std::unique_ptr<Message>(new SetGraphicsVisibilityMessage(visibility));
 }
 
-std::unique_ptr<Message> CreatePlaySoundEffectMessage(int id)
+std::unique_ptr<Message> MessageFactory::CreatePlaySoundEffectMessage(int id)
 {
   return std::unique_ptr<Message>(new PlaySoundEffectMessage(id));
 }

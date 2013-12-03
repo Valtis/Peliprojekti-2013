@@ -50,7 +50,7 @@ void SoundEffects::LoadEffect( std::string name, int id )
 
   if (effect == nullptr)
   {
-    throw std::runtime_error("Failed to load sound effect " + id);
+    throw std::runtime_error("Failed to load sound effect " + name);
   }
   m_effects[id] = effect;
 }

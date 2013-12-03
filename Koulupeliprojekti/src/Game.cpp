@@ -61,7 +61,8 @@ void Game::Draw()
   if (m_drawTick.TickHasPassed())
   {
     m_renderer.Draw(
-      m_testDebugCamera.get(), m_levelManager.GetCurrentLevel()->GetEntities(),
+      m_camera.get(), 
+      m_levelManager.GetCurrentLevel()->GetEntities(),
       m_levelManager.GetCurrentLevel()->GetStaticEntities(),
       m_levelManager.GetCurrentLevel()->GetStaticCollidables(),
       m_windowManager.GetWindows(),
@@ -96,7 +97,7 @@ void Game::Initialize()
   m_levelManager.SetParent(this);
   m_levelManager.Initialize(m_inputManager, camera, m_hud);
   
-  m_testDebugCamera = std::move(camera);
+  m_camera = std::move(camera);
 
   TestWindowCreation();
   m_isRunning = true;

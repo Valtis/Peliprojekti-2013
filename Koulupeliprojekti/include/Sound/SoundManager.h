@@ -14,7 +14,7 @@ class Music;
 class SoundEffects;
 class MessageProcessor;
 enum class MessageHandling;
-
+class Message;
 class SoundManager
 {
 public:

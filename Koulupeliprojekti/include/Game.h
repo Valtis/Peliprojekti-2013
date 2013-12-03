@@ -46,7 +46,7 @@ private:
   Tick m_drawTick;
   bool m_isRunning;
   bool m_isPaused;
-  std::unique_ptr<Camera> m_testDebugCamera;
+  std::unique_ptr<Camera> m_camera;
 
 };
 

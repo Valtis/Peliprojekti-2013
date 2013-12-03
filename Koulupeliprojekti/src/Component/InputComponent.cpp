@@ -107,6 +107,8 @@ void InputComponent::Fire()
 
   m_lastFireTick = SDL_GetTicks();
 
-  auto msg = MessageFactory::CreateSpawnEntityMessage(EntityType::BULLET, GetOwner());
-  GetOwner()->SendMessage(msg.get());
+  auto spawnMsg = MessageFactory::CreateSpawnEntityMessage(EntityType::BULLET, GetOwner());
+  auto soundMsg = MessageFactory::CreatePlaySoundEffectMessage(GUN_SHOOT);
+  GetOwner()->SendMessage(spawnMsg.get());
+  GetOwner()->SendMessage(soundMsg.get());
 }
