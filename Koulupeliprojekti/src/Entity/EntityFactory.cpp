@@ -48,7 +48,7 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
 
   std::unique_ptr<CollisionComponent> collision(new CollisionComponent);
   collision->AddHitbox(0, 0, 20, 20, HitboxType::TRIGGER);
-  std::unique_ptr<VelocityComponent> velocity(new VelocityComponent);
+  std::unique_ptr<VelocityComponent> velocity(new VelocityComponent(0, 0));
 
   y = 0;
   x = 5;
@@ -79,7 +79,7 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int frame, int x, int y, int
   std::unique_ptr<Entity> e(new Entity);
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
   std::unique_ptr<LocationComponent> l(new LocationComponent);
-  std::unique_ptr<VelocityComponent> v(new VelocityComponent);
+  std::unique_ptr<VelocityComponent> v(new VelocityComponent(3, 13));
   std::unique_ptr<CollisionComponent> c(new CollisionComponent());
   std::unique_ptr<FactionComponent> f(new FactionComponent(Faction::PLAYER));
   std::unique_ptr<PhysicsComponent> p(new PhysicsComponent);
@@ -116,7 +116,7 @@ std::unique_ptr<Entity> EntityFactory::CreateFlyingEnemy(int frame, int x, int y
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
   std::unique_ptr<LocationComponent> l(new LocationComponent);
   std::unique_ptr<CollisionComponent> c(new CollisionComponent());
-  std::unique_ptr<VelocityComponent> v(new VelocityComponent);
+  std::unique_ptr<VelocityComponent> v(new VelocityComponent(3, 3));
   std::unique_ptr<FactionComponent> f(new FactionComponent(Faction::ENEMY));
   std::unique_ptr<FlyingAiComponent> ai(new FlyingAiComponent(target));
   std::unique_ptr<InputComponent> i(new InputComponent(-1));

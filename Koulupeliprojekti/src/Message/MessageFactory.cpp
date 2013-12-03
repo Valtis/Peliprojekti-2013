@@ -22,26 +22,9 @@ std::unique_ptr<Message> MessageFactory::CreateSetLocationMessage(double x, doub
   return std::unique_ptr<Message>(new SetLocationMessage(x, y));
 }
 
-std::unique_ptr<Message> MessageFactory::CreateVelocityChangeMessage(double x, double y)
+std::unique_ptr<Message> MessageFactory::CreateSetVelocityMessage(Direction x, Direction y)
 {
-  return std::unique_ptr<Message>(new VelocityChangeMessage(x, y));
-}
-
-std::unique_ptr<Message> MessageFactory::CreateSetVelocityMessage(double x, double y)
-{
-  return std::unique_ptr<Message>(new SetVelocityMessage(x, y, Velocity::XY));
-}
-
-std::unique_ptr<Message> MessageFactory::CreateSetVelocityMessage(double vel, Velocity dir)
-{
-  if (dir == Velocity::X)
-  {
-    return std::unique_ptr<Message>(new SetVelocityMessage(vel,0,dir));
-  }
-  else
-  {
-    return std::unique_ptr<Message>(new SetVelocityMessage(0, vel, dir));
-  }
+  return std::unique_ptr<Message>(new SetVelocityMessage(x, y));
 }
 
 std::unique_ptr<Message> MessageFactory::CreateCollisionMessage(CollisionHit *hit)

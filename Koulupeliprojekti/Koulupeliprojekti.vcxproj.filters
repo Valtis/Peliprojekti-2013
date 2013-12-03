@@ -213,9 +213,6 @@
     <ClInclude Include="include\Message\MessageFactory.h">
       <Filter>Header Files\Message</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\VelocityChangeMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
     <ClInclude Include="include\Component\GraphicsComponent.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
@@ -323,6 +320,9 @@
     </ClInclude>
     <ClInclude Include="include\Message\SetLocationMessage.h">
       <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\DirectionEnum.h">
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

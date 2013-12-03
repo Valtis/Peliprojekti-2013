@@ -2,19 +2,18 @@
 #include <memory>
 #include <SDL.h>
 class Entity;
+
 class Message;
 enum class CollisionSide;
 enum class EntityType;
-enum class Velocity;
+enum class Direction;
 typedef struct _CollisionHit CollisionHit;
 
 namespace MessageFactory
 {
   std::unique_ptr<Message> CreateSetLocationMessage(double x, double y);
   std::unique_ptr<Message> CreateLocationChangeMessage(double x, double y);
-  std::unique_ptr<Message> CreateVelocityChangeMessage(double x, double y);
-  std::unique_ptr<Message> CreateSetVelocityMessage(double x, double y);
-  std::unique_ptr<Message> CreateSetVelocityMessage(double vel, Velocity dir);
+  std::unique_ptr<Message> CreateSetVelocityMessage(Direction x, Direction y);
   std::unique_ptr<Message> CreateCollisionMessage(CollisionHit *hit);
   std::unique_ptr<Message> CreateSpawnEntityMessage(EntityType type, Entity *spawner);
   std::unique_ptr<Message> CreateTerminateEntityMessage(Entity *entity);
