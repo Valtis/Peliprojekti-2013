@@ -6,12 +6,12 @@
 #include "Component/LocationComponent.h"
 #include "UI/InputManager.h"
 #include <SDL.h>
-InputComponent::InputComponent() : m_debugLastFireTick(0), m_id(0)
+InputComponent::InputComponent() : m_lastFireTick(0), m_id(0)
 {
 
 }
 
-InputComponent::InputComponent(int id) : m_id(id), m_debugLastFireTick(0)
+InputComponent::InputComponent(int id) : m_id(id), m_lastFireTick(0)
 {
 
 }
@@ -48,34 +48,25 @@ MessageHandling InputComponent::HandleInput( Command *msg )
   if (m_id == -1 && command->GetController() != -1)
     return MessageHandling::PASS_FORWARD;
 
-  double xVel = 3;
-  double yVel = 3;
-  if (command->GetState() == KeyState::UP)
-  {
-    xVel = yVel = 0;
-  }
+  Direction xDir = Direction::UNCHANGED;
+  Direction yDir = Direction::UNCHANGED;
 
-
-  double newXVelocity = 0;
-  double newYVelocity = 0;
-  Velocity dir = Velocity::X;
   // TODO: clean up this
   switch (command->GetCommand())
   {
   case Action::LEFT:
-    newXVelocity = -xVel;
+    xDir = command->GetState() == KeyState::DOWN ? Direction::LEFT : Direction::NONE;
     break;
   case Action::RIGHT:
-    newXVelocity = xVel;
+    xDir = command->GetState() == KeyState::DOWN ? Direction::RIGHT : Direction::NONE;
     break;
 
   case Action::UP:
-    newYVelocity = -yVel;
-    dir = Velocity::Y;
+    yDir = command->GetState() == KeyState::DOWN ? Direction::UP : Direction::NONE;
+
     break;
   case Action::DOWN:
-    newYVelocity = yVel;
-    dir = Velocity::Y;
+    yDir = command->GetState() == KeyState::DOWN ? Direction::DOWN : Direction::NONE;
     break;
   case Action::JUMP:
     if (command->GetState() == KeyState::DOWN)
@@ -89,18 +80,9 @@ MessageHandling InputComponent::HandleInput( Command *msg )
     break;
   }
 
-  if (dir == Velocity::X)
-  {
-    auto message = MessageFactory::CreateSetVelocityMessage(newXVelocity, Velocity::X);
-    GetOwner()->SendMessage(message.get());
-  }
-  else
-  {
-    auto message = MessageFactory::CreateSetVelocityMessage(newYVelocity, Velocity::Y);
-    GetOwner()->SendMessage(message.get());
-  }
 
-
+  auto velMsg = MessageFactory::CreateSetVelocityMessage(xDir, yDir);
+  GetOwner()->SendMessage(velMsg.get());
   return MessageHandling::PASS_FORWARD;
 }
 
@@ -112,18 +94,18 @@ void InputComponent::Jump()
   if (!loc->CanIJump())
     return;
 
-  auto message = MessageFactory::CreateSetVelocityMessage(-13, Velocity::Y);
+  auto message = MessageFactory::CreateSetVelocityMessage(Direction::UNCHANGED, Direction::UP);
   GetOwner()->SendMessage(message.get());
 }
 
 void InputComponent::Fire()
 {
-  if (m_debugLastFireTick + 500 >= SDL_GetTicks())
+  if (m_lastFireTick + 500 >= SDL_GetTicks())
   {
     return;
   }
 
-  m_debugLastFireTick = SDL_GetTicks();
+  m_lastFireTick = SDL_GetTicks();
 
   auto msg = MessageFactory::CreateSpawnEntityMessage(EntityType::BULLET, GetOwner());
   GetOwner()->SendMessage(msg.get());

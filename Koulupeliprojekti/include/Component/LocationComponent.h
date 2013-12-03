@@ -1,7 +1,7 @@
 #pragma once
 #include "Component.h"
 #include <map>
-enum class Direction : int { LEFT, RIGHT, UP, DOWN };
+#include "Utility/DirectionEnum.h"
 
 class LocationComponent : public Component
 {

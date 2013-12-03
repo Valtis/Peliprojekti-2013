@@ -62,7 +62,6 @@
     <ClInclude Include="include\Message\SetVelocityMessage.h" />
     <ClInclude Include="include\Message\SpawnEntityMessage.h" />
     <ClInclude Include="include\Message\StartBlinkingMessage.h" />
-    <ClInclude Include="include\Message\VelocityChangeMessage.h" />
     <ClInclude Include="include\Physics\PhysicsHandler.h" />
     <ClInclude Include="include\Sound\Music.h" />
     <ClInclude Include="include\Sound\SoundEffects.h" />
@@ -79,6 +78,7 @@
     <ClInclude Include="include\UI\Window\Window.h" />
     <ClInclude Include="include\UI\Window\WindowBase.h" />
     <ClInclude Include="include\UI\Window\WindowManager.h" />
+    <ClInclude Include="include\Utility\DirectionEnum.h" />
     <ClInclude Include="include\Utility\Logger.h" />
     <ClInclude Include="include\Utility\LoggerManager.h" />
     <ClInclude Include="include\Utility\Logs.h" />

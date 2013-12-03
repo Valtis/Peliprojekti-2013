@@ -1,19 +1,16 @@
 #pragma once
 #include "Message/Message.h"
-enum class Velocity : int { X, Y, XY };
-
+#include "Utility/DirectionEnum.h"
 class SetVelocityMessage : public Message
 {
 public:
-  SetVelocityMessage(double x, double y, Velocity dir) : m_xVelocity(x), m_yVelocity(y), m_direction(dir) { }
+  SetVelocityMessage(Direction x, Direction y) : m_xDirection(x), m_yDirection(y) { }
   MessageType GetType() const override { return MessageType::SET_VELOCITY; }
 
-  Velocity GetDirection() const { return m_direction; }
-  double GetXVelocity() const { return m_xVelocity; }
-  double GetYVelocity() const { return m_yVelocity; }
+  Direction GetXDirection() const { return m_xDirection; }
+  Direction GetYDirection() const { return m_yDirection; }
 
 private:
-  const double m_xVelocity;
-  const double m_yVelocity;
-  const Velocity m_direction;
+  const Direction m_xDirection;
+  const Direction m_yDirection;
 };
