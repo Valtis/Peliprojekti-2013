@@ -15,7 +15,15 @@ public:
   
   void AddComponent(ComponentType type, std::unique_ptr<Component> c);
   void AddScript(std::unique_ptr<Component> script);
-  Component *GetComponent(ComponentType type);
+  Component * GetComponent(ComponentType type)
+  {
+    if (m_components.count(type) == 0)
+    {
+      return nullptr;
+    }
+    return m_components[type].get();
+  }
+
   void Update(double ticksPassed);
 
   
