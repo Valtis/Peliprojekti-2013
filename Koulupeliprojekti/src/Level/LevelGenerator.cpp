@@ -17,7 +17,7 @@ LevelGenerator::~LevelGenerator() {}
 
 std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera, Hud &hud )
 {
-  int mapsize = 5;
+  int mapsize = 4;
   std::vector<int> map = GenerateMap(mapsize);
 
   std::vector<std::unique_ptr<Level>> levels;
@@ -47,7 +47,9 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
       }   
     }
   }
-  level->AddEntity(EntityFactory::CreateEndLevelEntity(END_FRAME, 200, 100, 50));
+  int endEntityX = ((rand()%mapsize) * 15 * TILESIZE) + (7 * TILESIZE);
+  int endEntityY = ((mapsize-1) * 10 * TILESIZE) + (10 * TILESIZE);
+  level->AddEntity(EntityFactory::CreateEndLevelEntity(END_FRAME, endEntityX, endEntityY, 50));
   levels.push_back(std::move(level));
 
   return levels;
