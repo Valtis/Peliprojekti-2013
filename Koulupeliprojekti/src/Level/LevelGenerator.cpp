@@ -17,13 +17,15 @@ LevelGenerator::~LevelGenerator() {}
 
 std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera, Hud &hud )
 {
-  int mapsize = 4;
+  int mapsize = 4; // so real size is 4 by 4
+  int roomWidth = 15;
+  int roomLength = 10; // dont change these yet
   std::vector<int> map = GenerateMap(mapsize);
 
   std::vector<std::unique_ptr<Level>> levels;
   std::unique_ptr<Level> level(new Level);
 
-  int playerStartX = ((mapsize/2) * 15 * TILESIZE) + (7 * TILESIZE);
+  int playerStartX = ((mapsize/2) * roomWidth * TILESIZE) + (7 * TILESIZE);
   int playerStartY = 8*TILESIZE;
   std::unique_ptr<Entity> e = EntityFactory::CreatePlayer(PLAYER_FRAME, playerStartX, playerStartY, 35, m_inputManager);
   camera->SetEntity(e.get());
@@ -34,7 +36,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
   for (int i = 0; i < mapsize; ++i) {
     for (int j = 0; j < mapsize; ++j) {
       // for each room in map
-      std::vector<SDL_Rect> room = GenerateRoom((i*15)+i,(j*10)+j,map[mapsize*j+i]); // hardcoded room width 15 length 10
+      std::vector<SDL_Rect> room = GenerateRoom((i*roomWidth)+i, (j*roomLength)+j, roomWidth, roomLength, map[mapsize*j+i]); // hardcoded room width 15 length 10
       // Create walls for room
       for (SDL_Rect r: room) {
         for (int k = r.x; k < (r.x + r.w); ++k) {
@@ -45,16 +47,16 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
         level->AddStaticEntity(EntityFactory::CreateCollisionBlock(r.x*TILESIZE, r.y*TILESIZE, r.w*TILESIZE, r.h*TILESIZE));
       }
       // Create enemy for room
-      enemyX = (i*15*TILESIZE) + (5*TILESIZE);
-      enemyY = (j*10*TILESIZE) + (5*TILESIZE);
+      enemyX = (i*roomWidth*TILESIZE) + (5*TILESIZE);
+      enemyY = (j*roomLength*TILESIZE) + (5*TILESIZE);
       level->AddEntity(std::move(EntityFactory::CreateFlyingEnemy(ENEMY_FRAME, enemyX, enemyY, 0, e.get())));
  
     }
   }
   level->AddEntity(std::move(e));
 
-  int endEntityX = ((rand()%mapsize) * 15 * TILESIZE) + (7 * TILESIZE);
-  int endEntityY = ((mapsize-1) * 10 * TILESIZE) + (10 * TILESIZE);
+  int endEntityX = ((rand()%mapsize) * roomWidth * TILESIZE) + (7 * TILESIZE);
+  int endEntityY = ((mapsize-1) * roomLength * TILESIZE) + (10 * TILESIZE);
   level->AddEntity(EntityFactory::CreateEndLevelEntity(END_FRAME, endEntityX, endEntityY, 50));
   levels.push_back(std::move(level));
 
@@ -113,13 +115,13 @@ std::vector<int> LevelGenerator::GenerateMap(int size)
   return map;
 }
 
-std::vector<SDL_Rect> LevelGenerator::GenerateRoom(int x, int y, int n)
+std::vector<SDL_Rect> LevelGenerator::GenerateRoom(int x, int y, int w, int l, int n)
 {
   // rooms always 15 width and 10 height
   // x and y is the left corner
   // n is which type of room we generate
 
-  int room_width = 15; int room_height = 10;
+  int room_width = w; int room_height = l;
   std::vector<SDL_Rect> room(0);
   SDL_Rect p1, p2, p3, p4, p5, p6;
   switch (n)
