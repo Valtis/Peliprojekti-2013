@@ -11,6 +11,7 @@
 #include "Message/NewTiledSpriteMessage.h"
 #include "Message/StartBlinkingMessage.h"
 #include "Message/SetGraphicsVisibilityMessage.h"
+#include "Message/PlaySoundEffectMessage.h"
 
 std::unique_ptr<Message> MessageFactory::CreateLocationChangeMessage(double x, double y)
 {
@@ -76,4 +77,9 @@ std::unique_ptr<Message> MessageFactory::CreateStartBlinkingMessage(double durat
 std::unique_ptr<Message> MessageFactory::CreateSetGraphicsVisibilityMessage(bool visibility)
 {
   return std::unique_ptr<Message>(new SetGraphicsVisibilityMessage(visibility));
+}
+
+std::unique_ptr<Message> CreatePlaySoundEffectMessage(int id)
+{
+  return std::unique_ptr<Message>(new PlaySoundEffectMessage(id));
 }

@@ -56,6 +56,7 @@
     <ClInclude Include="include\Message\Message.h" />
     <ClInclude Include="include\Message\MessageFactory.h" />
     <ClInclude Include="include\Message\MessageProcessor.h" />
+    <ClInclude Include="include\Message\PlaySoundEffectMessage.h" />
     <ClInclude Include="include\Message\ResetEntityPositionMessage.h" />
     <ClInclude Include="include\Message\SetGraphicsVisibilityMessage.h" />
     <ClInclude Include="include\Message\SetLocationMessage.h" />
@@ -64,6 +65,7 @@
     <ClInclude Include="include\Message\StartBlinkingMessage.h" />
     <ClInclude Include="include\Physics\PhysicsHandler.h" />
     <ClInclude Include="include\Sound\Music.h" />
+    <ClInclude Include="include\Sound\SoundEffectDefs.h" />
     <ClInclude Include="include\Sound\SoundEffects.h" />
     <ClInclude Include="include\Sound\SoundManager.h" />
     <ClInclude Include="include\UI\Controller\Controller.h" />

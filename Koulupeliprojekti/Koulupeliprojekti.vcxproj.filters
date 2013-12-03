@@ -324,6 +324,12 @@
     <ClInclude Include="include\Utility\DirectionEnum.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="include\Message\PlaySoundEffectMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Sound\SoundEffectDefs.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
