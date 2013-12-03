@@ -23,6 +23,7 @@
 
 void CreateBullet(Entity *e, SpawnEntityMessage *msg)
 {
+  const int bulletHitboxSize = 20;
   Entity *spawner = msg->Spawner();
 
   LocationComponent *spawnerLocation = static_cast<LocationComponent *>(spawner->GetComponent(ComponentType::LOCATION));
@@ -35,9 +36,23 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
     bulletFaction = spawnerFaction->GetFaction();
   }
 
+  
   double x = spawnerLocation->GetX();
   double y = spawnerLocation->GetY();
+
+  
   Direction direction = spawnerLocation->GetDirection();
+
+  
+  if (direction == Direction::LEFT)
+  {
+    x -= bulletHitboxSize;
+  }
+  else
+  {
+    x += bulletHitboxSize;
+  }
+  
 
   std::unique_ptr<LocationComponent> location(new LocationComponent());
   location->SetLocation(x, y);
@@ -47,22 +62,22 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   graphics->AddFrame(0, 200007);
 
   std::unique_ptr<CollisionComponent> collision(new CollisionComponent);
-  collision->AddHitbox(0, 0, 20, 20, HitboxType::TRIGGER);
+  collision->AddHitbox(0, 0, bulletHitboxSize, bulletHitboxSize, HitboxType::TRIGGER);
   std::unique_ptr<VelocityComponent> velocity(new VelocityComponent(0, 0));
 
   y = 0;
-  x = 5;
+  x = 10;
 
   if (direction == Direction::LEFT)
   {
-    x = -5;
+    x = -x;
   }
   velocity->SetVelocity(x, y);
 
   std::unique_ptr<FactionComponent> faction(new FactionComponent(bulletFaction));
   std::unique_ptr<HealthComponent> health(new HealthComponent(1, 1, 0));
   std::unique_ptr<BulletScriptComponent> script(new BulletScriptComponent);
- ;
+ 
 
   e->AddComponent(ComponentType::COLLISION, std::move(collision));
   e->AddComponent(ComponentType::GRAPHICS, std::move(graphics));
@@ -79,7 +94,7 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   std::unique_ptr<Entity> e(new Entity);
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
   std::unique_ptr<LocationComponent> l(new LocationComponent);
-  std::unique_ptr<VelocityComponent> v(new VelocityComponent(3, 13));
+  std::unique_ptr<VelocityComponent> v(new VelocityComponent(5, 13));
   std::unique_ptr<CollisionComponent> c(new CollisionComponent());
   std::unique_ptr<FactionComponent> f(new FactionComponent(Faction::PLAYER));
   std::unique_ptr<PhysicsComponent> p(new PhysicsComponent);
@@ -89,7 +104,7 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
 
   g->AddFrame(0, 200002, 20);
   g->AddFrame(0, 200002 + 1, 20);
-  g->AddFrame(0, 200002 + 2, 0);
+  g->AddFrame(0, 200002 + 2, 20);
   g->AddFrame(0, 200002 + 3, 20);
 
 
