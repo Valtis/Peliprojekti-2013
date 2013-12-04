@@ -473,9 +473,6 @@
     <ClCompile Include="src\UI\Window\TextField.cpp">
       <Filter>Source Files\UI\Window</Filter>
     </ClCompile>
-    <ClCompile Include="src\Component\WalkingAiComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Physics\PhysicsHandler.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
@@ -508,6 +505,9 @@
     </ClCompile>
     <ClCompile Include="src\Component\Scripts\DamageColliderScript.cpp">
       <Filter>Source Files\Component\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\WalkingAiComponent.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

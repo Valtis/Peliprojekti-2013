@@ -55,6 +55,12 @@ void Renderer::CreateWindow(std::string title, int width, int height)
   m_windowSize.first = width;
   m_windowSize.second = height;
 }
+void Renderer::SetWindowSize(int width, int height)
+{ 
+  m_windowSize.first = width; 
+  m_windowSize.second = height;
+}
+
 
 void Renderer::LoadSprites(std::string datafilePath)
 {

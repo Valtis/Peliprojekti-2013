@@ -135,6 +135,10 @@ void Game::PollEvents() {
        m_isRunning = false;
        return;
      }
+     if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED)
+     {
+       m_renderer.SetWindowSize(event.window.data1, event.window.data2);
+     }
      m_inputManager.HandleInput(event);
   }
 }
