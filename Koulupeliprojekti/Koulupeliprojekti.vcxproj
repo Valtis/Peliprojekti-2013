@@ -23,6 +23,7 @@
     <ClInclude Include="include\Component\InputComponent.h" />
     <ClInclude Include="include\Component\LocationComponent.h" />
     <ClInclude Include="include\Component\PhysicsComponent.h" />
+    <ClInclude Include="include\Component\Scripts\HealthPickupScript.h" />
     <ClInclude Include="include\Component\Scripts\BlinkScript.h" />
     <ClInclude Include="include\Component\Scripts\BulletScriptComponent.h" />
     <ClInclude Include="include\Component\Scripts\DamageColliderScript.h" />
@@ -105,6 +106,7 @@
     <ClCompile Include="src\Component\Scripts\BulletScriptComponent.cpp" />
     <ClCompile Include="src\Component\Scripts\DamageColliderScript.cpp" />
     <ClCompile Include="src\Component\Scripts\EndLevelScriptComponent.cpp" />
+    <ClCompile Include="src\Component\Scripts\HealthPickupScript.cpp" />
     <ClCompile Include="src\Component\Scripts\TempInvulnerabilityScript.cpp" />
     <ClCompile Include="src\Component\VelocityComponent.cpp" />
     <ClCompile Include="src\Component\WalkingAiComponent.cpp" />
