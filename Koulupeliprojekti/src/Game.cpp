@@ -13,7 +13,7 @@
 
 Game::Game() : m_gameTick(30), m_drawTick(30), 
   m_isRunning(false), m_isPaused(false), 
-  m_soundManager(44100, 1024) // todo: move the values to settings file instead of hardcoding
+  m_soundManager(44100, 1024)
 {
   RegisterMessageHandler(MessageType::END_GAME, Priority::HIGHEST, [&](Message *msg)
     {

@@ -11,12 +11,17 @@ public:
   ~MessageProcessor() { }
 
   // Passes messages to message handlers. If message was handled, returns true, else return false
-  virtual bool SendMessage(Message *message);
-  
-// register new message handler for messages with MessageType and with given priority
-  virtual void RegisterMessageHandler(MessageType type, Priority priority, MessageCallback callback);
+  bool SendMessage(Message *message);
+  // sends message to parent. Returns true if message was handled, false otherwise
+  bool SendMessageUpwards(Message *message);
+
+  // register new message handler for messages with MessageType and with given priority
+  void RegisterMessageHandler(MessageType type, Priority priority, MessageCallback callback);
+
   void SetParent(MessageProcessor *parent) { m_parent = parent; }
-  
+
+
+
 protected:
   MessageProcessor() : m_parent(nullptr) { }
 
@@ -30,5 +35,5 @@ private:
   void SortHandlers(MessageType type);
 
   std::map<MessageType, std::vector<PrioritizedCallback>> m_messageHandlers;
-  
+
 };

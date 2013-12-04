@@ -5,18 +5,24 @@ bool MessageProcessor::SendMessage(Message *message)
   auto handlers =  m_messageHandlers[message->GetType()];
   if (handlers.empty())
   {
-    if (m_parent == nullptr)
-    {
-      return false;
-    }
-    else
-    {
-      return m_parent->SendMessage(message);
-    }
+    return SendMessageUpwards(message);
   }
 
   PassMessageToHandlers(handlers, message);
   return true;
+}
+
+bool MessageProcessor::SendMessageUpwards(Message *message)
+{
+  if (m_parent == nullptr)
+  {
+    return false;
+  }
+  else
+  {
+    return m_parent->SendMessage(message);
+  }
+}
 }
 
 void MessageProcessor::PassMessageToHandlers(const std::vector<PrioritizedCallback> &handlers, Message *message )
