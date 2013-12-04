@@ -26,4 +26,5 @@ namespace MessageFactory
   std::unique_ptr<Message> CreateStartBlinkingMessage(double duration);
   std::unique_ptr<Message> CreateSetGraphicsVisibilityMessage(bool visibility);
   std::unique_ptr<Message> CreatePlaySoundEffectMessage(int id);
+  std::unique_ptr<Message> CreateAddHealthMessage(int health);
 }

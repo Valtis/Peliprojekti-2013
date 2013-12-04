@@ -333,6 +333,9 @@
     <ClInclude Include="include\Component\Scripts\HealthPickupScript.h">
       <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="include\Message\AddHealthMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">

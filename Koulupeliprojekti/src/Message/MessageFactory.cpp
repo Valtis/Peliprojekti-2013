@@ -12,6 +12,7 @@
 #include "Message/StartBlinkingMessage.h"
 #include "Message/SetGraphicsVisibilityMessage.h"
 #include "Message/PlaySoundEffectMessage.h"
+#include "Message/AddHealthMessage.h"
 
 std::unique_ptr<Message> MessageFactory::CreateLocationChangeMessage(double x, double y)
 {
@@ -82,4 +83,9 @@ std::unique_ptr<Message> MessageFactory::CreateSetGraphicsVisibilityMessage(bool
 std::unique_ptr<Message> MessageFactory::CreatePlaySoundEffectMessage(int id)
 {
   return std::unique_ptr<Message>(new PlaySoundEffectMessage(id));
+}
+
+std::unique_ptr<Message> MessageFactory::CreateAddHealthMessage(int health)
+{
+  return std::unique_ptr<Message>(new AddHealthMessage(health));
 }
