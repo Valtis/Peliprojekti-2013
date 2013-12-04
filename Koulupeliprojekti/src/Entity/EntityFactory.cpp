@@ -183,7 +183,7 @@ std::unique_ptr<Entity> EntityFactory::CreateFlyingEnemy(int x, int y, Entity *t
   c->AddHitbox(0,0,70,35, HitboxType::SOLID);
   c->AddHitbox(0,0,70,35, HitboxType::TRIGGER);
   
-  e->AddScript(std::unique_ptr<Component>(new SpawnHealthPickupOnDeathScript(100)));
+  e->AddScript(std::unique_ptr<Component>(new SpawnHealthPickupOnDeathScript(10)));
   return e;
 }
 
@@ -251,6 +251,7 @@ std::unique_ptr<Entity> EntityFactory::CreateEntity(SpawnEntityMessage *msg)
     break;
   case EntityType::HEALTH_PICKUP:
     CreateHealthPickup(e.get(), msg);
+    break;
   default:
     throw std::runtime_error("Default case reached in EntityFactory::CreateEntity() reached");
     break;
