@@ -1,6 +1,6 @@
 #include "Component/HealthComponent.h"
-#include "Message/CollisionMessage.h"
 #include "Message/MessageFactory.h"
+#include "Message/AddHealthMessage.h"
 #include "Component/FactionComponent.h"
 #include "Entity/Entity.h"
 #include "Utility/LoggerManager.h"
@@ -22,12 +22,15 @@ HealthComponent::~HealthComponent()
 
 void HealthComponent::OnAttatchingToEntity()
 {
-  GetOwner()->RegisterMessageHandler(MessageType::TAKE_DAMAGE, Priority::NORMAL, [&](Message *msg) 
+  GetOwner()->RegisterMessageHandler(MessageType::TAKE_DAMAGE, Priority::LOWEST, [&](Message *msg) 
   {
     this->TakeDamage();
     return MessageHandling::STOP_HANDLING;
   }
   );
+
+  GetOwner()->RegisterMessageHandler(MessageType::ADD_HEALTH, Priority::LOWEST, 
+    [&](Message *msg) { return this->HandleAddHealthMessage(msg); });
 }
 
 void HealthComponent::TakeDamage()
@@ -55,4 +58,11 @@ void HealthComponent::TakeDamage()
       GetOwner()->SendMessage(msg.get());
     }
   }
+}
+
+MessageHandling HealthComponent::HandleAddHealthMessage(Message *msg)
+{
+  auto healthMsg = static_cast<AddHealthMessage *>(msg);
+  m_hitpoints = std::min(m_maxHitpoints, m_hitpoints + healthMsg->GetHealth());
+  return MessageHandling::STOP_HANDLING;
 }
