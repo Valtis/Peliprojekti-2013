@@ -13,9 +13,9 @@ LevelGenerator::~LevelGenerator() {}
 
 std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera, Hud &hud )
 {
-  int mapsize = 4; // so real size is 4 by 4
-  int roomWidth = 15;
-  int roomLength = 10; // dont change these yet
+  int mapsize = 6; // so real size is 6 by 6
+  int roomWidth = 100;
+  int roomLength = 12; 
   std::vector<int> map = GenerateMap(mapsize);
 
   std::vector<std::unique_ptr<Level>> levels;
@@ -120,80 +120,58 @@ std::vector<SDL_Rect> LevelGenerator::GenerateRoom(int x, int y, int w, int l, i
   int room_width = w; int room_height = l;
   std::vector<SDL_Rect> room(0);
   SDL_Rect p1, p2, p3, p4, p5, p6;
+  SDL_Rect left_wall;
+  left_wall.x = x, left_wall.y = y+1, left_wall.h = room_height - 1, left_wall.w = 1;
+  SDL_Rect right_wall;
+  right_wall.x = x + room_width, right_wall.y = y + 1, right_wall.h = room_height - 1, right_wall.w = 1;
+  SDL_Rect top_wall;
+  top_wall.x = x, top_wall.y = y, top_wall.h = 1, top_wall.w = room_width+1;
+  SDL_Rect bottom_wall;
+  bottom_wall.x = x, bottom_wall.y = y + room_height, bottom_wall.h = 1, bottom_wall.w = room_width+1;
   switch (n)
   {
     case 1: // room has opening to left and right
-      // Left wall
-      p1.x = x, p1.y = y, p1.h = room_height - 4, p1.w = 1;
-      // Ceiling
-      p2.x = x + 1, p2.y = y, p2.h = 1, p2.w = room_width;
-      // Right wall
-      p3.x = x + room_width, p3.y = y +1, p3.h = room_height - 5, p3.w = 1;
-      // Floor
-      p4.x = x, p4.y = y + room_height, p4.h = 1, p4.w = room_width+1;
-      room.push_back(p1), room.push_back(p2), room.push_back(p3), room.push_back(p4);
+      right_wall.h = right_wall.h - 2;
+      left_wall.h = left_wall.h - 2;
+      room.push_back(left_wall), room.push_back(right_wall), room.push_back(top_wall), room.push_back(bottom_wall);
       break;
     case 2: // room has opening left, right and down
-      // Left wall
-      p1.x = x, p1.y = y, p1.h = room_height - 4, p1.w = 1;
-      // Ceiling
-      p2.x = x + 1, p2.y = y, p2.h = 1, p2.w = room_width;
-      // Right wall
-      p3.x = x + room_width, p3.y = y +1, p3.h = room_height - 5, p3.w = 1;
-      // Left floor
-      p4.x = x, p4.y = y + room_height, p4.h = 1, p4.w = 6;
-      // Right floor
-      p5.x = x + 8, p5.y = y + room_height, p5.h = 1, p5.w = 8;
-      room.push_back(p1), room.push_back(p2), room.push_back(p3);
-      room.push_back(p4), room.push_back(p5);
+      right_wall.h = right_wall.h - 2;
+      left_wall.h = left_wall.h - 2;
+      room.push_back(left_wall), room.push_back(right_wall), room.push_back(top_wall);
+      // we split the floor
+      bottom_wall.w = ((room_width+1) / 2 ) - 2;
+      p1.x = x + (room_width+1)/2;
+      p1.y = bottom_wall.y, p1.h = 1, p1.w = (room_width+1) - (bottom_wall.w + 2);
+      room.push_back(bottom_wall), room.push_back(p1);
       break;
     case 3: // opening left, right and up
-      // Left ceiling
-      p1.x = x, p1.y = y, p1.h = 1, p1.w = 6;
-      // Right ceiling
-      p2.x = x + 8, p2.y = y, p2.h = 1, p2.w = 8;
-      // Right wall
-      p3.x = x + room_width, p3.y = y +1, p3.h = room_height - 5, p3.w = 1;
-      // Left wall
-      p4.x = x, p4.y = y+1, p4.h = room_height - 5, p4.w = 1;
-      // Floor
-      p5.x = x, p5.y = y + room_height, p5.h = 1, p5.w = room_width+1;
-      room.push_back(p1), room.push_back(p2), room.push_back(p3);
-      room.push_back(p4), room.push_back(p5);
+      right_wall.h = right_wall.h - 2;
+      left_wall.h = left_wall.h - 2;
+      room.push_back(left_wall), room.push_back(right_wall), room.push_back(bottom_wall);
+      // we split the top
+      top_wall.w = ((room_width+1) / 2) -2;
+      p1.x = x + (room_width+1)/2;
+      p1.y = top_wall.y, p1.h = 1, p1.w = (room_width+1) - (top_wall.w + 2);
+      room.push_back(top_wall), room.push_back(p1);
       break;
     case 4: // opening to right
-      // Ceiling
-      p1.x = x, p1.y = y, p1.h = 1, p1.w = room_width+1;
-      // Left wall
-      p2.x = x, p2.y = y+1, p2.h = room_height-1, p2.w = 1;
-      // Floor
-      p3.x = x, p3.y = y + room_height, p3.h = 1, p3.w = room_width+1;
-      room.push_back(p1), room.push_back(p2), room.push_back(p3);
+      room.push_back(top_wall), room.push_back(left_wall), room.push_back(bottom_wall);
       break;
     case 5: // opening to left
-      // Ceiling
-      p1.x = x, p1.y = y, p1.h = 1, p1.w = room_width+1;
-      // Right wall
-      p2.x = x + room_width, p2.y = y+1, p2.h = room_height-1, p2.w = 1;
-      // Floor
-      p3.x = x, p3.y = y + room_height, p3.h = 1, p3.w = room_width+1;
-      room.push_back(p1), room.push_back(p2), room.push_back(p3);
+      room.push_back(top_wall), room.push_back(right_wall), room.push_back(bottom_wall);
       break;
     default: // room 6 opening to every direction
-      // Left ceiling
-      p1.x = x, p1.y = y, p1.h = 1, p1.w = 6;
-      // Right ceiling
-      p2.x = x + 8, p2.y = y, p2.h = 1, p2.w = 8;
-      // Right wall
-      p3.x = x + room_width, p3.y = y +1, p3.h = room_height - 5, p3.w = 1;
-      // Left wall
-      p4.x = x, p4.y = y+1, p4.h = room_height - 5, p4.w = 1;
-      // Left floor
-      p5.x = x, p5.y = y + room_height, p5.h = 1, p5.w = 6;
-      // Right floor
-      p6.x = x + 8, p6.y = y + room_height, p6.h = 1, p6.w = 8;
-      room.push_back(p1), room.push_back(p2), room.push_back(p3);
-      room.push_back(p4), room.push_back(p5), room.push_back(p6);
+      right_wall.h = right_wall.h - 2;
+      left_wall.h = left_wall.h - 2;
+      top_wall.w = ((room_width+1) / 2) -2;
+      p1.x = x + (room_width+1)/2;
+      p1.y = top_wall.y, p1.h = 1, p1.w = (room_width+1) - (top_wall.w + 2);
+      bottom_wall.w = ((room_width+1) / 2 ) - 2;
+      p2.x = x + (room_width+1)/2;
+      p2.y = bottom_wall.y, p2.h = 1, p2.w = (room_width+1) - (bottom_wall.w + 2);
+      room.push_back(bottom_wall), room.push_back(right_wall), room.push_back(left_wall);
+      room.push_back(top_wall), room.push_back(p1), room.push_back(p2);
       break;
   }
   return room;
