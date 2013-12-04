@@ -183,7 +183,7 @@ std::unique_ptr<Entity> EntityFactory::CreateFlyingEnemy(int x, int y, Entity *t
   c->AddHitbox(0,0,70,35, HitboxType::SOLID);
   c->AddHitbox(0,0,70,35, HitboxType::TRIGGER);
   
-  e->AddScript(std::unique_ptr<Component>(new SpawnHealthPickupOnDeathScript(10)));
+  e->AddScript(std::unique_ptr<Component>(new SpawnHealthPickupOnDeathScript(25)));
   return e;
 }
 

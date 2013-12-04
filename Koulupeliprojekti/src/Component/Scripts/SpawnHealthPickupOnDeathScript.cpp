@@ -2,10 +2,10 @@
 #include "Entity/Entity.h"
 #include "Message/MessageFactory.h"
 #include <ctime>
+#include <cstdlib>
 SpawnHealthPickupOnDeathScript::SpawnHealthPickupOnDeathScript(int dropChange) :
   m_dropChange(dropChange*100) 
 {
-  m_randomEngine.seed(time(nullptr));
 }
 
 SpawnHealthPickupOnDeathScript::~SpawnHealthPickupOnDeathScript()
@@ -21,8 +21,7 @@ void SpawnHealthPickupOnDeathScript::OnAttatchingToEntity()
 
 MessageHandling SpawnHealthPickupOnDeathScript::HandleTerminateMessage(Message *msg)
 {
-  std::uniform_int_distribution<int> dist(0, 10000);
-  if (dist(m_randomEngine) < m_dropChange)
+  if (rand() % 10000 <= m_dropChange)
   {
     auto spawnMsg = MessageFactory::CreateSpawnEntityMessage(EntityType::HEALTH_PICKUP, GetOwner());
     GetOwner()->SendMessage(spawnMsg.get());
