@@ -24,8 +24,8 @@ MessageHandling SpawnHealthPickupOnDeathScript::HandleTerminateMessage(Message *
   std::uniform_int_distribution<int> dist(0, 10000);
   if (dist(m_randomEngine) < m_dropChange)
   {
-    auto spawnMsg = MessageFactory::CreateSpawnEntityMessage(EntityType::HEALTH_PICKUP);
-    GetOwner()->SendMessage(msg);
+    auto spawnMsg = MessageFactory::CreateSpawnEntityMessage(EntityType::HEALTH_PICKUP, GetOwner());
+    GetOwner()->SendMessage(spawnMsg.get());
   }
   
 

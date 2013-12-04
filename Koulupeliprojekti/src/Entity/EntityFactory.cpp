@@ -17,6 +17,7 @@
 #include "Component/Scripts/BlinkScript.h"
 #include "Component/Scripts/TempInvulnerabilityScript.h"
 #include "Component/Scripts/HealthPickupScript.h"
+#include "Component/Scripts/SpawnHealthPickupOnDeathScript.h"
 #include <string>
 #include <SDL.h>
 #include <stdexcept>
@@ -182,6 +183,7 @@ std::unique_ptr<Entity> EntityFactory::CreateFlyingEnemy(int x, int y, Entity *t
   c->AddHitbox(0,0,70,35, HitboxType::SOLID);
   c->AddHitbox(0,0,70,35, HitboxType::TRIGGER);
   
+  e->AddScript(std::unique_ptr<Component>(new SpawnHealthPickupOnDeathScript(100)));
   return e;
 }
 
