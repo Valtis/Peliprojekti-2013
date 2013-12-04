@@ -16,6 +16,7 @@
 #include "Component/Scripts/DamageColliderScript.h"
 #include "Component/Scripts/BlinkScript.h"
 #include "Component/Scripts/TempInvulnerabilityScript.h"
+#include "Component/Scripts/HealthPickupScript.h"
 #include <string>
 #include <SDL.h>
 #include <stdexcept>
@@ -76,7 +77,7 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
 
   std::unique_ptr<FactionComponent> faction(new FactionComponent(bulletFaction));
   std::unique_ptr<HealthComponent> health(new HealthComponent(1, 1, 0));
-  std::unique_ptr<BulletScriptComponent> script(new BulletScriptComponent);
+  
  
 
   e->AddComponent(ComponentType::COLLISION, std::move(collision));
@@ -85,8 +86,35 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   e->AddComponent(ComponentType::VELOCITY, std::move(velocity));
   e->AddComponent(ComponentType::FACTION, std::move(faction));
   e->AddComponent(ComponentType::HEALTH, std::move(health));
-  e->AddScript(std::move(script));
+  e->AddScript(std::unique_ptr<BulletScriptComponent>(new BulletScriptComponent));
   e->AddScript(std::unique_ptr<DamageColliderScript>(new DamageColliderScript));
+}
+
+void CreateHealthPickup(Entity *e, SpawnEntityMessage *msg)
+{
+  const int hitboxSize = 20;
+  Entity *spawner = msg->Spawner();
+
+  LocationComponent *spawnerLocation = static_cast<LocationComponent *>(spawner->GetComponent(ComponentType::LOCATION));
+ 
+  double x = spawnerLocation->GetX();
+  double y = spawnerLocation->GetY();
+
+  e->AddComponent(ComponentType::LOCATION, std::unique_ptr<Component>(new LocationComponent(x, y)));
+  e->AddComponent(ComponentType::VELOCITY, std::unique_ptr<Component>(new VelocityComponent(0, 0)));
+  e->AddComponent(ComponentType::PHYSICS, std::unique_ptr<Component>(new PhysicsComponent));
+  
+  std::unique_ptr<GraphicsComponent> graphics(new GraphicsComponent());
+  
+  graphics->AddFrame(0, 200000);
+
+  std::unique_ptr<CollisionComponent> collision(new CollisionComponent);
+  collision->AddHitbox(0, 0, hitboxSize, hitboxSize, HitboxType::TRIGGER);
+  
+
+  e->AddComponent(ComponentType::COLLISION, std::move(collision));
+  e->AddComponent(ComponentType::GRAPHICS, std::move(graphics));
+  e->AddScript(std::unique_ptr<Component>(new HealthPickupScript(1)));
 }
 
 std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &input)
@@ -210,8 +238,6 @@ std::unique_ptr<Entity> EntityFactory::CreateEndLevelEntity(int x, int y)
 }
 
 
-
-
 std::unique_ptr<Entity> EntityFactory::CreateEntity(SpawnEntityMessage *msg)
 {
   std::unique_ptr<Entity> e(new Entity);
@@ -221,6 +247,8 @@ std::unique_ptr<Entity> EntityFactory::CreateEntity(SpawnEntityMessage *msg)
   case EntityType::BULLET:
     CreateBullet(e.get(), msg);
     break;
+  case EntityType::HEALTH_PICKUP:
+    CreateHealthPickup(e.get(), msg);
   default:
     throw std::runtime_error("Default case reached in EntityFactory::CreateEntity() reached");
     break;

@@ -4,7 +4,7 @@
 #include "Component/Component.h"
 #include "Message/MessageProcessor.h"
 
-enum class EntityType : int { BULLET };
+enum class EntityType : int { BULLET, HEALTH_PICKUP };
 
 class Entity : public MessageProcessor
 {

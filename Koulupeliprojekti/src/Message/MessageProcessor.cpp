@@ -23,7 +23,7 @@ bool MessageProcessor::SendMessageUpwards(Message *message)
     return m_parent->SendMessage(message);
   }
 }
-}
+
 
 void MessageProcessor::PassMessageToHandlers(const std::vector<PrioritizedCallback> &handlers, Message *message )
 {
