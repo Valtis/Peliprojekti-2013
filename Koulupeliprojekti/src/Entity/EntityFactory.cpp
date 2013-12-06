@@ -29,7 +29,7 @@
 // sobadsobadsobad
 void CreateBullet(Entity *e, SpawnEntityMessage *msg)
 {
-  const int bulletHitboxSize = 20;
+  const int bulletHitboxSize = 15;
   Entity *spawner = msg->Spawner();
 
   LocationComponent *spawnerLocation = static_cast<LocationComponent *>(spawner->GetComponent(ComponentType::LOCATION));
@@ -81,7 +81,7 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   graphics->AddFrame(0, 200007);
 
   std::unique_ptr<CollisionComponent> collision(new CollisionComponent);
-  collision->AddHitbox(0, 0, bulletHitboxSize, bulletHitboxSize, HitboxType::TRIGGER);
+  collision->AddHitbox(8, 8, bulletHitboxSize, bulletHitboxSize, HitboxType::TRIGGER);
   std::unique_ptr<VelocityComponent> velocity(new VelocityComponent(0, 0));
 
   
