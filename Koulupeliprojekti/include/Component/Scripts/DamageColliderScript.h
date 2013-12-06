@@ -7,7 +7,7 @@ public:
   DamageColliderScript() { }
   ~DamageColliderScript() { }
 protected:
-  void OnAttatchingToEntity();
+  void OnAttatchingToEntity() override;
 private:
   MessageHandling HandleCollisionMessage(Message *msg);
 };

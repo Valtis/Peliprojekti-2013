@@ -28,6 +28,7 @@
     <ClInclude Include="include\Component\Scripts\BulletScriptComponent.h" />
     <ClInclude Include="include\Component\Scripts\DamageColliderScript.h" />
     <ClInclude Include="include\Component\Scripts\EndLevelScriptComponent.h" />
+    <ClInclude Include="include\Component\Scripts\QuitGameOnDeathScript.h" />
     <ClInclude Include="include\Component\Scripts\SpawnHealthPickupOnDeathScript.h" />
     <ClInclude Include="include\Component\Scripts\TempInvulnerabilityScript.h" />
     <ClInclude Include="include\Component\VelocityComponent.h" />
@@ -109,6 +110,7 @@
     <ClCompile Include="src\Component\Scripts\DamageColliderScript.cpp" />
     <ClCompile Include="src\Component\Scripts\EndLevelScriptComponent.cpp" />
     <ClCompile Include="src\Component\Scripts\HealthPickupScript.cpp" />
+    <ClCompile Include="src\Component\Scripts\QuitGameOnDeathScript.cpp" />
     <ClCompile Include="src\Component\Scripts\SpawnHealthPickupOnDeathScript.cpp" />
     <ClCompile Include="src\Component\Scripts\TempInvulnerabilityScript.cpp" />
     <ClCompile Include="src\Component\VelocityComponent.cpp" />

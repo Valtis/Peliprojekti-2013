@@ -339,6 +339,9 @@
     <ClInclude Include="include\Component\Scripts\SpawnHealthPickupOnDeathScript.h">
       <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="include\Component\Scripts\QuitGameOnDeathScript.h">
+      <Filter>Header Files\Component\Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -522,6 +525,9 @@
       <Filter>Source Files\Component\Scripts</Filter>
     </ClCompile>
     <ClCompile Include="src\Component\Scripts\SpawnHealthPickupOnDeathScript.cpp">
+      <Filter>Source Files\Component\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Scripts\QuitGameOnDeathScript.cpp">
       <Filter>Source Files\Component\Scripts</Filter>
     </ClCompile>
   </ItemGroup>

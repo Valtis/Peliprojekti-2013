@@ -7,7 +7,7 @@ public:
   SpawnHealthPickupOnDeathScript(int dropChange);
   ~SpawnHealthPickupOnDeathScript();
 protected:
-  void OnAttatchingToEntity();
+  void OnAttatchingToEntity() override;
 private:
   MessageHandling HandleTerminateMessage(Message *msg);
   int m_dropChange;
