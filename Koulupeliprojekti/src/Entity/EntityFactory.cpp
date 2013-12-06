@@ -202,14 +202,14 @@ std::unique_ptr<Entity> EntityFactory::CreateFlyingEnemy(int x, int y, Entity *t
   return e;
 }
 
-std::unique_ptr<Entity> EntityFactory::CreateBlock(int x, int y)
+std::unique_ptr<Entity> EntityFactory::CreateBlock(int x, int y, int tileid)
 {
   std::unique_ptr<Entity> e(new Entity);
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
   std::unique_ptr<LocationComponent> l(new LocationComponent);
 
 
-  g->AddFrame(0, 400005);
+  g->AddFrame(0, tileid); // 400005
   e->AddComponent(ComponentType::GRAPHICS, std::move(g));
 
   l->SetLocation(x, y);
