@@ -2,6 +2,8 @@
 #include "Entity/Entity.h"
 #include "Message/MessageFactory.h"
 #include "Message/CollisionMessage.h"
+#include "Component/CollisionComponent.h"
+#include "Component/FactionComponent.h"
 
 HealthPickupScript::HealthPickupScript(int health) : m_healthOnPickup(health)
 {
@@ -22,7 +24,12 @@ void HealthPickupScript::OnAttatchingToEntity()
 
 MessageHandling HealthPickupScript::HandleCollisionMessage(Message *msg)
 {
+  
   auto colMsg = static_cast<CollisionMessage *>(msg);
+  if (colMsg->GetHitType() == HitboxType::TRIGGER)
+  {
+    return MessageHandling::STOP_HANDLING;
+  }
 
   auto healthMsg = MessageFactory::CreateAddHealthMessage(m_healthOnPickup);
   bool terminate = false;
@@ -31,7 +38,10 @@ MessageHandling HealthPickupScript::HandleCollisionMessage(Message *msg)
   // bullets have max 1hp so effectively they just destroy it
   for (auto e : colMsg->GetEntities())
   {
-    if (e->GetComponent(ComponentType::FACTION))
+
+
+    if (e->GetComponent(ComponentType::FACTION) && 
+      static_cast<FactionComponent *>(e->GetComponent(ComponentType::FACTION))->GetFaction() == Faction::PLAYER)
     {
       e->SendMessage(healthMsg.get());
       terminate = true;

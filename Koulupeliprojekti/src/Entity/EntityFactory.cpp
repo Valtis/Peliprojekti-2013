@@ -108,7 +108,7 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
 
 void CreateHealthPickup(Entity *e, SpawnEntityMessage *msg)
 {
-  const int hitboxSize = 20;
+  const int hitboxSize = 43;
   Entity *spawner = msg->Spawner();
 
   LocationComponent *spawnerLocation = static_cast<LocationComponent *>(spawner->GetComponent(ComponentType::LOCATION));
@@ -122,7 +122,7 @@ void CreateHealthPickup(Entity *e, SpawnEntityMessage *msg)
   
   std::unique_ptr<GraphicsComponent> graphics(new GraphicsComponent());
   
-  graphics->AddFrame(0, 200000);
+  graphics->AddFrame(0, 400000);
 
   std::unique_ptr<CollisionComponent> collision(new CollisionComponent);
   collision->AddHitbox(0, 0, hitboxSize, hitboxSize, HitboxType::TRIGGER);
@@ -150,8 +150,7 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   g->AddFrame(WALKING_ANIMATION, 200002, 4);
   g->AddFrame(WALKING_ANIMATION, 200002 + 1, 4);
   g->AddFrame(WALKING_ANIMATION, 200002 + 2, 4);
-  //g->AddFrame(0, 200002 + 3, 20);
-
+ 
 
   e->AddComponent(ComponentType::GRAPHICS, std::move(g));
   l->SetLocation(x, y);
@@ -211,7 +210,7 @@ std::unique_ptr<Entity> EntityFactory::CreateBlock(int x, int y, int tileid)
   std::unique_ptr<LocationComponent> l(new LocationComponent);
 
 
-  g->AddFrame(0, tileid); // 400005
+  g->AddFrame(0, tileid); 
   e->AddComponent(ComponentType::GRAPHICS, std::move(g));
 
   l->SetLocation(x, y);
