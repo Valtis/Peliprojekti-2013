@@ -148,7 +148,7 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   g->AddFrame(0, 200002, 20);
   g->AddFrame(0, 200002 + 1, 20);
   g->AddFrame(0, 200002 + 2, 20);
-  g->AddFrame(0, 200002 + 3, 20);
+  //g->AddFrame(0, 200002 + 3, 20);
 
 
   e->AddComponent(ComponentType::GRAPHICS, std::move(g));
@@ -157,7 +157,7 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   e->AddComponent(ComponentType::VELOCITY, std::move(v));
   e->AddComponent(ComponentType::INPUT, std::move(i));
   
-  c->AddHitbox(0, 0, 35, 35, HitboxType::SOLID);
+  c->AddHitbox(0, 0, 64, 90, HitboxType::SOLID);
   e->AddComponent(ComponentType::COLLISION, std::move(c));
   e->AddComponent(ComponentType::FACTION, std::move(f));
   e->AddComponent(ComponentType::PHYSICS,std::move(p));
