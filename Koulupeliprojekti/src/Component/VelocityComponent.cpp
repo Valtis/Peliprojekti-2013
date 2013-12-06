@@ -24,12 +24,12 @@ void VelocityComponent::Update(double ticksPassed)
   }
 
   // shouldn't really be hardcoded here but eh..
-  if (m_currentXVelocity == 0 || m_currentYVelocity != 0)
+  if (m_currentXVelocity == 0)
   {
     auto animationMsg = MessageFactory::CreateChangeAnimationMessage(IDLE_ANIMATION); 
     GetOwner()->SendMessage(animationMsg.get());
   }
-  else if (m_currentXVelocity != 0 && m_currentYVelocity == 0)
+  else if (m_currentXVelocity != 0)
   {
     auto animationMsg = MessageFactory::CreateChangeAnimationMessage(WALKING_ANIMATION); 
     GetOwner()->SendMessage(animationMsg.get());

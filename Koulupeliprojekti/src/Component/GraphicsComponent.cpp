@@ -132,9 +132,10 @@ MessageHandling GraphicsComponent::HandleSetGraphicsVisibilityMessage(Message *m
 MessageHandling GraphicsComponent::HandleAnimationChangeMessage( Message * msg )
 {
   auto animMsg = static_cast<AnimationChangeMessage *>(msg);
-  if (m_animations.count(animMsg->GetId()) != 0)
+  if (m_animations.count(animMsg->GetId()) != 0 && animMsg->GetId() != m_animationID)
   {
     m_animationID = animMsg->GetId();
+    m_frameID = 0;
   }
   return MessageHandling::STOP_HANDLING;
 }

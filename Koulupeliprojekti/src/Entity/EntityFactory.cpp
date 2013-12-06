@@ -23,6 +23,7 @@
 #include <SDL.h>
 #include <stdexcept>
 #include <sstream>
+#include "Utility/GenericDefines.h"
 
 
 // sobadsobadsobad
@@ -145,9 +146,10 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   std::unique_ptr<HealthComponent> h(new HealthComponent(4, 4, 3));
   i->RegisterInputHandler(input);
 
-  g->AddFrame(0, 200002, 20);
-  g->AddFrame(0, 200002 + 1, 20);
-  g->AddFrame(0, 200002 + 2, 20);
+  g->AddFrame(IDLE_ANIMATION, 200002, 20);
+  g->AddFrame(WALKING_ANIMATION, 200002, 4);
+  g->AddFrame(WALKING_ANIMATION, 200002 + 1, 4);
+  g->AddFrame(WALKING_ANIMATION, 200002 + 2, 4);
   //g->AddFrame(0, 200002 + 3, 20);
 
 
