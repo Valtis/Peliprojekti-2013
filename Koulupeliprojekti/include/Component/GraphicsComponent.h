@@ -30,6 +30,7 @@ protected:
 private:
   void UpdateAnimation( double ticksPassed );
   MessageHandling HandleSetGraphicsVisibilityMessage(Message *msg);
+  MessageHandling HandleAnimationChangeMessage( Message * msg );
   struct AnimationData
   {
     int m_spriteID;

@@ -6,7 +6,7 @@ class FiringDirectionMessage : public Message
 public:
   FiringDirectionMessage(Direction direction) : m_direction(direction) { }
   ~FiringDirectionMessage() { }
-  Direction GetDirection() { return m_direction; }
+  Direction GetDirection() const { return m_direction; }
   MessageType GetType() const override { return MessageType::FIRE_DIRECTION; }
 
 private:
