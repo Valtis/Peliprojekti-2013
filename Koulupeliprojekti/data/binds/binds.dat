@@ -6,3 +6,5 @@ shoot = lshift
 exit = q
 pause = p
 pause = pause
+up = up
+down = down
