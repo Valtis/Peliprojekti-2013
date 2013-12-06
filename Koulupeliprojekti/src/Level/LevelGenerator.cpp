@@ -6,7 +6,7 @@
 #include "UI/Hud.h"
 #include <ctime>
 
-#define TILESIZE 32
+#define TILESIZE 70
 
 LevelGenerator::LevelGenerator() {}
 LevelGenerator::~LevelGenerator() {}

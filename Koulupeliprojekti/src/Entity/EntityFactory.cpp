@@ -194,7 +194,7 @@ std::unique_ptr<Entity> EntityFactory::CreateBlock(int x, int y)
   std::unique_ptr<LocationComponent> l(new LocationComponent);
 
 
-  g->AddFrame(0, 400002);
+  g->AddFrame(0, 400005);
   e->AddComponent(ComponentType::GRAPHICS, std::move(g));
 
   l->SetLocation(x, y);
