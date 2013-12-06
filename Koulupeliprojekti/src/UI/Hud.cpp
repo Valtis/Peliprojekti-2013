@@ -45,8 +45,8 @@ std::vector<std::pair<int, SDL_Point>> Hud::GetTextureIdsAndPositions( int scree
 void Hud::AddLifebars( int screenHeight, HealthComponent *health, HudElements &elements )
 {
   const int lifeStartPosWidth = 10;
-  const int lifeStartPosHeight = screenHeight - 90;
-  const int lifeWidth = 45;
+  const int lifeStartPosHeight = screenHeight - 100;
+  const int lifeWidth = 55;
   SDL_Point point;
 
   point.y = lifeStartPosHeight;
