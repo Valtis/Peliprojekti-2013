@@ -92,7 +92,7 @@ void Game::Initialize()
   m_soundManager.Play();
 
   m_renderer.RegisterMessageHandlers(this);
-  m_renderer.CreateWindow("Adventureland", 800, 600);
+  m_renderer.CreateWindow("Adventureland", 1024, 768);
   m_renderer.LoadSprites("data/sprites/");
 
 
