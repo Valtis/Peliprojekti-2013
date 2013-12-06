@@ -89,3 +89,8 @@ std::unique_ptr<Message> MessageFactory::CreateAddHealthMessage(int health)
 {
   return std::unique_ptr<Message>(new AddHealthMessage(health));
 }
+
+std::unique_ptr<Message> MessageFactory::CreateImportantCharacterDeathMessage()
+{
+  return std::unique_ptr<Message>(new GenericMessageWithNoData(MessageType::IMPORTANT_CHARACTER_DEATH));
+}

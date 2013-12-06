@@ -13,8 +13,17 @@
 
 Game::Game() : m_gameTick(30), m_drawTick(30), 
   m_isRunning(false), m_isPaused(false), 
-  m_soundManager(44100, 1024)
+  m_soundManager(44100, 1024), m_playerAlive(true)
 {
+
+  RegisterMessageHandler(MessageType::IMPORTANT_CHARACTER_DEATH, Priority::HIGHEST,
+    [&](Message *msg) {
+
+      this->m_windowManager.GetWindows()[0]->Activate();
+      m_playerAlive = false;
+      return MessageHandling::STOP_HANDLING;
+    });
+
   RegisterMessageHandler(MessageType::END_GAME, Priority::HIGHEST, [&](Message *msg)
     {
       this->m_windowManager.GetWindows()[1]->Activate();
@@ -48,7 +57,7 @@ void Game::UpdateGameState()
     m_soundManager.Update(m_gameTick.TicksPassed());
     PollEvents();
 
-    if (!m_isPaused) 
+    if (m_playerAlive && !m_isPaused) 
     {
       m_levelManager.Update(m_gameTick.TicksPassed());
     }
@@ -149,6 +158,10 @@ void Game::ShutDownGame()
   m_isRunning = false;
 }
 
+
+
+// uggggh.
+// Really should be refactored but deadlineeees
 void Game::TestWindowCreation()
 {
   SDL_Rect location;
@@ -166,21 +179,21 @@ void Game::TestWindowCreation()
 
 
   std::unique_ptr<Window> window(new Window(location, color, &m_renderer));
-  window->Activate();
+  window->Deactivate();
   location.x = 10;
   location.y = 250;
   location.w = 140;
   location.h = 30;
   std::unique_ptr<Button> button(new Button(location, "Close window", &m_renderer));
 
-  button->AddHandler([&]{ this->m_windowManager.GetWindows()[0]->Deactivate(); });
+  button->AddHandler([&]{ this->ShutDownGame(); });
   window->AddWindow(std::move(button));
 
   location.x = 10;
   location.y = 10;
   location.w = 200;
   location.h = 230;
-  std::unique_ptr<TextBox> textBox(new TextBox("THIS IS UNFINISHED. Just pretend we have fixed the issues with collision detection, that the triangle is animated player and shooting actually does something", location, &m_renderer));
+  std::unique_ptr<TextBox> textBox(new TextBox("Welp, looks like you got yourself killed. Better luck next time maybe!", location, &m_renderer));
   window->AddWindow(std::move(textBox));
 
   m_windowManager.AddWindow(std::move(window));

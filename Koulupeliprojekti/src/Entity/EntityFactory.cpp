@@ -18,6 +18,7 @@
 #include "Component/Scripts/TempInvulnerabilityScript.h"
 #include "Component/Scripts/HealthPickupScript.h"
 #include "Component/Scripts/SpawnHealthPickupOnDeathScript.h"
+#include "Component/Scripts/QuitGameOnDeathScript.h"
 #include <string>
 #include <SDL.h>
 #include <stdexcept>
@@ -148,8 +149,9 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   e->AddComponent(ComponentType::FACTION, std::move(f));
   e->AddComponent(ComponentType::PHYSICS,std::move(p));
   e->AddComponent(ComponentType::HEALTH, std::move(h));
-  e->AddScript(std::unique_ptr<Component>(new TempInvulnerabilityScript(100)));
-  e->AddScript(std::unique_ptr<Component>(new BlinkScript(10)));
+  e->AddScript(std::unique_ptr<Component>(new TempInvulnerabilityScript(60)));
+  e->AddScript(std::unique_ptr<Component>(new BlinkScript(5)));
+  e->AddScript(std::unique_ptr<Component>(new QuitGameOnDeathScript));
 
   return e;
 }

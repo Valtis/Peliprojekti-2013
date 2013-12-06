@@ -27,4 +27,5 @@ namespace MessageFactory
   std::unique_ptr<Message> CreateSetGraphicsVisibilityMessage(bool visibility);
   std::unique_ptr<Message> CreatePlaySoundEffectMessage(int id);
   std::unique_ptr<Message> CreateAddHealthMessage(int health);
+  std::unique_ptr<Message> CreateImportantCharacterDeathMessage();
 }

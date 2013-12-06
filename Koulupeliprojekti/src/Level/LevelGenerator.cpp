@@ -24,6 +24,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
   int playerStartX = ((mapsize/2) * roomWidth * TILESIZE) + (7 * TILESIZE);
   int playerStartY = 8*TILESIZE;
   std::unique_ptr<Entity> e = EntityFactory::CreatePlayer(playerStartX, playerStartY, m_inputManager);
+  level->SetLevelStartPoint(std::make_pair(playerStartX, playerStartY));
   camera->SetEntity(e.get());
   hud.SetPlayer(e.get());
 
