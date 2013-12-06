@@ -38,7 +38,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
       for (SDL_Rect r: room) {
         for (int k = r.x; k < (r.x + r.w); ++k) {
           for (int l = r.y; l < (r.y + r.h); ++l) {
-	    level->AddStaticEntity(EntityFactory::CreateBlock(k*TILESIZE, l*TILESIZE));
+	    level->AddStaticEntity(EntityFactory::CreateBlock(k*TILESIZE, l*TILESIZE, 400005));
 	  }
         }
         level->AddStaticEntity(EntityFactory::CreateCollisionBlock(r.x*TILESIZE, r.y*TILESIZE, r.w*TILESIZE, r.h*TILESIZE));
