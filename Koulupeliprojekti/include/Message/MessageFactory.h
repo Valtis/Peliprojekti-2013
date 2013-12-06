@@ -28,4 +28,5 @@ namespace MessageFactory
   std::unique_ptr<Message> CreateAddHealthMessage(int health);
   std::unique_ptr<Message> CreateImportantCharacterDeathMessage();
   std::unique_ptr<Message> CreateSetFireDirectionMessage(Direction direction);
+  std::unique_ptr<Message> CreateChangeAnimationMessage(int animationID);
 }

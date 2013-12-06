@@ -14,6 +14,7 @@
 #include "Message/PlaySoundEffectMessage.h"
 #include "Message/AddHealthMessage.h"
 #include "Message/FiringDirectionMessage.h"
+#include "Message/AnimationChangeMessage.h"
 
 std::unique_ptr<Message> MessageFactory::CreateLocationChangeMessage(double x, double y)
 {
@@ -100,3 +101,9 @@ std::unique_ptr<Message> MessageFactory::CreateSetFireDirectionMessage(Direction
 {
   return std::unique_ptr<Message>(new FiringDirectionMessage(direction));
 }
+
+std::unique_ptr<Message> MessageFactory::CreateChangeAnimationMessage(int id)
+{
+  return std::unique_ptr<Message>(new AnimationChangeMessage(id));
+}
+

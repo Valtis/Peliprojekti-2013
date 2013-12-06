@@ -50,6 +50,7 @@
     <ClInclude Include="include\Level\LevelGenerator.h" />
     <ClInclude Include="include\Level\LevelManager.h" />
     <ClInclude Include="include\Message\AddHealthMessage.h" />
+    <ClInclude Include="include\Message\AnimationChangeMessage.h" />
     <ClInclude Include="include\Message\CollisionMessage.h" />
     <ClInclude Include="include\Message\Commands\Command.h" />
     <ClInclude Include="include\Message\Commands\ControlCommand.h" />
@@ -86,6 +87,7 @@
     <ClInclude Include="include\UI\Window\WindowBase.h" />
     <ClInclude Include="include\UI\Window\WindowManager.h" />
     <ClInclude Include="include\Utility\DirectionEnum.h" />
+    <ClInclude Include="include\Utility\GenericDefines.h" />
     <ClInclude Include="include\Utility\Logger.h" />
     <ClInclude Include="include\Utility\LoggerManager.h" />
     <ClInclude Include="include\Utility\Logs.h" />
