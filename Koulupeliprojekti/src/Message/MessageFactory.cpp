@@ -13,6 +13,7 @@
 #include "Message/SetGraphicsVisibilityMessage.h"
 #include "Message/PlaySoundEffectMessage.h"
 #include "Message/AddHealthMessage.h"
+#include "Message/FiringDirectionMessage.h"
 
 std::unique_ptr<Message> MessageFactory::CreateLocationChangeMessage(double x, double y)
 {
@@ -93,4 +94,9 @@ std::unique_ptr<Message> MessageFactory::CreateAddHealthMessage(int health)
 std::unique_ptr<Message> MessageFactory::CreateImportantCharacterDeathMessage()
 {
   return std::unique_ptr<Message>(new GenericMessageWithNoData(MessageType::IMPORTANT_CHARACTER_DEATH));
+}
+
+std::unique_ptr<Message> MessageFactory::CreateSetFireDirectionMessage(Direction direction)
+{
+  return std::unique_ptr<Message>(new FiringDirectionMessage(direction));
 }

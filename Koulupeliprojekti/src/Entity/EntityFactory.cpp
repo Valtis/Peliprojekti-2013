@@ -24,6 +24,8 @@
 #include <stdexcept>
 #include <sstream>
 
+
+// sobadsobadsobad
 void CreateBullet(Entity *e, SpawnEntityMessage *msg)
 {
   const int bulletHitboxSize = 20;
@@ -42,24 +44,37 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   
   double x = spawnerLocation->GetX();
   double y = spawnerLocation->GetY();
-
+  double speed = 10.0;
+  double xVel = 0;
+  double yVel = 0;
   
-  Direction direction = spawnerLocation->GetDirection();
+  Direction direction = spawnerLocation->GetFiringDirection();
 
-  
-  if (direction == Direction::LEFT)
+  switch (direction)
   {
-    x -= bulletHitboxSize;
-  }
-  else
-  {
-    x += bulletHitboxSize;
+    case Direction::RIGHT:
+       x += bulletHitboxSize;
+       xVel = speed;
+      break;
+    case Direction::LEFT:
+      x -= bulletHitboxSize;
+      xVel = -speed;
+      break;
+    case Direction::UP:
+      y -= bulletHitboxSize;
+      yVel = -speed;
+      break;
+    case Direction::DOWN:
+      y += bulletHitboxSize;
+      yVel = speed;
+      break;
+  default:
+    break;
   }
   
-
   std::unique_ptr<LocationComponent> location(new LocationComponent());
   location->SetLocation(x, y);
-  location->SetDirection(spawnerLocation->GetDirection());
+  location->SetDirection(direction);
 
   std::unique_ptr<GraphicsComponent> graphics(new GraphicsComponent());
   graphics->AddFrame(0, 200007);
@@ -68,14 +83,12 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   collision->AddHitbox(0, 0, bulletHitboxSize, bulletHitboxSize, HitboxType::TRIGGER);
   std::unique_ptr<VelocityComponent> velocity(new VelocityComponent(0, 0));
 
-  y = 0;
-  x = 10;
+  
+  
 
-  if (direction == Direction::LEFT)
-  {
-    x = -x;
-  }
-  velocity->SetVelocity(x, y);
+
+
+  velocity->SetVelocity(xVel, yVel);
 
   std::unique_ptr<FactionComponent> faction(new FactionComponent(bulletFaction));
   std::unique_ptr<HealthComponent> health(new HealthComponent(1, 1, 0));

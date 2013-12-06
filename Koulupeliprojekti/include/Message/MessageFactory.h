@@ -8,8 +8,7 @@ class Message;
 enum class CollisionSide;
 enum class EntityType;
 enum class Direction;
-typedef struct _CollisionHit CollisionHit;
-
+struct CollisionHit;
 namespace MessageFactory
 {
   std::unique_ptr<Message> CreateSetLocationMessage(double x, double y);
@@ -28,4 +27,5 @@ namespace MessageFactory
   std::unique_ptr<Message> CreatePlaySoundEffectMessage(int id);
   std::unique_ptr<Message> CreateAddHealthMessage(int health);
   std::unique_ptr<Message> CreateImportantCharacterDeathMessage();
+  std::unique_ptr<Message> CreateSetFireDirectionMessage(Direction direction);
 }

@@ -16,6 +16,7 @@ Game::Game() : m_gameTick(30), m_drawTick(30),
   m_soundManager(44100, 1024), m_playerAlive(true)
 {
 
+  // window management really should be better
   RegisterMessageHandler(MessageType::IMPORTANT_CHARACTER_DEATH, Priority::HIGHEST,
     [&](Message *msg) {
 
@@ -79,7 +80,7 @@ void Game::Draw()
       );
   }
 }
-
+// todo - stop hardcoding so much stuff
 void Game::Initialize()
 {
   LoggerManager::SetGlobalLogLevel(LogLevel::ALL);
@@ -90,7 +91,6 @@ void Game::Initialize()
   m_soundManager.RegisterMessageHandlers(this);
   m_soundManager.Play();
 
-  // test code - lots of stuff hard coded
   m_renderer.RegisterMessageHandlers(this);
   m_renderer.CreateWindow("Adventureland", 800, 600);
   m_renderer.LoadSprites("data/sprites/");

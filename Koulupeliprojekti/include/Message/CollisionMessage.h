@@ -5,7 +5,7 @@ enum class HitboxType;
 
 enum class CollisionSide : int { NONE, UP, DOWN, LEFT, RIGHT };
 
-typedef struct _CollisionHit
+struct CollisionHit
 {
   SDL_Rect isect;
   SDL_Point point;
@@ -13,7 +13,7 @@ typedef struct _CollisionHit
   CollisionSide h_side;
   HitboxType hit_type;
   std::vector<Entity *> entities;
-} CollisionHit;
+};
 
 class CollisionMessage : public Message
 {
