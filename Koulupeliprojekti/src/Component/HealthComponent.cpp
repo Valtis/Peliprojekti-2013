@@ -46,8 +46,13 @@ void HealthComponent::TakeDamage()
       auto faction = static_cast<FactionComponent *>(GetOwner()->GetComponent(ComponentType::FACTION));
       if (faction != nullptr && faction->GetFaction() == Faction::ENEMY) 
       {
-        auto deathSoundMsg = MessageFactory::CreatePlaySoundEffectMessage(MONSTER_DEATH);
+        auto deathSoundMsg = MessageFactory::CreatePlaySoundEffectMessage(SOUND_MONSTER_DEATH);
         GetOwner()->SendMessage(deathSoundMsg.get());
+      }
+      else
+      {
+        auto hitMsg = MessageFactory::CreatePlaySoundEffectMessage(SOUND_TAKE_DAMAGE);
+        GetOwner()->SendMessage(hitMsg.get());
       }
     }
     else 
