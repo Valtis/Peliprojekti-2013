@@ -48,27 +48,35 @@ MessageHandling InputComponent::HandleInput( Command *msg )
   if (m_id == -1 && command->GetController() != -1)
     return MessageHandling::PASS_FORWARD;
 
-  Direction moveDirection = Direction::UNCHANGED;
+  Direction moveXDirection = Direction::UNCHANGED;
+  Direction moveYDirection = Direction::UNCHANGED;
   Direction fireDirection = Direction::UNCHANGED;
 
   // TODO: clean up this
   switch (command->GetCommand())
   {
   case Action::LEFT:
-    moveDirection = command->GetState() == KeyState::DOWN ? Direction::LEFT : Direction::NONE;
-    fireDirection = moveDirection;
+    moveXDirection = command->GetState() == KeyState::DOWN ? Direction::LEFT : Direction::NONE;
+    fireDirection = moveXDirection;
     break;
   case Action::RIGHT:
-    moveDirection = command->GetState() == KeyState::DOWN ? Direction::RIGHT : Direction::NONE;
-    fireDirection = moveDirection;
+    moveXDirection = command->GetState() == KeyState::DOWN ? Direction::RIGHT : Direction::NONE;
+    fireDirection = moveXDirection;
     break;
 
   case Action::UP:
+    moveYDirection = command->GetState() == KeyState::DOWN ? Direction::UP : Direction::NONE;
+    break;
+  case Action::DOWN:
+     moveYDirection = command->GetState() == KeyState::DOWN ? Direction::DOWN : Direction::NONE;
+    break;
+
+  case Action::AIM_UP:
 
     fireDirection = command->GetState() == KeyState::DOWN ? Direction::UP : Direction::NONE;
     
     break;
-  case Action::DOWN:
+  case Action::AIM_DOWN:
     fireDirection = command->GetState() == KeyState::DOWN ? Direction::DOWN : Direction::NONE;
     break;
   case Action::JUMP:
@@ -84,7 +92,7 @@ MessageHandling InputComponent::HandleInput( Command *msg )
   }
 
 
-  auto velMsg = MessageFactory::CreateSetVelocityMessage(moveDirection, Direction::UNCHANGED);
+  auto velMsg = MessageFactory::CreateSetVelocityMessage(moveXDirection, moveYDirection);
   auto fireMsg = MessageFactory::CreateSetFireDirectionMessage(fireDirection);
   
   GetOwner()->SendMessage(velMsg.get());
