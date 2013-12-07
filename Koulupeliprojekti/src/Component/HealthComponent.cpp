@@ -35,6 +35,8 @@ void HealthComponent::OnAttatchingToEntity()
 
 void HealthComponent::TakeDamage()
 {
+  auto faction = static_cast<FactionComponent *>(GetOwner()->GetComponent(ComponentType::FACTION));
+
   --m_hitpoints;
   if (m_hitpoints <= 0)
   {
@@ -43,16 +45,11 @@ void HealthComponent::TakeDamage()
       auto deathMsg = MessageFactory::CreateTerminateEntityMessage(GetOwner());
 
       GetOwner()->SendMessage(deathMsg.get());
-      auto faction = static_cast<FactionComponent *>(GetOwner()->GetComponent(ComponentType::FACTION));
+
       if (faction != nullptr && faction->GetFaction() == Faction::ENEMY) 
       {
         auto deathSoundMsg = MessageFactory::CreatePlaySoundEffectMessage(SOUND_MONSTER_DEATH);
         GetOwner()->SendMessage(deathSoundMsg.get());
-      }
-      else
-      {
-        auto hitMsg = MessageFactory::CreatePlaySoundEffectMessage(SOUND_TAKE_DAMAGE);
-        GetOwner()->SendMessage(hitMsg.get());
       }
     }
     else 
@@ -63,6 +60,14 @@ void HealthComponent::TakeDamage()
       GetOwner()->SendMessage(msg.get());
     }
   }
+ 
+  if (faction != nullptr && faction->GetFaction() == Faction::PLAYER && m_hitpoints > 0)
+  {
+    auto hitMsg = MessageFactory::CreatePlaySoundEffectMessage(SOUND_TAKE_DAMAGE);
+    GetOwner()->SendMessage(hitMsg.get());
+  }
+
+
 }
 
 MessageHandling HealthComponent::HandleAddHealthMessage(Message *msg)

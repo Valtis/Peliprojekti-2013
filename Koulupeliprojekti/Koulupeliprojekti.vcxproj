@@ -179,6 +179,7 @@
   <ItemGroup>
     <Media Include="data\sound\dsbarexp.wav" />
     <Media Include="data\sound\dspdiehi.wav" />
+    <Media Include="data\sound\dspunch.wav" />
     <Media Include="data\sound\dsrlaunc.wav" />
     <Media Include="data\sound\jump.wav" />
   </ItemGroup>
