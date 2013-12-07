@@ -2,74 +2,17 @@ cmake_minimum_required (VERSION 2.6)
 project (PELI)
 
 set (ENV{PKG_CONFIG_PATH}
-  "/home/jtpakari/Software/lib/pkgconfig"
+  "/home/jtpakari/Software/lib/pkgconfig:$ENV{PKG_CONFIG_PATH}"
 )
 
 set(EXECUTABLE_OUTPUT_PATH "bin")
 set(LIBRARY_OUTPUT_PATH "bin")
 set(CMAKE_CACHEFILE_DIR "cmake")
 
-set (
+file(GLOB_RECURSE
   SOURCES
-  "src/Game.cpp"
-  "src/Collision/CollisionChecker.cpp"
-  "src/Component/AiComponent.cpp"
-  "src/Component/CollisionComponent.cpp"
-  "src/Component/Component.cpp"
-  "src/Component/FactionComponent.cpp"
-  "src/Component/FlyingAiComponent.cpp"
-  "src/Component/FollowingAiComponent.cpp"
-  "src/Component/GraphicsComponent.cpp"
-  "src/Component/HealthComponent.cpp"
-  "src/Component/InputComponent.cpp"
-  "src/Component/LocationComponent.cpp"
-  "src/Component/PhysicsComponent.cpp"
-  "src/Component/VelocityComponent.cpp"
-  "src/Component/WalkingAiComponent.cpp"
-  "src/Component/Scripts/DamageColliderScript.cpp"
-  "src/Component/Scripts/BlinkScript.cpp"
-  "src/Component/Scripts/BulletScriptComponent.cpp"
-  "src/Component/Scripts/EndLevelScriptComponent.cpp"
-  "src/Component/Scripts/TempInvulnerabilityScript.cpp"
-  "src/Entity/Entity.cpp"
-  "src/Entity/EntityFactory.cpp"
-  "src/Graphics/FontManager.cpp"
-  "src/Graphics/Renderer.cpp"
-  "src/Graphics/Sprite.cpp"
-  "src/Graphics/SpriteLoader.cpp"
-  "src/Graphics/SpriteManager.cpp"
-  "src/Graphics/SpriteSheetLoader.cpp"
-  "src/Graphics/SurfaceOperations.cpp"
-  "src/Graphics/TextureFactory.cpp"
-  "src/Graphics/Camera/EntityTrackingCamera.cpp"
-  "src/Level/Level.cpp"
-  "src/Level/LevelManager.cpp"
-  "src/Level/LevelGenerator.cpp"
-  "src/Message/Message.cpp"
-  "src/Message/MessageFactory.cpp"
-  "src/Message/MessageProcessor.cpp"
-  "src/Message/Commands/ControlCommand.cpp"
-  "src/Physics/PhysicsHandler.cpp"
-  "src/Sound/Music.cpp"
-  "src/Sound/SoundEffects.cpp"
-  "src/Sound/SoundManager.cpp"
-  "src/UI/Hud.cpp"
-  "src/UI/InputManager.cpp"
-  "src/UI/Controller/JoystickController.cpp"
-  "src/UI/Controller/KeyboardController.cpp"
-  "src/UI/Controller/MouseController.cpp"
-  "src/UI/Window/Button.cpp"
-  "src/UI/Window/TextBox.cpp"
-  "src/UI/Window/TextElement.cpp"
-  "src/UI/Window/TextField.cpp"
-  "src/UI/Window/Window.cpp"
-  "src/UI/Window/WindowBase.cpp"
-  "src/UI/Window/WindowManager.cpp"
-  "src/Utility/Logger.cpp"
-  "src/Utility/LoggerManager.cpp"
-  "src/Utility/StringUtility.cpp"
-  "src/Utility/Tick.cpp"
-  "main.cpp"
+  "*.h"
+  "*.cpp"
 )
 
 find_package(PkgConfig)
@@ -113,3 +56,4 @@ target_link_libraries (
   ${SDL2_TTF_LIBRARIES}
   ${SDL2_MIXER_LIBRARIES}
 )
+

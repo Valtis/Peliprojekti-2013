@@ -3,6 +3,24 @@
 #include "Utility/LoggerManager.h"
 #include <fstream>
 #include <stdexcept>
+#include <sstream>
+
+int StrToInt(std::string const str)
+{
+  std::stringstream ss;
+  ss.str(str);
+  int i = 0;
+  ss >> i;
+  return i;
+}
+
+std::string IntToStr(int i)
+{
+  std::stringstream ss;
+  ss.str("");
+  ss << i;
+  return ss.str();
+}
 
 SoundEffects::SoundEffects() : m_effects()
 {
@@ -20,7 +38,7 @@ void SoundEffects::Initialize()
   std::ifstream inFile("data/sound/soundeffects.dat");
   std::string line;
   std::getline(inFile, line);
-  Mix_Volume(-1, std::stoi(line));
+  Mix_Volume(-1, StrToInt(line));
 
   while (std::getline(inFile, line))
   {
@@ -38,13 +56,15 @@ void SoundEffects::ParseLine( std::string &line )
     return;
   }
 
-  if (m_effects.count(std::stoi(tokens[1])) != 0)
+  int i = StrToInt(tokens[1]);
+
+  if (m_effects.count(i) != 0)
   {
     LoggerManager::GetLog(SOUND_LOG).AddLine(LogLevel::WARNING, "Sound effect with id " + tokens[1] + " already exists - skipping");
     return;
   }
 
-  LoadEffect("data/sound/" + tokens[0], std::stoi(tokens[1]));
+  LoadEffect("data/sound/" + tokens[0], i);
 }
 
 
@@ -78,7 +98,8 @@ void SoundEffects::Play(int id)
 {
   if (m_effects.count(id) == 0)
   {
-    LoggerManager::GetLog(SOUND_LOG).AddLine(LogLevel::WARNING, "Sound effect with id " + std::to_string(id) + " does not exist - skipping");
+    LoggerManager::GetLog(SOUND_LOG).AddLine(LogLevel::WARNING,
+        "Sound effect with id " + IntToStr(id) + " does not exist - skipping");
     return;
   }
   Mix_PlayChannel(-1, m_effects[id], 0);
