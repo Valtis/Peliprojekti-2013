@@ -185,6 +185,9 @@
     <Media Include="data\sound\dsrlaunc.wav" />
     <Media Include="data\sound\jump.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="readme.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8D1292B3-5DB4-4E8D-8A06-0170615C3DF3}</ProjectGuid>
     <RootNamespace>Koulupeliprojekti</RootNamespace>
