@@ -211,7 +211,7 @@ void Game::TestWindowCreation()
   location.y = 10;
   location.w = 280;
   location.h = 240;
-  textBox.reset(new TextBox("Congratulations! You have finished the the game!", location, &m_renderer));
+  textBox.reset(new TextBox("Congratulations! You have finished the game!", location, &m_renderer));
   window->AddWindow(std::move(textBox));
 
 

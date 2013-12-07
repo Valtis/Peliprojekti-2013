@@ -99,7 +99,7 @@ void Renderer::DrawEntities( Camera *camera, EntityVector &entities, EntityVecto
   SortEntitiesByDrawPriority(spriteIds);
   PerformEntityDraw(spriteIds, topleft);
 
-  DebugDrawCollisionBoxes(entities, staticCollidables, topleft);
+  //DebugDrawCollisionBoxes(entities, staticCollidables, topleft);
 }
 
 std::vector<Renderer::SpriteData> Renderer::GetDataForDrawing( SDL_Point topleft, EntityVector &entities, EntityVector &staticEntities, EntityVector &staticCollidables )
