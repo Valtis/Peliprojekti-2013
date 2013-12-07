@@ -1,9 +1,9 @@
 0 0 50 50 0 200000 1
 51 0 50 50 0 200001 1
-64 0 64 90 6 200002 9 // player standing
-128 0 64 90 6 200003 9 // player walking
-192 0 64 90 6 200004 9 // player walking
-192 0 64 90 6 200005 9 // duplicate tile
+61 0 66 90 6 200002 9 // player standing
+126 0 66 90 6 200003 9 // player walking
+190 0 66 90 6 200004 9 // player walking
+190 0 66 90 6 200005 9 // duplicate tile
 51 51 50 50 0 200006
 160 5 30 30 8 200007 9
 160 5 30 30 8 200008 9
