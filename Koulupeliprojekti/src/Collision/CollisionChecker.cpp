@@ -141,6 +141,9 @@ void Collision::CheckCollisions(const std::vector<std::unique_ptr<Entity>> &enti
 {
   for (auto e = entities.begin(); e != entities.end(); e++)
   {
+
+    SDL_assert_release((*e).get() != nullptr);
+
     CollisionHit solid_hit, trigger_hit;
     solid_hit.h_side = CollisionSide::NONE;
     solid_hit.v_side = CollisionSide::NONE;
@@ -166,16 +169,14 @@ void Collision::CheckCollisions(const std::vector<std::unique_ptr<Entity>> &enti
     if (solid_hit.h_side != CollisionSide::NONE ||
         solid_hit.v_side != CollisionSide::NONE)
     {
-      CollisionHit *hit_ptr = new CollisionHit(solid_hit);
-      auto msg = MessageFactory::CreateCollisionMessage(hit_ptr);
+      auto msg = MessageFactory::CreateCollisionMessage(solid_hit);
       (*e)->SendMessage(msg.get());
     }
 
     if (trigger_hit.h_side != CollisionSide::NONE ||
         trigger_hit.v_side != CollisionSide::NONE)
     {
-      CollisionHit *hit_ptr = new CollisionHit(trigger_hit);
-      auto msg = MessageFactory::CreateCollisionMessage(hit_ptr);
+      auto msg = MessageFactory::CreateCollisionMessage(trigger_hit);
       (*e)->SendMessage(msg.get());
     }
   }
