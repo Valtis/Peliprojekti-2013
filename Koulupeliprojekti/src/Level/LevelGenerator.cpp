@@ -7,7 +7,7 @@
 #include <ctime>
 
 #define TILESIZE 70
-#define ROOMWIDTH 30
+#define ROOMWIDTH 26
 #define ROOMLENGTH 12
 
 LevelGenerator::LevelGenerator() {}

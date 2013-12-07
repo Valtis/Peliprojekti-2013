@@ -176,7 +176,7 @@ std::unique_ptr<Entity> BaseEnemy(int x, int y)
   e->AddComponent(ComponentType::COLLISION,std::unique_ptr<CollisionComponent>(new CollisionComponent));
   e->AddComponent(ComponentType::LOCATION,  std::unique_ptr<LocationComponent>(new LocationComponent(x, y)));
   e->AddComponent(ComponentType::GRAPHICS, std::unique_ptr<GraphicsComponent>(new GraphicsComponent));
-  e->AddComponent(ComponentType::VELOCITY, std::unique_ptr<VelocityComponent>(new VelocityComponent(3, 3)));
+  e->AddComponent(ComponentType::VELOCITY, std::unique_ptr<VelocityComponent>(new VelocityComponent(5, 5)));
   e->AddComponent(ComponentType::HEALTH, std::unique_ptr<Component>(new HealthComponent(3, 3, 0)));
   e->AddComponent(ComponentType::INPUT,  std::unique_ptr<InputComponent>(new InputComponent(-1)));
   e->AddComponent(ComponentType::FACTION, std::unique_ptr<FactionComponent>(new FactionComponent(Faction::ENEMY)));
