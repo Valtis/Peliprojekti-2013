@@ -242,11 +242,11 @@ std::unique_ptr<Entity> EntityFactory::CreateEndLevelEntity(int x, int y)
 
   std::unique_ptr<Entity> e(new Entity);
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
-  g->AddFrame(0, 200001);
+  g->AddFrame(0, 400006);
   e->AddComponent(ComponentType::GRAPHICS,std::move(g));
 
   std::unique_ptr<CollisionComponent> c(new CollisionComponent());
-  c->AddHitbox(0, 0, 50, 50,HitboxType::TRIGGER);
+  c->AddHitbox(0, 0, 70, 71,HitboxType::TRIGGER);
   e->AddComponent(ComponentType::COLLISION, std::move(c));
 
   e->AddComponent(ComponentType::LOCATION, std::unique_ptr<LocationComponent>(new LocationComponent(x, y)));
