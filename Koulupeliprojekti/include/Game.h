@@ -39,13 +39,15 @@ private:
   LevelManager m_levelManager;
   InputManager m_inputManager;
   WindowManager m_windowManager;
+  SoundManager m_soundManager;
   Hud m_hud;
   Renderer m_renderer;
   Tick m_gameTick;
   Tick m_drawTick;
   bool m_isRunning;
   bool m_isPaused;
-  std::unique_ptr<Camera> m_testDebugCamera;
+  bool m_playerAlive;
+  std::unique_ptr<Camera> m_camera;
 
 };
 

@@ -1,14 +1,14 @@
 #pragma once
 #include <memory>
 #include <SDL.h>
+#include "Sound/SoundEffectDefs.h"
 class Entity;
 
 class Message;
 enum class CollisionSide;
 enum class EntityType;
 enum class Direction;
-typedef struct _CollisionHit CollisionHit;
-
+struct CollisionHit;
 namespace MessageFactory
 {
   std::unique_ptr<Message> CreateSetLocationMessage(double x, double y);
@@ -24,7 +24,9 @@ namespace MessageFactory
   std::unique_ptr<Message> CreateEndGameMessage();
   std::unique_ptr<Message> CreateStartBlinkingMessage(double duration);
   std::unique_ptr<Message> CreateSetGraphicsVisibilityMessage(bool visibility);
-
-
-
+  std::unique_ptr<Message> CreatePlaySoundEffectMessage(int id);
+  std::unique_ptr<Message> CreateAddHealthMessage(int health);
+  std::unique_ptr<Message> CreateImportantCharacterDeathMessage();
+  std::unique_ptr<Message> CreateSetFireDirectionMessage(Direction direction);
+  std::unique_ptr<Message> CreateChangeAnimationMessage(int animationID);
 }

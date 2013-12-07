@@ -324,6 +324,33 @@
     <ClInclude Include="include\Utility\DirectionEnum.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="include\Message\PlaySoundEffectMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Sound\SoundEffectDefs.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\Scripts\HealthPickupScript.h">
+      <Filter>Header Files\Component\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\AddHealthMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\Scripts\SpawnHealthPickupOnDeathScript.h">
+      <Filter>Header Files\Component\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\Scripts\QuitGameOnDeathScript.h">
+      <Filter>Header Files\Component\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\FiringDirectionMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\GenericDefines.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\AnimationChangeMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -467,9 +494,6 @@
     <ClCompile Include="src\UI\Window\TextField.cpp">
       <Filter>Source Files\UI\Window</Filter>
     </ClCompile>
-    <ClCompile Include="src\Component\WalkingAiComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Physics\PhysicsHandler.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
@@ -501,6 +525,18 @@
       <Filter>Source Files\Component\Scripts</Filter>
     </ClCompile>
     <ClCompile Include="src\Component\Scripts\DamageColliderScript.cpp">
+      <Filter>Source Files\Component\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\WalkingAiComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Scripts\HealthPickupScript.cpp">
+      <Filter>Source Files\Component\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Scripts\SpawnHealthPickupOnDeathScript.cpp">
+      <Filter>Source Files\Component\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Scripts\QuitGameOnDeathScript.cpp">
       <Filter>Source Files\Component\Scripts</Filter>
     </ClCompile>
   </ItemGroup>
@@ -545,5 +581,19 @@
     <Font Include="data\fonts\FreeMono.otf">
       <Filter>Resource Files</Filter>
     </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="data\sound\dsbarexp.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="data\sound\dspdiehi.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="data\sound\dsrlaunc.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="data\sound\jump.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

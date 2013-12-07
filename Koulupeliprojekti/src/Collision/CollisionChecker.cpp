@@ -57,9 +57,8 @@ void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
     static_cast<CollisionComponent *>(entity->GetComponent(ComponentType::COLLISION));
   CollisionComponent *cc2 =
     static_cast<CollisionComponent *>(target_entity->GetComponent(ComponentType::COLLISION));
-  VelocityComponent *vc =
-    static_cast<VelocityComponent *>(entity->GetComponent(ComponentType::VELOCITY));
-  if (cc == nullptr || cc2 == nullptr || vc == nullptr)
+  
+  if (cc == nullptr || cc2 == nullptr)
     return;
 
   std::vector<SDL_Rect> cc_hitboxes = cc->GetHitboxes(HitboxType::SOLID);

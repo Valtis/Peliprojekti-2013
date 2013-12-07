@@ -3,15 +3,24 @@
 #include "Utility/LoggerManager.h"
 #include "Message/LocationChangeMessage.h"
 #include "Message/SetLocationMessage.h"
+#include "Message/FiringDirectionMessage.h"
 #include "Component/VelocityComponent.h"
 #include "Message/CollisionMessage.h"
 #include "Component/FactionComponent.h"
 #include "Component/CollisionComponent.h"
 
-LocationComponent::LocationComponent() : m_x(0), m_y(0), m_direction(Direction::RIGHT)
+LocationComponent::LocationComponent() : m_x(0), m_y(0), 
+  m_direction(Direction::RIGHT), m_firingDirection(Direction::RIGHT)
 {
 
 }
+
+LocationComponent::LocationComponent(double x, double y) : m_x(x), m_y(y),
+  m_direction(Direction::RIGHT)
+{
+
+}
+
 
 LocationComponent::~LocationComponent()
 {
@@ -26,21 +35,24 @@ void LocationComponent::OnAttatchingToEntity()
     [&](Message *msg) { return this->HandleCollisionMessage(msg); });
   GetOwner()->RegisterMessageHandler(MessageType::SET_LOCATION, Priority::NORMAL, 
     [&](Message *msg) { return this->HandleSetLocationMessage(msg); });
+  GetOwner()->RegisterMessageHandler(MessageType::FIRE_DIRECTION, Priority::NORMAL, 
+    [&](Message *msg) { return this->HandleSetFiringDirectionMessage(msg); });
 }
 
 void LocationComponent::Update(double ticksPassed)
 {
-   for (auto &collision : m_collision)
-   {
-     collision.second = false;
-   }
+  for (auto &collision : m_collision)
+  {
+    collision.second = false;
+  }
 }
 
 MessageHandling LocationComponent::HandleLocationChangeMessage(Message *msg)
 {
   if (msg->GetType() != MessageType::LOCATION_CHANGE)
   {
-    LoggerManager::GetLog(COMPONENT_LOG).AddLine(LogLevel::WARNING, "Invalid message type received in LocationComponent::HandleLocationChangeMessage() - ignoring");
+    LoggerManager::GetLog(COMPONENT_LOG).AddLine(LogLevel::WARNING, 
+      "Invalid message type received in LocationComponent::HandleLocationChangeMessage() - ignoring");
     return MessageHandling::PASS_FORWARD;
   }
   auto *locationMessage = static_cast<LocationChangeMessage *>(msg);
@@ -91,7 +103,7 @@ MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
     static_cast<VelocityComponent *>(GetOwner()->GetComponent(ComponentType::VELOCITY));
   if (v == nullptr)
     return MessageHandling::PASS_FORWARD;
-  
+
   FactionComponent *myFac =
     static_cast<FactionComponent *>(GetOwner()->GetComponent(ComponentType::FACTION));
   MessageHandling handling = MessageHandling::STOP_HANDLING;
@@ -101,7 +113,7 @@ MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
       static_cast<FactionComponent *>(collider->GetComponent(ComponentType::FACTION));
 
     if (myFac == nullptr || colFac == nullptr ||
-        myFac->GetFaction() != colFac->GetFaction())
+      myFac->GetFaction() != colFac->GetFaction())
       handling = MessageHandling::PASS_FORWARD;
   }
   CollisionSide h_side = colMsg->GetHorizontalSide();
@@ -130,4 +142,15 @@ MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
   m_collision[h_side] = true;
 
   return handling;
+}
+
+MessageHandling LocationComponent::HandleSetFiringDirectionMessage(Message *msg)
+{
+
+  auto fireMsg = static_cast<FiringDirectionMessage *>(msg);
+  if (fireMsg->GetDirection() != Direction::UNCHANGED && fireMsg->GetDirection() != Direction::NONE)
+  {  
+    m_firingDirection = fireMsg->GetDirection();
+  }
+  return MessageHandling::STOP_HANDLING;
 }

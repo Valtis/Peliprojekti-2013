@@ -2,8 +2,9 @@
 #include <stdexcept>
 #include "Sound/Music.h"
 #include "Sound/SoundEffects.h"
+#include "Message/MessageProcessor.h"
+#include "Message/PlaySoundEffectMessage.h"
 
-SoundManager *SoundManager::m_instance = nullptr;
 
 SoundManager::SoundManager(int frequency, int chunkSize) : m_music()
 {
@@ -88,25 +89,6 @@ void SoundManager::UninitializeSDLAudio()
 }
 
 
-
-
-void SoundManager::Release()
-{
-  delete m_instance;
-  m_instance = nullptr;
-}
-
-SoundManager &SoundManager::Instance()
-{
-  if (m_instance == nullptr)
-  {
-    m_instance = new SoundManager(44100, 1024); // todo: move the values to settings file instead of hardcoding
-  }
-
-  return *m_instance;
-}
-
-
 void SoundManager::Play()
 {
   m_music->Play();
@@ -145,4 +127,17 @@ void SoundManager::Update(double ticks_passed)
 void SoundManager::PlaySoundEffect(int id)
 {
   m_soundEffects->Play(id);
+}
+
+void SoundManager::RegisterMessageHandlers(MessageProcessor *processor)
+{
+  processor->RegisterMessageHandler(MessageType::PLAY_SOUND_EFFECT, Priority::HIGHEST, 
+    [&](Message *msg) { return this->HandlePlaySoundEffectMessage(msg); });
+}
+
+MessageHandling SoundManager::HandlePlaySoundEffectMessage(Message *msg)
+{
+  auto soundMsg = static_cast<PlaySoundEffectMessage *>(msg);
+  PlaySoundEffect(soundMsg->GetEffectID());
+  return MessageHandling::STOP_HANDLING;
 }

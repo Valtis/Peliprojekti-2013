@@ -9,14 +9,11 @@ EndLevelScriptComponent::EndLevelScriptComponent()
 
 void EndLevelScriptComponent::OnAttatchingToEntity()
 {
-	GetOwner()->RegisterMessageHandler(MessageType::COLLISION, Priority::HIGH,[&] (Message *msg) { return this->HandleCollisionMessage(msg); });
+	GetOwner()->RegisterMessageHandler(MessageType::COLLISION, Priority::HIGHEST,[&] (Message *msg) { return this->HandleCollisionMessage(msg); });
 }
 
 MessageHandling EndLevelScriptComponent::HandleCollisionMessage(Message *msg)
-{
-	if (msg->GetType() != MessageType::COLLISION)
-		return MessageHandling::STOP_HANDLING;
-	
+{	
 	CollisionMessage* col = static_cast<CollisionMessage*>(msg);
 
   bool found_player = false;

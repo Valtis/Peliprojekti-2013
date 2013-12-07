@@ -11,8 +11,20 @@
 #include "UI/Window/TextBox.h"
 #include "Message/Commands/ControlCommand.h"
 
-Game::Game() : m_gameTick(30), m_drawTick(30), m_isRunning(false), m_isPaused(false)
+Game::Game() : m_gameTick(30), m_drawTick(30), 
+  m_isRunning(false), m_isPaused(false), 
+  m_soundManager(44100, 1024), m_playerAlive(true)
 {
+
+  // window management really should be better
+  RegisterMessageHandler(MessageType::IMPORTANT_CHARACTER_DEATH, Priority::HIGHEST,
+    [&](Message *msg) {
+
+      this->m_windowManager.GetWindows()[0]->Activate();
+      m_playerAlive = false;
+      return MessageHandling::STOP_HANDLING;
+    });
+
   RegisterMessageHandler(MessageType::END_GAME, Priority::HIGHEST, [&](Message *msg)
     {
       this->m_windowManager.GetWindows()[1]->Activate();
@@ -43,10 +55,10 @@ void Game::UpdateGameState()
 {
   if (m_gameTick.TickHasPassed())
   {
-    SoundManager::Instance().Update(m_gameTick.TicksPassed());
+    m_soundManager.Update(m_gameTick.TicksPassed());
     PollEvents();
 
-    if (!m_isPaused) 
+    if (m_playerAlive && !m_isPaused) 
     {
       m_levelManager.Update(m_gameTick.TicksPassed());
     }
@@ -59,7 +71,8 @@ void Game::Draw()
   if (m_drawTick.TickHasPassed())
   {
     m_renderer.Draw(
-      m_testDebugCamera.get(), m_levelManager.GetCurrentLevel()->GetEntities(),
+      m_camera.get(), 
+      m_levelManager.GetCurrentLevel()->GetEntities(),
       m_levelManager.GetCurrentLevel()->GetStaticEntities(),
       m_levelManager.GetCurrentLevel()->GetStaticCollidables(),
       m_windowManager.GetWindows(),
@@ -67,7 +80,7 @@ void Game::Draw()
       );
   }
 }
-
+// todo - stop hardcoding so much stuff
 void Game::Initialize()
 {
   LoggerManager::SetGlobalLogLevel(LogLevel::ALL);
@@ -75,11 +88,11 @@ void Game::Initialize()
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
   SDL_JoystickEventState(SDL_ENABLE);
 
-  SoundManager::Instance().Play();
+  m_soundManager.RegisterMessageHandlers(this);
+  m_soundManager.Play();
 
-  // test code - lots of stuff hard coded
   m_renderer.RegisterMessageHandlers(this);
-  m_renderer.CreateWindow("Adventureland", 800, 600);
+  m_renderer.CreateWindow("Adventureland", 1024, 768);
   m_renderer.LoadSprites("data/sprites/");
 
 
@@ -93,7 +106,7 @@ void Game::Initialize()
   m_levelManager.SetParent(this);
   m_levelManager.Initialize(m_inputManager, camera, m_hud);
   
-  m_testDebugCamera = std::move(camera);
+  m_camera = std::move(camera);
 
   TestWindowCreation();
   m_isRunning = true;
@@ -131,6 +144,10 @@ void Game::PollEvents() {
        m_isRunning = false;
        return;
      }
+     if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED)
+     {
+       m_renderer.SetWindowSize(event.window.data1, event.window.data2);
+     }
      m_inputManager.HandleInput(event);
   }
 }
@@ -141,6 +158,10 @@ void Game::ShutDownGame()
   m_isRunning = false;
 }
 
+
+
+// uggggh.
+// Really should be refactored but deadlineeees
 void Game::TestWindowCreation()
 {
   SDL_Rect location;
@@ -158,21 +179,21 @@ void Game::TestWindowCreation()
 
 
   std::unique_ptr<Window> window(new Window(location, color, &m_renderer));
-  window->Activate();
+  window->Deactivate();
   location.x = 10;
   location.y = 250;
   location.w = 140;
   location.h = 30;
   std::unique_ptr<Button> button(new Button(location, "Close window", &m_renderer));
 
-  button->AddHandler([&]{ this->m_windowManager.GetWindows()[0]->Deactivate(); });
+  button->AddHandler([&]{ this->ShutDownGame(); });
   window->AddWindow(std::move(button));
 
   location.x = 10;
   location.y = 10;
   location.w = 200;
   location.h = 230;
-  std::unique_ptr<TextBox> textBox(new TextBox("THIS IS UNFINISHED. Just pretend we have fixed the issues with collision detection, that the triangle is animated player and shooting actually does something", location, &m_renderer));
+  std::unique_ptr<TextBox> textBox(new TextBox("Welp, looks like you got yourself killed. Better luck next time maybe!", location, &m_renderer));
   window->AddWindow(std::move(textBox));
 
   m_windowManager.AddWindow(std::move(window));

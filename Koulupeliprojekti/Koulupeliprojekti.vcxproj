@@ -23,10 +23,13 @@
     <ClInclude Include="include\Component\InputComponent.h" />
     <ClInclude Include="include\Component\LocationComponent.h" />
     <ClInclude Include="include\Component\PhysicsComponent.h" />
+    <ClInclude Include="include\Component\Scripts\HealthPickupScript.h" />
     <ClInclude Include="include\Component\Scripts\BlinkScript.h" />
     <ClInclude Include="include\Component\Scripts\BulletScriptComponent.h" />
     <ClInclude Include="include\Component\Scripts\DamageColliderScript.h" />
     <ClInclude Include="include\Component\Scripts\EndLevelScriptComponent.h" />
+    <ClInclude Include="include\Component\Scripts\QuitGameOnDeathScript.h" />
+    <ClInclude Include="include\Component\Scripts\SpawnHealthPickupOnDeathScript.h" />
     <ClInclude Include="include\Component\Scripts\TempInvulnerabilityScript.h" />
     <ClInclude Include="include\Component\VelocityComponent.h" />
     <ClInclude Include="include\Component\WalkingAiComponent.h" />
@@ -46,16 +49,20 @@
     <ClInclude Include="include\Level\Level.h" />
     <ClInclude Include="include\Level\LevelGenerator.h" />
     <ClInclude Include="include\Level\LevelManager.h" />
+    <ClInclude Include="include\Message\AddHealthMessage.h" />
+    <ClInclude Include="include\Message\AnimationChangeMessage.h" />
     <ClInclude Include="include\Message\CollisionMessage.h" />
     <ClInclude Include="include\Message\Commands\Command.h" />
     <ClInclude Include="include\Message\Commands\ControlCommand.h" />
     <ClInclude Include="include\Message\Commands\MouseCommand.h" />
+    <ClInclude Include="include\Message\FiringDirectionMessage.h" />
     <ClInclude Include="include\Message\NewTiledSpriteMessage.h" />
     <ClInclude Include="include\Message\GenericMessageWithNoData.h" />
     <ClInclude Include="include\Message\LocationChangeMessage.h" />
     <ClInclude Include="include\Message\Message.h" />
     <ClInclude Include="include\Message\MessageFactory.h" />
     <ClInclude Include="include\Message\MessageProcessor.h" />
+    <ClInclude Include="include\Message\PlaySoundEffectMessage.h" />
     <ClInclude Include="include\Message\ResetEntityPositionMessage.h" />
     <ClInclude Include="include\Message\SetGraphicsVisibilityMessage.h" />
     <ClInclude Include="include\Message\SetLocationMessage.h" />
@@ -64,6 +71,7 @@
     <ClInclude Include="include\Message\StartBlinkingMessage.h" />
     <ClInclude Include="include\Physics\PhysicsHandler.h" />
     <ClInclude Include="include\Sound\Music.h" />
+    <ClInclude Include="include\Sound\SoundEffectDefs.h" />
     <ClInclude Include="include\Sound\SoundEffects.h" />
     <ClInclude Include="include\Sound\SoundManager.h" />
     <ClInclude Include="include\UI\Controller\Controller.h" />
@@ -79,6 +87,7 @@
     <ClInclude Include="include\UI\Window\WindowBase.h" />
     <ClInclude Include="include\UI\Window\WindowManager.h" />
     <ClInclude Include="include\Utility\DirectionEnum.h" />
+    <ClInclude Include="include\Utility\GenericDefines.h" />
     <ClInclude Include="include\Utility\Logger.h" />
     <ClInclude Include="include\Utility\LoggerManager.h" />
     <ClInclude Include="include\Utility\Logs.h" />
@@ -103,6 +112,9 @@
     <ClCompile Include="src\Component\Scripts\BulletScriptComponent.cpp" />
     <ClCompile Include="src\Component\Scripts\DamageColliderScript.cpp" />
     <ClCompile Include="src\Component\Scripts\EndLevelScriptComponent.cpp" />
+    <ClCompile Include="src\Component\Scripts\HealthPickupScript.cpp" />
+    <ClCompile Include="src\Component\Scripts\QuitGameOnDeathScript.cpp" />
+    <ClCompile Include="src\Component\Scripts\SpawnHealthPickupOnDeathScript.cpp" />
     <ClCompile Include="src\Component\Scripts\TempInvulnerabilityScript.cpp" />
     <ClCompile Include="src\Component\VelocityComponent.cpp" />
     <ClCompile Include="src\Component\WalkingAiComponent.cpp" />
@@ -163,6 +175,12 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="data\fonts\FreeMono.otf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="data\sound\dsbarexp.wav" />
+    <Media Include="data\sound\dspdiehi.wav" />
+    <Media Include="data\sound\dsrlaunc.wav" />
+    <Media Include="data\sound\jump.wav" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8D1292B3-5DB4-4E8D-8A06-0170615C3DF3}</ProjectGuid>

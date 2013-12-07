@@ -18,10 +18,12 @@ public:
   int GetLives() { return m_lives; }
   void SetLives(int lives) { m_lives = lives; }
 
-  void TakeDamage();
+  
 protected:
   void OnAttatchingToEntity() override; 
 private:
+  void TakeDamage();
+  MessageHandling HandleAddHealthMessage(Message *msg);
 
   int m_hitpoints;
   int m_maxHitpoints;

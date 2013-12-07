@@ -48,25 +48,36 @@ MessageHandling InputComponent::HandleInput( Command *msg )
   if (m_id == -1 && command->GetController() != -1)
     return MessageHandling::PASS_FORWARD;
 
-  Direction xDir = Direction::UNCHANGED;
-  Direction yDir = Direction::UNCHANGED;
+  Direction moveXDirection = Direction::UNCHANGED;
+  Direction moveYDirection = Direction::UNCHANGED;
+  Direction fireDirection = Direction::UNCHANGED;
 
   // TODO: clean up this
   switch (command->GetCommand())
   {
   case Action::LEFT:
-    xDir = command->GetState() == KeyState::DOWN ? Direction::LEFT : Direction::NONE;
+    moveXDirection = command->GetState() == KeyState::DOWN ? Direction::LEFT : Direction::NONE;
+    fireDirection = moveXDirection;
     break;
   case Action::RIGHT:
-    xDir = command->GetState() == KeyState::DOWN ? Direction::RIGHT : Direction::NONE;
+    moveXDirection = command->GetState() == KeyState::DOWN ? Direction::RIGHT : Direction::NONE;
+    fireDirection = moveXDirection;
     break;
 
   case Action::UP:
-    yDir = command->GetState() == KeyState::DOWN ? Direction::UP : Direction::NONE;
-
+    moveYDirection = command->GetState() == KeyState::DOWN ? Direction::UP : Direction::NONE;
     break;
   case Action::DOWN:
-    yDir = command->GetState() == KeyState::DOWN ? Direction::DOWN : Direction::NONE;
+     moveYDirection = command->GetState() == KeyState::DOWN ? Direction::DOWN : Direction::NONE;
+    break;
+
+  case Action::AIM_UP:
+
+    fireDirection = command->GetState() == KeyState::DOWN ? Direction::UP : Direction::NONE;
+    
+    break;
+  case Action::AIM_DOWN:
+    fireDirection = command->GetState() == KeyState::DOWN ? Direction::DOWN : Direction::NONE;
     break;
   case Action::JUMP:
     if (command->GetState() == KeyState::DOWN)
@@ -81,8 +92,11 @@ MessageHandling InputComponent::HandleInput( Command *msg )
   }
 
 
-  auto velMsg = MessageFactory::CreateSetVelocityMessage(xDir, yDir);
+  auto velMsg = MessageFactory::CreateSetVelocityMessage(moveXDirection, moveYDirection);
+  auto fireMsg = MessageFactory::CreateSetFireDirectionMessage(fireDirection);
+  
   GetOwner()->SendMessage(velMsg.get());
+  GetOwner()->SendMessage(fireMsg.get());
   return MessageHandling::PASS_FORWARD;
 }
 
@@ -96,6 +110,9 @@ void InputComponent::Jump()
 
   auto message = MessageFactory::CreateSetVelocityMessage(Direction::UNCHANGED, Direction::UP);
   GetOwner()->SendMessage(message.get());
+  auto jmpMsg = MessageFactory::CreatePlaySoundEffectMessage(SOUND_JUMP);
+  GetOwner()->SendMessage(jmpMsg.get());
+
 }
 
 void InputComponent::Fire()
@@ -107,6 +124,8 @@ void InputComponent::Fire()
 
   m_lastFireTick = SDL_GetTicks();
 
-  auto msg = MessageFactory::CreateSpawnEntityMessage(EntityType::BULLET, GetOwner());
-  GetOwner()->SendMessage(msg.get());
+  auto spawnMsg = MessageFactory::CreateSpawnEntityMessage(EntityType::BULLET, GetOwner());
+  auto soundMsg = MessageFactory::CreatePlaySoundEffectMessage(SOUND_GUN_SHOOT);
+  GetOwner()->SendMessage(spawnMsg.get());
+  GetOwner()->SendMessage(soundMsg.get());
 }

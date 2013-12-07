@@ -55,6 +55,12 @@ void Renderer::CreateWindow(std::string title, int width, int height)
   m_windowSize.first = width;
   m_windowSize.second = height;
 }
+void Renderer::SetWindowSize(int width, int height)
+{ 
+  m_windowSize.first = width; 
+  m_windowSize.second = height;
+}
+
 
 void Renderer::LoadSprites(std::string datafilePath)
 {
@@ -198,7 +204,7 @@ void Renderer::DebugDrawCollisionBoxes( EntityVector &entities,
                                        EntityVector &staticCollidables, 
                                        SDL_Point topleft )
 {
-  SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
+ 
   for (const auto &entity : entities)
   {
     DrawSingleCollisionBox(entity, topleft);
@@ -215,6 +221,7 @@ void Renderer::DebugDrawCollisionBoxes( EntityVector &entities,
 
 void Renderer::DrawSingleCollisionBox( const std::unique_ptr<Entity> &entity, SDL_Point &topleft )
 {
+   SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
   auto collisionComponent = static_cast<CollisionComponent *>(entity->GetComponent(ComponentType::COLLISION));
   if (collisionComponent == nullptr)
   {
@@ -222,6 +229,16 @@ void Renderer::DrawSingleCollisionBox( const std::unique_ptr<Entity> &entity, SD
   }
   auto hitboxes = collisionComponent->GetHitboxes(HitboxType::SOLID);
 
+  for (auto hitbox : hitboxes)
+  {
+    hitbox.x -= topleft.x;
+    hitbox.y -= topleft.y;
+
+    SDL_RenderDrawRect(m_renderer, &hitbox);
+  }
+
+  hitboxes = collisionComponent->GetHitboxes(HitboxType::TRIGGER);
+   SDL_SetRenderDrawColor(m_renderer, 0, 0, 255, 255);
   for (auto hitbox : hitboxes)
   {
     hitbox.x -= topleft.x;

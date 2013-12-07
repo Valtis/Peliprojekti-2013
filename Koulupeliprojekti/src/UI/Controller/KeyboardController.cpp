@@ -113,6 +113,10 @@ void KeyboardController::AddBind(std::string keycode, std::string actionstring)
 		action = Action::EXIT;
 	else if (actionstring == "pause")
 		action = Action::PAUSE;
+  else if (actionstring == "aim_up")
+    action = Action::AIM_UP;
+  else if (actionstring == "aim_down")
+    action = Action::AIM_DOWN;
 	else
 		return;
 	m_binds[code] = action;

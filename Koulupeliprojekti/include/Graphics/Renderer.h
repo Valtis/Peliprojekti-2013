@@ -30,6 +30,7 @@ public:
 
   SDL_Renderer *GetRenderingContext() { return m_renderer; }
   void LoadSprites(std::string datafilePath);
+  void SetWindowSize(int width, int height); 
   
   void RegisterMessageHandlers(MessageProcessor *processor);
   void CreateWindow(std::string title, int width, int height);

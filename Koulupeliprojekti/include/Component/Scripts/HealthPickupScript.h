@@ -1,13 +1,14 @@
 #pragma once
 #include "Component/Component.h"
 
-class DamageColliderScript : public Component
+class HealthPickupScript : public Component
 {
 public:
-  DamageColliderScript() { }
-  ~DamageColliderScript() { }
+  HealthPickupScript(int health);
+  ~HealthPickupScript();
 protected:
   void OnAttatchingToEntity() override;
 private:
   MessageHandling HandleCollisionMessage(Message *msg);
+  int m_healthOnPickup;
 };
