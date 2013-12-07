@@ -7,8 +7,8 @@
 #include <ctime>
 
 #define TILESIZE 70
-#define ROOMWIDTH 10
-#define ROOMLENGTH 12
+#define ROOMWIDTH 26
+#define ROOMLENGTH 16
 
 LevelGenerator::LevelGenerator() {}
 LevelGenerator::~LevelGenerator() {}
@@ -63,11 +63,58 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
 
 void LevelGenerator::CreateBackgroundElements(int x, int y, int roomtype, std::unique_ptr<Level>& level)
 {
-  // box 400007
+  // box 400007, sign to right 400008, sign to left 400009
+  // green longest 400010
+  if (roomtype == 2) {
+    // there's route down here lets add signs
+    int sX = (x + (ROOMWIDTH/2)) * TILESIZE;
+    int sY = (y + (ROOMLENGTH-1)) * TILESIZE;
+    level->AddStaticEntity(EntityFactory::CreateBlock(sX, sY, 400008));
+    level->AddStaticEntity(EntityFactory::CreateBlock(sX-(3*TILESIZE),sY,400009));
+  }
 
-  int boxX = (x + (ROOMWIDTH/2)) * TILESIZE;
   int boxY = (y + (ROOMLENGTH-1)) * TILESIZE;
-  level->AddStaticEntity(EntityFactory::CreateBlock(boxX, boxY, 400007));
+  int boxX = (x + (ROOMWIDTH/2)) * TILESIZE + 2*(TILESIZE);
+  int r = (rand() % 100);
+  if (r < 60) {
+    level->AddStaticEntity(EntityFactory::CreateBlock(boxX, boxY, 400007));
+    boxX += TILESIZE;
+    level->AddStaticEntity(EntityFactory::CreateBlock(boxX, boxY, 400007));
+    boxX -= (TILESIZE/2);
+    boxY -= (TILESIZE-1);
+    level->AddStaticEntity(EntityFactory::CreateBlock(boxX, boxY, 400007));
+  }
+  int between_two_greens = TILESIZE/1.2;
+  int sizedifference = TILESIZE/2;  
+  // green thing smiling 400011
+  boxX += TILESIZE *4;
+  
+  level->AddStaticEntity(EntityFactory::CreateBlock(boxX, boxY, 400010));
+  boxX += between_two_greens;
+  boxY += sizedifference;
+  level->AddStaticEntity(EntityFactory::CreateBlock(boxX, boxY, 400012));
+  boxX += between_two_greens;
+  level->AddStaticEntity(EntityFactory::CreateBlock(boxX, boxY, 400011));
+  boxY -= sizedifference;
+  boxX += between_two_greens;
+  level->AddStaticEntity(EntityFactory::CreateBlock(boxX, boxY, 400010));
+  boxY += sizedifference;
+  boxX += between_two_greens;
+  level->AddStaticEntity(EntityFactory::CreateBlock(boxX, boxY, 400012));
+
+  boxX = ((x + (ROOMWIDTH/2)) * TILESIZE - (5*TILESIZE));
+  r = (rand() % 100);
+  if (r < 70) {
+    level->AddStaticEntity(EntityFactory::CreateBlock(boxX, boxY, 400012));
+    boxX -= between_two_greens;
+    boxY -= sizedifference;
+    level->AddStaticEntity(EntityFactory::CreateBlock(boxX, boxY, 400010));
+    boxY += sizedifference;
+    boxX -= between_two_greens;
+    level->AddStaticEntity(EntityFactory::CreateBlock(boxX, boxY, 400011));
+    boxX -= between_two_greens;
+    level->AddStaticEntity(EntityFactory::CreateBlock(boxX, boxY, 400011));
+  }
 
 }
 

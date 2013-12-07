@@ -93,7 +93,7 @@ void Renderer::DrawEntities( Camera *camera, EntityVector &entities, EntityVecto
 {
   SDL_Point topleft;
   topleft.x = camera->GetX() - m_windowSize.first/2;
-  topleft.y = camera->GetY() - m_windowSize.second/2;
+  topleft.y = camera->GetY() - m_windowSize.second/1.3;
 
   std::vector<SpriteData> spriteIds = GetDataForDrawing(topleft, entities, staticEntities, staticCollidables);
   SortEntitiesByDrawPriority(spriteIds);
