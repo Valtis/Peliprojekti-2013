@@ -14,7 +14,7 @@ LevelGenerator::~LevelGenerator() {}
 std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera, Hud &hud )
 {
   int mapsize = 6; // so real size is 6 by 6
-  int roomWidth = 20;
+  int roomWidth = 10;
   int roomLength = 12; 
   std::vector<int> map = GenerateMap(mapsize);
 
@@ -53,7 +53,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
   level->AddEntity(std::move(e));
 
   int endEntityX = ((rand()%mapsize) * roomWidth * TILESIZE) + (7 * TILESIZE);
-  int endEntityY = ((mapsize-1) * roomLength * TILESIZE) + (10 * TILESIZE);
+  int endEntityY = ((mapsize-1) * roomLength * TILESIZE) + ((roomLength-1) * TILESIZE);
   level->AddEntity(EntityFactory::CreateEndLevelEntity(endEntityX, endEntityY));
   levels.push_back(std::move(level));
 
