@@ -1,4 +1,5 @@
 #include <cmath>
+#include <sstream>
 #include "Collision/CollisionChecker.h"
 #include "Component/CollisionComponent.h"
 #include "Component/VelocityComponent.h"
@@ -136,8 +137,35 @@ void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
     hit.entities.push_back(target_entity.get());
 }
 
-void Collision::CheckCollisions(const std::vector<std::unique_ptr<Entity>> &entities,
-                                const std::vector<std::unique_ptr<Entity>> &staticEntities)
+int ThreadFunction(void *data)
+{
+  // TODO:
+  return 0;
+}
+
+// Private
+
+void CollisionChecker::InitThreadPool(int size)
+{
+  std::stringstream ss;
+  for (int i = 0; i < size; i++)
+  {
+    ss.str("");
+    ss << "CollisionThread " << i;
+
+    std::unique_ptr<CollisionThread> ct(new CollisionThread);
+    ct->thread =
+      SDL_CreateThread(ThreadFunction, ss.str().c_str(), (void *)NULL);
+    ct->id = i;
+
+    m_threads.push_back(std::move(ct));
+  }
+}
+
+// Public
+
+void CollisionChecker::CheckCollisions(const std::vector<std::unique_ptr<Entity>> &entities,
+                                       const std::vector<std::unique_ptr<Entity>> &staticEntities)
 {
   for (auto e = entities.begin(); e != entities.end(); e++)
   {

@@ -10,7 +10,7 @@
 #include "Message/SpawnEntityMessage.h"
 #include "Message/ResetEntityPositionMessage.h"
 
-Level::Level()
+Level::Level() : m_collisionChecker(new CollisionChecker)
 {
   m_levelStartPoint.first = 0;
   m_levelStartPoint.second = 0;
@@ -21,8 +21,6 @@ Level::Level()
 
   RegisterMessageHandler(MessageType::RESET_ENTITY_POSITION, Priority::HIGHEST, 
     [&](Message *msg) { return this->HandleEntityPositionReset(msg); });
-
-
 }
 
 Level::~Level()
@@ -41,7 +39,7 @@ void Level::Update(double ticksPassed)
   }
 
   Physics::HandlePhysics(m_entities);
-  Collision::CheckCollisions(m_entities, m_staticCollidables);
+  m_collisionChecker->CheckCollisions(m_entities, m_staticCollidables);
 }
 
 

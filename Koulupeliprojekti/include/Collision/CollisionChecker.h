@@ -10,7 +10,7 @@ class CollisionChecker
 {
   public:
     CollisionChecker() { InitThreadPool(SDL_GetCPUCount()); };
-    ~CollisionChecker();
+    ~CollisionChecker() { };
 
     void CheckCollisions(const std::vector<std::unique_ptr<Entity>> &entities,
                          const std::vector<std::unique_ptr<Entity>> &staticEntities);
@@ -23,5 +23,6 @@ class CollisionChecker
     };
     std::vector<std::unique_ptr<CollisionThread>> m_threads;
 
-    InitThreadPool(int size);
-}
+    void InitThreadPool(int size);
+};
+

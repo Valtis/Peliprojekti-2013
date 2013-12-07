@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "Message/MessageProcessor.h"
+#include "Collision/CollisionChecker.h"
 
 class Entity;
 class Window;
@@ -38,5 +39,5 @@ private:
   std::vector<std::unique_ptr<Entity>> m_staticEntities; // potentially more than ground, rename if needed
   std::vector<std::unique_ptr<Entity>> m_staticCollidables;
   std::vector<Entity *> m_deletionList;
-
+  std::unique_ptr<CollisionChecker> m_collisionChecker;
 };
