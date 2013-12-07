@@ -7,6 +7,8 @@
 #include <ctime>
 
 #define TILESIZE 70
+#define roomWidth 10
+#define roomLength 12
 
 LevelGenerator::LevelGenerator() {}
 LevelGenerator::~LevelGenerator() {}
@@ -14,8 +16,6 @@ LevelGenerator::~LevelGenerator() {}
 std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera, Hud &hud )
 {
   int mapsize = 6; // so real size is 6 by 6
-  int roomWidth = 10;
-  int roomLength = 12; 
   std::vector<int> map = GenerateMap(mapsize);
 
   std::vector<std::unique_ptr<Level>> levels;
@@ -64,8 +64,6 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
 void LevelGenerator::CreateBackgroundElements(int x, int y, int w, int l, int roomtype, std::unique_ptr<Level>& level)
 {
   // box 400007
-  int roomLength = l;
-  int roomWidth = w;
 
   int boxX = (x + (roomWidth/2)) * TILESIZE;
   int boxY = (y + (roomLength-1)) * TILESIZE;
