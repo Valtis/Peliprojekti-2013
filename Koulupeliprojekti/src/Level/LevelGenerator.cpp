@@ -43,6 +43,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
         }
         level->AddStaticEntity(EntityFactory::CreateCollisionBlock(r.x*TILESIZE, r.y*TILESIZE, r.w*TILESIZE, r.h*TILESIZE));
       }
+      CreateBackgroundElements((i*roomWidth)+i, (j*roomLength)+j, roomWidth, roomLength, map[mapsize*j+i], level);
       // Create enemy for room
       enemyX = (i*roomWidth*TILESIZE) + (5*TILESIZE);
       enemyY = (j*roomLength*TILESIZE) + (5*TILESIZE);
@@ -58,6 +59,18 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
   levels.push_back(std::move(level));
 
   return levels;
+}
+
+void LevelGenerator::CreateBackgroundElements(int x, int y, int w, int l, int roomtype, std::unique_ptr<Level>& level)
+{
+  // box 400007
+  int roomLength = l;
+  int roomWidth = w;
+
+  int boxX = (x + (roomWidth/2)) * TILESIZE;
+  int boxY = (y + (roomLength-1)) * TILESIZE;
+  level->AddStaticEntity(EntityFactory::CreateBlock(boxX, boxY, 400007));
+
 }
 
 std::vector<int> LevelGenerator::GenerateMap(int size)

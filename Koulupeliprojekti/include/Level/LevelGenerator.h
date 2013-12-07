@@ -17,4 +17,5 @@ class LevelGenerator {
   private:
     std::vector<SDL_Rect> GenerateRoom(int x, int y, int w, int l, int n);
     std::vector<int> GenerateMap(int size);
+    void CreateBackgroundElements(int x, int y, int w, int l, int roomtype, std::unique_ptr<Level>& level);
 };
