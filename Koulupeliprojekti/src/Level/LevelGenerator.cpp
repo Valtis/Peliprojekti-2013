@@ -7,6 +7,8 @@
 #include <ctime>
 
 #define TILESIZE 70
+#define ROOMWIDTH 10
+#define ROOMLENGTH 12
 
 LevelGenerator::LevelGenerator() {}
 LevelGenerator::~LevelGenerator() {}
@@ -14,14 +16,12 @@ LevelGenerator::~LevelGenerator() {}
 std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager& m_inputManager, std::unique_ptr<EntityTrackingCamera>& camera, Hud &hud )
 {
   int mapsize = 6; // so real size is 6 by 6
-  int roomWidth = 20;
-  int roomLength = 12; 
   std::vector<int> map = GenerateMap(mapsize);
 
   std::vector<std::unique_ptr<Level>> levels;
   std::unique_ptr<Level> level(new Level);
 
-  int playerStartX = ((mapsize/2) * roomWidth * TILESIZE) + (7 * TILESIZE);
+  int playerStartX = ((mapsize/2) * ROOMWIDTH * TILESIZE) + (7 * TILESIZE);
   int playerStartY = 8*TILESIZE;
   std::unique_ptr<Entity> e = EntityFactory::CreatePlayer(playerStartX, playerStartY, m_inputManager);
   level->SetLevelStartPoint(std::make_pair(playerStartX, playerStartY));
@@ -33,7 +33,7 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
   for (int i = 0; i < mapsize; ++i) {
     for (int j = 0; j < mapsize; ++j) {
       // for each room in map
-      std::vector<SDL_Rect> room = GenerateRoom((i*roomWidth)+i, (j*roomLength)+j, roomWidth, roomLength, map[mapsize*j+i]); // hardcoded room width 15 length 10
+      std::vector<SDL_Rect> room = GenerateRoom((i*ROOMWIDTH)+i, (j*ROOMLENGTH)+j, ROOMWIDTH, ROOMLENGTH, map[mapsize*j+i]); // hardcoded room width 15 length 10
       // Create walls for room
       for (SDL_Rect r: room) {
         for (int k = r.x; k < (r.x + r.w); ++k) {
@@ -43,21 +43,32 @@ std::vector<std::unique_ptr<Level>> LevelGenerator::GenerateLevels( InputManager
         }
         level->AddStaticEntity(EntityFactory::CreateCollisionBlock(r.x*TILESIZE, r.y*TILESIZE, r.w*TILESIZE, r.h*TILESIZE));
       }
+      CreateBackgroundElements((i*ROOMWIDTH)+i, (j*ROOMLENGTH)+j, map[mapsize*j+i], level);
       // Create enemy for room
-      enemyX = (i*roomWidth*TILESIZE) + (5*TILESIZE);
-      enemyY = (j*roomLength*TILESIZE) + (5*TILESIZE);
+      enemyX = (i*ROOMWIDTH*TILESIZE) + (5*TILESIZE);
+      enemyY = (j*ROOMLENGTH*TILESIZE) + (5*TILESIZE);
       level->AddEntity(std::move(EntityFactory::CreateFlyingEnemy(enemyX, enemyY, e.get())));
  
     }
   }
   level->AddEntity(std::move(e));
 
-  int endEntityX = ((rand()%mapsize) * roomWidth * TILESIZE) + (7 * TILESIZE);
-  int endEntityY = ((mapsize-1) * roomLength * TILESIZE) + (10 * TILESIZE);
+  int endEntityX = ((rand()%mapsize) * ROOMWIDTH * TILESIZE) + (7 * TILESIZE);
+  int endEntityY = ((mapsize-1) * ROOMLENGTH * TILESIZE) + ((ROOMLENGTH-1) * TILESIZE);
   level->AddEntity(EntityFactory::CreateEndLevelEntity(endEntityX, endEntityY));
   levels.push_back(std::move(level));
 
   return levels;
+}
+
+void LevelGenerator::CreateBackgroundElements(int x, int y, int roomtype, std::unique_ptr<Level>& level)
+{
+  // box 400007
+
+  int boxX = (x + (ROOMWIDTH/2)) * TILESIZE;
+  int boxY = (y + (ROOMLENGTH-1)) * TILESIZE;
+  level->AddStaticEntity(EntityFactory::CreateBlock(boxX, boxY, 400007));
+
 }
 
 std::vector<int> LevelGenerator::GenerateMap(int size)
@@ -118,17 +129,16 @@ std::vector<SDL_Rect> LevelGenerator::GenerateRoom(int x, int y, int w, int l, i
   // x and y is the left corner
   // n is which type of room we generate
 
-  int room_width = w; int room_height = l;
   std::vector<SDL_Rect> room(0);
   SDL_Rect p1, p2, p3, p4, p5, p6;
   SDL_Rect left_wall;
-  left_wall.x = x, left_wall.y = y+1, left_wall.h = room_height - 1, left_wall.w = 1;
+  left_wall.x = x, left_wall.y = y+1, left_wall.h = ROOMLENGTH - 1, left_wall.w = 1;
   SDL_Rect right_wall;
-  right_wall.x = x + room_width, right_wall.y = y + 1, right_wall.h = room_height - 1, right_wall.w = 1;
+  right_wall.x = x + ROOMWIDTH, right_wall.y = y + 1, right_wall.h = ROOMLENGTH - 1, right_wall.w = 1;
   SDL_Rect top_wall;
-  top_wall.x = x, top_wall.y = y, top_wall.h = 1, top_wall.w = room_width+1;
+  top_wall.x = x, top_wall.y = y, top_wall.h = 1, top_wall.w = ROOMWIDTH+1;
   SDL_Rect bottom_wall;
-  bottom_wall.x = x, bottom_wall.y = y + room_height, bottom_wall.h = 1, bottom_wall.w = room_width+1;
+  bottom_wall.x = x, bottom_wall.y = y + ROOMLENGTH, bottom_wall.h = 1, bottom_wall.w = ROOMWIDTH+1;
   switch (n)
   {
     case 1: // room has opening to left and right
@@ -141,9 +151,9 @@ std::vector<SDL_Rect> LevelGenerator::GenerateRoom(int x, int y, int w, int l, i
       left_wall.h = left_wall.h - 2;
       room.push_back(left_wall), room.push_back(right_wall), room.push_back(top_wall);
       // we split the floor
-      bottom_wall.w = ((room_width+1) / 2 ) - 2;
-      p1.x = x + (room_width+1)/2;
-      p1.y = bottom_wall.y, p1.h = 1, p1.w = (room_width+1) - (bottom_wall.w + 2);
+      bottom_wall.w = ((ROOMWIDTH+1) / 2 ) - 2;
+      p1.x = x + (ROOMWIDTH+1)/2;
+      p1.y = bottom_wall.y, p1.h = 1, p1.w = (ROOMWIDTH+1) - (bottom_wall.w + 2);
       room.push_back(bottom_wall), room.push_back(p1);
       break;
     case 3: // opening left, right and up
@@ -151,9 +161,9 @@ std::vector<SDL_Rect> LevelGenerator::GenerateRoom(int x, int y, int w, int l, i
       left_wall.h = left_wall.h - 2;
       room.push_back(left_wall), room.push_back(right_wall), room.push_back(bottom_wall);
       // we split the top
-      top_wall.w = ((room_width+1) / 2) -2;
-      p1.x = x + (room_width+1)/2;
-      p1.y = top_wall.y, p1.h = 1, p1.w = (room_width+1) - (top_wall.w + 2);
+      top_wall.w = ((ROOMWIDTH+1) / 2) -2;
+      p1.x = x + (ROOMWIDTH+1)/2;
+      p1.y = top_wall.y, p1.h = 1, p1.w = (ROOMWIDTH+1) - (top_wall.w + 2);
       room.push_back(top_wall), room.push_back(p1);
       break;
     case 4: // opening to right
@@ -165,12 +175,12 @@ std::vector<SDL_Rect> LevelGenerator::GenerateRoom(int x, int y, int w, int l, i
     default: // room 6 opening to every direction
       right_wall.h = right_wall.h - 2;
       left_wall.h = left_wall.h - 2;
-      top_wall.w = ((room_width+1) / 2) -2;
-      p1.x = x + (room_width+1)/2;
-      p1.y = top_wall.y, p1.h = 1, p1.w = (room_width+1) - (top_wall.w + 2);
-      bottom_wall.w = ((room_width+1) / 2 ) - 2;
-      p2.x = x + (room_width+1)/2;
-      p2.y = bottom_wall.y, p2.h = 1, p2.w = (room_width+1) - (bottom_wall.w + 2);
+      top_wall.w = ((ROOMWIDTH+1) / 2) -2;
+      p1.x = x + (ROOMWIDTH+1)/2;
+      p1.y = top_wall.y, p1.h = 1, p1.w = (ROOMWIDTH+1) - (top_wall.w + 2);
+      bottom_wall.w = ((ROOMWIDTH+1) / 2 ) - 2;
+      p2.x = x + (ROOMWIDTH+1)/2;
+      p2.y = bottom_wall.y, p2.h = 1, p2.w = (ROOMWIDTH+1) - (bottom_wall.w + 2);
       room.push_back(bottom_wall), room.push_back(right_wall), room.push_back(left_wall);
       room.push_back(top_wall), room.push_back(p1), room.push_back(p2);
       break;
