@@ -8,7 +8,7 @@
 
 #define TILESIZE 70
 #define ROOMWIDTH 26
-#define ROOMLENGTH 12
+#define ROOMLENGTH 16
 
 LevelGenerator::LevelGenerator() {}
 LevelGenerator::~LevelGenerator() {}
