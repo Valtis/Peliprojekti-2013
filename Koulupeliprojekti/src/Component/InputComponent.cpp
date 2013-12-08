@@ -110,7 +110,7 @@ void InputComponent::Jump()
 
   auto message = MessageFactory::CreateSetVelocityMessage(Direction::UNCHANGED, Direction::UP);
   GetOwner()->SendMessage(message.get());
-  auto jmpMsg = MessageFactory::CreatePlaySoundEffectMessage(SOUND_JUMP);
+  auto jmpMsg = MessageFactory::CreatePlaySoundMessage(SoundEffectType::JUMP);
   GetOwner()->SendMessage(jmpMsg.get());
 
 }
@@ -125,7 +125,7 @@ void InputComponent::Fire()
   m_lastFireTick = SDL_GetTicks();
 
   auto spawnMsg = MessageFactory::CreateSpawnEntityMessage(EntityType::BULLET, GetOwner());
-  auto soundMsg = MessageFactory::CreatePlaySoundEffectMessage(SOUND_GUN_SHOOT);
+  auto soundMsg = MessageFactory::CreatePlaySoundMessage(SoundEffectType::SHOOT);
   GetOwner()->SendMessage(spawnMsg.get());
   GetOwner()->SendMessage(soundMsg.get());
 }

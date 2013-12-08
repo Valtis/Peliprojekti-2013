@@ -11,6 +11,7 @@
 #include "Message/NewTiledSpriteMessage.h"
 #include "Message/StartBlinkingMessage.h"
 #include "Message/SetGraphicsVisibilityMessage.h"
+#include "Message/SoundManagerPlaySoundMessage.h"
 #include "Message/PlaySoundEffectMessage.h"
 #include "Message/AddHealthMessage.h"
 #include "Message/FiringDirectionMessage.h"
@@ -82,9 +83,14 @@ std::unique_ptr<Message> MessageFactory::CreateSetGraphicsVisibilityMessage(bool
   return std::unique_ptr<Message>(new SetGraphicsVisibilityMessage(visibility));
 }
 
-std::unique_ptr<Message> MessageFactory::CreatePlaySoundEffectMessage(int id)
+std::unique_ptr<Message> MessageFactory::CreateSoundManagerPlaySoundMessage(int id)
 {
-  return std::unique_ptr<Message>(new PlaySoundEffectMessage(id));
+  return std::unique_ptr<Message>(new SoundManagerPlaySoundMessage(id));
+}
+
+std::unique_ptr<Message> MessageFactory::CreatePlaySoundMessage(SoundEffectType type)
+{
+  return std::unique_ptr<Message>(new PlaySoundEffectMessage(type));
 }
 
 std::unique_ptr<Message> MessageFactory::CreateAddHealthMessage(int health)

@@ -1,12 +1,12 @@
 #pragma once
 #include "Message/Message.h"
-
+#include "Sound/SoundEffectDefs.h"
 class PlaySoundEffectMessage : public Message
 {
 public:
-  PlaySoundEffectMessage(int effectID) : m_effectId(effectID) { }
+  PlaySoundEffectMessage(SoundEffectType type) : m_type(type) { }
   MessageType GetType() const override { return MessageType::PLAY_SOUND_EFFECT; }
-  int GetEffectID() const { return m_effectId; }
+  SoundEffectType GetSoundType() const { return m_type; }
 private:
-  const int m_effectId;
+  const SoundEffectType m_type;
 };

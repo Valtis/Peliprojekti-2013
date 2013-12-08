@@ -6,7 +6,8 @@
 
 #include "Message/Message.h"
 #include "Message/MessageFactory.h"
-enum class ComponentType : int { NONE, GRAPHICS, COLLISION, INPUT, LOCATION, VELOCITY, ACCELERATION, AI, PHYSICS, FACTION, HEALTH };
+enum class ComponentType : int { NONE, GRAPHICS, COLLISION, INPUT, LOCATION, 
+  VELOCITY, ACCELERATION, AI, PHYSICS, FACTION, HEALTH, SOUND };
 class Entity;
 
 class Component

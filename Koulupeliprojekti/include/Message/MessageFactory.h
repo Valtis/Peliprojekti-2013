@@ -24,7 +24,8 @@ namespace MessageFactory
   std::unique_ptr<Message> CreateEndGameMessage();
   std::unique_ptr<Message> CreateStartBlinkingMessage(double duration);
   std::unique_ptr<Message> CreateSetGraphicsVisibilityMessage(bool visibility);
-  std::unique_ptr<Message> CreatePlaySoundEffectMessage(int id);
+  std::unique_ptr<Message> CreateSoundManagerPlaySoundMessage(int id);
+  std::unique_ptr<Message> CreatePlaySoundMessage(SoundEffectType id);
   std::unique_ptr<Message> CreateAddHealthMessage(int health);
   std::unique_ptr<Message> CreateImportantCharacterDeathMessage();
   std::unique_ptr<Message> CreateSetFireDirectionMessage(Direction direction);

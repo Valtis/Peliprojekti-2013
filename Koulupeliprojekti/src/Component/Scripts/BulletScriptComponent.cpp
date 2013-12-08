@@ -53,9 +53,7 @@ MessageHandling BulletScriptComponent::HandleCollisionMessage(Message *msg)
       myFaction->GetFaction() != otherFaction->GetFaction())
     {
       auto takeDamageMsg = MessageFactory::CreateTakeDamageMessage();
-      auto expSound = MessageFactory::CreatePlaySoundEffectMessage(SOUND_GUN_HIT);
       GetOwner()->SendMessage(takeDamageMsg.get());
-      GetOwner()->SendMessage(expSound.get());
     }
 
   }
