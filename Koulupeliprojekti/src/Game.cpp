@@ -184,7 +184,7 @@ void Game::TestWindowCreation()
   location.y = 250;
   location.w = 140;
   location.h = 30;
-  std::unique_ptr<Button> button(new Button(location, "Close window", &m_renderer));
+  std::unique_ptr<Button> button(new Button(location, "Close game", &m_renderer));
 
   button->AddHandler([&]{ this->ShutDownGame(); });
   window->AddWindow(std::move(button));

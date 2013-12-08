@@ -14,7 +14,7 @@ namespace MessageFactory
   std::unique_ptr<Message> CreateSetLocationMessage(double x, double y);
   std::unique_ptr<Message> CreateLocationChangeMessage(double x, double y);
   std::unique_ptr<Message> CreateSetVelocityMessage(Direction x, Direction y);
-  std::unique_ptr<Message> CreateCollisionMessage(CollisionHit *hit);
+  std::unique_ptr<Message> CreateCollisionMessage(CollisionHit &hit);
   std::unique_ptr<Message> CreateSpawnEntityMessage(EntityType type, Entity *spawner);
   std::unique_ptr<Message> CreateTerminateEntityMessage(Entity *entity);
   std::unique_ptr<Message> CreateResetEntityPositionMessage(Entity *entity);

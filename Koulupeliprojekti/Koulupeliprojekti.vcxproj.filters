@@ -565,6 +565,12 @@
     <None Include="data\sound\soundeffects.dat">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="data\music\Purple motion - World of plastic.ogg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\music\Purple Motion   Future Crew - Zak-zaka-zak-zak.ogg">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="data\sprites\spritesheet.bmp">
@@ -595,5 +601,13 @@
     <Media Include="data\sound\jump.wav">
       <Filter>Resource Files</Filter>
     </Media>
+    <Media Include="data\sound\dspunch.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="readme.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -31,8 +31,6 @@ Level::~Level()
 
 void Level::Update(double ticksPassed)
 {
-  HandlePendingDeletions();
-
   for (auto &entity : m_entities)
   {
     entity->Update(ticksPassed);
@@ -40,6 +38,7 @@ void Level::Update(double ticksPassed)
 
   Physics::HandlePhysics(m_entities);
   m_collisionChecker->CheckCollisions(m_entities, m_staticCollidables);
+  HandlePendingDeletions();
 }
 
 
