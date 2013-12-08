@@ -45,9 +45,9 @@ void HealthComponent::TakeDamage()
      GetOwner()->SendMessage(hitMsg.get());
   }
   
-  if (m_hitpoints <= 0)
+  if (m_hitpoints == 0)
   {
-    if (m_lives <= 0)
+    if (m_lives == 0)
     {
       auto deathMsg = MessageFactory::CreateTerminateEntityMessage(GetOwner());
 
