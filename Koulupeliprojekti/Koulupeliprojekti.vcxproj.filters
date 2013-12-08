@@ -351,6 +351,12 @@
     <ClInclude Include="include\Message\AnimationChangeMessage.h">
       <Filter>Header Files\Message</Filter>
     </ClInclude>
+    <ClInclude Include="include\Message\SoundManagerPlaySoundMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component\SoundComponent.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -538,6 +544,9 @@
     </ClCompile>
     <ClCompile Include="src\Component\Scripts\QuitGameOnDeathScript.cpp">
       <Filter>Source Files\Component\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\SoundComponent.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

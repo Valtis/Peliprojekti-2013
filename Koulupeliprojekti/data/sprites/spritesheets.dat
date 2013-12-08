@@ -1,8 +1,6 @@
-spritesheet.bmp 0
 enemy.bmp 2
 enemy2.bmp 5
-tiilit2.bmp 3
-hud.bmp 4
+hud_old.bmp 4
 p3_walk.bmp 6
 tiles_spritesheet.bmp 7
 hud_spritesheet.bmp 8

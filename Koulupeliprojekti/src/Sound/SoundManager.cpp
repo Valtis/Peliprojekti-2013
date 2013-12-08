@@ -3,7 +3,7 @@
 #include "Sound/Music.h"
 #include "Sound/SoundEffects.h"
 #include "Message/MessageProcessor.h"
-#include "Message/PlaySoundEffectMessage.h"
+#include "Message/SoundManagerPlaySoundMessage.h"
 
 
 SoundManager::SoundManager(int frequency, int chunkSize) : m_music()
@@ -131,13 +131,13 @@ void SoundManager::PlaySoundEffect(int id)
 
 void SoundManager::RegisterMessageHandlers(MessageProcessor *processor)
 {
-  processor->RegisterMessageHandler(MessageType::PLAY_SOUND_EFFECT, Priority::HIGHEST, 
+  processor->RegisterMessageHandler(MessageType::SOUND_MANAGER_PLAY_SOUND, Priority::HIGHEST, 
     [&](Message *msg) { return this->HandlePlaySoundEffectMessage(msg); });
 }
 
 MessageHandling SoundManager::HandlePlaySoundEffectMessage(Message *msg)
 {
-  auto soundMsg = static_cast<PlaySoundEffectMessage *>(msg);
+  auto soundMsg = static_cast<SoundManagerPlaySoundMessage*>(msg);
   PlaySoundEffect(soundMsg->GetEffectID());
   return MessageHandling::STOP_HANDLING;
 }

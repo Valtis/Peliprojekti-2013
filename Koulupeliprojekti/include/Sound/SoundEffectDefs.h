@@ -1,5 +1,9 @@
 #pragma once
 
+
+enum class SoundEffectType : int { SHOOT, DEATH, JUMP, TAKE_DAMAGE };
+
+
 #define SOUND_GUN_SHOOT 1
 #define SOUND_GUN_HIT 2
 #define SOUND_MONSTER_DEATH 3

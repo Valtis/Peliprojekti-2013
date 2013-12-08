@@ -6,6 +6,7 @@
 #include "Component/LocationComponent.h"
 #include "Component/CollisionComponent.h"
 #include "Component/GraphicsComponent.h"
+#include "Component/SoundComponent.h"
 #include "Component/InputComponent.h"
 #include "Component/VelocityComponent.h"
 #include "Component/FactionComponent.h"
@@ -94,8 +95,10 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   std::unique_ptr<FactionComponent> faction(new FactionComponent(bulletFaction));
   std::unique_ptr<HealthComponent> health(new HealthComponent(1, 1, 0));
   
- 
+  std::unique_ptr<SoundComponent> sound(new SoundComponent());
+  sound->AddSoundEffect(SoundEffectType::DEATH, SOUND_GUN_HIT);
 
+  e->AddComponent(ComponentType::SOUND, std::move(sound));
   e->AddComponent(ComponentType::COLLISION, std::move(collision));
   e->AddComponent(ComponentType::GRAPHICS, std::move(graphics));
   e->AddComponent(ComponentType::LOCATION, std::move(location));
@@ -150,7 +153,14 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   g->AddFrame(WALKING_ANIMATION, 200002, 4);
   g->AddFrame(WALKING_ANIMATION, 200002 + 1, 4);
   g->AddFrame(WALKING_ANIMATION, 200002 + 2, 4);
- 
+  
+  std::unique_ptr<SoundComponent> sound(new SoundComponent());
+  
+  sound->AddSoundEffect(SoundEffectType::TAKE_DAMAGE, SOUND_TAKE_DAMAGE);
+  sound->AddSoundEffect(SoundEffectType::JUMP, SOUND_JUMP);
+  sound->AddSoundEffect(SoundEffectType::SHOOT, SOUND_GUN_SHOOT);
+
+  e->AddComponent(ComponentType::SOUND, std::move(sound));
 
   e->AddComponent(ComponentType::GRAPHICS, std::move(g));
   l->SetLocation(x, y);
@@ -198,6 +208,11 @@ std::unique_ptr<Entity> EntityFactory::CreateFlyingEnemy(int x, int y, Entity *t
 
   c->AddHitbox(0,0,70,35, HitboxType::SOLID);
   c->AddHitbox(0,0,70,35, HitboxType::TRIGGER);
+
+  std::unique_ptr<SoundComponent> sound(new SoundComponent());
+  sound->AddSoundEffect(SoundEffectType::DEATH, SOUND_MONSTER_DEATH);
+
+  e->AddComponent(ComponentType::SOUND, std::move(sound));
   
   e->AddScript(std::unique_ptr<Component>(new SpawnHealthPickupOnDeathScript(25)));
   return e;
