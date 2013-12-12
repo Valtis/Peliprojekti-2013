@@ -64,6 +64,9 @@
     <ClInclude Include="include\Message\MessageFactory.h" />
     <ClInclude Include="include\Message\MessageProcessor.h" />
     <ClInclude Include="include\Message\PlaySoundEffectMessage.h" />
+    <ClInclude Include="include\Message\QueryCanIJumpMessage.h" />
+    <ClInclude Include="include\Message\QueryFactionMessage.h" />
+    <ClInclude Include="include\Message\QueryLocationMessage.h" />
     <ClInclude Include="include\Message\ResetEntityPositionMessage.h" />
     <ClInclude Include="include\Message\SetGraphicsVisibilityMessage.h" />
     <ClInclude Include="include\Message\SetLocationMessage.h" />
@@ -89,6 +92,7 @@
     <ClInclude Include="include\UI\Window\WindowBase.h" />
     <ClInclude Include="include\UI\Window\WindowManager.h" />
     <ClInclude Include="include\Utility\DirectionEnum.h" />
+    <ClInclude Include="include\Utility\FactionEnum.h" />
     <ClInclude Include="include\Utility\GenericDefines.h" />
     <ClInclude Include="include\Utility\Logger.h" />
     <ClInclude Include="include\Utility\LoggerManager.h" />

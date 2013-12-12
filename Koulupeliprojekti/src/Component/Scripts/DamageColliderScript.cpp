@@ -1,7 +1,8 @@
 #include "Component/Scripts/DamageColliderScript.h"
-#include "Component/FactionComponent.h"
 #include "Entity/Entity.h"
 #include "Message/CollisionMessage.h"
+#include "Message/QueryFactionMessage.h"
+#include "Message/MessageFactory.h"
 
 void DamageColliderScript::OnAttatchingToEntity()
 {
@@ -16,18 +17,22 @@ MessageHandling DamageColliderScript::HandleCollisionMessage(Message *msg)
 {
   auto colMsg = static_cast<CollisionMessage *>(msg);
 
-  auto myFaction = static_cast<FactionComponent *>(GetOwner()->GetComponent(ComponentType::FACTION));
+
+  auto facQuery = MessageFactory::CreateQueryFactionMessage();
+
+  bool myQueryWasAnswered = GetOwner()->SendMessage(facQuery.get());
+  auto myFaction = facQuery->GetFaction();
 
   std::vector<Entity *> targets;
   auto takeDamageMsg = MessageFactory::CreateTakeDamageMessage();
   for (auto entity : colMsg->GetEntities())
   {
-    auto otherFaction = static_cast<FactionComponent *>(entity->GetComponent(ComponentType::FACTION));
+    bool otherQueryWasAnswered = entity->SendMessage(facQuery.get());
+    auto otherFaction = facQuery->GetFaction();
 
-    if (myFaction == nullptr || otherFaction == nullptr ||
-      myFaction->GetFaction() != otherFaction->GetFaction())
+    if (myQueryWasAnswered == false || otherQueryWasAnswered == false ||
+      myFaction != otherFaction)
     {
-      
       entity->SendMessage(takeDamageMsg.get());
     }
   }

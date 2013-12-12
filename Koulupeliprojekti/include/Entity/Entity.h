@@ -1,9 +1,9 @@
 #pragma once
 #include <map>
 
-#include "Component/Component.h"
+enum class ComponentType;
 #include "Message/MessageProcessor.h"
-
+#include "Component/Component.h"
 enum class EntityType : int { BULLET, HEALTH_PICKUP };
 
 class Entity : public MessageProcessor

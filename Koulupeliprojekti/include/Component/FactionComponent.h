@@ -1,7 +1,7 @@
 #pragma once
 #include "Component/Component.h"
 
-enum class Faction : int { NONE, PLAYER, ALLIED, ENEMY };
+#include "Utility/FactionEnum.h"
 
 class FactionComponent : public Component
 {
@@ -12,7 +12,9 @@ public:
 
   Faction GetFaction() { return m_faction; }
   void SetFaction(Faction f) { m_faction = f;  }
-
+protected:
+  void OnAttatchingToEntity();
 private:
+  MessageHandling HandleQueryFactionMessage(Message *message);
   Faction m_faction;
 };

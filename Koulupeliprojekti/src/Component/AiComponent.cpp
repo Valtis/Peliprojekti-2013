@@ -7,5 +7,5 @@ AiComponent::AiComponent()
 void AiComponent::OnAttatchingToEntity()
 {
 	GetOwner()->RegisterMessageHandler(MessageType::COLLISION, Priority::HIGHEST,
-		[&](Message *msg) { return this->HandleCollisionMessage(msg); });
+		[=](Message *msg) { return this->HandleCollisionMessage(msg); });
 }

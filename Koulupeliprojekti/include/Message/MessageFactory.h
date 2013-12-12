@@ -5,6 +5,10 @@
 class Entity;
 
 class Message;
+class QueryLocationMessage;
+class QueryFactionMessage;
+class QueryCanIJumpMessage;
+
 enum class CollisionSide;
 enum class EntityType;
 enum class Direction;
@@ -30,4 +34,7 @@ namespace MessageFactory
   std::unique_ptr<Message> CreateImportantCharacterDeathMessage();
   std::unique_ptr<Message> CreateSetFireDirectionMessage(Direction direction);
   std::unique_ptr<Message> CreateChangeAnimationMessage(int animationID);
+  std::unique_ptr<QueryLocationMessage> CreateQueryLocationMessage();
+  std::unique_ptr<QueryFactionMessage> CreateQueryFactionMessage();
+  std::unique_ptr<QueryCanIJumpMessage> CreateQueryJumpMessage();
 }

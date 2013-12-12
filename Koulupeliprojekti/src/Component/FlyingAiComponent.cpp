@@ -1,11 +1,12 @@
 #include <SDL.h>
 #include <cmath>
 #include <memory>
-#include "Component/LocationComponent.h"
-#include "Entity/Entity.h"
+
 #include "Message/CollisionMessage.h"
+#include "Message/QueryLocationMessage.h"
+#include "Message/MessageFactory.h"
 #include "Message/Commands/ControlCommand.h"
-#include "Component/FactionComponent.h"
+#include "Entity/Entity.h"
 #include "Component/FlyingAiComponent.h"
 
 FlyingAiComponent::FlyingAiComponent(Entity* player) : AiComponent(), m_player(player), m_attacking(false), m_attack_tick(0), m_following(true), m_hit_a_wall(false), m_collision_tick(0)
@@ -16,17 +17,20 @@ FlyingAiComponent::FlyingAiComponent(Entity* player) : AiComponent(), m_player(p
 void FlyingAiComponent::Update(double ticksPassed)
 {
   m_attack_tick += ticksPassed;
-  LocationComponent* player_loc = static_cast<LocationComponent*>(m_player->GetComponent(ComponentType::LOCATION));
-  LocationComponent* own_loc = static_cast<LocationComponent*>(GetOwner()->GetComponent(ComponentType::LOCATION));
 
-  if(player_loc == nullptr || own_loc == nullptr)
+  auto playerLocationQuery = MessageFactory::CreateQueryLocationMessage();
+  auto ownLocationQuery =  MessageFactory::CreateQueryLocationMessage();
+
+  if (!GetOwner()->SendMessage(ownLocationQuery.get()) || !m_player->SendMessage(playerLocationQuery.get()))
+  {
     return;
+  }
 
-  double player_x = player_loc->GetX();
-  double player_y = player_loc->GetY();
+  double player_x = playerLocationQuery->GetX();
+  double player_y = playerLocationQuery->GetY();
 
-  double x = own_loc->GetX();
-  double y = own_loc->GetY();
+  double x = ownLocationQuery->GetX();
+  double y = ownLocationQuery->GetY();
 
   double distance = sqrt(pow(player_x - x,2) + pow(player_y - y,2));
   if (distance > 260)
@@ -70,15 +74,15 @@ MessageHandling FlyingAiComponent::HandleCollisionMessage(Message *msg)
 	m_hit_a_wall = false;
 
   CollisionMessage* collision = static_cast<CollisionMessage*>(msg);
-  CollisionSide side = collision->GetVerticalSide();
+  Direction side = collision->GetVerticalSide();
 
   Action action = Action::UP;
-  if (side == CollisionSide::UP)
+  if (side == Direction::UP)
 	action = Action::DOWN;
   side = collision->GetHorizontalSide();
-  if (side == CollisionSide::LEFT)
+  if (side == Direction::LEFT)
 	action = Action::RIGHT;
-  if (side == CollisionSide::RIGHT)
+  if (side == Direction::RIGHT)
 	action = Action::LEFT;
 
   if (action == Action::UP || action == Action::DOWN)

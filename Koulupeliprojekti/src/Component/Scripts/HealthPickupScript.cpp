@@ -3,7 +3,7 @@
 #include "Message/MessageFactory.h"
 #include "Message/CollisionMessage.h"
 #include "Component/CollisionComponent.h"
-#include "Component/FactionComponent.h"
+#include "Message/QueryFactionMessage.h"
 
 HealthPickupScript::HealthPickupScript(int health) : m_healthOnPickup(health)
 {
@@ -36,12 +36,13 @@ MessageHandling HealthPickupScript::HandleCollisionMessage(Message *msg)
 
   // any entity with faction component can pick it up. Includes bullets and enemies
   // bullets have max 1hp so effectively they just destroy it
+  auto facQuery = MessageFactory::CreateQueryFactionMessage();
   for (auto e : colMsg->GetEntities())
   {
 
-
-    if (e->GetComponent(ComponentType::FACTION) && 
-      static_cast<FactionComponent *>(e->GetComponent(ComponentType::FACTION))->GetFaction() == Faction::PLAYER)
+    bool answered = e->SendMessage(facQuery.get());
+    auto faction = facQuery->GetFaction();
+    if (answered && faction == Faction::PLAYER)
     {
       e->SendMessage(healthMsg.get());
       terminate = true;
@@ -54,4 +55,5 @@ MessageHandling HealthPickupScript::HandleCollisionMessage(Message *msg)
     GetOwner()->SendMessage(terminateMsg.get());
     return MessageHandling::PASS_FORWARD;
   }
+   return MessageHandling::PASS_FORWARD;
 }

@@ -1,9 +1,9 @@
 #include "Component/HealthComponent.h"
 #include "Message/MessageFactory.h"
 #include "Message/AddHealthMessage.h"
-#include "Component/FactionComponent.h"
-#include "Entity/Entity.h"
+#include "Message/QueryFactionMessage.h"
 #include "Utility/LoggerManager.h"
+#include "Entity/Entity.h"
 
 HealthComponent::HealthComponent() : m_hitpoints(0), m_lives(0)
 {
@@ -22,7 +22,7 @@ HealthComponent::~HealthComponent()
 
 void HealthComponent::OnAttatchingToEntity()
 {
-  GetOwner()->RegisterMessageHandler(MessageType::TAKE_DAMAGE, Priority::LOWEST, [&](Message *msg) 
+  GetOwner()->RegisterMessageHandler(MessageType::TAKE_DAMAGE, Priority::LOWEST, [=](Message *msg) 
   {
     this->TakeDamage();
     return MessageHandling::STOP_HANDLING;
@@ -30,12 +30,18 @@ void HealthComponent::OnAttatchingToEntity()
   );
 
   GetOwner()->RegisterMessageHandler(MessageType::ADD_HEALTH, Priority::LOWEST, 
-    [&](Message *msg) { return this->HandleAddHealthMessage(msg); });
+    [=](Message *msg) { return this->HandleAddHealthMessage(msg); });
 }
 
 void HealthComponent::TakeDamage()
 {
-  auto faction = static_cast<FactionComponent *>(GetOwner()->GetComponent(ComponentType::FACTION));
+  auto queryFacMsg = MessageFactory::CreateQueryFactionMessage();
+  Faction faction = Faction::NONE;
+  
+  if ( GetOwner()->SendMessage(queryFacMsg.get()))
+  {
+    faction = queryFacMsg->GetFaction();
+  }
 
   --m_hitpoints;
   

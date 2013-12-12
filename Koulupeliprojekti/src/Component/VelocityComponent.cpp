@@ -1,10 +1,11 @@
 #include "Component/VelocityComponent.h"
-#include "Entity/Entity.h"
+
 #include "Utility/LoggerManager.h"
 #include "Utility/GenericDefines.h"
 #include "Message/VelocityChangeMessage.h"
 #include "Message/SetVelocityMessage.h"
-
+#include "Message/MessageFactory.h"
+#include "Entity/Entity.h"
 VelocityComponent::VelocityComponent(double x, double y) : m_currentXVelocity(0), m_currentYVelocity(0), m_xChangeVelocity(x), m_yChangeVelocity(y)
 {
 

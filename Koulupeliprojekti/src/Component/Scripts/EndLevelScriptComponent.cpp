@@ -1,6 +1,7 @@
 #include "Component/Scripts/EndLevelScriptComponent.h"
-#include "Component/FactionComponent.h"
 #include "Message/CollisionMessage.h"
+#include "Message/MessageFactory.h"
+#include "Message/QueryFactionMessage.h"
 #include "Entity/Entity.h"
 
 EndLevelScriptComponent::EndLevelScriptComponent()
@@ -18,12 +19,17 @@ MessageHandling EndLevelScriptComponent::HandleCollisionMessage(Message *msg)
 
   bool found_player = false;
   bool pass = false;
+
+  auto facQuery = MessageFactory::CreateQueryFactionMessage();
+
   for (auto entity : col->GetEntities())
   {
-	  FactionComponent* faction = static_cast<FactionComponent*>(entity->GetComponent(ComponentType::FACTION));
-	  if (faction == nullptr || faction->GetFaction() != Faction::PLAYER)
+
+    bool answered = GetOwner()->SendMessage(facQuery.get());
+    auto faction = facQuery->GetFaction();
+	  if (answered == false || faction != Faction::PLAYER)
 		  pass = true;
-    else if (faction->GetFaction() == Faction::PLAYER)
+    else if (faction == Faction::PLAYER)
 		  found_player = true;
   }
 

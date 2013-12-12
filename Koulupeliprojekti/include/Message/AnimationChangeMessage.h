@@ -8,7 +8,7 @@ public:
   ~AnimationChangeMessage() { }
 
   int GetId() const { return m_id; }
-  MessageType GetType() const override { return MessageType::CHANGE_ANIMATION_MESSAGE; }
+  MessageType GetType() const override { return MessageType::CHANGE_ANIMATION; }
 
 private:
   const int m_id;

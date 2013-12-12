@@ -1,6 +1,6 @@
 #include "Component/Scripts/BlinkScript.h"
 #include "Message/StartBlinkingMessage.h"
-#include "Message/MessageProcessor.h"
+#include "Message/MessageFactory.h"
 #include "Entity/Entity.h"
 void BlinkScript::OnAttatchingToEntity()
 {

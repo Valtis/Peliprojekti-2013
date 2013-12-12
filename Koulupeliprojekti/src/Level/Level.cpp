@@ -9,6 +9,7 @@
 #include "Message/TerminateEntityMessage.h"
 #include "Message/SpawnEntityMessage.h"
 #include "Message/ResetEntityPositionMessage.h"
+#include "Message/MessageFactory.h"
 
 Level::Level()
 {

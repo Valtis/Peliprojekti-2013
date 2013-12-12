@@ -103,6 +103,9 @@
     <Filter Include="Source Files\Sound">
       <UniqueIdentifier>{e0e47dac-c586-474e-a709-894f356be1e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Message\Messages">
+      <UniqueIdentifier>{a92ed6c3-27ee-49c3-8a52-87469848bb15}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -119,9 +122,6 @@
     </ClInclude>
     <ClInclude Include="include\Component\Component.h">
       <Filter>Header Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\Message.h">
-      <Filter>Header Files\Message</Filter>
     </ClInclude>
     <ClInclude Include="include\Message\MessageProcessor.h">
       <Filter>Header Files\Message</Filter>
@@ -207,9 +207,6 @@
     <ClInclude Include="include\Collision\CollisionChecker.h">
       <Filter>Header Files\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\LocationChangeMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
     <ClInclude Include="include\Message\MessageFactory.h">
       <Filter>Header Files\Message</Filter>
     </ClInclude>
@@ -225,14 +222,8 @@
     <ClInclude Include="include\Component\CollisionComponent.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\CollisionMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
     <ClInclude Include="include\Component\InputComponent.h">
       <Filter>Header Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\SetVelocityMessage.h">
-      <Filter>Header Files\Message</Filter>
     </ClInclude>
     <ClInclude Include="include\Message\Commands\ControlCommand.h">
       <Filter>Header Files\Message\Commands</Filter>
@@ -242,9 +233,6 @@
     </ClInclude>
     <ClInclude Include="include\Component\Scripts\BulletScriptComponent.h">
       <Filter>Header Files\Component\Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\GenericMessageWithNoData.h">
-      <Filter>Header Files\Message</Filter>
     </ClInclude>
     <ClInclude Include="include\Component\AiComponent.h">
       <Filter>Header Files\Component</Filter>
@@ -291,9 +279,6 @@
     <ClInclude Include="include\Sound\SoundManager.h">
       <Filter>Header Files\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\NewTiledSpriteMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
     <ClInclude Include="include\UI\Hud.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
@@ -303,29 +288,11 @@
     <ClInclude Include="include\Component\Scripts\BlinkScript.h">
       <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\StartBlinkingMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\SetGraphicsVisibilityMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
     <ClInclude Include="include\Component\Scripts\DamageColliderScript.h">
       <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\ResetEntityPositionMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\SpawnEntityMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\SetLocationMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
     <ClInclude Include="include\Utility\DirectionEnum.h">
       <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\PlaySoundEffectMessage.h">
-      <Filter>Header Files\Message</Filter>
     </ClInclude>
     <ClInclude Include="include\Sound\SoundEffectDefs.h">
       <Filter>Header Files\Sound</Filter>
@@ -333,29 +300,77 @@
     <ClInclude Include="include\Component\Scripts\HealthPickupScript.h">
       <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\AddHealthMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
     <ClInclude Include="include\Component\Scripts\SpawnHealthPickupOnDeathScript.h">
       <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="include\Component\Scripts\QuitGameOnDeathScript.h">
       <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\FiringDirectionMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
     <ClInclude Include="include\Utility\GenericDefines.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\AnimationChangeMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\SoundManagerPlaySoundMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
     <ClInclude Include="include\Component\SoundComponent.h">
       <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\AddHealthMessage.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\AnimationChangeMessage.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\CollisionMessage.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\FiringDirectionMessage.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\GenericMessageWithNoData.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\LocationChangeMessage.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\Message.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\NewTiledSpriteMessage.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\PlaySoundEffectMessage.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\QueryLocationMessage.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\ResetEntityPositionMessage.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\SetGraphicsVisibilityMessage.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\SetLocationMessage.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\SetVelocityMessage.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\SoundManagerPlaySoundMessage.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\SpawnEntityMessage.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\StartBlinkingMessage.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\QueryFactionMessage.h">
+      <Filter>Header Files\Message\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility\FactionEnum.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Message\QueryCanIJumpMessage.h">
+      <Filter>Header Files\Message\Messages</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,10 +2,11 @@
 #include "Entity/Entity.h"
 #include "Message/PlaySoundEffectMessage.h"
 #include "Message/MessageFactory.h"
+#include "Entity/Entity.h"
 void SoundComponent::OnAttatchingToEntity()
 {
-  GetOwner()->RegisterMessageHandler(MessageType::PLAY_SOUND_EFFECT, Priority::NORMAL,
-    [&](Message *msg) { return this->HandlePlaySoundEffectMessage(msg); });
+  GetOwner()->RegisterMessageHandler(MessageType::PLAY_SOUND_EFFECT, Priority::LOWEST,
+    [=](Message *msg) { return this->HandlePlaySoundEffectMessage(msg); });
 }
 
 MessageHandling SoundComponent::HandlePlaySoundEffectMessage(Message *msg)

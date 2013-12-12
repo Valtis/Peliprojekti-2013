@@ -1,9 +1,9 @@
 #include "Component/CollisionComponent.h"
-#include "Component/LocationComponent.h"
-#include "Entity/Entity.h"
 #include "Message/CollisionMessage.h"
+#include "Message/QueryLocationMessage.h"
+#include "Message/MessageFactory.h"
 #include "Utility/LoggerManager.h"
-
+#include "Entity/Entity.h"
 CollisionComponent::CollisionComponent()
 {
 
@@ -59,15 +59,18 @@ const std::vector<SDL_Rect> CollisionComponent::GetHitboxes(const HitboxType typ
 SDL_Rect CollisionComponent::TransformHitbox(const SDL_Rect box)
 {
   SDL_Rect rect;
-  LocationComponent *loc;
-  
-  loc =
-    static_cast<LocationComponent *>(GetOwner()->GetComponent(ComponentType::LOCATION));
+  auto queryMsg = MessageFactory::CreateQueryLocationMessage();
+  bool answered = GetOwner()->SendMessage(queryMsg.get());
+ 
+  if (!answered)
+  {
+    throw std::runtime_error("No location component on entity with collision component\n");
+  }
   
   rect.w = box.w;
   rect.h = box.h;
-  rect.x = box.x + static_cast<int>(loc->GetX());
-  rect.y = box.y + static_cast<int>(loc->GetY());
+  rect.x = box.x + static_cast<int>(queryMsg->GetX());
+  rect.y = box.y + static_cast<int>(queryMsg->GetY());
 
   return rect;
 }

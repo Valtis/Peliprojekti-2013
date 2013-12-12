@@ -27,8 +27,6 @@ MessageHandling SpawnHealthPickupOnDeathScript::HandleTerminateMessage(Message *
     GetOwner()->SendMessage(spawnMsg.get());
   }
   
-
-
   GetOwner()->SendMessageUpwards(msg);
   return MessageHandling::STOP_HANDLING;
 }

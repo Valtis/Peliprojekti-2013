@@ -1,8 +1,8 @@
 #include "Component/GraphicsComponent.h"
-#include "Entity/Entity.h"
 #include "Utility/LoggerManager.h"
 #include "Message/SetGraphicsVisibilityMessage.h"
 #include "Message/AnimationChangeMessage.h"
+#include "Entity/Entity.h"
 const int NO_VALUE = -1;
 
 GraphicsComponent::GraphicsComponent() : m_ticksPassed(0), m_animationID(NO_VALUE), m_frameID(NO_VALUE), m_visible(true)
@@ -112,10 +112,10 @@ void GraphicsComponent::PreviousFrame()
 
 void GraphicsComponent::OnAttatchingToEntity()
 {
-  GetOwner()->RegisterMessageHandler(MessageType::CHANGE_ANIMATION_MESSAGE, Priority::LOWEST, 
+  GetOwner()->RegisterMessageHandler(MessageType::CHANGE_ANIMATION, Priority::LOWEST, 
     [=](Message *msg) { return this->HandleAnimationChangeMessage(msg); }    );
 
-  GetOwner()->RegisterMessageHandler(MessageType::SET_GRAPHICS_VISIBILITY, Priority::NORMAL, 
+  GetOwner()->RegisterMessageHandler(MessageType::SET_GRAPHICS_VISIBILITY, Priority::LOWEST, 
     [=](Message *msg)
     {
       return this->HandleSetGraphicsVisibilityMessage(msg);

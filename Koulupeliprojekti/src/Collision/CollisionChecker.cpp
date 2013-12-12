@@ -3,8 +3,11 @@
 #include "Component/CollisionComponent.h"
 #include "Component/VelocityComponent.h"
 #include "Message/CollisionMessage.h"
+#include "Message/MessageFactory.h"
 #include "Entity/Entity.h"
 #include <SDL.h>
+
+
 
 CollisionHit CheckHitboxes(const SDL_Rect &box1, const SDL_Rect &box2, const SDL_Rect &isect)
 {
@@ -28,18 +31,18 @@ CollisionHit CheckHitboxes(const SDL_Rect &box1, const SDL_Rect &box2, const SDL
     isDown = !isUp;
   }
 
-  hit.h_side = CollisionSide::NONE;
-  hit.v_side = CollisionSide::NONE;
+  hit.h_side = Direction::NONE;
+  hit.v_side = Direction::NONE;
   hit.point.x = 0;
   hit.point.y = 0;
   if (isect.w < isect.h && isLeft != isRight)
   {
-    hit.h_side = isLeft ? CollisionSide::LEFT : CollisionSide::RIGHT;
+    hit.h_side = isLeft ? Direction::LEFT : Direction::RIGHT;
     hit.point.x = isect.w;
   }
   else if (isUp != isDown)
   {
-    hit.v_side = isUp ? CollisionSide::UP : CollisionSide::DOWN;
+    hit.v_side = isUp ? Direction::UP : Direction::DOWN;
     hit.point.y = isect.h;
   }
 
@@ -86,34 +89,34 @@ void CheckEntityEntityCollision(const std::unique_ptr<Entity> &entity,
         }
         else
         {
-          if (new_hit.h_side != CollisionSide::NONE)
+          if (new_hit.h_side != Direction::NONE)
           {
             if (hit.point.x < new_hit.point.x &&
                 (new_hit.h_side == hit.h_side ||
-                 hit.h_side == CollisionSide::NONE))
+                 hit.h_side == Direction::NONE))
             {
               hit.h_side = new_hit.h_side;
               hit.point.x = new_hit.point.x;
             }
             else if (new_hit.h_side != hit.h_side)
             {
-              hit.h_side = CollisionSide::NONE;
+              hit.h_side = Direction::NONE;
               hit.point.x = 0;
             }
           }
             
-          if (new_hit.v_side != CollisionSide::NONE)
+          if (new_hit.v_side != Direction::NONE)
           {
             if (hit.point.y < new_hit.point.y &&
                 (new_hit.v_side == hit.v_side || 
-                 hit.v_side == CollisionSide::NONE))
+                 hit.v_side == Direction::NONE))
             {
               hit.v_side = new_hit.v_side;
               hit.point.y = new_hit.point.y;
             }
             else if (new_hit.v_side != hit.v_side)
             {
-              hit.v_side = CollisionSide::NONE;
+              hit.v_side = Direction::NONE;
               hit.point.y = 0;
             }
           }
@@ -145,14 +148,14 @@ void Collision::CheckCollisions(const std::vector<std::unique_ptr<Entity>> &enti
     SDL_assert_release((*e).get() != nullptr);
 
     CollisionHit solid_hit, trigger_hit;
-    solid_hit.h_side = CollisionSide::NONE;
-    solid_hit.v_side = CollisionSide::NONE;
+    solid_hit.h_side = Direction::NONE;
+    solid_hit.v_side = Direction::NONE;
     solid_hit.point.x = 0;
     solid_hit.point.y = 0;
     solid_hit.hit_type = HitboxType::SOLID;
 
-    trigger_hit.h_side = CollisionSide::NONE;
-    trigger_hit.v_side = CollisionSide::NONE;
+    trigger_hit.h_side = Direction::NONE;
+    trigger_hit.v_side = Direction::NONE;
     trigger_hit.point.x = 0;
     trigger_hit.point.y = 0;
     trigger_hit.hit_type = HitboxType::TRIGGER;
@@ -166,15 +169,15 @@ void Collision::CheckCollisions(const std::vector<std::unique_ptr<Entity>> &enti
     for (auto s_e = staticEntities.begin(); s_e != staticEntities.end(); s_e++)
       CheckEntityEntityCollision((*e),(*s_e),solid_hit,first_hit_s);
 
-    if (solid_hit.h_side != CollisionSide::NONE ||
-        solid_hit.v_side != CollisionSide::NONE)
+    if (solid_hit.h_side != Direction::NONE ||
+        solid_hit.v_side != Direction::NONE)
     {
       auto msg = MessageFactory::CreateCollisionMessage(solid_hit);
       (*e)->SendMessage(msg.get());
     }
 
-    if (trigger_hit.h_side != CollisionSide::NONE ||
-        trigger_hit.v_side != CollisionSide::NONE)
+    if (trigger_hit.h_side != Direction::NONE ||
+        trigger_hit.v_side != Direction::NONE)
     {
       auto msg = MessageFactory::CreateCollisionMessage(trigger_hit);
       (*e)->SendMessage(msg.get());

@@ -1,10 +1,9 @@
 #include <SDL.h>
 #include <memory>
 #include "Component/WalkingAiComponent.h"
-#include "Entity/Entity.h"
 #include "Message/CollisionMessage.h"
 #include "Message/Commands/ControlCommand.h"
-
+#include "Entity/Entity.h"
 WalkingAiComponent::WalkingAiComponent() : m_direction(true), m_lastTick(SDL_GetTicks())
 {
 

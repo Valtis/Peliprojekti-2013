@@ -1,13 +1,18 @@
 #include "Component/LocationComponent.h"
-#include "Entity/Entity.h"
 #include "Utility/LoggerManager.h"
+
 #include "Message/LocationChangeMessage.h"
 #include "Message/SetLocationMessage.h"
 #include "Message/FiringDirectionMessage.h"
-#include "Component/VelocityComponent.h"
 #include "Message/CollisionMessage.h"
+#include "Message/QueryLocationMessage.h"
+#include "Message/QueryCanIJumpMessage.h"
+
 #include "Component/FactionComponent.h"
 #include "Component/CollisionComponent.h"
+#include "Component/VelocityComponent.h"
+
+#include "Entity/Entity.h"
 
 LocationComponent::LocationComponent() : m_x(0), m_y(0), 
   m_direction(Direction::RIGHT), m_firingDirection(Direction::RIGHT)
@@ -29,14 +34,18 @@ LocationComponent::~LocationComponent()
 
 void LocationComponent::OnAttatchingToEntity()
 {
-  GetOwner()->RegisterMessageHandler(MessageType::LOCATION_CHANGE, Priority::NORMAL, 
-    [&](Message *msg) { return this->HandleLocationChangeMessage(msg); });
-  GetOwner()->RegisterMessageHandler(MessageType::COLLISION, Priority::NORMAL, 
-    [&](Message *msg) { return this->HandleCollisionMessage(msg); });
-  GetOwner()->RegisterMessageHandler(MessageType::SET_LOCATION, Priority::NORMAL, 
-    [&](Message *msg) { return this->HandleSetLocationMessage(msg); });
-  GetOwner()->RegisterMessageHandler(MessageType::FIRE_DIRECTION, Priority::NORMAL, 
-    [&](Message *msg) { return this->HandleSetFiringDirectionMessage(msg); });
+  GetOwner()->RegisterMessageHandler(MessageType::LOCATION_CHANGE, Priority::LOWEST, 
+    [=](Message *msg) { return this->HandleLocationChangeMessage(msg); });
+  GetOwner()->RegisterMessageHandler(MessageType::COLLISION, Priority::LOWEST, 
+    [=](Message *msg) { return this->HandleCollisionMessage(msg); });
+  GetOwner()->RegisterMessageHandler(MessageType::SET_LOCATION, Priority::LOWEST, 
+    [=](Message *msg) { return this->HandleSetLocationMessage(msg); });
+  GetOwner()->RegisterMessageHandler(MessageType::FIRE_DIRECTION, Priority::LOWEST, 
+    [=](Message *msg) { return this->HandleSetFiringDirectionMessage(msg); });
+  GetOwner()->RegisterMessageHandler(MessageType::QUERY_LOCATION, Priority::LOWEST, 
+    [=](Message *msg) { return this->HandleQueryLocationMessage(msg); });
+  GetOwner()->RegisterMessageHandler(MessageType::QUERY_JUMP, Priority::LOWEST, 
+    [=](Message *msg) { return this->HandleQueryLocationMessage(msg); });
 }
 
 void LocationComponent::Update(double ticksPassed)
@@ -86,9 +95,25 @@ MessageHandling LocationComponent::HandleSetLocationMessage(Message *msg)
   return MessageHandling::STOP_HANDLING;
 }
 
-bool LocationComponent::CanIJump()
+MessageHandling LocationComponent::HandleQueryLocationMessage(Message *msg)
 {
-  return m_collision[CollisionSide::DOWN];
+  if (msg->GetType() != MessageType::QUERY_JUMP)
+  {
+    LoggerManager::GetLog(COMPONENT_LOG).AddLine(LogLevel::WARNING, "Invalid message type received in LocationComponent::HandleQueryLocationMessage() - ignoring");
+    return MessageHandling::PASS_FORWARD;
+  }
+
+  auto queryMsg = static_cast<QueryLocationMessage *>(msg);
+  queryMsg->SetXY(m_x, m_y);
+
+  return MessageHandling::STOP_HANDLING;
+}
+
+MessageHandling LocationComponent::HandleCanIJumpMessage(Message *msg)
+{
+  auto queryJumpMsg = static_cast<QueryCanIJumpMessage *>(msg);
+  queryJumpMsg->SetJump(m_collision[Direction::DOWN]);
+  return MessageHandling::STOP_HANDLING;
 }
 
 
@@ -116,25 +141,25 @@ MessageHandling LocationComponent::HandleCollisionMessage(Message *msg)
       myFac->GetFaction() != colFac->GetFaction())
       handling = MessageHandling::PASS_FORWARD;
   }
-  CollisionSide h_side = colMsg->GetHorizontalSide();
-  CollisionSide v_side = colMsg->GetVerticalSide();
+  Direction h_side = colMsg->GetHorizontalSide();
+  Direction v_side = colMsg->GetVerticalSide();
 
   if (m_collision[h_side] && m_collision[h_side])
     return handling;
 
   if (!m_collision[h_side] && colMsg->GetIntersection().h > 8)
   {
-    if (h_side == CollisionSide::LEFT)
+    if (h_side == Direction::LEFT)
       m_x += colMsg->GetPoint().x;
-    else if (h_side == CollisionSide::RIGHT)
+    else if (h_side == Direction::RIGHT)
       m_x -= colMsg->GetPoint().x;
   }
 
   if (!m_collision[v_side])
   {
-    if (v_side == CollisionSide::UP)
+    if (v_side == Direction::UP)
       m_y += colMsg->GetPoint().y;
-    else if (v_side == CollisionSide::DOWN)
+    else if (v_side == Direction::DOWN)
       m_y -= colMsg->GetPoint().y;
   }
 

@@ -16,6 +16,9 @@
 #include "Message/AddHealthMessage.h"
 #include "Message/FiringDirectionMessage.h"
 #include "Message/AnimationChangeMessage.h"
+#include "Message/QueryLocationMessage.h"
+#include "Message/QueryFactionMessage.h"
+#include "Message/QueryCanIJumpMessage.h"
 
 std::unique_ptr<Message> MessageFactory::CreateLocationChangeMessage(double x, double y)
 {
@@ -113,3 +116,17 @@ std::unique_ptr<Message> MessageFactory::CreateChangeAnimationMessage(int id)
   return std::unique_ptr<Message>(new AnimationChangeMessage(id));
 }
 
+std::unique_ptr<QueryLocationMessage> MessageFactory::CreateQueryLocationMessage()
+{
+  return std::unique_ptr<QueryLocationMessage>(new QueryLocationMessage);
+}
+
+std::unique_ptr<QueryFactionMessage> MessageFactory::CreateQueryFactionMessage()
+{
+  return std::unique_ptr<QueryFactionMessage>(new QueryFactionMessage);
+}
+
+std::unique_ptr<QueryCanIJumpMessage> MessageFactory::CreateQueryJumpMessage()
+{
+  return std::unique_ptr<QueryCanIJumpMessage>(new QueryCanIJumpMessage);
+}

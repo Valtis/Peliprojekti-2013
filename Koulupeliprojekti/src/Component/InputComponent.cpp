@@ -1,10 +1,10 @@
 #include "Component/InputComponent.h"
 #include "Message/Commands/ControlCommand.h"
-#include "Entity/Entity.h"
 #include "Message/MessageFactory.h"
 #include "Message/SetVelocityMessage.h"
-#include "Component/LocationComponent.h"
+#include "Message/QueryCanIJumpMessage.h"
 #include "UI/InputManager.h"
+#include "Entity/Entity.h"
 #include <SDL.h>
 InputComponent::InputComponent() : m_lastFireTick(0), m_id(0)
 {
@@ -23,8 +23,8 @@ InputComponent::~InputComponent()
 
 void InputComponent::OnAttatchingToEntity()
 {
-  GetOwner()->RegisterMessageHandler(MessageType::CONTROL_COMMAND, Priority::NORMAL,
-    [&](Message *msg) { return this->HandleInput(static_cast<Command*>(msg)); });
+  GetOwner()->RegisterMessageHandler(MessageType::CONTROL_COMMAND, Priority::LOWEST,
+    [=](Message *msg) { return this->HandleInput(static_cast<Command*>(msg)); });
 }
 
 void InputComponent::RegisterInputHandler(InputManager &manager)
@@ -33,7 +33,6 @@ void InputComponent::RegisterInputHandler(InputManager &manager)
 }
 
 
-// this is kinda terrible, needs to be refactored
 
 MessageHandling InputComponent::HandleInput( Command *msg )
 {
@@ -102,11 +101,12 @@ MessageHandling InputComponent::HandleInput( Command *msg )
 
 void InputComponent::Jump()
 {
-  auto loc = static_cast<LocationComponent*>(GetOwner()->GetComponent(ComponentType::LOCATION));
-  if (loc == nullptr)
+
+  auto queryJumpMsg = MessageFactory::CreateQueryJumpMessage();  
+  if (!GetOwner()->SendMessage(queryJumpMsg.get()) || !queryJumpMsg->CanIJump())
+  {
     return;
-  if (!loc->CanIJump())
-    return;
+  }
 
   auto message = MessageFactory::CreateSetVelocityMessage(Direction::UNCHANGED, Direction::UP);
   GetOwner()->SendMessage(message.get());

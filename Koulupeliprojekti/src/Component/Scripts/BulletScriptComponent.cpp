@@ -2,7 +2,7 @@
 #include "Entity/Entity.h"
 #include "Utility/LoggerManager.h"
 #include "Message/CollisionMessage.h"
-#include "Component/FactionComponent.h"
+#include "Message/QueryFactionMessage.h"
 #include "Message/MessageFactory.h"
 
 BulletScriptComponent::BulletScriptComponent() : m_lifeTimeRemaining(100)
@@ -29,7 +29,7 @@ void BulletScriptComponent::Update(double ticksPassed)
 void BulletScriptComponent::OnAttatchingToEntity()
 {
   GetOwner()->RegisterMessageHandler(MessageType::COLLISION,  Priority::HIGHEST, 
-    [&](Message *msg){ return this->HandleCollisionMessage(msg); });
+    [=](Message *msg){ return this->HandleCollisionMessage(msg); });
 }
 
 MessageHandling BulletScriptComponent::HandleCollisionMessage(Message *msg)
@@ -41,16 +41,18 @@ MessageHandling BulletScriptComponent::HandleCollisionMessage(Message *msg)
   }
 
   auto colMsg = static_cast<CollisionMessage *> (msg);
-  auto myFaction = static_cast<FactionComponent *>(GetOwner()->GetComponent(ComponentType::FACTION));
+
+  auto facQuery = MessageFactory::CreateQueryFactionMessage();
+  if (!GetOwner()->SendMessage(facQuery.get()))
+  {
+    throw std::runtime_error("Bullet script attached to entity with no faction component");
+  }
+  auto myFaction = facQuery->GetFaction();
 
   std::vector<Entity *> targets;
   for (auto entity : colMsg->GetEntities())
   {
-
-    auto otherFaction = static_cast<FactionComponent *>(entity->GetComponent(ComponentType::FACTION));
-
-    if (myFaction == nullptr || otherFaction == nullptr ||
-      myFaction->GetFaction() != otherFaction->GetFaction())
+    if (!entity->SendMessage(facQuery.get()) || myFaction != facQuery->GetFaction())
     {
       auto takeDamageMsg = MessageFactory::CreateTakeDamageMessage();
       GetOwner()->SendMessage(takeDamageMsg.get());
