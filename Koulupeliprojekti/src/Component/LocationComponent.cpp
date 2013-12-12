@@ -45,7 +45,7 @@ void LocationComponent::OnAttatchingToEntity()
   GetOwner()->RegisterMessageHandler(MessageType::QUERY_LOCATION, Priority::LOWEST, 
     [=](Message *msg) { return this->HandleQueryLocationMessage(msg); });
   GetOwner()->RegisterMessageHandler(MessageType::QUERY_JUMP, Priority::LOWEST, 
-    [=](Message *msg) { return this->HandleQueryLocationMessage(msg); });
+    [=](Message *msg) { return this->HandleCanIJumpMessage(msg); });
 }
 
 void LocationComponent::Update(double ticksPassed)
@@ -97,7 +97,7 @@ MessageHandling LocationComponent::HandleSetLocationMessage(Message *msg)
 
 MessageHandling LocationComponent::HandleQueryLocationMessage(Message *msg)
 {
-  if (msg->GetType() != MessageType::QUERY_JUMP)
+  if (msg->GetType() != MessageType::QUERY_LOCATION)
   {
     LoggerManager::GetLog(COMPONENT_LOG).AddLine(LogLevel::WARNING, "Invalid message type received in LocationComponent::HandleQueryLocationMessage() - ignoring");
     return MessageHandling::PASS_FORWARD;

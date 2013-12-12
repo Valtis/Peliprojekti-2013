@@ -5,7 +5,7 @@
 class QueryCanIJumpMessage : public Message
 {
 public:
-  QueryCanIJumpMessage() { }
+  QueryCanIJumpMessage() : m_canIJump(false) { }
   ~QueryCanIJumpMessage() { }
 
   bool CanIJump() const { return m_canIJump; }

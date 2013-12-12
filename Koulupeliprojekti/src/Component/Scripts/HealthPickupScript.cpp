@@ -26,6 +26,8 @@ MessageHandling HealthPickupScript::HandleCollisionMessage(Message *msg)
 {
   
   auto colMsg = static_cast<CollisionMessage *>(msg);
+
+  // prevent bullets from hitting this
   if (colMsg->GetHitType() == HitboxType::TRIGGER)
   {
     return MessageHandling::STOP_HANDLING;
