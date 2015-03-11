@@ -20,6 +20,8 @@
 #include "Component/Scripts/HealthPickupScript.h"
 #include "Component/Scripts/SpawnHealthPickupOnDeathScript.h"
 #include "Component/Scripts/QuitGameOnDeathScript.h"
+
+#include "VM/VmState.h"
 #include <string>
 #include <SDL.h>
 #include <stdexcept>
@@ -139,6 +141,9 @@ void CreateHealthPickup(Entity *e, SpawnEntityMessage *msg)
 std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &input)
 {
   std::unique_ptr<Entity> e(new Entity);
+
+  e->AddVmScript(VMState{});
+
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
   std::unique_ptr<LocationComponent> l(new LocationComponent);
   std::unique_ptr<VelocityComponent> v(new VelocityComponent(5, 13));

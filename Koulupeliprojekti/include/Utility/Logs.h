@@ -5,3 +5,4 @@
 #define COMPONENT_LOG "Component.log"
 #define LEVEL_LOG "Level.log"
 #define SOUND_LOG "Sound.log"
+#define VM_LOG "Vm.log"

@@ -95,6 +95,12 @@
     <ClInclude Include="include\Utility\Logs.h" />
     <ClInclude Include="include\Utility\StringUtility.h" />
     <ClInclude Include="include\Utility\Tick.h" />
+    <ClInclude Include="include\VM\ByteCode.h" />
+    <ClInclude Include="include\VM\VM.h" />
+    <ClInclude Include="include\VM\VMFrame.h" />
+    <ClInclude Include="include\VM\VMFunction.h" />
+    <ClInclude Include="include\VM\VMObject.h" />
+    <ClInclude Include="include\VM\VMState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -160,6 +166,11 @@
     <ClCompile Include="src\Utility\LoggerManager.cpp" />
     <ClCompile Include="src\Utility\StringUtility.cpp" />
     <ClCompile Include="src\Utility\Tick.cpp" />
+    <ClCompile Include="src\VM\VM.cpp" />
+    <ClCompile Include="src\VM\VMFrame.cpp" />
+    <ClCompile Include="src\VM\VMFunction.cpp" />
+    <ClCompile Include="src\VM\VMObject.cpp" />
+    <ClCompile Include="src\VM\VMState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />

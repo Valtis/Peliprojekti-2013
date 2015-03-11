@@ -1,9 +1,9 @@
 #pragma once
 #include "Logger.h"
+#include "Logs.h"
 #include <unordered_map>
 #include <memory>
 
-#include "Utility/Logs.h"
 
 class LoggerManager
 {

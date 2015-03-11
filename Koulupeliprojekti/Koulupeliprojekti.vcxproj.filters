@@ -103,6 +103,12 @@
     <Filter Include="Source Files\Sound">
       <UniqueIdentifier>{e0e47dac-c586-474e-a709-894f356be1e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\VM">
+      <UniqueIdentifier>{e5b2e9cc-d060-4cff-88b5-68e41b50ff9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\VM">
+      <UniqueIdentifier>{65455e9f-e767-4ffa-9c04-7c0d6184efab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -357,6 +363,24 @@
     <ClInclude Include="include\Component\SoundComponent.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="include\VM\VM.h">
+      <Filter>Header Files\VM</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VM\VMFrame.h">
+      <Filter>Header Files\VM</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VM\VMFunction.h">
+      <Filter>Header Files\VM</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VM\VMObject.h">
+      <Filter>Header Files\VM</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VM\VMState.h">
+      <Filter>Header Files\VM</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VM\ByteCode.h">
+      <Filter>Header Files\VM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -547,6 +571,21 @@
     </ClCompile>
     <ClCompile Include="src\Component\SoundComponent.cpp">
       <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\VM.cpp">
+      <Filter>Source Files\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\VMFrame.cpp">
+      <Filter>Source Files\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\VMFunction.cpp">
+      <Filter>Source Files\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\VMObject.cpp">
+      <Filter>Source Files\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\VMState.cpp">
+      <Filter>Source Files\VM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

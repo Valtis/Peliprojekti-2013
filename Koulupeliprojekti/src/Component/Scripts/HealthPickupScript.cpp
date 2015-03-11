@@ -54,4 +54,6 @@ MessageHandling HealthPickupScript::HandleCollisionMessage(Message *msg)
     GetOwner()->SendMessage(terminateMsg.get());
     return MessageHandling::PASS_FORWARD;
   }
+
+  return MessageHandling::PASS_FORWARD;
 }

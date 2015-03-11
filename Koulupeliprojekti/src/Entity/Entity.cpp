@@ -1,5 +1,5 @@
 #include "Entity/Entity.h"
-
+#include "VM/VM.h"
 Entity::Entity()
 {
 
@@ -19,6 +19,10 @@ void Entity::AddComponent(ComponentType type, std::unique_ptr<Component> c)
   }
 }
 
+void Entity::AddVmScript(const VMState &state) {
+  m_vmScripts.push_back(state);
+}
+
 void Entity::AddScript(std::unique_ptr<Component> script)
 {
   script->Attach(this);
@@ -36,4 +40,9 @@ void Entity::Update(double ticksPassed)
   {
     script->Update(ticksPassed);
   }
+
+  for (auto &script : m_vmScripts) {
+    VMInstance().InvokeFunction(script, "update", { ticksPassed });
+  }
+
 }

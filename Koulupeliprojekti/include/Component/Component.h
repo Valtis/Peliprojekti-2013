@@ -1,9 +1,5 @@
 #pragma once
 
-#if (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ <= 6))
-  #define override
-#endif
-
 #include "Message/Message.h"
 #include "Message/MessageFactory.h"
 enum class ComponentType : int { NONE, GRAPHICS, COLLISION, INPUT, LOCATION, 

@@ -5,6 +5,8 @@
 #include "Entity/Entity.h"
 #include "Utility/LoggerManager.h"
 
+#include <algorithm>
+
 HealthComponent::HealthComponent() : m_hitpoints(0), m_lives(0)
 {
 
