@@ -1,8 +1,8 @@
 #include "VM/VMFrame.h"
 
-VMFrame::VMFrame() : m_function(nullptr) { }
+VMFrame::VMFrame() : VMFrame(nullptr) { }
 
-VMFrame::VMFrame(VMFunction *function) : m_function(function) {
+VMFrame::VMFrame(VMFunction *function) : m_function(function), m_current_instruction(0) {
 
 }
 

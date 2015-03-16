@@ -8,6 +8,9 @@ enum class MessageType : int { NONE, LOCATION_CHANGE, SET_LOCATION, VELOCITY_CHA
   ADD_HEALTH, IMPORTANT_CHARACTER_DEATH, FIRE_DIRECTION, CHANGE_ANIMATION_MESSAGE,
   SOUND_MANAGER_PLAY_SOUND };
 
+
+enum class Priority : int { LOWEST, LOW, NORMAL, HIGH, HIGHEST };
+
 #include <functional>
 
 
@@ -24,4 +27,3 @@ private:
 
 
 typedef std::function<MessageHandling(Message *)> MessageCallback;
-enum class Priority : int { LOWEST, LOW, NORMAL, HIGH, HIGHEST };

@@ -1,5 +1,9 @@
 #include "VM/VMFunction.h"
 
-ByteCode VMFunction::GetByteCode(uint32_t pos) {
+void VMFunction::AddByteCode(ByteCode code) {
+  m_bytecode.push_back(code);
+}
+
+ByteCode VMFunction::GetByteCode(uint32_t pos) const {
   return m_bytecode.at(pos);
 }

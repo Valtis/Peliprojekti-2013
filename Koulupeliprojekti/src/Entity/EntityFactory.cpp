@@ -30,6 +30,7 @@
 
 
 // sobadsobadsobad
+// honestly, whole thing should be defined in a data file somewhere
 void CreateBullet(Entity *e, SpawnEntityMessage *msg)
 {
   const int bulletHitboxSize = 15;
@@ -142,7 +143,7 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
 {
   std::unique_ptr<Entity> e(new Entity);
 
-  e->AddVmScript(VMState{});
+  e->AddVmScript(VMState{"/temp/directory/please/ignore"});
 
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
   std::unique_ptr<LocationComponent> l(new LocationComponent);

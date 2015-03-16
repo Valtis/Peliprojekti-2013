@@ -180,4 +180,5 @@ CMakeCache.txt
 Koulupeliprojekti/CMakeFiles/
 cmake_install.cmake
 Makefile
+*.log
 
