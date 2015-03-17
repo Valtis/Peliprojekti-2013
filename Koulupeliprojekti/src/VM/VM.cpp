@@ -1,6 +1,10 @@
 #include "VM/VM.h"
 #include "VM/VMState.h"
 #include "Utility/LoggerManager.h"
+#include "VM/MemoryManager.h"
+VM::VM() {
+}
+
 
 void VM::InvokeFunction(VMState &state, const std::string &functionName, std::vector<VMObject> objects) {
   
@@ -28,11 +32,11 @@ void VM::InvokeFunction(VMState &state, const std::string &functionName, std::ve
     m_stack[m_stack_ptr++] = o;
   }
 
-  Execute();
+  Execute(state);
 }
 
 
-void VM::Execute() {
+void VM::Execute(VMState &state) {
 
   for (;;)  {
     auto code = m_frames[m_frame_ptr].GetNextInstruction();
@@ -41,21 +45,32 @@ void VM::Execute() {
     switch (code) {
 
     case ByteCode::PUSH_INTEGER:
+      m_stack[m_stack_ptr++] = VMObject{ (int32_t)m_frames[m_frame_ptr].GetNextInstruction() };
+      break;
     case ByteCode::PUSH_CONSTANT_OBJECT: 
-        m_stack[m_stack_ptr++] = VMObject{ (int32_t)m_frames[m_frame_ptr].GetNextInstruction() };
+      m_stack[m_stack_ptr++] = state.GetPermanentStorageObject((int32_t)m_frames[m_frame_ptr].GetNextInstruction());
       break;
 
     case ByteCode::INVOKE_NATIVE:
       {
         VMObject second_param = m_stack[--m_stack_ptr];
         VMObject first_param = m_stack[--m_stack_ptr];
-        VMObject const_pool_index = m_stack[--m_stack_ptr];
-        VMObject pointer = m_stack[--m_stack_ptr];
+        VMObject managed_pointer = m_stack[--m_stack_ptr];
+        VMObject native_pointer = m_stack[--m_stack_ptr];
 
 
-        std::string text = std::string("Invoked native function, name stored at constant pool index ") 
-          + std::to_string(const_pool_index.as_int()) + " with first param " + first_param.to_string()
-          + " and second param " + second_param.to_string() + " and native pointer " + pointer.to_string();
+
+        std::string str = "";
+        for (auto i = 0; i < MemMgrInstance().GetArrayLength(managed_pointer); ++i) {
+          char c;
+          MemMgrInstance().ReadFromArrayIndex(managed_pointer, i, &c);
+          str += c;
+        }
+
+        std::string text = std::string("Invoked native function, name stored at managed heap address ") 
+          + std::to_string(managed_pointer.as_managed_pointer()) + " (value " + str + ") with first param " + first_param.to_string()
+          + " and second param " + second_param.to_string() + " and native pointer " + native_pointer.to_string();
+
   
 
         LoggerManager::GetLog(VM_LOG).AddLine(LogLevel::DEBUG, text);
@@ -81,9 +96,6 @@ void VM::Execute() {
     }
   }
 }
-
-
-
 
 VM &VMInstance() {
   static VM vm;

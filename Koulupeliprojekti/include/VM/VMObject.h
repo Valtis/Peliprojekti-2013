@@ -2,7 +2,11 @@
 #include <cstdint>
 #include <stdexcept>
 #include <string>
-enum class ObjectType : char { UNINITIALIZED, INT, FLOAT, DOUBLE, BOOL, NATIVE_POINTER };
+enum class ObjectType : char { UNINITIALIZED, INT, FLOAT, DOUBLE, BOOL, CHAR, NATIVE_POINTER, MANAGED_POINTER };
+
+uint32_t TypeSize(ObjectType type);
+
+
 class VMObject {
 public:
 
@@ -11,6 +15,7 @@ public:
   VMObject(const float v) { set_float(v); }
   VMObject(const double v) { set_double(v); }
   VMObject(const bool v) { set_bool(v); }
+  VMObject(const char v) { set_char(v); }
   VMObject(void * const v) { set_native_pointer(v); }
 
   void set_int(const int32_t v) {
@@ -31,11 +36,21 @@ public:
   void set_bool(const bool v) {
     m_type = ObjectType::BOOL;
     m_value.bool_value = v;
+  } 
+  
+  void set_char(const char v) {
+    m_type = ObjectType::CHAR;
+    m_value.char_value = v;
   }
-
+  
   void set_native_pointer(void * const v) {
     m_type = ObjectType::NATIVE_POINTER;
     m_value.native_pointer_value = v;
+  }
+
+  void set_managed_pointer(uint32_t v) {
+    m_type = ObjectType::MANAGED_POINTER;
+    m_value.managed_pointer_value = v;
   }
 
   int32_t as_int() const {
@@ -57,10 +72,20 @@ public:
     assert_type(ObjectType::BOOL);
     return m_value.bool_value;
   }
+  
+  char as_char() const {
+    assert_type(ObjectType::CHAR);
+    return m_value.char_value;
+  }
 
   void *as_native_pointer() const {
     assert_type(ObjectType::NATIVE_POINTER);
     return m_value.native_pointer_value;
+  }
+
+  uint32_t as_managed_pointer() const {
+    assert_type(ObjectType::MANAGED_POINTER);
+    return m_value.managed_pointer_value;
   }
 
   std::string to_string() const {
@@ -78,9 +103,16 @@ public:
       case ObjectType::BOOL:
         str = "Bool: " + std::to_string(m_value.bool_value);
         break;
+      case ObjectType::CHAR:
+        str = "Char: " + std::to_string(m_value.char_value);
+        break;
       case ObjectType::NATIVE_POINTER:
         str = "Native pointer: " + std::to_string((uint64_t)m_value.native_pointer_value);
         break;
+      case ObjectType::MANAGED_POINTER:
+        str = "Managed pointer: " + std::to_string(m_value.managed_pointer_value);
+        break;
+        
       default:
         str = "Unknown type";
     }
@@ -101,6 +133,8 @@ private:
     float float_value;
     double double_value;
     bool bool_value;
+    char char_value;
+    uint32_t managed_pointer_value;
     void *native_pointer_value;
   } m_value;
 };

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "VM/VMObject.h"
 #include "VM/VMFunction.h"
 #include <vector>

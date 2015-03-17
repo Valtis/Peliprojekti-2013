@@ -96,7 +96,9 @@
     <ClInclude Include="include\Utility\StringUtility.h" />
     <ClInclude Include="include\Utility\Tick.h" />
     <ClInclude Include="include\VM\ByteCode.h" />
+    <ClInclude Include="include\VM\MemoryManager.h" />
     <ClInclude Include="include\VM\VM.h" />
+    <ClInclude Include="include\VM\VMClass.h" />
     <ClInclude Include="include\VM\VMFrame.h" />
     <ClInclude Include="include\VM\VMFunction.h" />
     <ClInclude Include="include\VM\VMObject.h" />
@@ -166,7 +168,9 @@
     <ClCompile Include="src\Utility\LoggerManager.cpp" />
     <ClCompile Include="src\Utility\StringUtility.cpp" />
     <ClCompile Include="src\Utility\Tick.cpp" />
+    <ClCompile Include="src\VM\MemoryManager.cpp" />
     <ClCompile Include="src\VM\VM.cpp" />
+    <ClCompile Include="src\VM\VMClass.cpp" />
     <ClCompile Include="src\VM\VMFrame.cpp" />
     <ClCompile Include="src\VM\VMFunction.cpp" />
     <ClCompile Include="src\VM\VMObject.cpp" />

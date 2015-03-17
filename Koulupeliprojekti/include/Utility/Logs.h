@@ -6,3 +6,4 @@
 #define LEVEL_LOG "Level.log"
 #define SOUND_LOG "Sound.log"
 #define VM_LOG "Vm.log"
+#define MEMORY_LOG "Memory.log"

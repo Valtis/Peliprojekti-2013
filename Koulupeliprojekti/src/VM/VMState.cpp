@@ -1,5 +1,7 @@
 #include "VM/VMState.h"
 #include "VM/ByteCode.h"
+#include "VM/VM.h"
+#include "VM/MemoryManager.h"
 VMState::VMState(const std::string &path) {
   LoadByteCodeFile(path);
 }
@@ -8,9 +10,17 @@ void VMState::LoadByteCodeFile(const std::string &path) {
   // TODO: Load from file. Hardcoded for testing purposes for now
   VMFunction function;
   
+  std::string name = "RegisterMessageHandler";
+  VMObject obj = MemMgrInstance().AllocateArray(ObjectType::CHAR, name.length());
+
+  for (size_t i = 0; i < name.length(); ++i) {
+    MemMgrInstance().WriteToArrayIndex(obj, i, &name[0] + i);
+  }
+  m_permanent_storage.push_back(obj);
+
   function.AddByteCode(ByteCode::PUSH_CONSTANT_OBJECT);
-  // this is index to the const object pointer pool managed by the vm.
-  function.AddByteCode(static_cast<ByteCode>(123456789));
+  // index to const object pool
+  function.AddByteCode(static_cast<ByteCode>(0));
   
   function.AddByteCode(ByteCode::PUSH_INTEGER);
   function.AddByteCode(static_cast<ByteCode>(10)); // MessageType::TakeDamage
@@ -31,4 +41,8 @@ VMFunction *VMState::GetFunction(const std::string &name) {
   }
 
   return &iter->second;
+}
+
+VMObject VMState::GetPermanentStorageObject(uint32_t index) {
+  return m_permanent_storage.at(index);
 }

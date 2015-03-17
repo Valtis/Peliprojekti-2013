@@ -2,7 +2,7 @@
 
 #include "VMObject.h"
 #include "VMFrame.h"
-
+#include "VMClass.h"
 #include <array>
 #include <vector>
 #include <cstdint>
@@ -18,12 +18,14 @@ class VMState;
 
 class VM {
 public:
+  VM();
   void InvokeFunction(VMState &state, const std::string &functionName, std::vector<VMObject> objects);
 private:
-  void Execute();
+  void Execute(VMState &state);
   
   std::array<VMObject, STACK_SIZE> m_stack;
   std::array<VMFrame, MAX_FRAME_COUNT> m_frames;
+  
 
   uint32_t m_stack_ptr;
   uint32_t m_frame_ptr;
