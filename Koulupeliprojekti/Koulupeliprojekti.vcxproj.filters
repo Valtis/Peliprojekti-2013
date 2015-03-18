@@ -109,6 +109,12 @@
     <Filter Include="Source Files\VM">
       <UniqueIdentifier>{65455e9f-e767-4ffa-9c04-7c0d6184efab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\VM\FFI">
+      <UniqueIdentifier>{23bfe4e4-61bb-422d-ba55-992bd60e5922}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\VM\FFI">
+      <UniqueIdentifier>{e541c129-4d69-4711-8608-7dfe8348d9e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -387,6 +393,9 @@
     <ClInclude Include="include\VM\MemoryManager.h">
       <Filter>Header Files\VM</Filter>
     </ClInclude>
+    <ClInclude Include="include\VM\FFI\ConversionFunctions.h">
+      <Filter>Header Files\VM\FFI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -598,6 +607,9 @@
     </ClCompile>
     <ClCompile Include="src\VM\MemoryManager.cpp">
       <Filter>Source Files\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\FFI\ConversionFunctions.cpp">
+      <Filter>Source Files\VM\FFI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

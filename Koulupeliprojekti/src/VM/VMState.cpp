@@ -9,13 +9,11 @@ VMState::VMState(const std::string &path) {
 void VMState::LoadByteCodeFile(const std::string &path) {
   // TODO: Load from file. Hardcoded for testing purposes for now
   VMFunction function;
+  function.SetName("initialize");
   
   std::string name = "RegisterMessageHandler";
   VMObject obj = MemMgrInstance().AllocateArray(ObjectType::CHAR, name.length());
-
-  for (size_t i = 0; i < name.length(); ++i) {
-    MemMgrInstance().WriteToArrayIndex(obj, i, &name[0] + i);
-  }
+  MemMgrInstance().WriteToArrayIndex(obj, &name[0], 0, name.length());
   m_permanent_storage.push_back(obj);
 
   function.AddByteCode(ByteCode::PUSH_CONSTANT_OBJECT);

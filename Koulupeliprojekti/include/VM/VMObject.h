@@ -2,7 +2,9 @@
 #include <cstdint>
 #include <stdexcept>
 #include <string>
-enum class ObjectType : char { UNINITIALIZED, INT, FLOAT, DOUBLE, BOOL, CHAR, NATIVE_POINTER, MANAGED_POINTER };
+#include <sstream>
+#include <iomanip>
+enum class ObjectType : uint8_t { UNINITIALIZED, INT, FLOAT, DOUBLE, BOOL, CHAR, NATIVE_POINTER, MANAGED_POINTER };
 
 uint32_t TypeSize(ObjectType type);
 
@@ -88,36 +90,7 @@ public:
     return m_value.managed_pointer_value;
   }
 
-  std::string to_string() const {
-    std::string str;
-    switch (m_type) {
-      case ObjectType::INT:
-        str = "Integer: " + std::to_string(m_value.int_value);
-        break;
-      case ObjectType::FLOAT:
-        str = "Float: " + std::to_string(m_value.float_value);
-        break;
-      case ObjectType::DOUBLE:
-        str = "Double: " + std::to_string(m_value.double_value);
-        break;
-      case ObjectType::BOOL:
-        str = "Bool: " + std::to_string(m_value.bool_value);
-        break;
-      case ObjectType::CHAR:
-        str = "Char: " + std::to_string(m_value.char_value);
-        break;
-      case ObjectType::NATIVE_POINTER:
-        str = "Native pointer: " + std::to_string((uint64_t)m_value.native_pointer_value);
-        break;
-      case ObjectType::MANAGED_POINTER:
-        str = "Managed pointer: " + std::to_string(m_value.managed_pointer_value);
-        break;
-        
-      default:
-        str = "Unknown type";
-    }
-    return str;
-  }
+  std::string to_string() const;
 
 private:
   void assert_type(const ObjectType t) const {

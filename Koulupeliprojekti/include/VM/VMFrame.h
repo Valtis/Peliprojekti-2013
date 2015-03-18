@@ -8,7 +8,10 @@ public:
   VMFrame();
   VMFrame(VMFunction *function);
   ByteCode GetNextInstruction();
+  ByteCode GetPreviousInstruction() const;
   void SetNextInstruction(uint32_t);
+  std::string GetFunctionName() const;
+  uint32_t GetProgramCounter() const;
 private:
   std::vector<VMObject> m_local_variables;
   VMFunction *m_function; // non-owning pointer - pointed value must not be deleted

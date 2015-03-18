@@ -1,25 +1,51 @@
 #pragma once
 #include "VMObject.h"
 
+
+
+const uint32_t ALIGN = 16; // memory allocation aligned to multiples of 16. Allocations are padded as needed
+#define ALIGN_FOR_ALIGNAS 16 // keep this in sync with above! alignas/declspec requires size as a number, not variable
+
+// visual studio 2013 and earlier do not support alignas
+#if _MSC_VER <= 1800
+#define alignas(x) __declspec(align(x))
+#endif
+
 class MemoryManager {
 public:
   MemoryManager(uint32_t heap_size);
+  MemoryManager(const MemoryManager &) = delete;
+  MemoryManager(MemoryManager &&);
+  MemoryManager &operator=(const MemoryManager &) = delete;
+  MemoryManager &operator=(MemoryManager &&);
+  ~MemoryManager();
+
   VMObject AllocateArray(const ObjectType objectType, const uint32_t length);
-  void WriteToArrayIndex(const VMObject object, const uint32_t index, const void *value);
-  void ReadFromArrayIndex(const VMObject object, const uint32_t index, void *value);
+  void WriteToArrayIndex(const VMObject object, const void *value, const uint32_t index, const uint32_t length);
+  void ReadFromArrayIndex(const VMObject object, void *value, const uint32_t index, const uint32_t length) const;
 
   void RunGc();
 
-  uint32_t GetArrayLength(VMObject object);
+  uint32_t GetArrayLength(VMObject object) const;
 private:
 
   void EnsureFreeMemory(uint32_t requiredSpace);
-  uint32_t GetArrayLengthUnchecked(VMObject obj);
-  uint32_t GetTypeField(VMObject object);
-  void EnsureArray(uint32_t type);
 
-  uint8_t *m_memory;
-  uint8_t *m_toSpace; // reseved for garbage collection
+  struct ArrayReadWriteData {
+    uint8_t *data;
+    ObjectType type;
+  };
+  
+  ArrayReadWriteData ArrayReadWriteCommon(const VMObject object, const uint32_t index, const uint32_t length) const;
+
+  uint32_t GetArrayLengthUnchecked(VMObject obj) const;
+  uint32_t GetTypeField(VMObject object) const;
+
+  void EnsureNotNull(VMObject object) const;
+  void EnsureArray(uint32_t type) const;
+ 
+  alignas(ALIGN_FOR_ALIGNAS) uint8_t *m_memory;
+  alignas(ALIGN_FOR_ALIGNAS) uint8_t *m_toSpace; // reseved for garbage collection
 
   uint32_t m_heapSize;
   uint32_t m_freeSpacePointer;
