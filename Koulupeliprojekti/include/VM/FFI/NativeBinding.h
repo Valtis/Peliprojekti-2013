@@ -8,6 +8,23 @@
 
 #include "VM/FFI/NativeBindingTypedef.h"
 
+// thanks to MSN from stackoverflow. Slightly modified.
+// http://stackoverflow.com/questions/5147492/member-function-call-in-decltype
+template <typename R, typename C, typename... A>
+R GetReturnType(R(C::*)(A...));
+
+
+
+
+#define CREATE_4_ARGS_BINDING(CLASS, FUNCTION, FIRST_PARAM, SECOND_PARAM, THIRD_PARAM, FOURTH_PARAM)  \
+CreateNativeBinding<decltype(GetReturnType(&CLASS::FUNCTION)), \
+                    FIRST_PARAM,    \
+                    SECOND_PARAM,   \
+                    THIRD_PARAM,    \
+                    FOURTH_PARAM,   \
+                    CLASS>(std::mem_fn(&CLASS::FUNCTION))
+
+
 
 // Creates binding for 4-param void function
 template <typename ReturnType,

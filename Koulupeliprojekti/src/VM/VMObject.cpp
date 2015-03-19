@@ -16,7 +16,9 @@ uint32_t TypeSize(ObjectType type) {
   case ObjectType::NATIVE_POINTER:
     return sizeof(void *);
   case ObjectType::MANAGED_POINTER:
+  default:
     return 0;
+
   }
 }
 
