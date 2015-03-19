@@ -1,4 +1,6 @@
 #include "Message/MessageProcessor.h"
+#include "VM/VM.h"
+#include "Utility/LoggerManager.h"
 #include <algorithm>
 bool MessageProcessor::SendMessage(Message *message)
 {
@@ -7,7 +9,6 @@ bool MessageProcessor::SendMessage(Message *message)
   {
     return SendMessageUpwards(message);
   }
-
   PassMessageToHandlers(handlers, message);
   return true;
 }
@@ -37,9 +38,21 @@ void MessageProcessor::PassMessageToHandlers(const std::vector<PrioritizedCallba
 }
 
 
+void MessageProcessor::RegisterScriptMessageHandler(VMState *state, int type, int priority, std::string scriptName) {
+  LoggerManager::GetLog("temp.txt").AddLine(LogLevel::INFO, std::string("Registered callback to script function") + scriptName);
+
+  MessageCallback callback = [=](Message *message) -> MessageHandling {
+    auto messageHandling = VMInstance().InvokeFunction(*state, scriptName, {message});
+    return static_cast<MessageHandling>(messageHandling.as_int());
+  };
+
+  m_messageHandlers[static_cast<MessageType>(type)].push_back({ static_cast<Priority>(priority), callback });
+  SortHandlers(static_cast<MessageType>(type));
+}
+
 void MessageProcessor::RegisterMessageHandler(MessageType type, Priority priority, MessageCallback callback)
 {
-  m_messageHandlers[type].push_back(std::make_pair(priority, callback));
+  m_messageHandlers[type].push_back({ priority, callback });
   SortHandlers(type);
 }
 

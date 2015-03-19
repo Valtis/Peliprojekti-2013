@@ -97,6 +97,8 @@
     <ClInclude Include="include\Utility\Tick.h" />
     <ClInclude Include="include\VM\ByteCode.h" />
     <ClInclude Include="include\VM\FFI\ConversionFunctions.h" />
+    <ClInclude Include="include\VM\FFI\NativeBinding.h" />
+    <ClInclude Include="include\VM\FFI\NativeBindingTypedef.h" />
     <ClInclude Include="include\VM\MemoryManager.h" />
     <ClInclude Include="include\VM\VM.h" />
     <ClInclude Include="include\VM\VMClass.h" />
@@ -170,6 +172,7 @@
     <ClCompile Include="src\Utility\StringUtility.cpp" />
     <ClCompile Include="src\Utility\Tick.cpp" />
     <ClCompile Include="src\VM\FFI\ConversionFunctions.cpp" />
+    <ClCompile Include="src\VM\FFI\NativeBinding.cpp" />
     <ClCompile Include="src\VM\MemoryManager.cpp" />
     <ClCompile Include="src\VM\VM.cpp" />
     <ClCompile Include="src\VM\VMClass.cpp" />

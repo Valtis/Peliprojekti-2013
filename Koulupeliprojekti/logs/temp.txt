@@ -1,0 +1,6 @@
+[2015.3.19 22:33:39] Opening new log file
+
+[22:33:39]  Info: Greetings from native binding
+[22:33:39]  Info: Registered callback to script functionOnDamageTaken
+
+[2015.3.19 22:33:51] Closing log file

@@ -396,6 +396,12 @@
     <ClInclude Include="include\VM\FFI\ConversionFunctions.h">
       <Filter>Header Files\VM\FFI</Filter>
     </ClInclude>
+    <ClInclude Include="include\VM\FFI\NativeBinding.h">
+      <Filter>Header Files\VM\FFI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VM\FFI\NativeBindingTypedef.h">
+      <Filter>Header Files\VM\FFI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -609,6 +615,9 @@
       <Filter>Source Files\VM</Filter>
     </ClCompile>
     <ClCompile Include="src\VM\FFI\ConversionFunctions.cpp">
+      <Filter>Source Files\VM\FFI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\FFI\NativeBinding.cpp">
       <Filter>Source Files\VM\FFI</Filter>
     </ClCompile>
   </ItemGroup>

@@ -122,7 +122,7 @@ uint32_t MemoryManager::GetTypeField(VMObject object) const {
 }
 
 void MemoryManager::EnsureArray(uint32_t typeField) const {
-  if (typeField & (1 << 31) == 0) {
+  if ((typeField & (1 << 31)) == 0) {
     throw std::runtime_error("Non-array object provided when array object expected");
   }
 }

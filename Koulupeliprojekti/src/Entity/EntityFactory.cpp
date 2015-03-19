@@ -22,6 +22,8 @@
 #include "Component/Scripts/QuitGameOnDeathScript.h"
 
 #include "VM/VmState.h"
+#include "VM/FFI/NativeBinding.h"
+
 #include <string>
 #include <SDL.h>
 #include <stdexcept>
@@ -143,7 +145,23 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
 {
   std::unique_ptr<Entity> e(new Entity);
 
-  e->AddVmScript(VMState{"/temp/directory/please/ignore"});
+  // placeholder for testing purposes
+
+
+
+  VMState temp = VMState{ "/temp/directory/please/ignore" };
+ 
+  auto binding = CreateNativeBinding<
+    void,
+    VMState *, 
+    int,
+    int,
+    std::string,
+    Entity
+    >(std::mem_fn(&Entity::RegisterScriptMessageHandler));
+    
+  temp.AddNativeBinding("RegisterMessageHandler", binding);
+  e->AddVmScript(temp);
 
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
   std::unique_ptr<LocationComponent> l(new LocationComponent);

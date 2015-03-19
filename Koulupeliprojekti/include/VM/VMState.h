@@ -6,6 +6,8 @@
 #include <vector>
 #include <string>
 
+#include "VM/FFI/NativeBindingTypedef.h"
+
 class VMFunction;
 
 class VMState {
@@ -16,8 +18,12 @@ public:
   void LoadByteCodeFile(const std::string &path);
   VMFunction *GetFunction(const std::string &name); 
   VMObject GetPermanentStorageObject(uint32_t index);
+  
+  NativeBinding GetNativeBinding(const std::string &name);
+  void AddNativeBinding(const std::string &name, NativeBinding binding);
 
 private:
   std::unordered_map<std::string, VMFunction> m_functions;
+  std::unordered_map<std::string, NativeBinding> m_native_bindings;
   std::vector<VMObject> m_permanent_storage;
 };

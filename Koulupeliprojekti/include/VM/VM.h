@@ -19,7 +19,7 @@ class VMState;
 class VM {
 public:
   VM();
-  void InvokeFunction(VMState &state, const std::string &functionName, std::vector<VMObject> objects);
+  VMObject InvokeFunction(VMState &state, const std::string &functionName, std::vector<VMObject> objects);
 private:
   void Execute(VMState &state);
   

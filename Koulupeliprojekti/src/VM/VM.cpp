@@ -3,27 +3,29 @@
 #include "Utility/LoggerManager.h"
 #include "VM/MemoryManager.h"
 #include "VM/FFI/ConversionFunctions.h"
+#include "VM/FFI/NativeBinding.h"
 
 #include <map>
 VM::VM() {
 }
 
 // needs to be broken into smaller functions.
-void VM::InvokeFunction(VMState &state, const std::string &functionName, std::vector<VMObject> objects) {
+VMObject VM::InvokeFunction(VMState &state, const std::string &functionName, std::vector<VMObject> objects) {
   
   auto &log = LoggerManager::GetLog(VM_LOG);
-  log.AddLine(LogLevel::DEBUG, "Attempting to invoke script function " + functionName);
+
+  auto function = state.GetFunction(functionName);
+  if (function == nullptr) {
+    return{};
+  }
+
+  log.AddLine(LogLevel::DEBUG, "Invoking script function " + functionName);
 
   int i = 0;
   for (const auto &o : objects) {
     log.AddLine(LogLevel::DEBUG, "Parameter " + std::to_string(++i) + ": " + o.to_string());
   }
 
-  auto function = state.GetFunction(functionName);
-  if (function == nullptr) {
-    log.AddLine(LogLevel::DEBUG, "No function called " + functionName + " found - aborting");
-    return;
-  }
 
   m_stack_ptr = 0;
   m_frame_ptr = 0;
@@ -49,17 +51,24 @@ void VM::InvokeFunction(VMState &state, const std::string &functionName, std::ve
     instruction_names[ByteCode::INVOKE_NATIVE] = "INVOKE_NATIVE";
 
     auto &frame = m_frames[m_frame_ptr];
-    log.AddLine(LogLevel::ERROR, std::string("\tWhen executing script function") + frame.GetFunctionName());
+    log.AddLine(LogLevel::ERROR, std::string("\tWhen executing script function ") + frame.GetFunctionName());
     log.AddLine(LogLevel::ERROR, std::string("\tWhen executing instruction ") + instruction_names[frame.GetPreviousInstruction()]);
     log.AddLine(LogLevel::ERROR, std::string("\tWith program counter value ") + std::to_string(frame.GetProgramCounter()));
 
 
-    for (int i = m_frame_ptr; i >= 0; --i) {
-      log.AddLine(LogLevel::ERROR, std::string("\t\tCalled from script function") + m_frames[i].GetFunctionName());
+    for (int i = m_frame_ptr - 1; i >= 0; --i) {
+      log.AddLine(LogLevel::ERROR, std::string("\n\t\tCalled from script function ") + m_frames[i].GetFunctionName());
       log.AddLine(LogLevel::ERROR, std::string("\t\tWith program counter value ") + std::to_string(m_frames[i].GetProgramCounter()));
 
     }
     throw std::runtime_error(error);
+  }
+
+  // return topmost stack item, if any
+  if (m_stack_ptr != 0) {
+    return m_stack[m_stack_ptr];
+  } else {
+    return {};
   }
 }
 
@@ -80,24 +89,10 @@ void VM::Execute(VMState &state) {
       break;
 
     case ByteCode::INVOKE_NATIVE:
-      {
-        VMObject second_param = m_stack[--m_stack_ptr];
-        VMObject first_param = m_stack[--m_stack_ptr];
-        VMObject managed_pointer = m_stack[--m_stack_ptr];
-        VMObject native_pointer = m_stack[--m_stack_ptr];
-
-        auto str = ToNativeType<std::string>(managed_pointer);
-
-
-        std::string text = std::string("Invoked native function, name stored at managed heap address ") 
-          + std::to_string(managed_pointer.as_managed_pointer()) + " (value " + str + ") with first param " + first_param.to_string()
-          + " and second param " + second_param.to_string() + " and native pointer " + native_pointer.to_string();
-
- 
-  
-
-        LoggerManager::GetLog(VM_LOG).AddLine(LogLevel::DEBUG, text);
-      }
+      
+      state.GetNativeBinding(ToNativeType<std::string>(m_stack[--m_stack_ptr]))
+        (m_stack.data(), m_stack_ptr);
+     
       break;
 
     case ByteCode::RETURN:

@@ -34,8 +34,3 @@ template<>
 char ToNativeType<char>(VMObject obj) {
   return obj.as_char();
 }
-
-template<>
-void *ToNativeType<void *>(VMObject obj) {
-  return obj.as_native_pointer();
-}

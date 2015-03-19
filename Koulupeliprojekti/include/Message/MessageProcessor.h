@@ -1,10 +1,12 @@
 #pragma once
+
+#include "Message/Message.h"
 #include <memory>
 #include <map>
 #include <vector>
 #include <utility>
 
-#include "Message/Message.h"
+class VMState;
 class MessageProcessor
 {
 public:
@@ -17,6 +19,7 @@ public:
 
   // register new message handler for messages with MessageType and with given priority
   void RegisterMessageHandler(MessageType type, Priority priority, MessageCallback callback);
+  void RegisterScriptMessageHandler(VMState *state, int type, int priority, std::string scriptName);
 
   void SetParent(MessageProcessor *parent) { m_parent = parent; }
 
