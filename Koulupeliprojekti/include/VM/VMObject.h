@@ -9,16 +9,16 @@ enum class ObjectType : uint8_t { UNINITIALIZED, INT, FLOAT, DOUBLE, BOOL, CHAR,
 uint32_t TypeSize(ObjectType type);
 
 
-class VMObject {
+class VMValue {
 public:
 
-  VMObject() { m_type = ObjectType::UNINITIALIZED; m_value.double_value = 0; }
-  VMObject(const int32_t v) { set_int(v); }
-  VMObject(const float v) { set_float(v); }
-  VMObject(const double v) { set_double(v); }
-  VMObject(const bool v) { set_bool(v); }
-  VMObject(const char v) { set_char(v); }
-  VMObject(void * const v) { set_native_pointer(v); }
+  VMValue() { m_type = ObjectType::UNINITIALIZED; m_value.double_value = 0; }
+  VMValue(const int32_t v) { set_int(v); }
+  VMValue(const float v) { set_float(v); }
+  VMValue(const double v) { set_double(v); }
+  VMValue(const bool v) { set_bool(v); }
+  VMValue(const char v) { set_char(v); }
+  VMValue(void * const v) { set_native_pointer(v); }
 
   void set_int(const int32_t v) {
     m_type = ObjectType::INT;

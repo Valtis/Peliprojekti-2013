@@ -14,7 +14,7 @@ void VMState::LoadByteCodeFile(const std::string &path) {
   function.SetName("initialize");
   
   std::string name = "RegisterMessageHandler";
-  VMObject obj = MemMgrInstance().AllocateArray(ObjectType::CHAR, name.length());
+  VMValue obj = MemMgrInstance().AllocateArray(ObjectType::CHAR, name.length());
   MemMgrInstance().WriteToArrayIndex(obj, &name[0], 0, name.length());
   m_permanent_storage.push_back(obj);
 
@@ -65,7 +65,7 @@ VMFunction *VMState::GetFunction(const std::string &name) {
   return &iter->second;
 }
 
-VMObject VMState::GetPermanentStorageObject(uint32_t index) {
+VMValue VMState::GetPermanentStorageObject(uint32_t index) {
   return m_permanent_storage.at(index);
 }
 

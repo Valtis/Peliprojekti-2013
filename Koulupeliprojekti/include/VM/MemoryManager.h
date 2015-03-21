@@ -20,13 +20,13 @@ public:
   MemoryManager &operator=(MemoryManager &&);
   ~MemoryManager();
 
-  VMObject AllocateArray(const ObjectType objectType, const uint32_t length);
-  void WriteToArrayIndex(const VMObject object, const void *value, const uint32_t index, const uint32_t length);
-  void ReadFromArrayIndex(const VMObject object, void *value, const uint32_t index, const uint32_t length) const;
+  VMValue AllocateArray(const ObjectType objectType, const uint32_t length);
+  void WriteToArrayIndex(const VMValue object, const void *value, const uint32_t index, const uint32_t length);
+  void ReadFromArrayIndex(const VMValue object, void *value, const uint32_t index, const uint32_t length) const;
 
   void RunGc();
 
-  uint32_t GetArrayLength(VMObject object) const;
+  uint32_t GetArrayLength(VMValue object) const;
 private:
 
   void EnsureFreeMemory(uint32_t requiredSpace);
@@ -36,12 +36,12 @@ private:
     ObjectType type;
   };
   
-  ArrayReadWriteData ArrayReadWriteCommon(const VMObject object, const uint32_t index, const uint32_t length) const;
+  ArrayReadWriteData ArrayReadWriteCommon(const VMValue object, const uint32_t index, const uint32_t length) const;
 
-  uint32_t GetArrayLengthUnchecked(VMObject obj) const;
-  uint32_t GetTypeField(VMObject object) const;
+  uint32_t GetArrayLengthUnchecked(VMValue obj) const;
+  uint32_t GetTypeField(VMValue object) const;
 
-  void EnsureNotNull(VMObject object) const;
+  void EnsureNotNull(VMValue object) const;
   void EnsureArray(uint32_t type) const;
  
   alignas(ALIGN_FOR_ALIGNAS) uint8_t *m_memory;

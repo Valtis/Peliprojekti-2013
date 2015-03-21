@@ -1,27 +1,27 @@
 #pragma once
 #include "VM/VMObject.h"
 template<typename T>
-T ToNativeType(VMObject obj) {
+T ToNativeType(VMValue obj) {
   static_assert ( std::is_pointer<T>::value, "This type of conversion is not implemented");
   return (T)obj.as_native_pointer();
 }
 
 template<>
-std::string ToNativeType<std::string>(VMObject obj);
+std::string ToNativeType<std::string>(VMValue obj);
 
 template<>
-int32_t ToNativeType<int32_t>(VMObject obj);
+int32_t ToNativeType<int32_t>(VMValue obj);
 
 template<>
-float ToNativeType<float>(VMObject obj);
+float ToNativeType<float>(VMValue obj);
 
 template<>
-double ToNativeType<double>(VMObject obj);
+double ToNativeType<double>(VMValue obj);
 
 template<>
-bool ToNativeType<bool>(VMObject obj);
+bool ToNativeType<bool>(VMValue obj);
 
 template<>
-char ToNativeType<char>(VMObject obj);
+char ToNativeType<char>(VMValue obj);
 
 

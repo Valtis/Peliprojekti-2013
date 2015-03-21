@@ -36,7 +36,7 @@ template <typename ReturnType,
           typename MemberFunctionPointer,
           typename std::enable_if<std::is_void<ReturnType>::value>::type* = nullptr>
 NativeBinding CreateNativeBinding(MemberFunctionPointer pointer) {
-  return [=](VMObject *stack, uint32_t &stack_pointer) {
+  return [=](VMValue *stack, uint32_t &stack_pointer) {
 
     auto fourthParam = ToNativeType<FourthParameterType>(stack[--stack_pointer]);
     auto thirdParam = ToNativeType<ThirdParameterType>(stack[--stack_pointer]);

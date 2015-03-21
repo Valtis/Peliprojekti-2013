@@ -19,11 +19,11 @@ class VMState;
 class VM {
 public:
   VM();
-  VMObject InvokeFunction(VMState &state, const std::string &functionName, std::vector<VMObject> objects);
+  VMValue InvokeFunction(VMState &state, const std::string &functionName, std::vector<VMValue> objects);
 private:
   void Execute(VMState &state);
   
-  std::array<VMObject, STACK_SIZE> m_stack;
+  std::array<VMValue, STACK_SIZE> m_stack;
   std::array<VMFrame, MAX_FRAME_COUNT> m_frames;
   
 

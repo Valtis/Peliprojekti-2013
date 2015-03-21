@@ -10,7 +10,7 @@ VM::VM() {
 }
 
 // needs to be broken into smaller functions.
-VMObject VM::InvokeFunction(VMState &state, const std::string &functionName, std::vector<VMObject> objects) {
+VMValue VM::InvokeFunction(VMState &state, const std::string &functionName, std::vector<VMValue> objects) {
   
   auto &log = LoggerManager::GetLog(VM_LOG);
 
@@ -82,7 +82,7 @@ void VM::Execute(VMState &state) {
     switch (code) {
 
     case ByteCode::PUSH_INTEGER:
-      m_stack[m_stack_ptr++] = VMObject{ (int32_t)m_frames[m_frame_ptr].GetNextInstruction() };
+      m_stack[m_stack_ptr++] = VMValue{ (int32_t)m_frames[m_frame_ptr].GetNextInstruction() };
       break;
     case ByteCode::PUSH_CONSTANT_OBJECT: 
       m_stack[m_stack_ptr++] = state.GetPermanentStorageObject((int32_t)m_frames[m_frame_ptr].GetNextInstruction());

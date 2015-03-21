@@ -23,7 +23,7 @@ uint32_t TypeSize(ObjectType type) {
 }
 
 
-std::string VMObject::to_string() const {
+std::string VMValue::to_string() const {
    std::string str;
    switch (m_type) {
    case ObjectType::INT:
