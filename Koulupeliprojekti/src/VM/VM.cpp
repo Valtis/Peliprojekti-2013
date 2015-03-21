@@ -46,7 +46,6 @@ void VM::InitializeVMForExecution(const std::string & functionName, std::vector<
 
   m_stack_ptr = 0;
   m_frame_ptr = 0;
-
   m_frames[m_frame_ptr] = VMFrame{ function };
 
   for (const auto &o : objects) {

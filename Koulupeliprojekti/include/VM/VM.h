@@ -1,6 +1,6 @@
 #pragma once
 
-#include "VMObject.h"
+#include "VMValue.h"
 #include "VMFrame.h"
 #include "VMClass.h"
 #include <array>
@@ -24,7 +24,7 @@ public:
 
 private:
 
-  void InitializeVMForExecution(const std::string & functionName, std::vector<VMValue> objects);
+  void InitializeVMForExecution(const std::string & functionName, std::vector<VMValue> objects, VMFunction *function);
   void Execute(VMState &state);
   void BuildStackTraceAndThrow(const std::exception &ex);
 

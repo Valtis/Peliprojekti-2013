@@ -1,6 +1,6 @@
 #pragma once
 #include "Utility/LoggerManager.h"
-#include "VM/VMObject.h"
+#include "VM/VMValue.h"
 #include "VM/FFI/ConversionFunctions.h"
 #include <functional>
 #include <type_traits>

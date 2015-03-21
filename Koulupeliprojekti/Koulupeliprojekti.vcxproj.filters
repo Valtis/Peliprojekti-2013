@@ -378,9 +378,6 @@
     <ClInclude Include="include\VM\VMFunction.h">
       <Filter>Header Files\VM</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\VMObject.h">
-      <Filter>Header Files\VM</Filter>
-    </ClInclude>
     <ClInclude Include="include\VM\VMState.h">
       <Filter>Header Files\VM</Filter>
     </ClInclude>
@@ -401,6 +398,9 @@
     </ClInclude>
     <ClInclude Include="include\VM\FFI\NativeBindingTypedef.h">
       <Filter>Header Files\VM\FFI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VM\VMValue.h">
+      <Filter>Header Files\VM</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -602,9 +602,6 @@
     <ClCompile Include="src\VM\VMFunction.cpp">
       <Filter>Source Files\VM</Filter>
     </ClCompile>
-    <ClCompile Include="src\VM\VMObject.cpp">
-      <Filter>Source Files\VM</Filter>
-    </ClCompile>
     <ClCompile Include="src\VM\VMState.cpp">
       <Filter>Source Files\VM</Filter>
     </ClCompile>
@@ -621,6 +618,9 @@
       <Filter>Source Files\VM\FFI</Filter>
     </ClCompile>
     <ClCompile Include="src\VM\ByteCode.cpp">
+      <Filter>Source Files\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\VMValue.cpp">
       <Filter>Source Files\VM</Filter>
     </ClCompile>
   </ItemGroup>

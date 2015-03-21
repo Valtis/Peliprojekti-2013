@@ -1,6 +1,6 @@
 #pragma once
 
-#include "VMObject.h"
+#include "VMValue.h"
 #include "VMFunction.h"
 #include <unordered_map>
 #include <vector>

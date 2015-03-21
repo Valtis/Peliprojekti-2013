@@ -1,6 +1,6 @@
 #pragma once
 #include "VMFunction.h"
-#include "VMObject.h"
+#include "VMValue.h"
 #include <cstdint>
 class VMFrame {
 

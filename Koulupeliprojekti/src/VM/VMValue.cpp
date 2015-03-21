@@ -1,4 +1,4 @@
-#include "VM/VMObject.h"
+#include "VM/VMValue.h"
 uint32_t TypeSize(ObjectType type) {
   switch (type) {
   case ObjectType::UNINITIALIZED:
@@ -36,7 +36,7 @@ std::string VMValue::to_string() const {
      str = "Double: " + std::to_string(m_value.double_value);
      break;
    case ObjectType::BOOL:
-     str = "Bool: " + std::to_string(m_value.bool_value);
+     str = "Boolean: " + std::to_string(m_value.bool_value);
      break;
    case ObjectType::CHAR:
      str = "Char: " + std::to_string(m_value.char_value);

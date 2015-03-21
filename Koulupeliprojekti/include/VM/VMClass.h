@@ -1,6 +1,6 @@
 #pragma once
 
-#include "VM/VMObject.h"
+#include "VM/VMValue.h"
 #include "VM/VMFunction.h"
 #include <vector>
 #include <cstdint>
