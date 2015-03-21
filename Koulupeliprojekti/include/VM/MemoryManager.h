@@ -3,8 +3,7 @@
 
 
 
-const uint32_t ALIGN = 16; // memory allocation aligned to multiples of 16. Allocations are padded as needed
-#define ALIGN_FOR_ALIGNAS 16 // keep this in sync with above! alignas/declspec requires size as a number, not variable
+#define ALIGN 4 // memory allocation aligned to multiples of 4. Allocations are padded as needed
 
 // visual studio 2013 and earlier do not support alignas
 #if _MSC_VER <= 1800
@@ -44,8 +43,8 @@ private:
   void EnsureNotNull(VMValue object) const;
   void EnsureArray(uint32_t type) const;
  
-  alignas(ALIGN_FOR_ALIGNAS) uint8_t *m_memory;
-  alignas(ALIGN_FOR_ALIGNAS) uint8_t *m_toSpace; // reseved for garbage collection
+  alignas(ALIGN) uint8_t *m_memory;
+  alignas(ALIGN) uint8_t *m_toSpace; // reseved for garbage collection
 
   uint32_t m_heapSize;
   uint32_t m_freeSpacePointer;
