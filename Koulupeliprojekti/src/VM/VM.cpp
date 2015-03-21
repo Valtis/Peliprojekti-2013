@@ -25,12 +25,8 @@ VMValue VM::InvokeFunction(VMState &state, const std::string &functionName, std:
     BuildStackTraceAndThrow(ex);
   }
 
-  // return topmost stack item, if any
-  if (m_stack_ptr != 0) {
-    return m_stack[m_stack_ptr];
-  } else {
-    return {};
-  }
+  return ReturnValue();
+
 }
 
 void VM::InitializeVMForExecution(const std::string & functionName, std::vector<VMValue> objects, VMFunction *function)
@@ -68,11 +64,51 @@ void VM::Execute(VMState &state) {
       m_stack[m_stack_ptr++] = state.GetPermanentStorageObject((int32_t)m_frames[m_frame_ptr].GetNextInstruction());
       break;
 
+    case ByteCode::ADD_INTEGER:
+    {
+      auto second = m_stack[--m_stack_ptr].as_int();
+      auto first = m_stack[--m_stack_ptr].as_int();
+      m_stack[m_stack_ptr++] = first + second;
+      break;
+    }
+    case ByteCode::SUB_INTEGER:
+    {
+      auto second = m_stack[--m_stack_ptr].as_int();
+      auto first = m_stack[--m_stack_ptr].as_int();
+      m_stack[m_stack_ptr++] = first - second;
+      break;
+    }
+    case ByteCode::MUL_INTEGER:
+    {
+      auto second = m_stack[--m_stack_ptr].as_int();
+      auto first = m_stack[--m_stack_ptr].as_int();
+      m_stack[m_stack_ptr++] = first * second;
+      break;
+    }
+    case ByteCode::DIV_INTEGER:
+    {
+      auto second = m_stack[--m_stack_ptr].as_int();
+      auto first = m_stack[--m_stack_ptr].as_int();
+      m_stack[m_stack_ptr++] = first / second;
+      break;
+    }
+
     case ByteCode::INVOKE_NATIVE:
       
       state.GetNativeBinding(ToNativeType<std::string>(m_stack[--m_stack_ptr]))
         (m_stack.data(), m_stack_ptr);
      
+      break;
+    case ByteCode::INVOKE_MANAGED:
+      {
+        auto ptrToName = m_stack[--m_stack_ptr];
+        auto name = ToNativeType<std::string>(ptrToName);
+        auto function = state.GetFunction(name);
+        if (function == nullptr) {
+          throw std::runtime_error("Could not invoke function " + name + ": No such function exists");
+        }
+        m_frames[++m_frame_ptr] = VMFrame{ function };
+      }
       break;
 
     case ByteCode::RETURN:
@@ -95,8 +131,17 @@ void VM::Execute(VMState &state) {
   }
 }
 
-void VM::BuildStackTraceAndThrow(const std::exception &ex)
-{
+VMValue VM::ReturnValue() {
+  // return topmost stack item, if any
+  if (m_stack_ptr != 0) {
+    return m_stack[m_stack_ptr];
+  }
+  else {
+    return{};
+  }
+}
+
+void VM::BuildStackTraceAndThrow(const std::exception &ex) {
 
   auto &log = LoggerManager::GetLog(VM_LOG);
   std::string error = std::string("An error has occurred during script execution: ") + ex.what();
@@ -112,24 +157,21 @@ void VM::BuildStackTraceAndThrow(const std::exception &ex)
   throw std::runtime_error(error);
 }
 
-void VM::AddBasicScriptInfoToErrorMessage(std::string &stack_trace)
-{
+void VM::AddBasicScriptInfoToErrorMessage(std::string &stack_trace) {
   auto &frame = m_frames[m_frame_ptr];
   stack_trace += "\tWhen executing script function '" + frame.GetFunctionName() + "'\n";
   stack_trace += "\tWhen executing instruction '" + std::string(GetByteCodeName(frame.GetPreviousInstruction())) + "'\n";
   stack_trace += "\tWith program counter value " + std::to_string(frame.GetProgramCounter()) + "\n\n";
 }
 
-void VM::AddFrameStackToErrorMessage(std::string &stack_trace)
-{
+void VM::AddFrameStackToErrorMessage(std::string &stack_trace) {
   for (int i = m_frame_ptr - 1; i >= 0; --i) {
     stack_trace += "\t\tCalled from script function '" + m_frames[i].GetFunctionName() + "'\n";
     stack_trace += "\t\tWith program counter value " + std::to_string(m_frames[i].GetProgramCounter()) + "\n\n";
   }
 }
 
-void VM::AddValueStackToErrorMessage(std::string &stack_trace)
-{
+void VM::AddValueStackToErrorMessage(std::string &stack_trace) {
   stack_trace += "Script stack:\n\n";
   for (int i = m_stack_ptr - 1; i >= 0; --i) {
     stack_trace += std::to_string(i) + ": " + m_stack[i].to_string() + "\n";

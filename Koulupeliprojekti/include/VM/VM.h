@@ -22,10 +22,13 @@ public:
   VMValue InvokeFunction(VMState &state, const std::string &functionName, std::vector<VMValue> objects);
 
 
+
+
 private:
 
   void InitializeVMForExecution(const std::string & functionName, std::vector<VMValue> objects, VMFunction *function);
   void Execute(VMState &state);
+  VMValue ReturnValue();
   void BuildStackTraceAndThrow(const std::exception &ex);
 
   void AddBasicScriptInfoToErrorMessage(std::string &stack_trace);

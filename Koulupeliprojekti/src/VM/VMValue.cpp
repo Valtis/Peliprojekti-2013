@@ -18,7 +18,6 @@ uint32_t TypeSize(ObjectType type) {
   case ObjectType::MANAGED_POINTER:
   default:
     return 0;
-
   }
 }
 
