@@ -7,6 +7,7 @@
 #include <array>
 
 #include "VM/FFI/NativeBindingTypedef.h"
+#include "VM/VMOperations.h"
 
 // thanks to MSN from stackoverflow. Slightly modified.
 // http://stackoverflow.com/questions/5147492/member-function-call-in-decltype
@@ -36,14 +37,14 @@ template <typename ReturnType,
           typename MemberFunctionPointer,
           typename std::enable_if<std::is_void<ReturnType>::value>::type* = nullptr>
 NativeBinding CreateNativeBinding(MemberFunctionPointer pointer) {
-  return [=](VMValue *stack, uint32_t &stack_pointer) {
+  return [=](std::vector<VMValue> &stack) {
 
-    auto fourthParam = ToNativeType<FourthParameterType>(stack[--stack_pointer]);
-    auto thirdParam = ToNativeType<ThirdParameterType>(stack[--stack_pointer]);
-    auto secondParam = ToNativeType<SecondParamType>(stack[--stack_pointer]);
-    auto firstParam = ToNativeType<FirstParamType>(stack[--stack_pointer]);
+    auto fourthParam = ToNativeType<FourthParameterType>(Op::PopValue(stack));
+    auto thirdParam = ToNativeType<ThirdParameterType>(Op::PopValue(stack));
+    auto secondParam = ToNativeType<SecondParamType>(Op::PopValue(stack));
+    auto firstParam = ToNativeType<FirstParamType>(Op::PopValue(stack));
 
-    auto classPointer = ToNativeType<ClassType *>(stack[--stack_pointer]);
+    auto classPointer = ToNativeType<ClassType *>(Op::PopValue(stack));
     LoggerManager::GetLog("temp.txt").AddLine(LogLevel::INFO, "Greetings from native binding");
     pointer(classPointer, firstParam, secondParam, thirdParam, fourthParam);
   };

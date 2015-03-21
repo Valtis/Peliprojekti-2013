@@ -49,14 +49,11 @@ void VMState::LoadByteCodeFile(const std::string &path) {
 
   m_functions["OnDamageTaken"] = damageTaken;
 
-
-
-
 }
 
 
 
-VMFunction *VMState::GetFunction(const std::string &name) {
+const VMFunction *VMState::GetFunction(const std::string &name) const {
   auto iter = m_functions.find(name);
   if (iter == m_functions.end()) {
     return nullptr;
@@ -65,11 +62,11 @@ VMFunction *VMState::GetFunction(const std::string &name) {
   return &iter->second;
 }
 
-VMValue VMState::GetPermanentStorageObject(uint32_t index) {
+VMValue VMState::GetPermanentStorageObject(uint32_t index) const {
   return m_permanent_storage.at(index);
 }
 
-NativeBinding VMState::GetNativeBinding(const std::string &name) {
+NativeBinding VMState::GetNativeBinding(const std::string &name) const {
   auto bindIter = m_native_bindings.find(name);
   if (bindIter == m_native_bindings.end()) {
     throw std::runtime_error(std::string("No native binding with name ") + name + " has been registered");

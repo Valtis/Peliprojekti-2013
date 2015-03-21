@@ -2,7 +2,7 @@
 
 VMFrame::VMFrame() : VMFrame(nullptr) { }
 
-VMFrame::VMFrame(VMFunction *function) : m_function(function), m_current_instruction(0) {
+VMFrame::VMFrame(const VMFunction *function) : m_function(function), m_current_instruction(0) {
 
 }
 

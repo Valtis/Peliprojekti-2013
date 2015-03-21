@@ -4,9 +4,16 @@
 #include "VM/MemoryManager.h"
 #include "VM/FFI/ConversionFunctions.h"
 #include "VM/FFI/NativeBinding.h"
+#include "VM/VMOperations.h"
 
 #include <map>
+
+const uint32_t stackSize = 4096;
+const uint32_t frameSize = 1024;
 VM::VM() {
+
+  m_stack.reserve(stackSize);
+  m_frames.reserve(frameSize);
 }
 
 // needs to be broken into smaller functions.
@@ -29,7 +36,7 @@ VMValue VM::InvokeFunction(VMState &state, const std::string &functionName, std:
 
 }
 
-void VM::InitializeVMForExecution(const std::string & functionName, std::vector<VMValue> objects, VMFunction *function)
+void VM::InitializeVMForExecution(const std::string & functionName, std::vector<VMValue> objects, const VMFunction *function)
 {
   auto &log = LoggerManager::GetLog(VM_LOG);
   log.AddLine(LogLevel::DEBUG, "Invoking script function " + functionName);
@@ -39,13 +46,16 @@ void VM::InitializeVMForExecution(const std::string & functionName, std::vector<
     log.AddLine(LogLevel::DEBUG, "Parameter " + std::to_string(++i) + ": " + o.to_string());
   }
 
+  m_stack.clear();
+  m_frames.clear();
 
-  m_stack_ptr = 0;
-  m_frame_ptr = 0;
-  m_frames[m_frame_ptr] = VMFrame{ function };
+  m_stack.reserve(stackSize);
+  m_frames.reserve(frameSize);
+
+  m_frames.push_back(VMFrame{ function });
 
   for (const auto &o : objects) {
-    m_stack[m_stack_ptr++] = o;
+    m_stack.push_back(o);
   }
 }
 
@@ -53,70 +63,41 @@ void VM::InitializeVMForExecution(const std::string & functionName, std::vector<
 void VM::Execute(VMState &state) {
 
   for (;;)  {
-    auto code = m_frames[m_frame_ptr].GetNextInstruction();
+    auto code = m_frames.back().GetNextInstruction();
 
     switch (code) {
 
     case ByteCode::PUSH_INTEGER:
-      m_stack[m_stack_ptr++] = VMValue{ (int32_t)m_frames[m_frame_ptr].GetNextInstruction() };
+      Op::PushInteger(m_stack, m_frames);
       break; 
     case ByteCode::PUSH_CONSTANT_OBJECT: 
-      m_stack[m_stack_ptr++] = state.GetPermanentStorageObject((int32_t)m_frames[m_frame_ptr].GetNextInstruction());
+      Op::PushConstantObject(state, m_stack, m_frames);
       break;
 
     case ByteCode::ADD_INTEGER:
-    {
-      auto second = m_stack[--m_stack_ptr].as_int();
-      auto first = m_stack[--m_stack_ptr].as_int();
-      m_stack[m_stack_ptr++] = first + second;
+      Op::AddInteger(m_stack);
       break;
-    }
+    
     case ByteCode::SUB_INTEGER:
-    {
-      auto second = m_stack[--m_stack_ptr].as_int();
-      auto first = m_stack[--m_stack_ptr].as_int();
-      m_stack[m_stack_ptr++] = first - second;
-      break;
-    }
+      Op::SubInteger(m_stack);
+      break;    
     case ByteCode::MUL_INTEGER:
-    {
-      auto second = m_stack[--m_stack_ptr].as_int();
-      auto first = m_stack[--m_stack_ptr].as_int();
-      m_stack[m_stack_ptr++] = first * second;
+      Op::MulInteger(m_stack);
       break;
-    }
     case ByteCode::DIV_INTEGER:
-    {
-      auto second = m_stack[--m_stack_ptr].as_int();
-      auto first = m_stack[--m_stack_ptr].as_int();
-      m_stack[m_stack_ptr++] = first / second;
+      Op::DivInteger(m_stack);
       break;
-    }
 
     case ByteCode::INVOKE_NATIVE:
-      
-      state.GetNativeBinding(ToNativeType<std::string>(m_stack[--m_stack_ptr]))
-        (m_stack.data(), m_stack_ptr);
-     
+      Op::InvokeNative(state, m_stack);
       break;
     case ByteCode::INVOKE_MANAGED:
-      {
-        auto ptrToName = m_stack[--m_stack_ptr];
-        auto name = ToNativeType<std::string>(ptrToName);
-        auto function = state.GetFunction(name);
-        if (function == nullptr) {
-          throw std::runtime_error("Could not invoke function " + name + ": No such function exists");
-        }
-        m_frames[++m_frame_ptr] = VMFrame{ function };
-      }
+      Op::InvokeManaged(state, m_stack, m_frames);
       break;
 
     case ByteCode::RETURN:
-      if (m_frame_ptr == 0)  {
-        return; // stop execution - returning from last function.
-      }
-      else {
-        --m_frame_ptr;
+      if (!Op::Return(m_frames)) {
+        return;
       }
       break;
     default: 
@@ -133,8 +114,8 @@ void VM::Execute(VMState &state) {
 
 VMValue VM::ReturnValue() {
   // return topmost stack item, if any
-  if (m_stack_ptr != 0) {
-    return m_stack[m_stack_ptr];
+  if (!m_stack.empty()) {
+    return m_stack.back();
   }
   else {
     return{};
@@ -158,14 +139,14 @@ void VM::BuildStackTraceAndThrow(const std::exception &ex) {
 }
 
 void VM::AddBasicScriptInfoToErrorMessage(std::string &stack_trace) {
-  auto &frame = m_frames[m_frame_ptr];
+  auto &frame = m_frames.back();
   stack_trace += "\tWhen executing script function '" + frame.GetFunctionName() + "'\n";
   stack_trace += "\tWhen executing instruction '" + std::string(GetByteCodeName(frame.GetPreviousInstruction())) + "'\n";
   stack_trace += "\tWith program counter value " + std::to_string(frame.GetProgramCounter()) + "\n\n";
 }
 
 void VM::AddFrameStackToErrorMessage(std::string &stack_trace) {
-  for (int i = m_frame_ptr - 1; i >= 0; --i) {
+  for (int i = m_frames.size() - 2; i >= 0; --i) {
     stack_trace += "\t\tCalled from script function '" + m_frames[i].GetFunctionName() + "'\n";
     stack_trace += "\t\tWith program counter value " + std::to_string(m_frames[i].GetProgramCounter()) + "\n\n";
   }
@@ -173,7 +154,7 @@ void VM::AddFrameStackToErrorMessage(std::string &stack_trace) {
 
 void VM::AddValueStackToErrorMessage(std::string &stack_trace) {
   stack_trace += "Script stack:\n\n";
-  for (int i = m_stack_ptr - 1; i >= 0; --i) {
+  for (int i = m_stack.size() - 1; i >= 0; --i) {
     stack_trace += std::to_string(i) + ": " + m_stack[i].to_string() + "\n";
   }
 }

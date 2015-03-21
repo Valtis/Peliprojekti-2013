@@ -8,11 +8,6 @@
 #include <cstdint>
 #include <string>
 
-#define STACK_SIZE 2048
-#define MAX_FRAME_COUNT 40
-
-// simple VM. Due to time constraints, ease of implementation is preferred over absolute speed
-// also not thread safe.
 
 class VMState;
 
@@ -26,7 +21,7 @@ public:
 
 private:
 
-  void InitializeVMForExecution(const std::string & functionName, std::vector<VMValue> objects, VMFunction *function);
+  void InitializeVMForExecution(const std::string & functionName, std::vector<VMValue> objects, const VMFunction *function);
   void Execute(VMState &state);
   VMValue ReturnValue();
   void BuildStackTraceAndThrow(const std::exception &ex);
@@ -35,12 +30,9 @@ private:
   void AddValueStackToErrorMessage(std::string &stack_trace);
   void AddFrameStackToErrorMessage(std::string &stack_trace);
 
-  std::array<VMValue, STACK_SIZE> m_stack;
-  std::array<VMFrame, MAX_FRAME_COUNT> m_frames;
-  
+  std::vector<VMValue> m_stack;
+  std::vector<VMFrame> m_frames;
 
-  uint32_t m_stack_ptr;
-  uint32_t m_frame_ptr;
 };
 
 

@@ -16,10 +16,10 @@ public:
   VMState(const std::string &path);
 
   void LoadByteCodeFile(const std::string &path);
-  VMFunction *GetFunction(const std::string &name); 
-  VMValue GetPermanentStorageObject(uint32_t index);
+  const VMFunction *GetFunction(const std::string &name) const; 
+  VMValue GetPermanentStorageObject(uint32_t index) const;
   
-  NativeBinding GetNativeBinding(const std::string &name);
+  NativeBinding GetNativeBinding(const std::string &name) const;
   void AddNativeBinding(const std::string &name, NativeBinding binding);
 
 private:
