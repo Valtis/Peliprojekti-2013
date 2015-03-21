@@ -171,6 +171,7 @@
     <ClCompile Include="src\Utility\LoggerManager.cpp" />
     <ClCompile Include="src\Utility\StringUtility.cpp" />
     <ClCompile Include="src\Utility\Tick.cpp" />
+    <ClCompile Include="src\VM\ByteCode.cpp" />
     <ClCompile Include="src\VM\FFI\ConversionFunctions.cpp" />
     <ClCompile Include="src\VM\FFI\NativeBinding.cpp" />
     <ClCompile Include="src\VM\MemoryManager.cpp" />

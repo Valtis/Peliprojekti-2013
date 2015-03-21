@@ -620,6 +620,9 @@
     <ClCompile Include="src\VM\FFI\NativeBinding.cpp">
       <Filter>Source Files\VM\FFI</Filter>
     </ClCompile>
+    <ClCompile Include="src\VM\ByteCode.cpp">
+      <Filter>Source Files\VM</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore">

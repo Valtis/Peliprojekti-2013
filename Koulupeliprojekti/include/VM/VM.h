@@ -20,9 +20,18 @@ class VM {
 public:
   VM();
   VMValue InvokeFunction(VMState &state, const std::string &functionName, std::vector<VMValue> objects);
+
+
 private:
+
+  void InitializeVMForExecution(const std::string & functionName, std::vector<VMValue> objects);
   void Execute(VMState &state);
-  
+  void BuildStackTraceAndThrow(const std::exception &ex);
+
+  void AddBasicScriptInfoToErrorMessage(std::string &stack_trace);
+  void AddValueStackToErrorMessage(std::string &stack_trace);
+  void AddFrameStackToErrorMessage(std::string &stack_trace);
+
   std::array<VMValue, STACK_SIZE> m_stack;
   std::array<VMFrame, MAX_FRAME_COUNT> m_frames;
   
