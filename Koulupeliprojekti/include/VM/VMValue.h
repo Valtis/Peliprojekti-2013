@@ -95,11 +95,14 @@ public:
 private:
   void assert_type(const ValueType t) const {
     if (m_type != t) {
-      throw std::runtime_error("Invalid type");
+      std::string error = "TypeError: Expected " + TypeToString(t) + " but was " + TypeToString(m_type);
+      throw std::runtime_error(error);
     }
   }
 
   ValueType m_type;
+
+  std::string TypeToString(ValueType t) const;
 
   union {
     int32_t int_value;

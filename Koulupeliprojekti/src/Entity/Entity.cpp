@@ -30,6 +30,8 @@ void Entity::AddScript(std::unique_ptr<Component> script)
   m_scripts.push_back(std::move(script));
 }
 
+
+
 void Entity::Update(double ticksPassed)
 {
   for (auto &component : m_components)

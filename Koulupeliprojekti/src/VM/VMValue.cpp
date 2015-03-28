@@ -23,22 +23,22 @@ uint32_t TypeSize(ValueType type) {
 
 
 std::string VMValue::to_string() const {
-   std::string str;
+  std::string str = TypeToString(m_type) + ": ";
    switch (m_type) {
    case ValueType::INT:
-     str = "Integer: " + std::to_string(m_value.int_value);
+     str += std::to_string(m_value.int_value);
      break;
    case ValueType::FLOAT:
-     str = "Float: " + std::to_string(m_value.float_value);
+     str += std::to_string(m_value.float_value);
      break;
    case ValueType::DOUBLE:
-     str = "Double: " + std::to_string(m_value.double_value);
+     str += std::to_string(m_value.double_value);
      break;
    case ValueType::BOOL:
-     str = "Boolean: " + std::to_string(m_value.bool_value);
+     str += std::to_string(m_value.bool_value);
      break;
    case ValueType::CHAR:
-     str = "Char: " + std::to_string(m_value.char_value);
+     str += std::to_string(m_value.char_value);
      break;
    case ValueType::NATIVE_POINTER:
    {
@@ -46,17 +46,45 @@ std::string VMValue::to_string() const {
      stream << "0x"
        << std::setfill('0') << std::setw(sizeof(void *) * 2)
        << std::hex << m_value.native_pointer_value;
-     str = "Native pointer: " + stream.str();
+     str += stream.str();
 
    }
 
    break;
    case ValueType::MANAGED_POINTER:
-     str = "Managed pointer: " + std::to_string(m_value.managed_pointer_value);
+     str += std::to_string(m_value.managed_pointer_value);
      break;
-
+   case ValueType::UNINITIALIZED:
+     str = "Uninitialized value";
+     break;
    default:
-     str = "Unknown type";
+     str = "Default case reached in VMValue::ToString(). This should not happen";
    }
    return str;
  }
+
+
+std::string VMValue::TypeToString(ValueType t) const {
+  switch (t) {
+  case ValueType::INT:
+    return "Integer";
+  case ValueType::FLOAT:
+    return "Float";
+  case ValueType::DOUBLE:
+    return "Double";
+  case ValueType::BOOL:
+    return "Boolean";
+  case ValueType::CHAR:
+    return "Character";
+  case ValueType::NATIVE_POINTER:
+    return "Native pointer";
+
+    break;
+  case ValueType::MANAGED_POINTER:
+    return "Managed pointer";
+  case ValueType::UNINITIALIZED:
+    return "Uninitialized";
+  default:
+    return "Default case reached in TypeToString. This should not happen";
+  }
+}

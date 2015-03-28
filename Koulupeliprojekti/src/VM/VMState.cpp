@@ -48,7 +48,6 @@ void VMState::LoadByteCodeFile(const std::string &path) {
   damageTaken.AddByteCode(ByteCode::RETURN);
 
   m_functions["OnDamageTaken"] = damageTaken;
-
 }
 
 
