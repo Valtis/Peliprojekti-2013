@@ -39,8 +39,6 @@ void MessageProcessor::PassMessageToHandlers(const std::vector<PrioritizedCallba
 
 
 void MessageProcessor::RegisterScriptMessageHandler(VMState *state, int type, int priority, std::string scriptName) {
-  LoggerManager::GetLog("temp.txt").AddLine(LogLevel::INFO, std::string("Registered callback to script function") + scriptName);
-
   MessageCallback callback = [=](Message *message) -> MessageHandling {
     auto messageHandling = VMInstance().InvokeFunction(*state, scriptName, {message});
     return static_cast<MessageHandling>(messageHandling.as_int());

@@ -4,7 +4,7 @@
 #include "VM/FFI/ConversionFunctions.h"
 #include <functional>
 #include <type_traits>
-#include <array>
+#include <tuple>
 
 #include "VM/FFI/NativeBindingTypedef.h"
 #include "VM/VMOperations.h"
@@ -27,25 +27,41 @@ CreateNativeBinding<decltype(GetReturnType(&CLASS::FUNCTION)), \
 
 
 
+// base case for when whole tuple has been handled - do nothing
+template <size_t position, typename Tuple>
+void SetTupleValue(Tuple &t, std::vector<VMValue> &stack) {
+
+}
+
+template<size_t position, typename Tuple, typename ParameterType, typename ...RemainingParameterTypes>
+void SetTupleValue(Tuple &t, std::vector<VMValue> &stack) {
+  SetTupleValue<position + 1, decltype(t), RemainingParameterTypes...>(t, stack);
+  std::get<position>(t) = ToNativeType<ParameterType>(Op::PopValue(stack));
+}
+
+template<typename ...ParameterTypes>
+std::tuple<ParameterTypes...> ConstructParameterTuple(std::vector<VMValue> &stack) {
+  std::tuple<ParameterTypes...> t;
+  SetTupleValue<0, decltype(t), ParameterTypes...>(t, stack);
+  return t;
+}
+
+
+
 // Creates binding for 4-param void function
 template <typename ReturnType,
           typename FirstParamType, 
           typename SecondParamType, 
-          typename ThirdParameterType,
-          typename FourthParameterType,
+          typename ThirdParamType,
+          typename FourthParamType,
           typename ClassType,
           typename MemberFunctionPointer,
           typename std::enable_if<std::is_void<ReturnType>::value>::type* = nullptr>
 NativeBinding CreateNativeBinding(MemberFunctionPointer pointer) {
   return [=](std::vector<VMValue> &stack) {
-
-    auto fourthParam = ToNativeType<FourthParameterType>(Op::PopValue(stack));
-    auto thirdParam = ToNativeType<ThirdParameterType>(Op::PopValue(stack));
-    auto secondParam = ToNativeType<SecondParamType>(Op::PopValue(stack));
-    auto firstParam = ToNativeType<FirstParamType>(Op::PopValue(stack));
-
+    
+    auto parameterTuple = ConstructParameterTuple<FirstParamType, SecondParamType, ThirdParamType, FourthParamType>(stack);
     auto classPointer = ToNativeType<ClassType *>(Op::PopValue(stack));
-    LoggerManager::GetLog("temp.txt").AddLine(LogLevel::INFO, "Greetings from native binding");
-    pointer(classPointer, firstParam, secondParam, thirdParam, fourthParam);
+    pointer(classPointer, std::get<0>(parameterTuple), std::get<1>(parameterTuple), std::get<2>(parameterTuple), std::get<3>(parameterTuple));
   };
 }
