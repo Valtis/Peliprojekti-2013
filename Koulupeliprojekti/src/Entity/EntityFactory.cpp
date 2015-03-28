@@ -146,7 +146,7 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   std::unique_ptr<Entity> e(new Entity);
 
   // placeholder for testing purposes
-  VMState temp = VMState{ "/temp/directory/please/ignore" };
+  VMState temp = VMState{ "data/scripts/invulnerabilityOnHit.txt" };
   auto binding = CREATE_4_ARGS_BINDING(Entity, RegisterScriptMessageHandler, VMState *, int, int, std::string);
 
   temp.AddNativeBinding("RegisterMessageHandler", binding);
@@ -186,7 +186,7 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   e->AddComponent(ComponentType::FACTION, std::move(f));
   e->AddComponent(ComponentType::PHYSICS,std::move(p));
   e->AddComponent(ComponentType::HEALTH, std::move(h));
-  e->AddScript(std::unique_ptr<Component>(new TempInvulnerabilityScript(60)));
+  //e->AddScript(std::unique_ptr<Component>(new TempInvulnerabilityScript(60)));
   e->AddScript(std::unique_ptr<Component>(new BlinkScript(5)));
   e->AddScript(std::unique_ptr<Component>(new QuitGameOnDeathScript));
 

@@ -22,6 +22,9 @@ public:
   NativeBinding GetNativeBinding(const std::string &name) const;
   void AddNativeBinding(const std::string &name, NativeBinding binding);
 
+  size_t AddPermanentObject(VMValue value);
+  void AddFunction(const std::string &name, VMFunction function);
+
 private:
   std::unordered_map<std::string, VMFunction> m_functions;
   std::unordered_map<std::string, NativeBinding> m_native_bindings;

@@ -82,3 +82,24 @@ std::vector<std::string> Utility::WrapLines(std::vector<std::string> lines, doub
 
   return wrappedLines;
 }
+
+
+
+
+std::string Utility::Trim(const std::string &str)
+{
+  const std::string whiteSpaceTokens = " \n\t\r";
+
+  int beginning = str.find_first_not_of(whiteSpaceTokens);
+  if (beginning == std::string::npos)
+  {
+    return "";
+  }
+  std::string ret = str.substr(beginning);
+  int end = ret.find_last_not_of(whiteSpaceTokens);
+  if (end == std::string::npos)
+  {
+    end = ret.length();
+  }
+  return ret.substr(0, end + 1);
+}

@@ -2,6 +2,7 @@
 #include "VM/ByteCode.h"
 #include "VM/VM.h"
 #include "VM/MemoryManager.h"
+#include "VM/ScriptLoader.h"
 VMState::VMState(const std::string &path) {
   LoadByteCodeFile(path);
 }
@@ -9,45 +10,9 @@ VMState::VMState(const std::string &path) {
 
 
 void VMState::LoadByteCodeFile(const std::string &path) {
-  // TODO: Load from file. Hardcoded for testing purposes for now
-  VMFunction function;
-  function.SetName("initialize");
-  
-  std::string name = "RegisterMessageHandler";
-  VMValue obj = MemMgrInstance().AllocateArray(ValueType::CHAR, name.length());
-  MemMgrInstance().WriteToArrayIndex(obj, &name[0], 0, name.length());
-  m_permanent_storage.push_back(obj);
 
-  name = "OnDamageTaken";
-  obj = MemMgrInstance().AllocateArray(ValueType::CHAR, name.length());
-  MemMgrInstance().WriteToArrayIndex(obj, &name[0], 0, name.length());
-  m_permanent_storage.push_back(obj);
-
-  function.AddByteCode(ByteCode::PUSH_INTEGER);
-  function.AddByteCode(static_cast<ByteCode>(10)); // MessageType::TakeDamage
-  
-  function.AddByteCode(ByteCode::PUSH_INTEGER);
-  function.AddByteCode(static_cast<ByteCode>(4)); // Priority::Highest
-  function.AddByteCode(ByteCode::PUSH_CONSTANT_OBJECT);
-  // index to const object pool
-  function.AddByteCode(static_cast<ByteCode>(1));
-
-  function.AddByteCode(ByteCode::PUSH_CONSTANT_OBJECT);
-  // index to const object pool
-  function.AddByteCode(static_cast<ByteCode>(0));
-
-  function.AddByteCode(ByteCode::INVOKE_NATIVE);
-  function.AddByteCode(ByteCode::RETURN);
-
-  m_functions["initialize"] = function;
-
-  VMFunction damageTaken;
-  damageTaken.SetName("OnDamageTaken");
-  damageTaken.AddByteCode(ByteCode::PUSH_INTEGER);
-  damageTaken.AddByteCode(static_cast<ByteCode>(0)); // MessagePassing::PASS_FORWARD
-  damageTaken.AddByteCode(ByteCode::RETURN);
-
-  m_functions["OnDamageTaken"] = damageTaken;
+  ScriptLoader loader(*this, path);
+  loader.Load();
 }
 
 
@@ -75,4 +40,13 @@ NativeBinding VMState::GetNativeBinding(const std::string &name) const {
 
 void VMState::AddNativeBinding(const std::string &name, NativeBinding binding) {
   m_native_bindings[name] = binding;
+}
+
+size_t VMState::AddPermanentObject(VMValue value) {
+  m_permanent_storage.push_back(value);
+  return m_permanent_storage.size() - 1;
+}
+
+void VMState::AddFunction(const std::string &name, VMFunction function) {
+  m_functions[name] = function;
 }
