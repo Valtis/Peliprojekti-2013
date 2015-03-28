@@ -14,12 +14,12 @@ void VMState::LoadByteCodeFile(const std::string &path) {
   function.SetName("initialize");
   
   std::string name = "RegisterMessageHandler";
-  VMValue obj = MemMgrInstance().AllocateArray(ObjectType::CHAR, name.length());
+  VMValue obj = MemMgrInstance().AllocateArray(ValueType::CHAR, name.length());
   MemMgrInstance().WriteToArrayIndex(obj, &name[0], 0, name.length());
   m_permanent_storage.push_back(obj);
 
   name = "OnDamageTaken";
-  obj = MemMgrInstance().AllocateArray(ObjectType::CHAR, name.length());
+  obj = MemMgrInstance().AllocateArray(ValueType::CHAR, name.length());
   MemMgrInstance().WriteToArrayIndex(obj, &name[0], 0, name.length());
   m_permanent_storage.push_back(obj);
 

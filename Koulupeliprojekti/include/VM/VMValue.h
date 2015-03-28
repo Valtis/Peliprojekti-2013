@@ -4,15 +4,15 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
-enum class ObjectType : uint8_t { UNINITIALIZED, INT, FLOAT, DOUBLE, BOOL, CHAR, NATIVE_POINTER, MANAGED_POINTER };
+enum class ValueType : uint8_t { UNINITIALIZED, INT, FLOAT, DOUBLE, BOOL, CHAR, NATIVE_POINTER, MANAGED_POINTER };
 
-uint32_t TypeSize(ObjectType type);
+uint32_t TypeSize(ValueType type);
 
 
 class VMValue {
 public:
 
-  VMValue() { m_type = ObjectType::UNINITIALIZED; m_value.double_value = 0; }
+  VMValue() { m_type = ValueType::UNINITIALIZED; m_value.double_value = 0; }
   VMValue(const int32_t v) { set_int(v); }
   VMValue(const float v) { set_float(v); }
   VMValue(const double v) { set_double(v); }
@@ -21,85 +21,85 @@ public:
   VMValue(void * const v) { set_native_pointer(v); }
 
   void set_int(const int32_t v) {
-    m_type = ObjectType::INT;
+    m_type = ValueType::INT;
     m_value.int_value = v;
   }
 
   void set_float(const float v) {
-    m_type = ObjectType::FLOAT;
+    m_type = ValueType::FLOAT;
     m_value.float_value = v;
   }
 
   void set_double(const double v) {
-    m_type = ObjectType::DOUBLE;
+    m_type = ValueType::DOUBLE;
     m_value.double_value = v;
   }
 
   void set_bool(const bool v) {
-    m_type = ObjectType::BOOL;
+    m_type = ValueType::BOOL;
     m_value.bool_value = v;
   } 
   
   void set_char(const char v) {
-    m_type = ObjectType::CHAR;
+    m_type = ValueType::CHAR;
     m_value.char_value = v;
   }
   
   void set_native_pointer(void * const v) {
-    m_type = ObjectType::NATIVE_POINTER;
+    m_type = ValueType::NATIVE_POINTER;
     m_value.native_pointer_value = v;
   }
 
   void set_managed_pointer(uint32_t v) {
-    m_type = ObjectType::MANAGED_POINTER;
+    m_type = ValueType::MANAGED_POINTER;
     m_value.managed_pointer_value = v;
   }
 
   int32_t as_int() const {
-    assert_type(ObjectType::INT);
+    assert_type(ValueType::INT);
     return m_value.int_value;
   }
 
   float as_float() const  {
-    assert_type(ObjectType::FLOAT);
+    assert_type(ValueType::FLOAT);
     return m_value.float_value;
   }
 
   double as_double() const  {
-    assert_type(ObjectType::DOUBLE);
+    assert_type(ValueType::DOUBLE);
     return m_value.double_value;
   }
 
   bool as_bool() const  {
-    assert_type(ObjectType::BOOL);
+    assert_type(ValueType::BOOL);
     return m_value.bool_value;
   }
   
   char as_char() const {
-    assert_type(ObjectType::CHAR);
+    assert_type(ValueType::CHAR);
     return m_value.char_value;
   }
 
   void *as_native_pointer() const {
-    assert_type(ObjectType::NATIVE_POINTER);
+    assert_type(ValueType::NATIVE_POINTER);
     return m_value.native_pointer_value;
   }
 
   uint32_t as_managed_pointer() const {
-    assert_type(ObjectType::MANAGED_POINTER);
+    assert_type(ValueType::MANAGED_POINTER);
     return m_value.managed_pointer_value;
   }
 
   std::string to_string() const;
 
 private:
-  void assert_type(const ObjectType t) const {
+  void assert_type(const ValueType t) const {
     if (m_type != t) {
       throw std::runtime_error("Invalid type");
     }
   }
 
-  ObjectType m_type;
+  ValueType m_type;
 
   union {
     int32_t int_value;

@@ -44,7 +44,7 @@ MemoryManager::~MemoryManager() {
 // |1 bit          |  31 bits   | 32 bits         | 32 bits      | rest       |
 // |array mark bit | array type | forward pointer | array length | array data |
 // so 12 byte header containing bookkeeping information and length * sizeof(array type) bytes for array itself
-VMValue MemoryManager::AllocateArray(const ObjectType objectType, const uint32_t length) {
+VMValue MemoryManager::AllocateArray(const ValueType objectType, const uint32_t length) {
   auto requiredSpace = length*TypeSize(objectType) + FORWARD_POINTER_SIZE + TYPE_POINTER_SIZE + ARRAY_LENGTH_FIELD_SIZE;
   requiredSpace = requiredSpace + (ALIGN - requiredSpace % ALIGN) % ALIGN; // ensure alignment
   EnsureFreeMemory(requiredSpace);
@@ -96,7 +96,7 @@ MemoryManager::ArrayReadWriteData MemoryManager::ArrayReadWriteCommon(const VMVa
   EnsureArray(typeField);
 
   auto address = object.as_managed_pointer();
-  ObjectType type = static_cast<ObjectType>(typeField & ~(1 << 31));
+  ValueType type = static_cast<ValueType>(typeField & ~(1 << 31));
 
   auto arrayLength = GetArrayLengthUnchecked(object);
 

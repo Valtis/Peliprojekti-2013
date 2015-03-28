@@ -19,7 +19,7 @@ public:
   MemoryManager &operator=(MemoryManager &&);
   ~MemoryManager();
 
-  VMValue AllocateArray(const ObjectType objectType, const uint32_t length);
+  VMValue AllocateArray(const ValueType objectType, const uint32_t length);
   void WriteToArrayIndex(const VMValue object, const void *value, const uint32_t index, const uint32_t length);
   void ReadFromArrayIndex(const VMValue object, void *value, const uint32_t index, const uint32_t length) const;
 
@@ -32,7 +32,7 @@ private:
 
   struct ArrayReadWriteData {
     uint8_t *data;
-    ObjectType type;
+    ValueType type;
   };
   
   ArrayReadWriteData ArrayReadWriteCommon(const VMValue object, const uint32_t index, const uint32_t length) const;
