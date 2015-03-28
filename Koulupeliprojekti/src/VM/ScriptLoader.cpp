@@ -19,7 +19,17 @@
 
 #define PUSH_INTEGER_TOKEN "PushInteger"
 #define LOAD_STATIC_TOKEN "LoadStatic"
+#define STORE_STATIC_TOKEN "StoreStatic"
 #define INVOKE_NATIVE_TOKEN "InvokeNative"
+#define JUMP_IF_ZERO_TOKEN "JumpIfZero"
+#define JUMP_IF_NEGATIVE_TOKEN "JumpIfNegative"
+#define JUMP_IF_POSITIVE_TOKEN "JUMPIfPositive"
+#define RETURN_TOKEN "Return"
+#define LABEL_TOKEN "Label"
+#define STORE_LOCAL_TOKEN "StoreLocal"
+#define LOAD_LOCAL_TOKEN "LoadLocal"
+
+#define INTEGER_SUBTRACT_TOKEN "IntegerSubtract"
 
 #define END_FUNCTION_TOKEN "endfunction"
 
@@ -113,7 +123,7 @@ void ScriptLoader::AddStaticValue(const std::vector<std::string> &tokens) {
     throw std::string("Unexpected token " + tokens[0] + ". Expected type declaration");
   }
 
-  auto index = m_state.AddPermanentObject(obj);
+  auto index = m_state.AddStaticObject(obj);
   m_staticNameIndexMapping[name] = index;
 }
 
@@ -137,8 +147,13 @@ void ScriptLoader::LoadFunction(const std::string &name) {
   VMFunction function;
   function.SetName(name);
   
-  LoadLocals();
+  auto locals = LoadLocals();
   
+  std::unordered_map<std::string, size_t> labelPositions; // targets for jump instructions
+
+  // contains the jumps where label was not yet processed (jumping forward)
+  // name - placeholder bytecode location
+  std::unordered_map<std::string, size_t> unhandledJumps; 
 
   std::string line;
   while (GetLine(line)) {
@@ -155,19 +170,87 @@ void ScriptLoader::LoadFunction(const std::string &name) {
     auto tokens = Utility::Tokenize(line, " ");
 
     if (tokens[0] == PUSH_INTEGER_TOKEN) {
+      ExpectTokenCount(tokens, 2);
       function.AddByteCode(ByteCode::PUSH_INTEGER);
       function.AddByteCode(static_cast<ByteCode>(ConvertToInteger(tokens[1])));
       
     } else if (tokens[0] == LOAD_STATIC_TOKEN) {
+      ExpectTokenCount(tokens, 2);
       if (m_staticNameIndexMapping.find(tokens[1]) == m_staticNameIndexMapping.end()) {
         throw std::runtime_error("Could not find registered static with name " + tokens[1]);
       }
-      function.AddByteCode(ByteCode::PUSH_CONSTANT_OBJECT);
+      function.AddByteCode(ByteCode::LOAD_STATIC_OBJECT);
       function.AddByteCode(static_cast<ByteCode>(m_staticNameIndexMapping[tokens[1]]));
+
+    } else if (tokens[0] == STORE_STATIC_TOKEN) {
+      ExpectTokenCount(tokens, 2);
+      if (m_staticNameIndexMapping.find(tokens[1]) == m_staticNameIndexMapping.end()) {
+        throw std::runtime_error("Could not find registered static with name " + tokens[1]);
+      }
+      function.AddByteCode(ByteCode::STORE_STATIC_OBJECT);
+      function.AddByteCode(static_cast<ByteCode>(m_staticNameIndexMapping[tokens[1]]));
+
+    } else if (tokens[0] == JUMP_IF_ZERO_TOKEN) {
+      ExpectTokenCount(tokens, 2);
+      function.AddByteCode(ByteCode::JUMP_IF_ZERO);
+      if (labelPositions.find(tokens[1]) == labelPositions.end()) {
+        auto index = function.AddByteCode(ByteCode::NOP);
+        unhandledJumps[tokens[1]] = index;
+      } else {
+        function.AddByteCode(static_cast<ByteCode>(labelPositions[tokens[1]]));
+      }
+
+    } else if (tokens[0] == JUMP_IF_NEGATIVE_TOKEN) {
+      ExpectTokenCount(tokens, 2);
+      function.AddByteCode(ByteCode::JUMP_IF_NEGATIVE);
+      if (labelPositions.find(tokens[1]) == labelPositions.end()) {
+        auto index = function.AddByteCode(ByteCode::NOP);
+        unhandledJumps[tokens[1]] = index;
+      }
+      else {
+        function.AddByteCode(static_cast<ByteCode>(labelPositions[tokens[1]]));
+      }
+
+    }
+    else if (tokens[0] == JUMP_IF_POSITIVE_TOKEN) {
+      ExpectTokenCount(tokens, 2);
+      function.AddByteCode(ByteCode::JUMP_IF_POSITIVE);
+      if (labelPositions.find(tokens[1]) == labelPositions.end()) {
+        auto index = function.AddByteCode(ByteCode::NOP);
+        unhandledJumps[tokens[1]] = index;
+      }
+      else {
+        function.AddByteCode(static_cast<ByteCode>(labelPositions[tokens[1]]));
+      }
 
     }
     else if (tokens[0] == INVOKE_NATIVE_TOKEN) {
+      ExpectTokenCount(tokens, 1);
       function.AddByteCode(ByteCode::INVOKE_NATIVE);
+    } else if (tokens[0] == RETURN_TOKEN) {
+      ExpectTokenCount(tokens, 1);
+      function.AddByteCode(ByteCode::RETURN);
+    } else if (tokens[0] == LABEL_TOKEN) {
+      ExpectTokenCount(tokens, 2);
+      labelPositions[tokens[1]] = function.GetByteCodeCount();
+    } else if (tokens[0] == STORE_LOCAL_TOKEN) {
+      ExpectTokenCount(tokens, 2);
+      if (locals.find(tokens[1]) == locals.end()) {
+        throw std::runtime_error("No local variable '" + tokens[1] + "' defined");
+      }
+      function.AddByteCode(ByteCode::STORE_LOCAL);
+      function.AddByteCode(static_cast<ByteCode>(locals[tokens[1]]));
+
+    } else if (tokens[0] == LOAD_LOCAL_TOKEN) {
+      ExpectTokenCount(tokens, 2);
+      if (locals.find(tokens[1]) == locals.end()) {
+        throw std::runtime_error("No local variable '" + tokens[1] + "' defined");
+      }
+      function.AddByteCode(ByteCode::LOAD_LOCAL);
+      function.AddByteCode(static_cast<ByteCode>(locals[tokens[1]]));
+    } else if (tokens[0] == INTEGER_SUBTRACT_TOKEN) {
+      ExpectTokenCount(tokens, 1);
+      function.AddByteCode(ByteCode::SUB_INTEGER);
     } else  {
       throw std::runtime_error("Unexpected token '" + tokens[0] + "'. Expected a command");
     }
@@ -175,17 +258,52 @@ void ScriptLoader::LoadFunction(const std::string &name) {
 
   }
 
+  HandleUnhandledJumps(function, unhandledJumps, labelPositions);
+
+
+  function.SetLocalCount(locals.size());
   function.AddByteCode(ByteCode::RETURN);
   m_state.AddFunction(name, function);
 }
 
-void ScriptLoader::LoadLocals()
+
+void ScriptLoader::HandleUnhandledJumps(VMFunction &function, std::unordered_map<std::string, size_t> &unhandledJumps, std::unordered_map<std::string, size_t> &labelPositions)
 {
+  for (auto pair : unhandledJumps) {
+    if (labelPositions.find(pair.first) == labelPositions.end()) {
+      throw std::runtime_error("Could not find label '" + pair.first + "'");
+    }
+    function.ChangeByteCode(pair.second, static_cast<ByteCode>(labelPositions[pair.first]));
+  }
+}
+
+
+
+std::unordered_map<std::string, size_t> ScriptLoader::LoadLocals()
+{
+  
   std::string line;
   GetLine(line);
   ExpectToken(line, LOCALS_TOKEN);
-  GetLine(line);
-  ExpectToken(line, END_LOCALS_TOKEN);
+  std::unordered_map<std::string, uint32_t> localNameToIndexMappings;
+  size_t localPos = 0;
+  while (GetLine(line)) {
+    if (line.empty()) {
+      continue;
+    }
+    if (line == END_LOCALS_TOKEN) {
+      break;
+    }
+
+    auto tokens = Utility::Tokenize(line, " ");
+    ExpectTokenCount(tokens, 1);
+
+    if (localNameToIndexMappings.find(tokens[0]) != localNameToIndexMappings.end()) {
+      throw std::runtime_error("Local variable " + tokens[0] + " has already been defined");
+    }
+    localNameToIndexMappings[tokens[0]] = localPos++;
+  }
+  return localNameToIndexMappings;
 }
 
 
@@ -201,3 +319,4 @@ bool ScriptLoader::GetLine(std::string &line) {
 
   return true;
 }
+

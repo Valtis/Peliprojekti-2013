@@ -66,14 +66,29 @@ void VM::Execute(VMState &state) {
     auto code = m_frames.back().GetNextInstruction();
 
     switch (code) {
-
+    case ByteCode::LOAD_LOCAL:
+      Op::LoadLocal(state, m_stack, m_frames);
+      break;
+    case ByteCode::STORE_LOCAL:
+      Op::StoreLocal(state, m_stack, m_frames);
+      break;
     case ByteCode::PUSH_INTEGER:
       Op::PushInteger(m_stack, m_frames);
       break; 
-    case ByteCode::PUSH_CONSTANT_OBJECT: 
-      Op::PushConstantObject(state, m_stack, m_frames);
+    case ByteCode::LOAD_STATIC_OBJECT: 
+      Op::LoadStaticObject(state, m_stack, m_frames);
       break;
-
+    case ByteCode::STORE_STATIC_OBJECT:
+      Op::LoadStaticObject(state, m_stack, m_frames);
+    case ByteCode::JUMP_IF_ZERO:
+      Op::JumpIfZero(state, m_stack, m_frames);
+      break;
+    case ByteCode::JUMP_IF_NEGATIVE:
+      Op::JumpIfNegative(state, m_stack, m_frames);
+      break; 
+    case ByteCode::JUMP_IF_POSITIVE:
+        Op::JumpIfPositive(state, m_stack, m_frames);
+        break;
     case ByteCode::ADD_INTEGER:
       Op::AddInteger(m_stack);
       break;
@@ -99,6 +114,8 @@ void VM::Execute(VMState &state) {
       if (!Op::Return(m_frames)) {
         return;
       }
+      break;
+    case ByteCode::NOP:
       break;
     default: 
     {

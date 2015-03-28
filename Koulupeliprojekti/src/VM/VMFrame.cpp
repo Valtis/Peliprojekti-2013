@@ -3,7 +3,7 @@
 VMFrame::VMFrame() : VMFrame(nullptr) { }
 
 VMFrame::VMFrame(const VMFunction *function) : m_function(function), m_current_instruction(0) {
-
+  m_localVariables.resize(function->GetLocalCount());
 }
 
 ByteCode VMFrame::GetNextInstruction() {
@@ -25,4 +25,12 @@ std::string VMFrame::GetFunctionName() const {
 
 uint32_t VMFrame::GetProgramCounter() const {
   return m_current_instruction;
+}
+
+void VMFrame::SetLocalVariable(size_t index, VMValue value) {
+  m_localVariables.at(index) = value;
+}
+
+VMValue VMFrame::GetLocalVariable(size_t index) const {
+  return m_localVariables.at(index);
 }

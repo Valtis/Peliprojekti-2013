@@ -26,8 +26,17 @@ const VMFunction *VMState::GetFunction(const std::string &name) const {
   return &iter->second;
 }
 
-VMValue VMState::GetPermanentStorageObject(uint32_t index) const {
-  return m_permanent_storage.at(index);
+void VMState::SetStaticObject(uint32_t index, VMValue value) {
+  m_static_objects.at(index) = value;
+}
+
+VMValue VMState::GetStaticObject(uint32_t index) const {
+  return m_static_objects.at(index);
+}
+
+size_t VMState::AddStaticObject(VMValue value) {
+  m_static_objects.push_back(value);
+  return m_static_objects.size() - 1;
 }
 
 NativeBinding VMState::GetNativeBinding(const std::string &name) const {
@@ -42,10 +51,6 @@ void VMState::AddNativeBinding(const std::string &name, NativeBinding binding) {
   m_native_bindings[name] = binding;
 }
 
-size_t VMState::AddPermanentObject(VMValue value) {
-  m_permanent_storage.push_back(value);
-  return m_permanent_storage.size() - 1;
-}
 
 void VMState::AddFunction(const std::string &name, VMFunction function) {
   m_functions[name] = function;

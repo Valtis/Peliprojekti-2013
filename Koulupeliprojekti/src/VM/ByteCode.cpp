@@ -9,8 +9,14 @@ const char *GetByteCodeName(ByteCode code) {
       return "RETURN";
     case ByteCode::PUSH_INTEGER:
       return "PUSH_INTEGER";
-    case ByteCode::PUSH_CONSTANT_OBJECT:
-      return "PUSH_CONSTANT_OBJECT";
+    case ByteCode::STORE_STATIC_OBJECT:
+      return "STORE_STATIC_OBJECT";
+    case ByteCode::LOAD_STATIC_OBJECT:
+      return "LOAD_STATIC_OBJECT";
+    case ByteCode::STORE_LOCAL:
+      return "STORE_LOCAL";
+    case ByteCode::LOAD_LOCAL:
+      return "LOAD_LOCAL";
     case ByteCode::INVOKE_NATIVE:
       return "INVOKE_NATIVE";
     case ByteCode::INVOKE_MANAGED:
@@ -23,6 +29,12 @@ const char *GetByteCodeName(ByteCode code) {
       return "MUL_INTEGER";
     case ByteCode::DIV_INTEGER:
       return "DIV_INTEGER";
+    case ByteCode::JUMP_IF_ZERO:
+      return "JUMP_IF_ZERO";
+    case ByteCode::JUMP_IF_NEGATIVE:
+      return "JUMP_IF_NEGATIVE";
+    case ByteCode::JUMP_IF_POSITIVE:
+      return "Jump_IF_POSITIVE";
     default:
       return "Unknown code";
   }

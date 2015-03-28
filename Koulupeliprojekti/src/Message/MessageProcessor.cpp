@@ -40,8 +40,12 @@ void MessageProcessor::PassMessageToHandlers(const std::vector<PrioritizedCallba
 
 void MessageProcessor::RegisterScriptMessageHandler(VMState *state, int type, int priority, std::string scriptName) {
   MessageCallback callback = [=](Message *message) -> MessageHandling {
-    auto messageHandling = VMInstance().InvokeFunction(*state, scriptName, {message});
-    return static_cast<MessageHandling>(messageHandling.as_int());
+    auto messageHandling = VMInstance().InvokeFunction(*state, scriptName, { message });
+    try {
+      return static_cast<MessageHandling>(messageHandling.as_int());
+    } catch (std::exception &ex) {
+      throw std::runtime_error(std::string("An error occurred when parsing script message handler return value: ") + ex.what());
+    }
   };
 
   m_messageHandlers[static_cast<MessageType>(type)].push_back({ static_cast<Priority>(priority), callback });

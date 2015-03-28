@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <vector>
 #include <unordered_map>
+
+class VMFunction;
 class VMState;
 
 
@@ -19,7 +21,8 @@ private:
   void LoadFunction(const std::string &name);
   bool GetLine(std::string &line);
   void AddStaticValue(const std::vector<std::string> &tokens);
-  void LoadLocals();
+  std::unordered_map<std::string, size_t> LoadLocals();
+  void HandleUnhandledJumps(VMFunction &function, std::unordered_map<std::string, size_t> &unhandledJumps, std::unordered_map<std::string, size_t> &labelPositions);
   VMState &m_state;
   std::string m_path;
   uint32_t m_line;
