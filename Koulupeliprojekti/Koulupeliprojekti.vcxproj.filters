@@ -408,6 +408,9 @@
     <ClInclude Include="include\VM\ScriptLoader.h">
       <Filter>Header Files\VM</Filter>
     </ClInclude>
+    <ClInclude Include="include\Message\ScriptMessageInterface.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -634,6 +637,9 @@
     </ClCompile>
     <ClCompile Include="src\VM\ScriptLoader.cpp">
       <Filter>Source Files\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Message\ScriptMessageInterface.cpp">
+      <Filter>Source Files\Message</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

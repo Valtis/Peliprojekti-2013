@@ -16,7 +16,8 @@ enum class ByteCode : uint32_t {
   DIV_INTEGER,
   JUMP_IF_ZERO,
   JUMP_IF_NEGATIVE,
-  JUMP_IF_POSITIVE };
+  JUMP_IF_POSITIVE, 
+  DOUBLE_TO_INTEGER };
 
 
 const char *GetByteCodeName(ByteCode code);

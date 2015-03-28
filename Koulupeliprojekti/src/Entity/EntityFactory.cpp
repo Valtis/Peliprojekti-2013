@@ -1,6 +1,7 @@
 #include "Entity/EntityFactory.h"
 #include "Entity/Entity.h"
 #include "UI/InputManager.h"
+#include "Message/ScriptMessageInterface.h"
 #include "Message/SpawnEntityMessage.h"
 #include "Component/FlyingAiComponent.h"
 #include "Component/LocationComponent.h"
@@ -16,10 +17,11 @@
 #include "Component/Scripts/EndLevelScriptComponent.h"
 #include "Component/Scripts/DamageColliderScript.h"
 #include "Component/Scripts/BlinkScript.h"
-#include "Component/Scripts/TempInvulnerabilityScript.h"
 #include "Component/Scripts/HealthPickupScript.h"
 #include "Component/Scripts/SpawnHealthPickupOnDeathScript.h"
 #include "Component/Scripts/QuitGameOnDeathScript.h"
+#include "Component/Scripts/TempInvulnerabilityScript.h"
+
 
 #include "VM/VmState.h"
 #include "VM/FFI/NativeBinding.h"
@@ -146,11 +148,13 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   std::unique_ptr<Entity> e(new Entity);
 
   // placeholder for testing purposes
-  VMState temp = VMState{ "data/scripts/invulnerabilityOnHit.txt" };
-  auto binding = CREATE_4_ARGS_BINDING(Entity, RegisterScriptMessageHandler, VMState *, int, int, std::string);
+  VMState invulnerabilityOnHitScript = VMState{ "data/scripts/invulnerabilityOnHit.txt" };
+  auto registerBinding = CREATE_4_ARGS_BINDING(Entity, RegisterScriptMessageHandler, VMState *, int, int, std::string);
+  auto blinkMessageBinding = CREATE_2_ARGS_BINDING(ScriptMessageInterface, SendBlinkingMessage, Entity *, int);
 
-  temp.AddNativeBinding("RegisterMessageHandler", binding);
-  e->AddVmScript(temp);
+  invulnerabilityOnHitScript.AddNativeBinding("RegisterMessageHandler", registerBinding);
+  invulnerabilityOnHitScript.AddNativeBinding("SendBlinkMessage", blinkMessageBinding);
+  e->AddVmScript(invulnerabilityOnHitScript);
 
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
   std::unique_ptr<LocationComponent> l(new LocationComponent);

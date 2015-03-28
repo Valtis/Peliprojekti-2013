@@ -15,17 +15,14 @@ class VM {
 public:
   VM();
   VMValue InvokeFunction(VMState &state, const std::string &functionName, std::vector<VMValue> objects);
-
-
-
-
+  
 private:
 
   void InitializeVMForExecution(const std::string & functionName, std::vector<VMValue> objects, const VMFunction *function);
   void Execute(VMState &state);
   VMValue ReturnValue();
   void BuildStackTraceAndThrow(const std::exception &ex);
-
+  std::string CreateStackTrace();
   void AddBasicScriptInfoToErrorMessage(std::string &stack_trace);
   void AddValueStackToErrorMessage(std::string &stack_trace);
   void AddFrameStackToErrorMessage(std::string &stack_trace);

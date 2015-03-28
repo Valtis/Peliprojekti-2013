@@ -15,7 +15,6 @@ public:
 
   void Load();
 private:
-
   void LoadStatics();
   void LoadFunctions();
   void LoadFunction(const std::string &name);

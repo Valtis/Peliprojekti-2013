@@ -8,6 +8,7 @@
 #define STATICS_TOKEN "statics"
 #define STRING_TOKEN "string"
 #define INTEGER_TOKEN "integer"
+#define NATIVE_POINTER_TOKEN "native_pointer"
 #define AS_TOKEN "as"
 
 #define END_STATICS_TOKEN "endstatics"
@@ -30,6 +31,8 @@
 #define LOAD_LOCAL_TOKEN "LoadLocal"
 
 #define INTEGER_SUBTRACT_TOKEN "IntegerSubtract"
+
+#define DOUBLE_TO_INTEGER_TOKEN "DoubleToInteger"
 
 #define END_FUNCTION_TOKEN "endfunction"
 
@@ -119,8 +122,11 @@ void ScriptLoader::AddStaticValue(const std::vector<std::string> &tokens) {
     obj = VMValue{ ConvertToInteger(value) };
     
   }
+  else if (tokens[0] == NATIVE_POINTER_TOKEN) {
+    obj.set_native_pointer(nullptr);
+  }
   else {
-    throw std::string("Unexpected token " + tokens[0] + ". Expected type declaration");
+    throw std::runtime_error("Unexpected token " + tokens[0] + ". Expected type declaration");
   }
 
   auto index = m_state.AddStaticObject(obj);
@@ -251,7 +257,11 @@ void ScriptLoader::LoadFunction(const std::string &name) {
     } else if (tokens[0] == INTEGER_SUBTRACT_TOKEN) {
       ExpectTokenCount(tokens, 1);
       function.AddByteCode(ByteCode::SUB_INTEGER);
-    } else  {
+    } else if (tokens[0] == DOUBLE_TO_INTEGER_TOKEN) {
+      ExpectTokenCount(tokens, 1);
+      function.AddByteCode(ByteCode::DOUBLE_TO_INTEGER);
+    }
+    else  {
       throw std::runtime_error("Unexpected token '" + tokens[0] + "'. Expected a command");
     }
 

@@ -112,4 +112,3 @@ std::unique_ptr<Message> MessageFactory::CreateChangeAnimationMessage(int id)
 {
   return std::unique_ptr<Message>(new AnimationChangeMessage(id));
 }
-

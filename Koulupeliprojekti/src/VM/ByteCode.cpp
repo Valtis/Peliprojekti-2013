@@ -35,6 +35,8 @@ const char *GetByteCodeName(ByteCode code) {
       return "JUMP_IF_NEGATIVE";
     case ByteCode::JUMP_IF_POSITIVE:
       return "Jump_IF_POSITIVE";
+    case ByteCode::DOUBLE_TO_INTEGER:
+      return "DOUBLE_TO_INTEGER";
     default:
       return "Unknown code";
   }

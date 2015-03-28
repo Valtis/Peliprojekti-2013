@@ -45,6 +45,8 @@ namespace Op {
   void SubInteger(std::vector<VMValue> &stack) {
     auto second = PopValue(stack).as_int();
     auto first = PopValue(stack).as_int();
+
+    LoggerManager::GetLog("foobar.txt").AddLine(LogLevel::INFO, std::to_string(first) + "-" + std::to_string(second));
     PushValue(first - second, stack);
   }
 
@@ -89,6 +91,7 @@ namespace Op {
   void JumpIfZero(const VMState &state, std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
     auto jumpDestination = (uint32_t)frames.back().GetNextInstruction();
     auto value = PopValue(stack);
+
     if (value.as_int() == 0) {
       frames.back().SetNextInstruction(jumpDestination);
     }
@@ -120,6 +123,12 @@ namespace Op {
   void LoadLocal(const VMState &state, std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
     auto index = (uint32_t)frames.back().GetNextInstruction();
     PushValue(frames.back().GetLocalVariable(index), stack);
+  }
+
+  void DoubleToInteger(std::vector<VMValue> &stack) {
+    auto value = PopValue(stack);
+    value.set_int((int32_t)value.as_double());
+    PushValue(value, stack);
   }
 
 

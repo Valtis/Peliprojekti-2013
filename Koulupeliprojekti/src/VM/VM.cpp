@@ -23,7 +23,7 @@ VMValue VM::InvokeFunction(VMState &state, const std::string &functionName, std:
   if (function == nullptr) {
     return{};
   }
- 
+
   InitializeVMForExecution(functionName, objects, function);
   
   try {
@@ -38,14 +38,6 @@ VMValue VM::InvokeFunction(VMState &state, const std::string &functionName, std:
 
 void VM::InitializeVMForExecution(const std::string & functionName, std::vector<VMValue> objects, const VMFunction *function)
 {
-  auto &log = LoggerManager::GetLog(VM_LOG);
-  log.AddLine(LogLevel::DEBUG, "Invoking script function " + functionName);
-
-  int i = 0;
-  for (const auto &o : objects) {
-    log.AddLine(LogLevel::DEBUG, "Parameter " + std::to_string(++i) + ": " + o.to_string());
-  }
-
   m_stack.clear();
   m_frames.clear();
 
@@ -79,7 +71,8 @@ void VM::Execute(VMState &state) {
       Op::LoadStaticObject(state, m_stack, m_frames);
       break;
     case ByteCode::STORE_STATIC_OBJECT:
-      Op::LoadStaticObject(state, m_stack, m_frames);
+      Op::StoreStaticObject(state, m_stack, m_frames);
+      break;
     case ByteCode::JUMP_IF_ZERO:
       Op::JumpIfZero(state, m_stack, m_frames);
       break;
@@ -87,8 +80,8 @@ void VM::Execute(VMState &state) {
       Op::JumpIfNegative(state, m_stack, m_frames);
       break; 
     case ByteCode::JUMP_IF_POSITIVE:
-        Op::JumpIfPositive(state, m_stack, m_frames);
-        break;
+      Op::JumpIfPositive(state, m_stack, m_frames);
+      break;
     case ByteCode::ADD_INTEGER:
       Op::AddInteger(m_stack);
       break;
@@ -115,6 +108,9 @@ void VM::Execute(VMState &state) {
         return;
       }
       break;
+
+    case ByteCode::DOUBLE_TO_INTEGER:
+      Op::DoubleToInteger(m_stack);
     case ByteCode::NOP:
       break;
     default: 
@@ -145,14 +141,20 @@ void VM::BuildStackTraceAndThrow(const std::exception &ex) {
   std::string error = std::string("An error has occurred during script execution: ") + ex.what();
   std::string stack_trace = "\n" + error + "\n";
  
-  AddBasicScriptInfoToErrorMessage(stack_trace);
-  AddFrameStackToErrorMessage(stack_trace);
-  AddValueStackToErrorMessage(stack_trace);
+  stack_trace += CreateStackTrace();
 
 
   log.AddLine(LogLevel::ERROR, stack_trace);
 
   throw std::runtime_error(error);
+}
+
+std::string VM::CreateStackTrace() {
+  std::string stackTrace;
+  AddBasicScriptInfoToErrorMessage(stackTrace);
+  AddFrameStackToErrorMessage(stackTrace);
+  AddValueStackToErrorMessage(stackTrace);
+  return stackTrace;
 }
 
 void VM::AddBasicScriptInfoToErrorMessage(std::string &stack_trace) {

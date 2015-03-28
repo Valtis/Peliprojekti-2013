@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Message/ScriptMessageInterface.h"
 #include "Component/Component.h"
 #include "Message/MessageProcessor.h"
 #include "VM/VMState.h"
@@ -33,4 +33,5 @@ private:
   std::vector<VMState> m_vmScripts;
   std::vector<std::unique_ptr<Component>> m_scripts;
   std::map<ComponentType, std::unique_ptr<Component>> m_components;
+  ScriptMessageInterface m_messageInterface;
 };

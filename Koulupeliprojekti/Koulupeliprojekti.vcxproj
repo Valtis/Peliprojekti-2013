@@ -65,6 +65,7 @@
     <ClInclude Include="include\Message\MessageProcessor.h" />
     <ClInclude Include="include\Message\PlaySoundEffectMessage.h" />
     <ClInclude Include="include\Message\ResetEntityPositionMessage.h" />
+    <ClInclude Include="include\Message\ScriptMessageInterface.h" />
     <ClInclude Include="include\Message\SetGraphicsVisibilityMessage.h" />
     <ClInclude Include="include\Message\SetLocationMessage.h" />
     <ClInclude Include="include\Message\SetVelocityMessage.h" />
@@ -153,6 +154,7 @@
     <ClCompile Include="src\Message\Message.cpp" />
     <ClCompile Include="src\Message\MessageFactory.cpp" />
     <ClCompile Include="src\Message\MessageProcessor.cpp" />
+    <ClCompile Include="src\Message\ScriptMessageInterface.cpp" />
     <ClCompile Include="src\Physics\PhysicsHandler.cpp" />
     <ClCompile Include="src\Sound\Music.cpp" />
     <ClCompile Include="src\Sound\SoundEffects.cpp" />
