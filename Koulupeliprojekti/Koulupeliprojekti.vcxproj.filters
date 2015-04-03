@@ -411,6 +411,12 @@
     <ClInclude Include="include\Message\ScriptMessageInterface.h">
       <Filter>Header Files\Message</Filter>
     </ClInclude>
+    <ClInclude Include="include\VM\FFI\VariadicFunctionCallTemplates.h">
+      <Filter>Header Files\VM\FFI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VM\FFI\FunctionArgumentTupleTemplates.h">
+      <Filter>Header Files\VM\FFI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">

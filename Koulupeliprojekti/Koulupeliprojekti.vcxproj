@@ -98,8 +98,10 @@
     <ClInclude Include="include\Utility\Tick.h" />
     <ClInclude Include="include\VM\ByteCode.h" />
     <ClInclude Include="include\VM\FFI\ConversionFunctions.h" />
+    <ClInclude Include="include\VM\FFI\FunctionArgumentTupleTemplates.h" />
     <ClInclude Include="include\VM\FFI\NativeBinding.h" />
     <ClInclude Include="include\VM\FFI\NativeBindingTypedef.h" />
+    <ClInclude Include="include\VM\FFI\VariadicFunctionCallTemplates.h" />
     <ClInclude Include="include\VM\MemoryManager.h" />
     <ClInclude Include="include\VM\ScriptLoader.h" />
     <ClInclude Include="include\VM\VM.h" />
