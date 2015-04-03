@@ -9,6 +9,8 @@ const char *GetByteCodeName(ByteCode code) {
       return "RETURN";
     case ByteCode::PUSH_INTEGER:
       return "PUSH_INTEGER";
+    case ByteCode::POP:
+      return "POP";
     case ByteCode::STORE_STATIC_OBJECT:
       return "STORE_STATIC_OBJECT";
     case ByteCode::LOAD_STATIC_OBJECT:
@@ -37,6 +39,8 @@ const char *GetByteCodeName(ByteCode code) {
       return "Jump_IF_POSITIVE";
     case ByteCode::DOUBLE_TO_INTEGER:
       return "DOUBLE_TO_INTEGER";
+    case ByteCode::ALLOCATE_INTEGER_ARRAY:
+      return "ALLOCATE_INTEGER_ARRAY";
     default:
       return "Unknown code";
   }

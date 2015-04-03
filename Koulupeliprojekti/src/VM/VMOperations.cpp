@@ -6,6 +6,7 @@
 #include "VM/FFI/ConversionFunctions.h"
 #include "VM/FFI/NativeBinding.h"
 
+#include "VM/MemoryManager.h"
 #include <vector>
 
 namespace Op {
@@ -129,5 +130,8 @@ namespace Op {
     PushValue(value, stack);
   }
 
-
+  void AllocateIntegerArray(std::vector<VMValue> &stack) {
+    auto size = PopValue(stack);
+    PushValue(MemMgrInstance().AllocateArray(ValueType::INT, size.as_int()), stack);
+  }
 }

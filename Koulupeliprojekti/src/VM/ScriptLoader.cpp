@@ -17,22 +17,25 @@
 #define FUNCTION_TOKEN "function"
 #define LOCALS_TOKEN "locals"
 #define END_LOCALS_TOKEN "endlocals"
-
+#define POP_TOKEN "Pop"
 #define PUSH_INTEGER_TOKEN "PushInteger"
 #define LOAD_STATIC_TOKEN "LoadStatic"
 #define STORE_STATIC_TOKEN "StoreStatic"
 #define INVOKE_NATIVE_TOKEN "InvokeNative"
 #define JUMP_IF_ZERO_TOKEN "JumpIfZero"
 #define JUMP_IF_NEGATIVE_TOKEN "JumpIfNegative"
-#define JUMP_IF_POSITIVE_TOKEN "JUMPIfPositive"
+#define JUMP_IF_POSITIVE_TOKEN "JumpIfPositive"
 #define RETURN_TOKEN "Return"
 #define LABEL_TOKEN "Label"
 #define STORE_LOCAL_TOKEN "StoreLocal"
 #define LOAD_LOCAL_TOKEN "LoadLocal"
 
+
 #define INTEGER_SUBTRACT_TOKEN "IntegerSubtract"
 
 #define DOUBLE_TO_INTEGER_TOKEN "DoubleToInteger"
+#define ALLOCATE_INTEGER_ARRAY_TOKEN "AllocateIntegerArray"
+
 
 #define END_FUNCTION_TOKEN "endfunction"
 
@@ -172,14 +175,18 @@ void ScriptLoader::LoadFunction(const std::string &name) {
     }
 
 
-    // TODO - CLEANUP
+    // TODO - CLEANUP (seriously, it's horrible)
     auto tokens = Utility::Tokenize(line, " ");
-
-    if (tokens[0] == PUSH_INTEGER_TOKEN) {
+    if (tokens[0] == POP_TOKEN) {
+      ExpectTokenCount(tokens, 1);
+      function.AddByteCode(ByteCode::POP);
+    } else if (tokens[0] == ALLOCATE_INTEGER_ARRAY_TOKEN) {
+      ExpectTokenCount(tokens, 1);
+      function.AddByteCode(ByteCode::ALLOCATE_INTEGER_ARRAY);
+    } else if (tokens[0] == PUSH_INTEGER_TOKEN) {
       ExpectTokenCount(tokens, 2);
       function.AddByteCode(ByteCode::PUSH_INTEGER);
       function.AddByteCode(static_cast<ByteCode>(ConvertToInteger(tokens[1])));
-      
     } else if (tokens[0] == LOAD_STATIC_TOKEN) {
       ExpectTokenCount(tokens, 2);
       if (m_staticNameIndexMapping.find(tokens[1]) == m_staticNameIndexMapping.end()) {

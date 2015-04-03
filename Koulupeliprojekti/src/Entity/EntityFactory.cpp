@@ -160,6 +160,8 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   invulnerabilityOnHitScript.AddNativeBinding("SendBlinkMessage", blinkMessageBinding);
   e->AddVmScript(invulnerabilityOnHitScript);
 
+  e->AddVmScript(VMState{"data/scripts/SpendTonsOfMemory.txt"});
+
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
   std::unique_ptr<LocationComponent> l(new LocationComponent);
   std::unique_ptr<VelocityComponent> v(new VelocityComponent(5, 13));

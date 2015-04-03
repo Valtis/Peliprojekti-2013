@@ -3,7 +3,8 @@
 enum class ByteCode : uint32_t { 
   NOP, 
   RETURN, 
-  PUSH_INTEGER, 
+  PUSH_INTEGER,
+  POP,
   STORE_STATIC_OBJECT, 
   LOAD_STATIC_OBJECT,
   STORE_LOCAL,
@@ -17,7 +18,9 @@ enum class ByteCode : uint32_t {
   JUMP_IF_ZERO,
   JUMP_IF_NEGATIVE,
   JUMP_IF_POSITIVE, 
-  DOUBLE_TO_INTEGER };
+  DOUBLE_TO_INTEGER,
+  ALLOCATE_INTEGER_ARRAY
+};
 
 
 const char *GetByteCodeName(ByteCode code);

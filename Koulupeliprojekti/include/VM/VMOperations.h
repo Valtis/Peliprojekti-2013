@@ -29,6 +29,8 @@ namespace Op {
 
   void DoubleToInteger(std::vector<VMValue> &stack);
 
+  void AllocateIntegerArray(std::vector<VMValue> &stack);
+
   // returns true if there are still frames remaining after returning
   bool Return(std::vector<VMFrame> &frames);
 }

@@ -1,0 +1,36 @@
+statics
+endstatics
+
+# allocates 400 megabytes of memory just because
+function update
+  locals
+    counter
+  endlocals
+  
+  # initialize counter to 100 and save it
+  PushInteger 1000
+  StoreLocal counter
+  
+  Label start
+  
+  # allocate an array of integers with size of 100000 (~400 kilobytes)
+  PushInteger 100000
+  AllocateIntegerArray
+  
+  # pop the reference from stack, thus losing the reference
+  Pop
+  
+  # subtract counter by one  
+  LoadLocal counter
+  PushInteger 1
+  IntegerSubtract
+  
+  #store result for future
+  StoreLocal counter
+  
+  # check if counter is still positive
+  LoadLocal counter
+  JumpIfPositive start
+  
+  
+endfunction

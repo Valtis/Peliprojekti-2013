@@ -58,6 +58,10 @@ void VM::Execute(VMState &state) {
     auto code = m_frames.back().GetNextInstruction();
 
     switch (code) {
+    case ByteCode::POP:
+      Op::PopValue(m_stack);
+    return;
+
     case ByteCode::LOAD_LOCAL:
       Op::LoadLocal(state, m_stack, m_frames);
       break;
@@ -103,14 +107,18 @@ void VM::Execute(VMState &state) {
       Op::InvokeManaged(state, m_stack, m_frames);
       break;
 
+    case ByteCode::ALLOCATE_INTEGER_ARRAY:
+      Op::AllocateIntegerArray(m_stack);
+      break;
+    case ByteCode::DOUBLE_TO_INTEGER:
+      Op::DoubleToInteger(m_stack);
+
     case ByteCode::RETURN:
       if (!Op::Return(m_frames)) {
         return;
       }
       break;
-
-    case ByteCode::DOUBLE_TO_INTEGER:
-      Op::DoubleToInteger(m_stack);
+    
     case ByteCode::NOP:
       break;
     default: 
