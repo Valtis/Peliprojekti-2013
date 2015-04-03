@@ -23,6 +23,7 @@
 #include "Component/Scripts/TempInvulnerabilityScript.h"
 
 
+#include "Message/ScriptMessageInterface.h"
 #include "VM/VmState.h"
 #include "VM/FFI/NativeBinding.h"
 
@@ -143,15 +144,17 @@ void CreateHealthPickup(Entity *e, SpawnEntityMessage *msg)
   e->AddScript(std::unique_ptr<Component>(new HealthPickupScript(1)));
 }
 
+
 std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &input)
 {
   std::unique_ptr<Entity> e(new Entity);
 
   // placeholder for testing purposes
   VMState invulnerabilityOnHitScript = VMState{ "data/scripts/invulnerabilityOnHit.txt" };
-  auto registerBinding = CREATE_NATIVE_BINDING(Entity, RegisterScriptMessageHandler, VMState *, int, int, std::string);
-  auto blinkMessageBinding = CREATE_NATIVE_BINDING(ScriptMessageInterface, SendBlinkingMessage, Entity *, int);
+  auto registerBinding = CREATE_NATIVE_CLASS_BINDING(Entity, RegisterScriptMessageHandler, VMState *, int, int, std::string);
+ // auto blinkMessageBinding = CREATE_NATIVE_CLASS_BINDING(ScriptMessageInterface, SendBlinkingMessage, Entity *, int);
 
+  auto blinkMessageBinding = CREATE_NATIVE_FREE_BINDING(ScriptMessageInterface::SendBlinkingMessage, Entity *, int);
   invulnerabilityOnHitScript.AddNativeBinding("RegisterMessageHandler", registerBinding);
   invulnerabilityOnHitScript.AddNativeBinding("SendBlinkMessage", blinkMessageBinding);
   e->AddVmScript(invulnerabilityOnHitScript);

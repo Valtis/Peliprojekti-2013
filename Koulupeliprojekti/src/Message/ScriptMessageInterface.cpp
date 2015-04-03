@@ -4,7 +4,12 @@
 #include "VM/VM.h"
 #include "Utility/LoggerManager.h"
 
-void ScriptMessageInterface::SendBlinkingMessage(Entity *entity, int duration) {
+namespace ScriptMessageInterface {
+void SendBlinkingMessage(Entity *entity, int duration) {
+  //LoggerManager::GetLog("foobar.txt").AddLine(LogLevel::INFO, std::string("Invoking message creation with entity ")
+    // + std::to_string(uint64_t(entity)) + " and duration  " + std::to_string(duration));
   auto message = MessageFactory::CreateStartBlinkingMessage(duration);
   entity->SendMessage(message.get());
+}
+
 }

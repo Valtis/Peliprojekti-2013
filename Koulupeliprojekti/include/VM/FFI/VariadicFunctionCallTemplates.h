@@ -25,13 +25,13 @@ void CallMemberFunction(Function f, Pointer p, Tuple params) {
 }
 // would be nice if these could somehow merged to the above (or vice versa), as this is basically code duplication. 
 // Maybe figure out how to bind the object back to the member function
-template<typename Function, typename Pointer, typename Tuple, int ...S>
-void CallFreeFunctionImpl(Function f, Pointer p, Tuple params, seq<S...>) {
-  f(p, std::get<S>(params) ...);
+template<typename Function, typename Tuple, int ...S>
+void CallFreeFunctionImpl(Function f, Tuple params, seq<S...>) {
+  f(std::get<S>(params) ...);
 }
 
 template <typename Function, typename Tuple, typename... Args>
 void CallFreeFunction(Function f, Tuple params) {
-  CallFreeFunctionImpl(f, p, params, typename gens<sizeof...(Args)>::type());
+  CallFreeFunctionImpl(f, params, typename gens<sizeof...(Args)>::type());
 }
 

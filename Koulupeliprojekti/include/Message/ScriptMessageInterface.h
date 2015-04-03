@@ -2,7 +2,6 @@
 
 class Entity;
 
-class ScriptMessageInterface {
-public:
+namespace ScriptMessageInterface {
   void SendBlinkingMessage(Entity *entity, int duration);
 };
