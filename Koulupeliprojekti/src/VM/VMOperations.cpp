@@ -45,8 +45,6 @@ namespace Op {
   void SubInteger(std::vector<VMValue> &stack) {
     auto second = PopValue(stack).as_int();
     auto first = PopValue(stack).as_int();
-
-    LoggerManager::GetLog("foobar.txt").AddLine(LogLevel::INFO, std::to_string(first) + "-" + std::to_string(second));
     PushValue(first - second, stack);
   }
 

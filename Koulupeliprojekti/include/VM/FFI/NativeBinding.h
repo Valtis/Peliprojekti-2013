@@ -10,23 +10,13 @@
 #include "VM/VMOperations.h"
 
 
-// helper macros hiding the templates. TODO: Check if these can be handled with single variadic macro instead
-#define CREATE_2_ARGS_BINDING(CLASS, FUNCTION, FIRST_PARAM, SECOND_PARAM)  \
-CreateNativeBinding<decltype(GetReturnType(&CLASS::FUNCTION)), \
-                    CLASS,          \
-                    decltype(std::mem_fn(&CLASS::FUNCTION)), \
-                    FIRST_PARAM,    \
-                    SECOND_PARAM>(std::mem_fn(&CLASS::FUNCTION))
 
-#define CREATE_4_ARGS_BINDING(CLASS, FUNCTION, FIRST_PARAM, SECOND_PARAM, THIRD_PARAM, FOURTH_PARAM)  \
+// helper macro for registering native binding
+ #define CREATE_NATIVE_BINDING(CLASS, FUNCTION,  ...) \
 CreateNativeBinding<decltype(GetReturnType(&CLASS::FUNCTION)), \
-                    CLASS,          \
-                    decltype(std::mem_fn(&CLASS::FUNCTION)), \
-                    FIRST_PARAM,    \
-                    SECOND_PARAM,   \
-                    THIRD_PARAM,    \
-                    FOURTH_PARAM>(std::mem_fn(&CLASS::FUNCTION))
-
+                    CLASS,    \
+                    decltype(std::mem_fn(&CLASS::FUNCTION)),  \
+                    __VA_ARGS__>(std::mem_fn(&CLASS::FUNCTION))
 
 
 // thanks to user 'MSN' from Stack Overflow. Slightly modified.
