@@ -20,8 +20,10 @@ void Entity::AddComponent(ComponentType type, std::unique_ptr<Component> c)
 }
 
 void Entity::AddVmScript(const VMState &state) {
-  m_vmScripts.push_back(state);
-  VMInstance().InvokeFunction(m_vmScripts.back(), "initialize", { this, &m_vmScripts.back() });
+  m_vmScripts.push_back(state); 
+
+  VMInstance().RegisterVMState(&m_vmScripts.back());
+  VMInstance().InvokeFunction(m_vmScripts.back(), "initialize", { VMValue{ this }, VMValue{ &m_vmScripts.back() } });
 }
 
 void Entity::AddScript(std::unique_ptr<Component> script)
@@ -45,7 +47,7 @@ void Entity::Update(double ticksPassed)
   }
 
   for (auto &script : m_vmScripts) {
-    VMInstance().InvokeFunction(script, "update", { ticksPassed });
+    VMInstance().InvokeFunction(script, "update", { VMValue{ ticksPassed } });
   }
 
 }

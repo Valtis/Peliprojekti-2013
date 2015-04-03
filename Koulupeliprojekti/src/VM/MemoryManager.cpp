@@ -127,7 +127,9 @@ MemoryManager::ArrayReadWriteData MemoryManager::ArrayReadWriteCommon(const VMVa
 }
 
 ValueType MemoryManager::GetArrayValueType(uint32_t typeField) const {
-  return static_cast<ValueType>(typeField & ~(1 << 31));
+  ValueType type = static_cast<ValueType>(typeField & ~(1 << 31));
+  LoggerManager::GetLog(MEMORY_LOG).AddLine(LogLevel::DEBUG, "Read array type tag " + std::to_string(typeField & ~(1 << 31)));
+  return type;
 }
 
 void MemoryManager::EnsureNotNull(VMValue object) const {
@@ -212,7 +214,10 @@ void MemoryManager::Scavenge() {
   }
 
   std::vector<VMValue *> rootSet = m_provider->GetRootSet();
+  LoggerManager::GetLog(MEMORY_LOG).AddLine(LogLevel::INFO, "Root set size: " + std::to_string(rootSet.size()) + " objects");
+
   std::swap(m_toSpace, m_memory);
+
   EvacuateRootSet(rootSet);
   EvacuateObjects();
 }
@@ -233,7 +238,6 @@ void MemoryManager::EvacuateObjects() {
     CopyPointedObjects(pointer);
     scanPointer += CalculateObjectSize(pointer);
   }
-
 }
 
 void MemoryManager::CopyPointedObjects(VMValue &pointer) {
@@ -242,7 +246,7 @@ void MemoryManager::CopyPointedObjects(VMValue &pointer) {
     auto position = pointer.as_managed_pointer() + ArrayMetaDataSize();
     auto length = GetArrayLengthUnchecked(pointer);
     auto typeSize = TypeSize(GetArrayValueType(typeField));
-    for (int i = 0; i < length; ++i) {
+    for (size_t i = 0; i < length; ++i) {
       uint32_t pointer;
       auto pointerInArrayLocation = position + i*typeSize;
       memcpy(&pointer, m_memory + pointerInArrayLocation, sizeof(pointer));
@@ -272,7 +276,7 @@ void MemoryManager::MoveObject(VMValue *pointer) {
 }
 
 void MemoryManager::PerformCopy(VMValue *pointer) {
-  auto size = CalculateObjectSize(pointer);
+  auto size = CalculateObjectSize(*pointer);
   memcpy(m_memory + m_freeSpacePointer, m_toSpace + pointer->as_managed_pointer(), size);
   
   UpdateForwardingPointer(pointer);

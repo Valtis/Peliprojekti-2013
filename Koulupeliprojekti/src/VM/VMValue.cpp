@@ -78,13 +78,12 @@ std::string VMValue::TypeToString(ValueType t) const {
     return "Character";
   case ValueType::NATIVE_POINTER:
     return "Native pointer";
-
     break;
   case ValueType::MANAGED_POINTER:
     return "Managed pointer";
   case ValueType::UNINITIALIZED:
     return "Uninitialized";
   default:
-    return "Default case reached in TypeToString. This should not happen";
+    return "Invalid type tag in TypeToString. Memory corruption likely";
   }
 }

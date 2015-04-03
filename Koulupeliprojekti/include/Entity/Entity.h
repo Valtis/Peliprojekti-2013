@@ -2,6 +2,7 @@
 #include "Component/Component.h"
 #include "Message/MessageProcessor.h"
 #include "VM/VMState.h"
+#include <list>
 #include <map>
 enum class EntityType : int { BULLET, HEALTH_PICKUP };
 
@@ -29,7 +30,7 @@ public:
 
   
 private:
-  std::vector<VMState> m_vmScripts;
+  std::list<VMState> m_vmScripts; // list due to the fact that pointers\iterators into the list must not be invalidated on reallocation
   std::vector<std::unique_ptr<Component>> m_scripts;
   std::map<ComponentType, std::unique_ptr<Component>> m_components;
 };

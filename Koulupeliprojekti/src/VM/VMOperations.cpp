@@ -22,7 +22,7 @@ namespace Op {
   }
 
   void PushInteger(std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
-    PushValue((int32_t)frames.back().GetNextInstruction(), stack);
+    PushValue(VMValue{ (int32_t)frames.back().GetNextInstruction() }, stack);
   }
 
 
@@ -40,25 +40,25 @@ namespace Op {
   void AddInteger(std::vector<VMValue> &stack) {
     auto second = PopValue(stack).as_int();
     auto first = PopValue(stack).as_int();
-    PushValue(first + second, stack);
+    PushValue(VMValue{ first + second }, stack);
   }
 
   void SubInteger(std::vector<VMValue> &stack) {
     auto second = PopValue(stack).as_int();
     auto first = PopValue(stack).as_int();
-    PushValue(first - second, stack);
+    PushValue(VMValue{ first - second }, stack);
   }
 
   void MulInteger(std::vector<VMValue> &stack) {
     auto second = PopValue(stack).as_int();
     auto first = PopValue(stack).as_int();
-    PushValue(first * second, stack);
+    PushValue(VMValue{ first * second }, stack);
   }
 
   void DivInteger(std::vector<VMValue> &stack) {
     auto second = PopValue(stack).as_int();
     auto first = PopValue(stack).as_int();
-    PushValue(first / second, stack);
+    PushValue(VMValue{ first / second }, stack);
   }
 
   void InvokeNative(const VMState &state, std::vector<VMValue> &stack) {

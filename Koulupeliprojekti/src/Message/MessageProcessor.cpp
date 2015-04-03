@@ -40,7 +40,7 @@ void MessageProcessor::PassMessageToHandlers(const std::vector<PrioritizedCallba
 
 void MessageProcessor::RegisterScriptMessageHandler(VMState *state, int type, int priority, std::string scriptName) {
   MessageCallback callback = [=](Message *message) -> MessageHandling {
-    auto messageHandling = VMInstance().InvokeFunction(*state, scriptName, { message });
+    auto messageHandling = VMInstance().InvokeFunction(*state, scriptName, { VMValue{ message } });
     try {
       return static_cast<MessageHandling>(messageHandling.as_int());
     } catch (std::exception &ex) {

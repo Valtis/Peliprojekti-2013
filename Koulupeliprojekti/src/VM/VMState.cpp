@@ -5,8 +5,8 @@
 #include "VM/ScriptLoader.h"
 VMState::VMState(const std::string &path) {
   LoadByteCodeFile(path);
-  VMInstance().RegisterVMState(this);
 }
+
 
 VMState::~VMState() {
   VMInstance().UnregisterVMState(this);

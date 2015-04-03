@@ -12,13 +12,13 @@ uint32_t TypeSize(ValueType type);
 class VMValue {
 public:
 
-  VMValue() { m_type = ValueType::UNINITIALIZED; m_value.double_value = 0; }
-  VMValue(const int32_t v) { set_int(v); }
-  VMValue(const float v) { set_float(v); }
-  VMValue(const double v) { set_double(v); }
-  VMValue(const bool v) { set_bool(v); }
-  VMValue(const char v) { set_char(v); }
-  VMValue(void * const v) { set_native_pointer(v); }
+  VMValue() { m_type = ValueType::UNINITIALIZED; m_value.double_value = 0; } 
+  explicit VMValue(const int32_t v) { set_int(v); }
+  explicit VMValue(const float v) { set_float(v); }
+  explicit VMValue(const double v) { set_double(v); }
+  explicit VMValue(const bool v) { set_bool(v); }
+  explicit VMValue(const char v) { set_char(v); }
+  explicit VMValue(void * const v) { set_native_pointer(v); }
 
   void set_int(const int32_t v) {
     m_type = ValueType::INT;
