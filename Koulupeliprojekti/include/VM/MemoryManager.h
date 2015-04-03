@@ -1,6 +1,6 @@
 #pragma once
 #include "VMValue.h"
-
+#include <vector>
 
 
 #define ALIGN 4 // memory allocation aligned to multiples of 4. Allocations are padded as needed
@@ -34,20 +34,37 @@ private:
     uint8_t *data;
     ValueType type;
   };
-  
+
+  bool IsArray(uint32_t typeField) const;
   ArrayReadWriteData ArrayReadWriteCommon(const VMValue object, const uint32_t index, const uint32_t length) const;
 
   uint32_t GetArrayLengthUnchecked(VMValue obj) const;
   uint32_t GetTypeField(VMValue object) const;
+  ValueType GetArrayValueType(uint32_t typeField) const;
 
   void EnsureNotNull(VMValue object) const;
   void EnsureArray(uint32_t type) const;
- 
+  void EnsureValidAccess(VMValue pointer) const;
+
+  void Scavenge();
+  void EvacuateRootSet(std::vector<VMValue *> rootSet);
+  void EvacuateObjects();
+  void CopyPointedObjects(VMValue &pointer);
+  void  MoveObject(VMValue *pointer); 
+  void PerformCopy(VMValue *pointer);
+
+  void UpdatePointer(VMValue *pointer, uint32_t newLocation);
+  void UpdateForwardingPointer(VMValue *pointer);
+  uint32_t GetForwardingPointer(VMValue *pointer);
+
+  uint32_t CalculateObjectSize(const VMValue pointer) const;
+  
   alignas(ALIGN) uint8_t *m_memory;
-  alignas(ALIGN) uint8_t *m_toSpace; // reseved for garbage collection
+  alignas(ALIGN) uint8_t *m_toSpace; // reserved for garbage collection
 
   uint32_t m_heapSize;
   uint32_t m_freeSpacePointer;
+  RootsetProvider *m_provider; // non-owning pointer. MUST NOT BE DELETED
 };
 
 
