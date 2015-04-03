@@ -17,30 +17,16 @@ CreateNativeBindingForMemberFunction<decltype(GetMemberReturnType(&CLASS::FUNCTI
                     decltype(std::mem_fn(&CLASS::FUNCTION)),  \
                     __VA_ARGS__>(std::mem_fn(&CLASS::FUNCTION))
 
+template <typename R, typename... Args>
+NativeBinding CreateNativeFreeBinding(R(*ptr)(Args...)) {
+  return CreateNativeBindingForFreeFunction<R, decltype(ptr), Args...>(ptr);
+}
 
-// helper macro for registering native binding
-#define CREATE_NATIVE_FREE_BINDING(FUNCTION,  ...) \
-CreateNativeBindingForFreeFunction<GetFreeReturnType<decltype(&FUNCTION)>::type, \
-                    decltype(&FUNCTION), \
-                    __VA_ARGS__>(&FUNCTION)
 
 // thanks to user 'MSN' from Stack Overflow. Slightly modified.
 // http://stackoverflow.com/questions/5147492/member-function-call-in-decltype
 template <typename R, typename C, typename... A>
 R GetMemberReturnType(R(C::*)(A...));
-
-// thanks to user 'Angew' from Stack Overflow. Naming modified to fit existing naming scheme 
-// http://stackoverflow.com/questions/18695564/deducing-a-function-pointer-return-type
-template <class F>
-struct GetFreeReturnType;
-
-template <class R, class... A>
-struct GetFreeReturnType < R(*)(A...) >
-{
-  typedef R type;
-};
-
-// end thanks to Angew
 
 template <typename ReturnType,
           typename ClassType,
