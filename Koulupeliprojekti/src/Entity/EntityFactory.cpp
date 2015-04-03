@@ -153,8 +153,9 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   VMState invulnerabilityOnHitScript = VMState{ "data/scripts/invulnerabilityOnHit.txt" };
  
 
-  auto registerBinding = CreateBinding<Entity>(&Entity::RegisterScriptMessageHandler);
+  auto registerBinding = CreateBinding(&Entity::RegisterScriptMessageHandler);
   auto blinkMessageBinding = CreateBinding(&ScriptMessageInterface::SendBlinkingMessage);
+
   invulnerabilityOnHitScript.AddNativeBinding("RegisterMessageHandler", registerBinding);
   invulnerabilityOnHitScript.AddNativeBinding("SendBlinkMessage", blinkMessageBinding);
   e->AddVmScript(invulnerabilityOnHitScript);
