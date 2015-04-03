@@ -92,6 +92,10 @@ public:
 
   std::string to_string() const;
 
+  ValueType type() {
+    return m_type;
+  }
+
 private:
   void assert_type(const ValueType t) const {
     if (m_type != t) {

@@ -417,6 +417,9 @@
     <ClInclude Include="include\VM\FFI\FunctionArgumentTupleTemplates.h">
       <Filter>Header Files\VM\FFI</Filter>
     </ClInclude>
+    <ClInclude Include="include\VM\RootSetProvider.h">
+      <Filter>Source Files\VM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -646,6 +649,9 @@
     </ClCompile>
     <ClCompile Include="src\Message\ScriptMessageInterface.cpp">
       <Filter>Source Files\Message</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\RootSetProvider.cpp">
+      <Filter>Source Files\VM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

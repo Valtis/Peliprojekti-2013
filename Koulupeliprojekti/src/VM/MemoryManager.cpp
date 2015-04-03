@@ -22,7 +22,7 @@ uint32_t AlignSize(uint32_t &size) {
   return size + (ALIGN - size % ALIGN) % ALIGN; // ensure alignment
 }
 
-MemoryManager::MemoryManager(uint32_t heap_size) : m_heapSize(heap_size), m_freeSpacePointer(HEAP_BEGIN_ADDRESS) {
+MemoryManager::MemoryManager(uint32_t heap_size) : m_heapSize(heap_size), m_freeSpacePointer(HEAP_BEGIN_ADDRESS), m_provider(nullptr) {
   m_memory = new uint8_t[heap_size];
   m_toSpace = new uint8_t[heap_size];
 }
@@ -207,7 +207,11 @@ void MemoryManager::RunGc() {
 }
 
 void MemoryManager::Scavenge() {
-  std::vector<VMValue *> rootSet = provider.GetRootset();
+  if (m_provider == nullptr) {
+    return;
+  }
+
+  std::vector<VMValue *> rootSet = m_provider->GetRootSet();
   std::swap(m_toSpace, m_memory);
   EvacuateRootSet(rootSet);
   EvacuateObjects();

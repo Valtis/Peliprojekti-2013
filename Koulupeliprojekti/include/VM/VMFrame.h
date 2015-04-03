@@ -15,6 +15,9 @@ public:
 
   void SetLocalVariable(size_t index, VMValue value);
   VMValue GetLocalVariable(size_t index) const;
+  VMValue &GetLocalVariableReference(size_t index);
+
+  size_t GetLocalVariableCount() const;
 private:
   std::vector<VMValue> m_localVariables;
   const VMFunction *m_function; // non-owning pointer - pointed value must not be deleted

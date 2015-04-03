@@ -1,5 +1,6 @@
 #pragma once
-#include "VMValue.h"
+#include "VM/RootSetProvider.h"
+#include "VM/VMValue.h"
 #include <vector>
 
 
@@ -26,6 +27,8 @@ public:
   void RunGc();
 
   uint32_t GetArrayLength(VMValue object) const;
+
+  void SetRootSetProvider(RootSetProvider *provider) { m_provider = provider;  }
 private:
 
   void EnsureFreeMemory(uint32_t requiredSpace);
@@ -64,7 +67,7 @@ private:
 
   uint32_t m_heapSize;
   uint32_t m_freeSpacePointer;
-  RootsetProvider *m_provider; // non-owning pointer. MUST NOT BE DELETED
+  RootSetProvider *m_provider; // non-owning pointer. MUST NOT BE DELETED
 };
 
 

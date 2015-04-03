@@ -12,6 +12,7 @@ const uint32_t stackSize = 4096;
 const uint32_t frameSize = 1024;
 VM::VM() {
 
+  MemMgrInstance().SetRootSetProvider(this);
   m_stack.reserve(stackSize);
   m_frames.reserve(frameSize);
 }
@@ -190,4 +191,41 @@ void VM::AddValueStackToErrorMessage(std::string &stack_trace) {
 VM &VMInstance() {
   static VM vm;
   return vm;
+}
+
+
+std::vector<VMValue *> VM::GetRootSet()  {
+  std::vector<VMValue *> rootSet;
+  GetRootsFromStack(rootSet);
+  GetRootsFromFrames(rootSet);
+  GetRootsFromStates(rootSet);
+  return rootSet;
+}
+
+void VM::GetRootsFromStack(std::vector<VMValue *> &rootSet)  {
+  for (auto &value : m_stack) {
+    if (value.type() == ValueType::MANAGED_POINTER) {
+      rootSet.push_back(&value);
+    }
+  }
+}
+
+void VM::GetRootsFromFrames(std::vector<VMValue *> &rootSet) {
+  for (auto &frame : m_frames) {
+    for (size_t i = 0; i < frame.GetLocalVariableCount(); ++i) {
+      if (frame.GetLocalVariableReference(i).type() == ValueType::MANAGED_POINTER) {
+        rootSet.push_back(&frame.GetLocalVariableReference(i));
+      }
+    }
+  }
+}
+
+void VM::GetRootsFromStates(std::vector<VMValue *> &rootSet) {
+  for (auto state : m_states) {
+    for (size_t i = 0; i < state->GetStaticObjectCount(); ++i) {
+      if (state->GetStaticObject(i).type() == ValueType::MANAGED_POINTER) {
+        rootSet.push_back(&state->GetStaticObjectReference(i));
+      }
+    }
+  }
 }

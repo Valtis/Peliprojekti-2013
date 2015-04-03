@@ -5,8 +5,12 @@
 #include "VM/ScriptLoader.h"
 VMState::VMState(const std::string &path) {
   LoadByteCodeFile(path);
+  VMInstance().RegisterVMState(this);
 }
 
+VMState::~VMState() {
+  VMInstance().UnregisterVMState(this);
+}
 
 
 void VMState::LoadByteCodeFile(const std::string &path) {
@@ -34,6 +38,10 @@ VMValue VMState::GetStaticObject(uint32_t index) const {
   return m_static_objects.at(index);
 }
 
+VMValue &VMState::GetStaticObjectReference(uint32_t index) {
+  return m_static_objects.at(index);
+}
+
 size_t VMState::AddStaticObject(VMValue value) {
   m_static_objects.push_back(value);
   return m_static_objects.size() - 1;
@@ -54,4 +62,8 @@ void VMState::AddNativeBinding(const std::string &name, NativeBinding binding) {
 
 void VMState::AddFunction(const std::string &name, VMFunction function) {
   m_functions[name] = function;
+}
+
+size_t VMState::GetStaticObjectCount() const {
+  return m_static_objects.size();
 }

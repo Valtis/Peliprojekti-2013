@@ -34,3 +34,10 @@ void VMFrame::SetLocalVariable(size_t index, VMValue value) {
 VMValue VMFrame::GetLocalVariable(size_t index) const {
   return m_localVariables.at(index);
 }
+
+VMValue &VMFrame::GetLocalVariableReference(size_t index) {
+  return m_localVariables.at(index);
+}
+size_t VMFrame::GetLocalVariableCount() const {
+  return m_localVariables.size();
+}
