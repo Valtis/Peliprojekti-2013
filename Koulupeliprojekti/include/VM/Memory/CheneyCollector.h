@@ -10,9 +10,7 @@ public:
   CheneyCollector(uint32_t heapSize, RootSetProvider *provider);
   CheneyCollector(const CheneyCollector &collector) = delete;
   CheneyCollector &operator=(const CheneyCollector &) = delete;
-  ~CheneyCollector();
-
-  
+  ~CheneyCollector();  
   
   void Scavenge(uint8_t **memory, MemoryManager &manager);
   

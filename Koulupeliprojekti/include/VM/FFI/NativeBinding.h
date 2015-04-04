@@ -10,13 +10,8 @@
 #include <type_traits>
 #include <tuple>
 
-// helper macro for registering native binding
-#define CREATE_NATIVE_CLASS_BINDING(CLASS, FUNCTION,  ...) \
-CreateNativeBindingForMemberFunction<decltype(GetMemberReturnType(&CLASS::FUNCTION)), \
-                    CLASS,    \
-                    decltype(std::mem_fn(&CLASS::FUNCTION)),  \
-                    __VA_ARGS__>(std::mem_fn(&CLASS::FUNCTION))
 
+// binding for void free functions
 template <typename ReturnType, typename... Args,
   typename std::enable_if<std::is_void<ReturnType>::value>::type* = nullptr>
 NativeBinding CreateBinding(ReturnType(*ptr)(Args...)) {
@@ -27,6 +22,8 @@ NativeBinding CreateBinding(ReturnType(*ptr)(Args...)) {
   };
 }
 
+
+// binding for void member functions
 template <typename Class, typename ReturnType, typename... Args,
   typename std::enable_if<std::is_void<ReturnType>::value>::type* = nullptr>
 NativeBinding CreateBinding(ReturnType (Class::*ptr)(Args...)) {
