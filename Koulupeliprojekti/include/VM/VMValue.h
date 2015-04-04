@@ -8,6 +8,7 @@ enum class ValueType : uint8_t { UNINITIALIZED, INT, FLOAT, DOUBLE, BOOL, CHAR, 
 
 uint32_t TypeSize(ValueType type);
 
+std::string TypeToString(ValueType t);
 
 class VMValue {
 public:
@@ -106,7 +107,6 @@ private:
 
   ValueType m_type;
 
-  std::string TypeToString(ValueType t) const;
 
   union {
     int32_t int_value;

@@ -25,8 +25,6 @@ VMValue VM::InvokeFunction(VMState &state, const std::string &functionName, std:
     return{};
   }
 
-  LoggerManager::GetLog(VM_LOG).AddLine(LogLevel::INFO, "Invoking script function " + functionName);
-
   InitializeVMForExecution(functionName, objects, function);
   
   try {
@@ -63,7 +61,7 @@ void VM::Execute(VMState &state) {
     switch (code) {
     case ByteCode::POP:
       Op::PopValue(m_stack);
-    return;
+    break;
 
     case ByteCode::LOAD_LOCAL:
       Op::LoadLocal(state, m_stack, m_frames);

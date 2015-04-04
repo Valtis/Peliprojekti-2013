@@ -224,8 +224,7 @@ void ScriptLoader::LoadFunction(const std::string &name) {
         function.AddByteCode(static_cast<ByteCode>(labelPositions[tokens[1]]));
       }
 
-    }
-    else if (tokens[0] == JUMP_IF_POSITIVE_TOKEN) {
+    } else if (tokens[0] == JUMP_IF_POSITIVE_TOKEN) {
       ExpectTokenCount(tokens, 2);
       function.AddByteCode(ByteCode::JUMP_IF_POSITIVE);
       if (labelPositions.find(tokens[1]) == labelPositions.end()) {

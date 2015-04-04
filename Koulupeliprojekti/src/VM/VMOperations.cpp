@@ -108,6 +108,7 @@ namespace Op {
   void JumpIfPositive(const VMState &state, std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
     auto jumpDestination = (uint32_t)frames.back().GetNextInstruction();
     auto value = PopValue(stack);
+
     if (value.as_int() > 0) {
       frames.back().SetNextInstruction(jumpDestination);
     }

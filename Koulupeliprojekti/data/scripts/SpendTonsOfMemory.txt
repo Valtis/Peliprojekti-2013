@@ -13,13 +13,7 @@ function update
   AllocateIntegerArray
   #StoreLocal root
   
-  LoadStatic invocationTimes
-  JumpIfZero end
   
-  LoadStatic invocationTimes
-  PushInteger 1
-  IntegerSubtract
-  StoreStatic invocationTimes
   
   # initialize counter to 100 and save it
   PushInteger 1000
@@ -47,6 +41,21 @@ function update
   JumpIfPositive start
   
   
-  Label end
   
+endfunction
+
+
+function placeholder
+  locals
+  endlocals
+
+  LoadStatic invocationTimes
+  JumpIfZero end
+
+  LoadStatic invocationTimes
+  PushInteger 1
+  IntegerSubtract
+  StoreStatic invocationTimes
+  
+  Label end
 endfunction

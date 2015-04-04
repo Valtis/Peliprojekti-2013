@@ -64,7 +64,7 @@ std::string VMValue::to_string() const {
  }
 
 
-std::string VMValue::TypeToString(ValueType t) const {
+std::string TypeToString(ValueType t) {
   switch (t) {
   case ValueType::INT:
     return "Integer";

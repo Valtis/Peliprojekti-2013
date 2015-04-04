@@ -18,8 +18,8 @@ uint32_t ArrayMetaDataSize() {
   return TYPE_POINTER_SIZE + FORWARD_POINTER_SIZE + ARRAY_LENGTH_FIELD_SIZE;
 }
 
-uint32_t AlignSize(uint32_t &size) {
-  return size + (ALIGN - size % ALIGN) % ALIGN; // ensure alignment
+uint32_t AlignSize(uint32_t size) {
+  return size + ((ALIGN - size % ALIGN) % ALIGN); // ensure alignment
 }
 
 MemoryManager::MemoryManager(uint32_t heap_size) : m_heapSize(heap_size), m_freeSpacePointer(HEAP_BEGIN_ADDRESS), m_provider(nullptr) {
@@ -60,8 +60,9 @@ MemoryManager::~MemoryManager() {
 // so 12 byte header containing bookkeeping information and length * sizeof(array type) bytes for array itself
 VMValue MemoryManager::AllocateArray(const ValueType objectType, const uint32_t length) {
   auto requiredSpace = length*TypeSize(objectType) + ArrayMetaDataSize();
-  AlignSize(requiredSpace);
 
+  requiredSpace = AlignSize(requiredSpace);
+  
   EnsureFreeMemory(requiredSpace);
 
   // zero-initialization of memory before handing it over
@@ -212,6 +213,29 @@ void MemoryManager::Scavenge() {
   if (m_provider == nullptr) {
     return;
   }
+  /*
+  std::string msg = "Memory layout dump:\n";
+  for (int i = HEAP_BEGIN_ADDRESS; i < m_freeSpacePointer;) {
+    VMValue f;
+    f.set_managed_pointer(i);
+    auto typeField = GetTypeField(f, m_memory);
+    if (IsArray(typeField)) {
+      msg += "\nArray at address " + std::to_string(i) + "\n";
+      msg += "Type tag " + TypeToString(GetArrayValueType(typeField)) + " (Size: " + std::to_string(TypeSize(GetArrayValueType(typeField))) + ")\n";
+      msg += "Length: " + std::to_string(GetArrayLengthUnchecked(f, m_memory)) + "\n";
+
+    }
+    else {
+      msg += "\nInvalid object in memory dump - terminating dump\n";
+      break;
+    }
+
+    i += CalculateObjectSize(f, m_memory);
+  }*/
+
+
+  LoggerManager::GetLog(MEMORY_LOG).AddLine(LogLevel::DEBUG,msg);
+
 
   std::vector<VMValue *> rootSet = m_provider->GetRootSet();
 
@@ -241,7 +265,9 @@ void MemoryManager::EvacuateObjects() {
 }
 
 void MemoryManager::CopyPointedObjects(VMValue &pointer) {
-  auto typeField = GetTypeField(pointer, m_memory);
+
+  auto typeField = GetTypeField(pointer, m_toSpace);
+
   if (IsArray(typeField)) {
     if (GetArrayValueType(typeField) != ValueType::MANAGED_POINTER) {
       return;
@@ -320,10 +346,7 @@ uint32_t MemoryManager::CalculateObjectSize(const VMValue pointer, uint8_t *memo
   auto typeField = GetTypeField(pointer, memoryArea);
 
   if (IsArray(typeField)) {
-   
-    auto size = GetArrayLengthUnchecked(pointer, memoryArea)*TypeSize(GetArrayValueType(typeField)) + ArrayMetaDataSize();
-    AlignSize(size);
-    return size;
+    return AlignSize(GetArrayLengthUnchecked(pointer, memoryArea)*TypeSize(GetArrayValueType(typeField)) + ArrayMetaDataSize());
   } else {
     throw std::logic_error("Size calculation not implemented for non-arrays");
   }
