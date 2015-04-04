@@ -1,4 +1,5 @@
-#include "VM/MemoryManager.h"
+#include "VM/VM.h"
+#include "VM/Memory/MemoryManager.h"
 #include "Utility/LoggerManager.h"
 #include <string>
 #ifdef _MSC_VER
@@ -22,7 +23,7 @@ uint32_t AlignSize(uint32_t size) {
   return size + ((ALIGN - size % ALIGN) % ALIGN); // ensure alignment
 }
 
-MemoryManager::MemoryManager(uint32_t heap_size) : m_heapSize(heap_size), m_freeSpacePointer(HEAP_BEGIN_ADDRESS), m_provider(nullptr) {
+MemoryManager::MemoryManager(uint32_t heap_size, RootSetProvider *provider) : m_heapSize(heap_size), m_freeSpacePointer(HEAP_BEGIN_ADDRESS), m_provider(provider) {
   m_memory = new uint8_t[heap_size];
   m_toSpace = new uint8_t[heap_size];
 }
@@ -354,6 +355,6 @@ uint32_t MemoryManager::CalculateObjectSize(const VMValue pointer, uint8_t *memo
 
 MemoryManager &MemMgrInstance() {
   // should probably read the values from ini or something; hard coded for now
-  static MemoryManager manager(1024 * 1024 * 32);
+  static MemoryManager manager(1024 * 1024 * 32, &VMInstance());
   return manager;
 }

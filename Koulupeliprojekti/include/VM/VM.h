@@ -1,6 +1,6 @@
 #pragma once
 
-#include "VM/RootsetProvider.h"
+#include "VM/Memory/RootsetProvider.h"
 #include "VM/VMValue.h"
 #include "VM/VMFrame.h"
 #include "VM/VMClass.h"

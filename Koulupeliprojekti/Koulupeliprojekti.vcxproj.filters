@@ -115,6 +115,12 @@
     <Filter Include="Header Files\VM\FFI">
       <UniqueIdentifier>{e541c129-4d69-4711-8608-7dfe8348d9e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\VM\Memory">
+      <UniqueIdentifier>{50985708-7079-4abe-9e2d-80947aef747d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\VM\Memory">
+      <UniqueIdentifier>{72c695d4-b228-44e6-b731-d948c1bd430b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -387,9 +393,6 @@
     <ClInclude Include="include\VM\VMClass.h">
       <Filter>Header Files\VM</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\MemoryManager.h">
-      <Filter>Header Files\VM</Filter>
-    </ClInclude>
     <ClInclude Include="include\VM\FFI\ConversionFunctions.h">
       <Filter>Header Files\VM\FFI</Filter>
     </ClInclude>
@@ -417,8 +420,11 @@
     <ClInclude Include="include\VM\FFI\FunctionArgumentTupleTemplates.h">
       <Filter>Header Files\VM\FFI</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\RootSetProvider.h">
-      <Filter>Source Files\VM</Filter>
+    <ClInclude Include="include\VM\Memory\MemoryManager.h">
+      <Filter>Header Files\VM\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VM\Memory\RootSetProvider.h">
+      <Filter>Header Files\VM\Memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -626,9 +632,6 @@
     <ClCompile Include="src\VM\VMClass.cpp">
       <Filter>Source Files\VM</Filter>
     </ClCompile>
-    <ClCompile Include="src\VM\MemoryManager.cpp">
-      <Filter>Source Files\VM</Filter>
-    </ClCompile>
     <ClCompile Include="src\VM\FFI\ConversionFunctions.cpp">
       <Filter>Source Files\VM\FFI</Filter>
     </ClCompile>
@@ -650,8 +653,11 @@
     <ClCompile Include="src\Message\ScriptMessageInterface.cpp">
       <Filter>Source Files\Message</Filter>
     </ClCompile>
-    <ClCompile Include="src\VM\RootSetProvider.cpp">
-      <Filter>Source Files\VM</Filter>
+    <ClCompile Include="src\VM\Memory\MemoryManager.cpp">
+      <Filter>Source Files\VM\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Memory\RootSetProvider.cpp">
+      <Filter>Source Files\VM\Memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

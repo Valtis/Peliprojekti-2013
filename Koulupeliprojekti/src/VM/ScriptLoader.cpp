@@ -1,5 +1,5 @@
 #include "VM/ScriptLoader.h"
-#include "VM/MemoryManager.h"
+#include "VM/Memory/MemoryManager.h"
 #include "VM/VMState.h"
 #include "VM/VMFunction.h"
 #include "Utility/StringUtility.h"

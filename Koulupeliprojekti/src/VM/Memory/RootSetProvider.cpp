@@ -1,4 +1,4 @@
-#include "VM/RootSetProvider.h"
+#include "VM/Memory/RootSetProvider.h"
 RootSetProvider::~RootSetProvider() {
 
 }

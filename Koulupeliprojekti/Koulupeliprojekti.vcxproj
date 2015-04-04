@@ -102,8 +102,8 @@
     <ClInclude Include="include\VM\FFI\NativeBinding.h" />
     <ClInclude Include="include\VM\FFI\NativeBindingTypedef.h" />
     <ClInclude Include="include\VM\FFI\VariadicFunctionCallTemplates.h" />
-    <ClInclude Include="include\VM\MemoryManager.h" />
-    <ClInclude Include="include\VM\RootSetProvider.h" />
+    <ClInclude Include="include\VM\Memory\MemoryManager.h" />
+    <ClInclude Include="include\VM\Memory\RootSetProvider.h" />
     <ClInclude Include="include\VM\ScriptLoader.h" />
     <ClInclude Include="include\VM\VM.h" />
     <ClInclude Include="include\VM\VMClass.h" />
@@ -181,8 +181,8 @@
     <ClCompile Include="src\VM\ByteCode.cpp" />
     <ClCompile Include="src\VM\FFI\ConversionFunctions.cpp" />
     <ClCompile Include="src\VM\FFI\NativeBinding.cpp" />
-    <ClCompile Include="src\VM\MemoryManager.cpp" />
-    <ClCompile Include="src\VM\RootSetProvider.cpp" />
+    <ClCompile Include="src\VM\Memory\MemoryManager.cpp" />
+    <ClCompile Include="src\VM\Memory\RootSetProvider.cpp" />
     <ClCompile Include="src\VM\ScriptLoader.cpp" />
     <ClCompile Include="src\VM\VM.cpp" />
     <ClCompile Include="src\VM\VMClass.cpp" />

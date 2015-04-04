@@ -15,7 +15,7 @@ function update
   
   
   
-  # initialize counter to 100 and save it
+  # initialize counter to 1000 and save it
   PushInteger 1000
   StoreLocal counter
   
@@ -42,20 +42,4 @@ function update
   
   
   
-endfunction
-
-
-function placeholder
-  locals
-  endlocals
-
-  LoadStatic invocationTimes
-  JumpIfZero end
-
-  LoadStatic invocationTimes
-  PushInteger 1
-  IntegerSubtract
-  StoreStatic invocationTimes
-  
-  Label end
 endfunction

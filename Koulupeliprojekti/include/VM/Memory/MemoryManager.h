@@ -1,5 +1,5 @@
 #pragma once
-#include "VM/RootSetProvider.h"
+#include "VM/Memory/RootSetProvider.h"
 #include "VM/VMValue.h"
 #include <vector>
 
@@ -13,7 +13,7 @@
 
 class MemoryManager {
 public:
-  MemoryManager(uint32_t heap_size);
+  MemoryManager(uint32_t heap_size, RootSetProvider *provider);
   MemoryManager(const MemoryManager &) = delete;
   MemoryManager(MemoryManager &&);
   MemoryManager &operator=(const MemoryManager &) = delete;
@@ -28,7 +28,6 @@ public:
 
   uint32_t GetArrayLength(VMValue object) const;
 
-  void SetRootSetProvider(RootSetProvider *provider) { m_provider = provider;  }
 private:
 
   void EnsureFreeMemory(uint32_t requiredSpace);

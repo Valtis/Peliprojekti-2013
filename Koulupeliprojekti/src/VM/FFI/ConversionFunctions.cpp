@@ -1,5 +1,5 @@
 #include "VM/FFI/ConversionFunctions.h"
-#include "VM/MemoryManager.h"
+#include "VM/Memory/MemoryManager.h"
 #include <string>
 template<>
 std::string ToNativeType<std::string>(VMValue obj) {

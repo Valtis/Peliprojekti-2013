@@ -7,7 +7,7 @@
 #include "VM/FFI/NativeBinding.h"
 
 #include "Utility/LoggerManager.h"
-#include "VM/MemoryManager.h"
+#include "VM/Memory/MemoryManager.h"
 #include <vector>
 
 namespace Op {

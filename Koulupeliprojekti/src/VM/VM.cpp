@@ -1,7 +1,7 @@
 #include "VM/VM.h"
 #include "VM/VMState.h"
 #include "Utility/LoggerManager.h"
-#include "VM/MemoryManager.h"
+#include "VM/Memory/MemoryManager.h"
 #include "VM/FFI/ConversionFunctions.h"
 #include "VM/FFI/NativeBinding.h"
 #include "VM/VMOperations.h"
@@ -11,8 +11,6 @@
 const uint32_t stackSize = 4096;
 const uint32_t frameSize = 1024;
 VM::VM() {
-
-  MemMgrInstance().SetRootSetProvider(this);
   m_stack.reserve(stackSize);
   m_frames.reserve(frameSize);
 }

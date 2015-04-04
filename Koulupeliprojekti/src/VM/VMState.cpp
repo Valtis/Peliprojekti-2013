@@ -1,7 +1,6 @@
 #include "VM/VMState.h"
 #include "VM/ByteCode.h"
 #include "VM/VM.h"
-#include "VM/MemoryManager.h"
 #include "VM/ScriptLoader.h"
 VMState::VMState(const std::string &path) {
   LoadByteCodeFile(path);

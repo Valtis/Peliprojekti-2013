@@ -11,7 +11,7 @@ Tick::Tick( Uint32 tickLength ) : m_maxTickLength(2), m_lastTick(0), m_lastTickL
 
 double Tick::TicksPassed()
 {
-  return min(m_lastTickLength/m_tickLength, m_maxTickLength);
+  return min(((double)m_lastTickLength)/m_tickLength, m_maxTickLength);
 }
 
 bool Tick::TickHasPassed()
