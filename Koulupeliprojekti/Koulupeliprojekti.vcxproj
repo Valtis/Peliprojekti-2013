@@ -102,8 +102,12 @@
     <ClInclude Include="include\VM\FFI\NativeBinding.h" />
     <ClInclude Include="include\VM\FFI\NativeBindingTypedef.h" />
     <ClInclude Include="include\VM\FFI\VariadicFunctionCallTemplates.h" />
+    <ClInclude Include="include\VM\Memory\CheneyCollector.h" />
+    <ClInclude Include="include\VM\Memory\GarbageCollector.h" />
+    <ClInclude Include="include\VM\Memory\GCFactory.h" />
     <ClInclude Include="include\VM\Memory\MemoryManager.h" />
     <ClInclude Include="include\VM\Memory\RootSetProvider.h" />
+    <ClInclude Include="include\VM\Memory\VMObjectFunctions.h" />
     <ClInclude Include="include\VM\ScriptLoader.h" />
     <ClInclude Include="include\VM\VM.h" />
     <ClInclude Include="include\VM\VMClass.h" />
@@ -181,8 +185,12 @@
     <ClCompile Include="src\VM\ByteCode.cpp" />
     <ClCompile Include="src\VM\FFI\ConversionFunctions.cpp" />
     <ClCompile Include="src\VM\FFI\NativeBinding.cpp" />
+    <ClCompile Include="src\VM\Memory\CheneyCollector.cpp" />
+    <ClCompile Include="src\VM\Memory\GarbageCollector.cpp" />
+    <ClCompile Include="src\VM\Memory\GCFactory.cpp" />
     <ClCompile Include="src\VM\Memory\MemoryManager.cpp" />
     <ClCompile Include="src\VM\Memory\RootSetProvider.cpp" />
+    <ClCompile Include="src\VM\Memory\VMObjectFunctions.cpp" />
     <ClCompile Include="src\VM\ScriptLoader.cpp" />
     <ClCompile Include="src\VM\VM.cpp" />
     <ClCompile Include="src\VM\VMClass.cpp" />

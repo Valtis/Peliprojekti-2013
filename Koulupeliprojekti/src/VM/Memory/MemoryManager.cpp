@@ -1,5 +1,6 @@
 #include "VM/VM.h"
 #include "VM/Memory/MemoryManager.h"
+#include "VM/Memory/GCFactory.h"
 #include "Utility/LoggerManager.h"
 #include <string>
 #ifdef _MSC_VER
@@ -9,40 +10,28 @@
 #endif 
 
 // 0 is reserved for null pointers and as such is invalid address. Skip first ALIGN bytes as a result
-const uint32_t HEAP_BEGIN_ADDRESS = ALIGN;
-const uint32_t TYPE_POINTER_SIZE = 4;
-const uint32_t FORWARD_POINTER_SIZE = 4;
-const uint32_t ARRAY_LENGTH_FIELD_SIZE = 4;
-const uint32_t VM_NULLPTR = 0;
 
-uint32_t ArrayMetaDataSize() {
-  return TYPE_POINTER_SIZE + FORWARD_POINTER_SIZE + ARRAY_LENGTH_FIELD_SIZE;
-}
 
-uint32_t AlignSize(uint32_t size) {
-  return size + ((ALIGN - size % ALIGN) % ALIGN); // ensure alignment
-}
 
-MemoryManager::MemoryManager(uint32_t heap_size, RootSetProvider *provider) : m_heapSize(heap_size), m_freeSpacePointer(HEAP_BEGIN_ADDRESS), m_provider(provider) {
+MemoryManager::MemoryManager(uint32_t heap_size, std::unique_ptr<GarbageCollector> collector) 
+  : m_heapSize(heap_size), m_freeSpacePointer(HEAP_BEGIN_ADDRESS), m_collector(std::move(collector)) {
   m_memory = new uint8_t[heap_size];
-  m_toSpace = new uint8_t[heap_size];
 }
 
 MemoryManager::MemoryManager(MemoryManager &&other) 
-  : m_heapSize(other.m_heapSize), m_memory(other.m_memory), m_toSpace(other.m_toSpace), 
-    m_freeSpacePointer(other.m_freeSpacePointer) {
+  : m_heapSize(other.m_heapSize), m_memory(other.m_memory), 
+  m_freeSpacePointer(other.m_freeSpacePointer), m_collector(std::move(other.m_collector)) {
   other.m_memory = nullptr;
-  other.m_toSpace = nullptr;
 }
 
 MemoryManager &MemoryManager::operator=(MemoryManager &&rhs) {
   if (&rhs != this) {
     m_heapSize = rhs.m_heapSize;
     m_memory = rhs.m_memory;
-    m_toSpace = rhs.m_toSpace;
     m_freeSpacePointer = rhs.m_freeSpacePointer;
+    m_collector = std::move(rhs.m_collector);
     rhs.m_memory = nullptr;
-    rhs.m_toSpace = nullptr;
+    
   }
 
   return *this;
@@ -50,8 +39,6 @@ MemoryManager &MemoryManager::operator=(MemoryManager &&rhs) {
 
 MemoryManager::~MemoryManager() {
   delete[] m_memory;
-  delete[] m_toSpace;
-  // m_provider is a non-owning pointer and MUST NOT BE DELETED HERE
 }
 
 
@@ -60,9 +47,9 @@ MemoryManager::~MemoryManager() {
 // |array mark bit | array type | forward pointer | array length | array data |
 // so 12 byte header containing bookkeeping information and length * sizeof(array type) bytes for array itself
 VMValue MemoryManager::AllocateArray(const ValueType objectType, const uint32_t length) {
-  auto requiredSpace = length*TypeSize(objectType) + ArrayMetaDataSize();
+  auto requiredSpace = length*TypeSize(objectType) + VMObjectFunction::ArrayMetaDataSize();
 
-  requiredSpace = AlignSize(requiredSpace);
+  requiredSpace = VMObjectFunction::AlignSize(requiredSpace);
   
   EnsureFreeMemory(requiredSpace);
 
@@ -112,13 +99,13 @@ MemoryManager::ArrayReadWriteData MemoryManager::ArrayReadWriteCommon(const VMVa
   EnsureNotNull(object);
 
   
-  uint32_t typeField = GetTypeField(object, m_memory);
+  uint32_t typeField = VMObjectFunction::GetTypeField(object, m_memory);
   EnsureArray(typeField);
 
   auto address = object.as_managed_pointer();
-  ValueType type = GetArrayValueType(typeField);
+  ValueType type = VMObjectFunction::GetArrayValueType(typeField);
 
-  auto arrayLength = GetArrayLengthUnchecked(object, m_memory);
+  auto arrayLength = VMObjectFunction::GetArrayLengthUnchecked(object, m_memory);
 
   if (index + readWriteLength > arrayLength || index < 0 || arrayLength == 0) {
     std::string err = "Out of bounds array access: Array length: " + std::to_string(arrayLength) + "   Index: "
@@ -130,9 +117,6 @@ MemoryManager::ArrayReadWriteData MemoryManager::ArrayReadWriteCommon(const VMVa
   return { data, type };
 }
 
-ValueType MemoryManager::GetArrayValueType(uint32_t typeField) const {
-  return static_cast<ValueType>(typeField & ~(1 << 31));
-}
 
 void MemoryManager::EnsureNotNull(VMValue object) const {
   if (object.as_managed_pointer() == VM_NULLPTR) {
@@ -140,19 +124,11 @@ void MemoryManager::EnsureNotNull(VMValue object) const {
   }
 }
 
-uint32_t MemoryManager::GetTypeField(VMValue object, uint8_t *memoryArea) const {
-  uint32_t *typeField = (uint32_t *)(memoryArea + object.as_managed_pointer());
-  return *typeField;
-}
 
 void MemoryManager::EnsureArray(uint32_t typeField) const {
-  if (IsArray(typeField) == false) {
+  if (VMObjectFunction::IsArray(typeField) == false) {
     throw std::runtime_error("Non-array object provided when array object expected");
   }
-}
-
-bool MemoryManager::IsArray(uint32_t typeField) const {
-  return (typeField & (1 << 31)) != 0;
 }
 
 void MemoryManager::EnsureValidAccess(VMValue pointer) const{
@@ -163,17 +139,11 @@ void MemoryManager::EnsureValidAccess(VMValue pointer) const{
 
 uint32_t MemoryManager::GetArrayLength(VMValue object) const {
 
-  uint32_t typeField = GetTypeField(object, m_memory);
+  uint32_t typeField = VMObjectFunction::GetTypeField(object, m_memory);
   EnsureNotNull(object);
   EnsureArray(typeField);
   EnsureValidAccess(object);
-  return GetArrayLengthUnchecked(object, m_memory);
-}
-
-uint32_t MemoryManager::GetArrayLengthUnchecked(VMValue object, uint8_t *memoryArea) const {
-  uint32_t *length_field = (uint32_t *)(memoryArea + object.as_managed_pointer()
-    + TYPE_POINTER_SIZE + FORWARD_POINTER_SIZE);
-  return *length_field;
+  return VMObjectFunction::GetArrayLengthUnchecked(object, m_memory);
 }
 
 
@@ -189,13 +159,17 @@ void MemoryManager::RunGc() {
   QueryPerformanceFrequency(&Frequency);
   QueryPerformanceCounter(&StartingTime);
 #endif
-  Scavenge();
+  
+  if (m_collector != nullptr) {
+    m_collector->Scavenge(&m_memory, *this);
+  }  else {
+    LoggerManager::GetLog(MEMORY_LOG).AddLine(LogLevel::WARNING, "No garbage collector set - skipping collection");
+  }
+
+
 #ifdef _MSC_VER   
   QueryPerformanceCounter(&EndingTime);
   ElapsedMicroseconds.QuadPart = EndingTime.QuadPart - StartingTime.QuadPart;
-
-
-
   ElapsedMicroseconds.QuadPart *= 1000000;
   ElapsedMicroseconds.QuadPart /= Frequency.QuadPart;
 
@@ -207,23 +181,21 @@ void MemoryManager::RunGc() {
     + " Time spent (microseconds) : " + std::to_string(ElapsedMicroseconds.QuadPart)
 #endif
     );
-
 }
 
-void MemoryManager::Scavenge() {
-  if (m_provider == nullptr) {
-    return;
-  }
-  /*
+
+
+void MemoryManager::LogMemoryLayout() const {
   std::string msg = "Memory layout dump:\n";
-  for (int i = HEAP_BEGIN_ADDRESS; i < m_freeSpacePointer;) {
+  for (size_t i = HEAP_BEGIN_ADDRESS; i < m_freeSpacePointer;) {
     VMValue f;
     f.set_managed_pointer(i);
-    auto typeField = GetTypeField(f, m_memory);
-    if (IsArray(typeField)) {
+    auto typeField = VMObjectFunction::GetTypeField(f, m_memory);
+    if (VMObjectFunction::IsArray(typeField)) {
       msg += "\nArray at address " + std::to_string(i) + "\n";
-      msg += "Type tag " + TypeToString(GetArrayValueType(typeField)) + " (Size: " + std::to_string(TypeSize(GetArrayValueType(typeField))) + ")\n";
-      msg += "Length: " + std::to_string(GetArrayLengthUnchecked(f, m_memory)) + "\n";
+      msg += "Type tag " + TypeToString(VMObjectFunction::GetArrayValueType(typeField)) + " (Size: " + 
+        std::to_string(TypeSize(VMObjectFunction::GetArrayValueType(typeField))) + ")\n";
+      msg += "Length: " + std::to_string(VMObjectFunction::GetArrayLengthUnchecked(f, m_memory)) + "\n";
 
     }
     else {
@@ -231,130 +203,18 @@ void MemoryManager::Scavenge() {
       break;
     }
 
-    i += CalculateObjectSize(f, m_memory);
+    i += VMObjectFunction::CalculateObjectSize(f, m_memory);
   }
 
 
-  LoggerManager::GetLog(MEMORY_LOG).AddLine(LogLevel::DEBUG,msg);*/
-
-
-  std::vector<VMValue *> rootSet = m_provider->GetRootSet();
-
-  LoggerManager::GetLog(MEMORY_LOG).AddLine(LogLevel::INFO, "Root set size: " + std::to_string(rootSet.size()) + " objects");
-
-  EvacuateRootSet(rootSet);
-  EvacuateObjects();
-  std::swap(m_toSpace, m_memory);
-}
-
-void MemoryManager::EvacuateRootSet(std::vector<VMValue *> rootSet) {
-  m_freeSpacePointer = HEAP_BEGIN_ADDRESS;
-  for (auto &value : rootSet) {
-    MoveObject(value);
-  }
-}
-
-void MemoryManager::EvacuateObjects() {
-  auto scanPointer = HEAP_BEGIN_ADDRESS;
-
-  while (scanPointer < m_freeSpacePointer) {
-    VMValue pointer;
-    pointer.set_managed_pointer(scanPointer);
-    CopyPointedObjects(pointer);
-    scanPointer += CalculateObjectSize(pointer, m_toSpace);
-  }
-}
-
-void MemoryManager::CopyPointedObjects(VMValue &pointer) {
-
-  auto typeField = GetTypeField(pointer, m_toSpace);
-
-  if (IsArray(typeField)) {
-    if (GetArrayValueType(typeField) != ValueType::MANAGED_POINTER) {
-      return;
-    }
-
-    auto position = pointer.as_managed_pointer() + ArrayMetaDataSize();
-    auto length = GetArrayLengthUnchecked(pointer, m_memory);
-    auto typeSize = TypeSize(GetArrayValueType(typeField));
-    for (size_t i = 0; i < length; ++i) {
-      uint32_t pointer;
-      auto pointerInArrayLocation = position + i*typeSize;
-      memcpy(&pointer, m_memory + pointerInArrayLocation, sizeof(pointer));
-      
-      VMValue tempPointer;
-      tempPointer.set_managed_pointer(pointer);
-      MoveObject(&tempPointer);
-
-      pointer = tempPointer.as_managed_pointer();
-      memcpy(m_memory + pointerInArrayLocation, &pointer, sizeof(pointer));
-    }
-  }
-  else {
-    throw std::logic_error("Copying not implemented for non-arrays");
-  }
-}
-
-// returns size of the object moved
-void MemoryManager::MoveObject(VMValue *pointer) {
-
-  auto forwardingPointer = GetForwardingPointer(pointer);
-  if (forwardingPointer != 0) {
-    UpdatePointer(pointer, forwardingPointer);
-    return;
-  }
-
-  PerformCopy(pointer);  
-}
-
-void MemoryManager::PerformCopy(VMValue *pointer) {
-
-  auto size = CalculateObjectSize(*pointer, m_memory);
-  memcpy(m_toSpace + m_freeSpacePointer, m_memory + pointer->as_managed_pointer(), size);
-
-  if (IsArray(GetTypeField(*pointer, m_memory))) {
-    VMValue foobar;
-    foobar.set_managed_pointer(m_freeSpacePointer);
-
-  }
-  
-
-  UpdateForwardingPointer(pointer);
-
-  UpdatePointer(pointer, m_freeSpacePointer);
-  m_freeSpacePointer += size;
-}
-
-void MemoryManager::UpdateForwardingPointer(VMValue *pointer) {
-  auto position = pointer->as_managed_pointer() + TYPE_POINTER_SIZE; // skip first header field
-  memcpy(m_memory + position, &m_freeSpacePointer, sizeof(m_freeSpacePointer));
+  LoggerManager::GetLog(MEMORY_LOG).AddLine(LogLevel::DEBUG, msg);
 }
 
 
-uint32_t MemoryManager::GetForwardingPointer(VMValue *pointer) {
-  uint32_t ptr;
-  auto position = pointer->as_managed_pointer() + TYPE_POINTER_SIZE; // skip first header field
-  memcpy(&ptr, m_memory + position, sizeof(FORWARD_POINTER_SIZE));
-  return ptr;
-}
-
-void MemoryManager::UpdatePointer(VMValue *pointer, uint32_t newValue) {
-  VMValue newLocation;
-  newLocation.set_managed_pointer(newValue);
-  *pointer = newLocation;
-}
-uint32_t MemoryManager::CalculateObjectSize(const VMValue pointer, uint8_t *memoryArea) const {
-  auto typeField = GetTypeField(pointer, memoryArea);
-
-  if (IsArray(typeField)) {
-    return AlignSize(GetArrayLengthUnchecked(pointer, memoryArea)*TypeSize(GetArrayValueType(typeField)) + ArrayMetaDataSize());
-  } else {
-    throw std::logic_error("Size calculation not implemented for non-arrays");
-  }
-}
 
 MemoryManager &MemMgrInstance() {
   // should probably read the values from ini or something; hard coded for now
-  static MemoryManager manager(1024 * 1024 * 32, &VMInstance());
+  auto size = 1024 * 1024 * 32;
+  static MemoryManager manager(size, GCFactory::GetGC(CollectorType::CHENEY_HEMPISPACE_COLLECTOR, &VMInstance(), size));
   return manager;
 }

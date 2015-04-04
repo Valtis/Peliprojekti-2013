@@ -426,6 +426,18 @@
     <ClInclude Include="include\VM\Memory\RootSetProvider.h">
       <Filter>Header Files\VM\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="include\VM\Memory\GarbageCollector.h">
+      <Filter>Header Files\VM\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VM\Memory\CheneyCollector.h">
+      <Filter>Header Files\VM\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VM\Memory\GCFactory.h">
+      <Filter>Header Files\VM\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VM\Memory\VMObjectFunctions.h">
+      <Filter>Header Files\VM\Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -657,6 +669,18 @@
       <Filter>Source Files\VM\Memory</Filter>
     </ClCompile>
     <ClCompile Include="src\VM\Memory\RootSetProvider.cpp">
+      <Filter>Source Files\VM\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Memory\GarbageCollector.cpp">
+      <Filter>Source Files\VM\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Memory\CheneyCollector.cpp">
+      <Filter>Source Files\VM\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Memory\GCFactory.cpp">
+      <Filter>Source Files\VM\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Memory\VMObjectFunctions.cpp">
       <Filter>Source Files\VM\Memory</Filter>
     </ClCompile>
   </ItemGroup>
