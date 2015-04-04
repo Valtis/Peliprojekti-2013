@@ -25,6 +25,8 @@ VMValue VM::InvokeFunction(VMState &state, const std::string &functionName, std:
     return{};
   }
 
+  LoggerManager::GetLog(VM_LOG).AddLine(LogLevel::INFO, "Invoking script function " + functionName);
+
   InitializeVMForExecution(functionName, objects, function);
   
   try {
@@ -113,7 +115,7 @@ void VM::Execute(VMState &state) {
       break;
     case ByteCode::DOUBLE_TO_INTEGER:
       Op::DoubleToInteger(m_stack);
-
+      break;
     case ByteCode::RETURN:
       if (!Op::Return(m_frames)) {
         return;

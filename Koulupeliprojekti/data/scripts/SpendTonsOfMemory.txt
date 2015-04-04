@@ -6,7 +6,12 @@ endstatics
 function update
   locals
     counter
+    root
   endlocals
+  
+  PushInteger 500
+  AllocateIntegerArray
+  #StoreLocal root
   
   LoadStatic invocationTimes
   JumpIfZero end
