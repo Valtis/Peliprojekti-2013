@@ -231,10 +231,10 @@ void MemoryManager::Scavenge() {
     }
 
     i += CalculateObjectSize(f, m_memory);
-  }*/
+  }
 
 
-  LoggerManager::GetLog(MEMORY_LOG).AddLine(LogLevel::DEBUG,msg);
+  LoggerManager::GetLog(MEMORY_LOG).AddLine(LogLevel::DEBUG,msg);*/
 
 
   std::vector<VMValue *> rootSet = m_provider->GetRootSet();
