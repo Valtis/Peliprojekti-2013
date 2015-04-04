@@ -1,4 +1,4 @@
-#include "VM/ScriptLoader.h"
+#include "VM/ScriptLoader/ScriptLoader.h"
 #include "VM/Memory/MemoryManager.h"
 #include "VM/VMState.h"
 #include "VM/VMFunction.h"

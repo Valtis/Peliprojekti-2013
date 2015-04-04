@@ -121,6 +121,12 @@
     <Filter Include="Header Files\VM\Memory">
       <UniqueIdentifier>{72c695d4-b228-44e6-b731-d948c1bd430b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\VM\ScriptLoader">
+      <UniqueIdentifier>{af562761-a70d-4f74-a493-e34380091c2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\VM\ScriptLoader">
+      <UniqueIdentifier>{0fc20819-e228-411f-bb0e-cb584bff3a3d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -408,9 +414,6 @@
     <ClInclude Include="include\VM\VMOperations.h">
       <Filter>Header Files\VM</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\ScriptLoader.h">
-      <Filter>Header Files\VM</Filter>
-    </ClInclude>
     <ClInclude Include="include\Message\ScriptMessageInterface.h">
       <Filter>Header Files\Message</Filter>
     </ClInclude>
@@ -437,6 +440,9 @@
     </ClInclude>
     <ClInclude Include="include\VM\Memory\VMObjectFunctions.h">
       <Filter>Header Files\VM\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VM\ScriptLoader\ScriptLoader.h">
+      <Filter>Header Files\VM\ScriptLoader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -659,9 +665,6 @@
     <ClCompile Include="src\VM\VMOperations.cpp">
       <Filter>Source Files\VM</Filter>
     </ClCompile>
-    <ClCompile Include="src\VM\ScriptLoader.cpp">
-      <Filter>Source Files\VM</Filter>
-    </ClCompile>
     <ClCompile Include="src\Message\ScriptMessageInterface.cpp">
       <Filter>Source Files\Message</Filter>
     </ClCompile>
@@ -682,6 +685,9 @@
     </ClCompile>
     <ClCompile Include="src\VM\Memory\VMObjectFunctions.cpp">
       <Filter>Source Files\VM\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\ScriptLoader\ScriptLoader.cpp">
+      <Filter>Source Files\VM\ScriptLoader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

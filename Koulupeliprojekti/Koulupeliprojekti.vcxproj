@@ -108,7 +108,7 @@
     <ClInclude Include="include\VM\Memory\MemoryManager.h" />
     <ClInclude Include="include\VM\Memory\RootSetProvider.h" />
     <ClInclude Include="include\VM\Memory\VMObjectFunctions.h" />
-    <ClInclude Include="include\VM\ScriptLoader.h" />
+    <ClInclude Include="include\VM\ScriptLoader\ScriptLoader.h" />
     <ClInclude Include="include\VM\VM.h" />
     <ClInclude Include="include\VM\VMClass.h" />
     <ClInclude Include="include\VM\VMFrame.h" />
@@ -191,7 +191,7 @@
     <ClCompile Include="src\VM\Memory\MemoryManager.cpp" />
     <ClCompile Include="src\VM\Memory\RootSetProvider.cpp" />
     <ClCompile Include="src\VM\Memory\VMObjectFunctions.cpp" />
-    <ClCompile Include="src\VM\ScriptLoader.cpp" />
+    <ClCompile Include="src\VM\ScriptLoader\ScriptLoader.cpp" />
     <ClCompile Include="src\VM\VM.cpp" />
     <ClCompile Include="src\VM\VMClass.cpp" />
     <ClCompile Include="src\VM\VMFrame.cpp" />
