@@ -6,6 +6,7 @@
 #include "VM/FFI/ConversionFunctions.h"
 #include "VM/FFI/NativeBinding.h"
 
+#include "Utility/LoggerManager.h"
 #include "VM/MemoryManager.h"
 #include <vector>
 
@@ -63,6 +64,7 @@ namespace Op {
 
   void InvokeNative(const VMState &state, std::vector<VMValue> &stack) {
     auto ptrToStr = PopValue(stack);
+    LoggerManager::GetLog(VM_LOG).AddLine(LogLevel::INFO, "Invoking native function " + ToNativeType<std::string>(ptrToStr));
     auto binding = state.GetNativeBinding(ToNativeType<std::string>(ptrToStr));
     binding(stack);
   }

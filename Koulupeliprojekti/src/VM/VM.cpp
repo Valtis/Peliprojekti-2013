@@ -199,6 +199,7 @@ std::vector<VMValue *> VM::GetRootSet()  {
   GetRootsFromStack(rootSet);
   GetRootsFromFrames(rootSet);
   GetRootsFromStates(rootSet);
+
   return rootSet;
 }
 
@@ -223,9 +224,9 @@ void VM::GetRootsFromFrames(std::vector<VMValue *> &rootSet) {
 void VM::GetRootsFromStates(std::vector<VMValue *> &rootSet) {
   for (auto state : m_states) {
     for (size_t i = 0; i < state->GetStaticObjectCount(); ++i) {
-      VMValue &object = state->GetStaticObject(i);
-      if (object.type() == ValueType::MANAGED_POINTER) {
-        rootSet.push_back(&object);
+      VMValue *object = &state->GetStaticObjectReference(i);
+      if (object->type() == ValueType::MANAGED_POINTER) {
+        rootSet.push_back(object);
       }
     }
   }

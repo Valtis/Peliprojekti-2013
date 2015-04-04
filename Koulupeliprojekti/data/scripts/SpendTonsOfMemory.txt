@@ -1,4 +1,5 @@
 statics
+  integer 4 as invocationTimes
 endstatics
 
 # allocates 400 megabytes of memory just because
@@ -6,6 +7,14 @@ function update
   locals
     counter
   endlocals
+  
+  LoadStatic invocationTimes
+  JumpIfZero end
+  
+  LoadStatic invocationTimes
+  PushInteger 1
+  IntegerSubtract
+  StoreStatic invocationTimes
   
   # initialize counter to 100 and save it
   PushInteger 1000
@@ -32,5 +41,7 @@ function update
   LoadLocal counter
   JumpIfPositive start
   
+  
+  Label end
   
 endfunction
