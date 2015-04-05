@@ -1,4 +1,5 @@
 #pragma once
+#include "ByteCodeCreator/ByteCodeCreator.h"
 #include <string>
 #include <fstream>
 #include <cstdint>
@@ -7,8 +8,6 @@
 
 class VMFunction;
 class VMState;
-
-
 class ScriptLoader {
 public:
   ScriptLoader(VMState &state, std::string path);
@@ -28,4 +27,5 @@ private:
   std::ifstream m_scriptFile;
 
   std::unordered_map<std::string, size_t> m_staticNameIndexMapping;
+  std::unordered_map<std::string, ByteCodeCreatorFunction> m_byteCodeCreator;
 };

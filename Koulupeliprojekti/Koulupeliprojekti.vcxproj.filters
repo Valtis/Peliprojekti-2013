@@ -127,6 +127,12 @@
     <Filter Include="Header Files\VM\ScriptLoader">
       <UniqueIdentifier>{0fc20819-e228-411f-bb0e-cb584bff3a3d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\VM\ScriptLoader\ByteCodeCreator">
+      <UniqueIdentifier>{666cfb85-4c3e-4d9b-a13e-d005d4ae5b06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\VM\ScriptLoader\ByteCodeCreator">
+      <UniqueIdentifier>{d345fab9-cc90-49b5-a84c-2c7517a612a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h">
@@ -444,6 +450,12 @@
     <ClInclude Include="include\VM\ScriptLoader\ScriptLoader.h">
       <Filter>Header Files\VM\ScriptLoader</Filter>
     </ClInclude>
+    <ClInclude Include="include\VM\ScriptLoader\ByteCodeCreator\ByteCodeCreator.h">
+      <Filter>Header Files\VM\ScriptLoader\ByteCodeCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VM\ScriptLoader\Tokens.h">
+      <Filter>Header Files\VM\ScriptLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -688,6 +700,9 @@
     </ClCompile>
     <ClCompile Include="src\VM\ScriptLoader\ScriptLoader.cpp">
       <Filter>Source Files\VM\ScriptLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\ScriptLoader\ByteCodeCreator\ByteCodeCreator.cpp">
+      <Filter>Source Files\VM\ScriptLoader\ByteCodeCreator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
