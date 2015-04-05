@@ -38,6 +38,29 @@ namespace Op {
     state.SetStaticObject(index, value);
   }
 
+  void LoadArrayIndex(std::vector<VMValue> &stack) {
+    auto array = PopValue(stack);
+    auto index = PopValue(stack);
+    auto type = MemMgrInstance().GetArrayType(array);
+    
+    VMValue value{ type };
+    MemMgrInstance().ReadFromArrayIndex(array, value.value_pointer(), index.as_int(), 1);
+    PushValue(value, stack);
+  }
+
+  void StoreArrayIndex(std::vector<VMValue> &stack) {
+    auto array = PopValue(stack);
+    auto index = PopValue(stack);
+    auto value = PopValue(stack);
+    auto type = MemMgrInstance().GetArrayType(array);
+    if (type != value.type()) {
+      throw std::runtime_error("Array type and value type mismatch: Array is of type " + TypeToString(type) + " and value is of type " + 
+        TypeToString(value.type()));
+    }
+
+    MemMgrInstance().WriteToArrayIndex(array, value.value_pointer(), index.as_int(), 1);
+  }
+
   void AddInteger(std::vector<VMValue> &stack) {
     auto second = PopValue(stack).as_int();
     auto first = PopValue(stack).as_int();
@@ -136,4 +159,10 @@ namespace Op {
     auto size = PopValue(stack);
     PushValue(MemMgrInstance().AllocateArray(ValueType::INT, size.as_int()), stack);
   }
+
+  void AllocateObjectArray(std::vector<VMValue> &stack) {
+    auto size = PopValue(stack);
+    PushValue(MemMgrInstance().AllocateArray(ValueType::MANAGED_POINTER, size.as_int()), stack);
+  }
+
 }

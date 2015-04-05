@@ -16,8 +16,9 @@ uint32_t TypeSize(ValueType type) {
   case ValueType::NATIVE_POINTER:
     return sizeof(void *);
   case ValueType::MANAGED_POINTER:
+    return sizeof(uint32_t);
   default:
-    return 0;
+    throw std::runtime_error("Invalid type specified in TypeSize");
   }
 }
 

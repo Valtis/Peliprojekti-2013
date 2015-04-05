@@ -33,9 +33,10 @@ void ScriptLoader::Load() {
 
 void ScriptLoader::LoadStatics() {
   std::string line;
-  GetLine(line);
-  if (line.empty()) {
-    return;
+  while (GetLine(line)) {
+    if (!line.empty()) {
+      break;
+    }
   }
 
   ByteCodeCreator::ExpectToken(line, STATICS_TOKEN);
@@ -155,7 +156,12 @@ std::unordered_map<std::string, size_t> ScriptLoader::LoadLocals()
 {
   
   std::string line;
-  GetLine(line);
+  while (GetLine(line)) {
+    if (!line.empty()) {
+      break;
+    }
+  }
+  
   ByteCodeCreator::ExpectToken(line, LOCALS_TOKEN);
   std::unordered_map<std::string, uint32_t> localNameToIndexMappings;
   size_t localPos = 0;

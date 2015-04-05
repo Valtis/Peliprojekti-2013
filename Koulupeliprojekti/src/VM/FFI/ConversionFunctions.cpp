@@ -34,3 +34,8 @@ template<>
 char ToNativeType<char>(VMValue obj) {
   return obj.as_char();
 }
+
+template<>
+VMValue ToNativeType<VMValue>(VMValue obj) {
+  return obj;
+}

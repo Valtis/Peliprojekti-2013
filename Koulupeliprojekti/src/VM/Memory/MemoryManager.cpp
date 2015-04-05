@@ -47,6 +47,7 @@ MemoryManager::~MemoryManager() {
 // |array mark bit | array type | forward pointer | array length | array data |
 // so 12 byte header containing bookkeeping information and length * sizeof(array type) bytes for array itself
 VMValue MemoryManager::AllocateArray(const ValueType objectType, const uint32_t length) {
+
   auto requiredSpace = length*TypeSize(objectType) + VMObjectFunction::ArrayMetaDataSize();
 
   requiredSpace = VMObjectFunction::AlignSize(requiredSpace);
@@ -92,6 +93,13 @@ void MemoryManager::ReadFromArrayIndex(const VMValue object, void *value,
     const uint32_t index, const uint32_t length) const {
   auto arrayData = ArrayReadWriteCommon(object, index, length);
   memcpy(value, arrayData.data + index * TypeSize(arrayData.type), TypeSize(arrayData.type)*length);
+}
+
+ValueType MemoryManager::GetArrayType(const VMValue object) {
+  EnsureNotNull(object);
+  uint32_t typeField = VMObjectFunction::GetTypeField(object, m_memory);
+  EnsureArray(typeField);
+  return VMObjectFunction::GetArrayValueType(typeField);
 }
 
 MemoryManager::ArrayReadWriteData MemoryManager::ArrayReadWriteCommon(const VMValue object, 

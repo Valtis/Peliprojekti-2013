@@ -9,8 +9,13 @@ namespace Op {
   void PushValue(const VMValue &value, std::vector<VMValue> &stack);
   VMValue PopValue(std::vector<VMValue> &stack);
   void PushInteger(std::vector<VMValue> &stack, std::vector<VMFrame> &frames);
+  
   void LoadStaticObject(const VMState &state, std::vector<VMValue> &stack, std::vector<VMFrame> &frames);
   void StoreStaticObject(VMState &state, std::vector<VMValue> &stack, std::vector<VMFrame> &frames);
+
+  void LoadArrayIndex(std::vector<VMValue> &stack);
+  void StoreArrayIndex(std::vector<VMValue> &stack);
+
   void AddInteger(std::vector<VMValue> &stack);
   void SubInteger(std::vector<VMValue> &stack);
   void MulInteger(std::vector<VMValue> &stack);
@@ -30,7 +35,8 @@ namespace Op {
   void DoubleToInteger(std::vector<VMValue> &stack);
 
   void AllocateIntegerArray(std::vector<VMValue> &stack);
-
+  void AllocateObjectArray(std::vector<VMValue> &stack);
+  
   // returns true if there are still frames remaining after returning
   bool Return(std::vector<VMFrame> &frames);
 }

@@ -1,5 +1,6 @@
 #include "VM/Memory/CheneyCollector.h"
 #include "Utility/LoggerManager.h"
+#include <cassert>
 
 CheneyCollector::CheneyCollector(uint32_t heapSize, RootSetProvider *provider) : m_provider(provider) {
   m_toSpace = new uint8_t[heapSize];
@@ -47,7 +48,8 @@ void CheneyCollector::EvacuateObjects(uint8_t *fromSpace) {
 // scans object, which is in toSpace, pointed by VMValue &pointer, for sub-pointers. Then copies the objects pointed by subpointer (if needed)
 // and updates the subpointer
 void CheneyCollector::CopyPointedObjects(VMValue &pointer, uint8_t *fromSpace) {
-
+  
+  assert(pointer.as_managed_pointer() != VM_NULLPTR);
   auto typeField = VMObjectFunction::GetTypeField(pointer, m_toSpace);
   
   if (VMObjectFunction::IsArray(typeField)) {
@@ -89,6 +91,9 @@ void CheneyCollector::CopyPointedObjects(VMValue &pointer, uint8_t *fromSpace) {
 
 // moves object pointed by the pointer if it did not contain forwarding pointer, otherwise merely updates pointer
 void CheneyCollector::MoveObject(VMValue *pointer, uint8_t *fromSpace) {
+  if (pointer->as_managed_pointer() == VM_NULLPTR) {
+    return;
+  }
 
   auto forwardingPointer = GetForwardingPointer(pointer, fromSpace);
   if (forwardingPointer != 0) {

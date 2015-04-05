@@ -24,4 +24,6 @@ bool ToNativeType<bool>(VMValue obj);
 template<>
 char ToNativeType<char>(VMValue obj);
 
+template<>
+VMValue ToNativeType<VMValue>(VMValue obj);
 

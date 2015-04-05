@@ -1,22 +1,138 @@
 statics
-  integer 4 as invocationTimes
+  string createObjectGraph as AllocateGraph # awesome naming here
+  string allocateTonsOfStuff as ForceGc  
+  string logging as LogValue
+  string logger as Logger
 endstatics
 
-# allocates 400 megabytes of memory just because
+# random GC testing
 function update
   locals
-    counter
     root
+    root2
+  endlocals
+    
+  LoadStatic AllocateGraph
+  InvokeManaged
+  StoreLocal root
+  
+  # check that both roots get update correctly during GC
+  LoadLocal root
+  StoreLocal root2
+  
+  LoadStatic ForceGc
+  InvokeManaged
+  
+  LoadLocal root
+  LoadStatic LogValue
+  InvokeManaged
+  
+  LoadLocal root2
+  LoadStatic LogValue
+  InvokeManaged  
+endfunction
+
+function createObjectGraph
+  locals
+    root
+    array_3
+    array_4
+    array_5
   endlocals
   
-  PushInteger 500
+  # allocates following graph:
+  #
+  #   1--2    4-*
+  #  / \     ^ \
+  # *   \   /   |
+  #      v /    v
+  #       3---> 5
+  #      / ^ 
+  #      |  \ cycle
+  #       \_/
+  #     
+  #  where star indicates null pointer
+  
+  # allocate array 5
+  PushInteger 2
   AllocateIntegerArray
-  #StoreLocal root
+  StoreLocal array_5
   
+  # array_5[0] = 123
+  PushInteger 123
+  PushInteger 0
+  LoadLocal array_5
+  StoreArrayIndex
   
+  # array_5[1] = 700
+  PushInteger 700
+  PushInteger 1
+  LoadLocal array_5
+  StoreArrayIndex
+    
+  # allocate array 4
+  PushInteger 2
+  AllocateObjectArray
+  StoreLocal array_4
   
+  # array_4[1] = array_5
+  LoadLocal array_5
+  PushInteger 1
+  LoadLocal array_4
+  StoreArrayIndex
+  
+  # allocate array 3
+  PushInteger 3
+  AllocateObjectArray
+  StoreLocal array_3
+  
+  # array_3[0] = array_3
+  LoadLocal array_3
+  PushInteger 0
+  LoadLocal array_3
+  StoreArrayIndex
+    
+  # array_3[1] = array_4
+  LoadLocal array_4
+  PushInteger 1
+  LoadLocal array_3
+  StoreArrayIndex
+    
+  # array_3[2] = array_5
+  LoadLocal array_5
+  PushInteger 2
+  LoadLocal array_3
+  StoreArrayIndex
+  
+  # allocate array 2
+  PushInteger 4
+  AllocateIntegerArray  
+  
+  # allocate root
+  PushInteger 3
+  AllocateObjectArray
+  StoreLocal root
+  
+  # root[0] = array_2 (array 2 still in stack so no local needed)
+  PushInteger 0
+  LoadLocal root
+  StoreArrayIndex
+  
+  # root[1] = array_3
+  LoadLocal array_3
+  PushInteger 1
+  LoadLocal root
+  StoreArrayIndex 
+  
+  LoadLocal root # return value
+endfunction
+
+function allocateTonsOfStuff
+  locals
+    counter
+  endlocals
   # initialize counter to 1000 and save it
-  PushInteger 1000
+  PushInteger 10
   StoreLocal counter
   
   Label start
@@ -39,7 +155,45 @@ function update
   # check if counter is still positive
   LoadLocal counter
   JumpIfPositive start
-  
-  
-  
 endfunction
+
+function logging
+  locals
+    array
+  endlocals
+  StoreLocal array
+  # load array_3 from root[1]
+  PushInteger 1
+  LoadLocal array
+  LoadArrayIndex
+  StoreLocal array
+  
+  # load array_5 from array_3[2]
+  PushInteger 2
+  LoadLocal array
+  LoadArrayIndex
+  StoreLocal array
+  
+  # array now contains reference to array_5
+  
+  #load values from index 1 and 0
+  
+  PushInteger 1
+  LoadLocal array
+  LoadArrayIndex
+  
+  PushInteger 0
+  LoadLocal array
+  LoadArrayIndex
+  
+  # invoke logger twice, thus logging values from indexes 0 & 1
+  
+  LoadStatic Logger
+  InvokeNative 
+  
+  LoadStatic Logger
+  InvokeNative 
+    
+endfunction
+  
+

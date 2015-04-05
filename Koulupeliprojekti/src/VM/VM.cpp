@@ -60,6 +60,9 @@ void VM::Execute(VMState &state) {
     case ByteCode::POP:
       Op::PopValue(m_stack);
     break;
+    case ByteCode::PUSH_INTEGER:
+      Op::PushInteger(m_stack, m_frames);
+      break;
 
     case ByteCode::LOAD_LOCAL:
       Op::LoadLocal(state, m_stack, m_frames);
@@ -67,15 +70,18 @@ void VM::Execute(VMState &state) {
     case ByteCode::STORE_LOCAL:
       Op::StoreLocal(state, m_stack, m_frames);
       break;
-    case ByteCode::PUSH_INTEGER:
-      Op::PushInteger(m_stack, m_frames);
-      break; 
     case ByteCode::LOAD_STATIC_OBJECT: 
       Op::LoadStaticObject(state, m_stack, m_frames);
       break;
     case ByteCode::STORE_STATIC_OBJECT:
       Op::StoreStaticObject(state, m_stack, m_frames);
       break;
+    case ByteCode::LOAD_ARRAY_INDEX:
+      Op::LoadArrayIndex(m_stack);
+      break;
+    case ByteCode::STORE_ARRAY_INDEX:
+      Op::StoreArrayIndex(m_stack);
+      break;    
     case ByteCode::JUMP_IF_ZERO:
       Op::JumpIfZero(state, m_stack, m_frames);
       break;
@@ -108,6 +114,9 @@ void VM::Execute(VMState &state) {
 
     case ByteCode::ALLOCATE_INTEGER_ARRAY:
       Op::AllocateIntegerArray(m_stack);
+      break; 
+    case ByteCode::ALLOCATE_OBJECT_ARRAY:
+      Op::AllocateObjectArray(m_stack);
       break;
     case ByteCode::DOUBLE_TO_INTEGER:
       Op::DoubleToInteger(m_stack);

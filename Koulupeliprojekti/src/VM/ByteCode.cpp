@@ -19,6 +19,10 @@ const char *GetByteCodeName(ByteCode code) {
       return "STORE_LOCAL";
     case ByteCode::LOAD_LOCAL:
       return "LOAD_LOCAL";
+    case ByteCode::STORE_ARRAY_INDEX:
+      return "STORE_ARRAY_INDEX";
+    case ByteCode::LOAD_ARRAY_INDEX:
+      return "LOAD_ARRAY_INDEX";
     case ByteCode::INVOKE_NATIVE:
       return "INVOKE_NATIVE";
     case ByteCode::INVOKE_MANAGED:
@@ -41,6 +45,8 @@ const char *GetByteCodeName(ByteCode code) {
       return "DOUBLE_TO_INTEGER";
     case ByteCode::ALLOCATE_INTEGER_ARRAY:
       return "ALLOCATE_INTEGER_ARRAY";
+    case ByteCode::ALLOCATE_OBJECT_ARRAY:
+      return "ALLOCATE_OBJECT_ARRAY";
     default:
       return "Unknown code";
   }

@@ -10,6 +10,8 @@ uint32_t TypeSize(ValueType type);
 
 std::string TypeToString(ValueType t);
 
+
+// FIXME: Change naming convention to fit the rest of the project
 class VMValue {
 public:
 
@@ -20,6 +22,7 @@ public:
   explicit VMValue(const bool v) { set_bool(v); }
   explicit VMValue(const char v) { set_char(v); }
   explicit VMValue(void * const v) { set_native_pointer(v); }
+  explicit VMValue(ValueType type) { m_type = type; memset(&m_value, 0, sizeof(m_value)); }
 
   void set_int(const int32_t v) {
     m_type = ValueType::INT;
@@ -97,6 +100,8 @@ public:
     return m_type;
   }
 
+  void *value_pointer() { return &m_value; }
+    
 private:
   void assert_type(const ValueType t) const {
     if (m_type != t) {
@@ -106,7 +111,6 @@ private:
   }
 
   ValueType m_type;
-
 
   union {
     int32_t int_value;

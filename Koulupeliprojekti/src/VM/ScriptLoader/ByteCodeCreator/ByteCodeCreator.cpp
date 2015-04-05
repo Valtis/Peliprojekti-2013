@@ -47,6 +47,16 @@ namespace ByteCodeCreator{
     args.function.AddByteCode(static_cast<ByteCode>(args.localsToIndexMappings[args.tokens[1]]));
   }
 
+  HANDLER(LoadArrayIndexToken) {
+    ExpectTokenCount(args.tokens, 1);
+    args.function.AddByteCode(ByteCode::LOAD_ARRAY_INDEX);
+  }
+
+  HANDLER(StoreArrayIndexToken) {
+    ExpectTokenCount(args.tokens, 1);
+    args.function.AddByteCode(ByteCode::STORE_ARRAY_INDEX);
+  }
+
   void SetJumpTarget(VMFunction &function, std::unordered_map<std::string, size_t> &labelPositions, 
     std::unordered_map<std::string, size_t> &unhandled_jumps, std::string labelName) {
     if (labelPositions.find(labelName) == labelPositions.end()) {
@@ -86,19 +96,45 @@ namespace ByteCodeCreator{
     args.function.AddByteCode(ByteCode::RETURN);
   }
 
+  HANDLER(IntegerAdditionToken) {
+    ExpectTokenCount(args.tokens, 1);
+    args.function.AddByteCode(ByteCode::ADD_INTEGER);
+  }
+
   HANDLER(IntegerSubtractToken) {
     ExpectTokenCount(args.tokens, 1);
     args.function.AddByteCode(ByteCode::SUB_INTEGER);
   }
+  
+  HANDLER(IntegerMultiplyToken) {
+    ExpectTokenCount(args.tokens, 1);
+    args.function.AddByteCode(ByteCode::MUL_INTEGER);
+  }
+
+  HANDLER(IntegerDivideToken) {
+    ExpectTokenCount(args.tokens, 1);
+    args.function.AddByteCode(ByteCode::DIV_INTEGER);
+  }
+
 
   HANDLER(AllocateIntegerArrayToken) {
     ExpectTokenCount(args.tokens, 1);
     args.function.AddByteCode(ByteCode::ALLOCATE_INTEGER_ARRAY);
   }
 
+  HANDLER(AllocateObjectArrayToken) {
+    ExpectTokenCount(args.tokens, 1);
+    args.function.AddByteCode(ByteCode::ALLOCATE_OBJECT_ARRAY);
+  }
+  
   HANDLER(InvokeNativeToken) {
     ExpectTokenCount(args.tokens, 1);
     args.function.AddByteCode(ByteCode::INVOKE_NATIVE);
+  } 
+  
+  HANDLER(InvokeManagedToken) {
+    ExpectTokenCount(args.tokens, 1);
+    args.function.AddByteCode(ByteCode::INVOKE_MANAGED);
   }
 
   HANDLER(DoubleToIntegerToken) {
@@ -119,6 +155,8 @@ namespace ByteCodeCreator{
     creators[STORE_STATIC_TOKEN] = &StoreStaticToken;
     creators[LOAD_LOCAL_TOKEN] = &LoadLocalToken;
     creators[STORE_LOCAL_TOKEN] = &StoreLocalToken;
+    creators[LOAD_ARRAY_INDEX_TOKEN] = &LoadArrayIndexToken;
+    creators[STORE_ARRAY_INDEX_TOKEN] = &StoreArrayIndexToken;
 
     // jumps/labels/return
     creators[JUMP_IF_ZERO_TOKEN] = &JumpIfZeroToken;
@@ -128,13 +166,18 @@ namespace ByteCodeCreator{
     creators[RETURN_TOKEN] = &ReturnToken;
     
     // arithmetic operations
+    creators[INTEGER_ADDITION_TOKEN] = &IntegerAdditionToken;
     creators[INTEGER_SUBTRACT_TOKEN] = &IntegerSubtractToken;
+    creators[INTEGER_MULTIPLY_TOKEN] = &IntegerMultiplyToken;
+    creators[INTEGER_DIVIDE_TOKEN] = &IntegerDivideToken;
 
     // allocations
     creators[ALLOCATE_INTEGER_ARRAY_TOKEN] = &AllocateIntegerArrayToken;
+    creators[ALLOCATE_OBJECT_ARRAY_TOKEN] = &AllocateObjectArrayToken;
     
     // function invocations
     creators[INVOKE_NATIVE_TOKEN] = &InvokeNativeToken;
+    creators[INVOKE_MANAGED_TOKEN] = &InvokeManagedToken;
 
     // conversions
     creators[DOUBLE_TO_INTEGER_TOKEN] = &DoubleToIntegerToken;

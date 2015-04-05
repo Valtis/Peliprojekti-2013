@@ -31,6 +31,7 @@
 #include <SDL.h>
 #include <stdexcept>
 #include <sstream>
+#include "Utility/LoggerManager.h"
 #include "Utility/GenericDefines.h"
 
 
@@ -151,16 +152,22 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
 
   // placeholder for testing purposes
   VMState invulnerabilityOnHitScript = VMState{ "data/scripts/invulnerabilityOnHit.txt" };
- 
+
 
   auto registerBinding = CreateBinding(&Entity::RegisterScriptMessageHandler);
   auto blinkMessageBinding = CreateBinding(&ScriptMessageInterface::SendBlinkingMessage);
 
+  void(*pointer)(VMValue) = [](VMValue value) -> void { LoggerManager::GetLog("script.log").AddLine(LogLevel::ALL, value.to_string()); };
+  auto loggerBinding = CreateBinding(pointer);
+
   invulnerabilityOnHitScript.AddNativeBinding("RegisterMessageHandler", registerBinding);
   invulnerabilityOnHitScript.AddNativeBinding("SendBlinkMessage", blinkMessageBinding);
+  
   e->AddVmScript(invulnerabilityOnHitScript);
 
-  e->AddVmScript(VMState{"data/scripts/SpendTonsOfMemory.txt"});
+  auto memoryTesting = VMState{ "data/scripts/SpendTonsOfMemory.txt" };
+  memoryTesting.AddNativeBinding("logger", loggerBinding);
+  e->AddVmScript(memoryTesting);
 
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
   std::unique_ptr<LocationComponent> l(new LocationComponent);
