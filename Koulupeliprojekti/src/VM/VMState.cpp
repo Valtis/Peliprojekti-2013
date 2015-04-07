@@ -20,13 +20,30 @@ void VMState::LoadByteCodeFile(const std::string &path) {
 
 
 
-const VMFunction *VMState::GetFunction(const std::string &name) const {
-  auto iter = m_functions.find(name);
-  if (iter == m_functions.end()) {
+size_t VMState::AddFunction(VMFunction function)
+{
+  m_functioNameToIndexMapping[function.GetName()] = m_functions.size();
+  m_functions.push_back(function);
+  return m_functioNameToIndexMapping[function.GetName()];
+}
+
+
+const VMFunction *VMState::GetFunction(uint32_t index) const
+{
+  try {
+    return &m_functions.at(index);
+  } catch (const std::out_of_range &ex) {
+    throw std::logic_error("Internal error: No function with index " + std::to_string(index) + " found");
+  }
+}
+
+const VMFunction *VMState::GetFunction(const std::string &name) const
+{
+  auto it = m_functioNameToIndexMapping.find(name);
+  if (it == m_functioNameToIndexMapping.end()) {
     return nullptr;
   }
-
-  return &iter->second;
+  return GetFunction(it->second);
 }
 
 void VMState::SetStaticObject(uint32_t index, VMValue value) {
@@ -56,11 +73,6 @@ NativeBinding VMState::GetNativeBinding(const std::string &name) const {
 
 void VMState::AddNativeBinding(const std::string &name, NativeBinding binding) {
   m_native_bindings[name] = binding;
-}
-
-
-void VMState::AddFunction(const std::string &name, VMFunction function) {
-  m_functions[name] = function;
 }
 
 size_t VMState::GetStaticObjectCount() const {

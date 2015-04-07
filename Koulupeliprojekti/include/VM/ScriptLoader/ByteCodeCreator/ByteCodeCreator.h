@@ -3,15 +3,17 @@
 #include <unordered_map>
 #include <string>
 #include <cstdint>
-
+#include <tuple>
 class VMFunction;
 
 struct ByteCodeCreatorArguments {
   VMFunction &function; 
-  std::unordered_map<std::string, size_t> &staticNameToIndexMappings;
-  std::unordered_map<std::string, size_t> &localsToIndexMappings;
+  std::unordered_map<std::string, size_t> &staticNameToIndexMapping;
+  std::unordered_map<std::string, size_t> &localToIndexMapping;
+  std::unordered_map<std::string, size_t> &functionNameToIndexMapping;
+  std::vector<std::tuple<std::string, std::string, size_t>> &funcionCallsWithUndeclaredNames;
   std::unordered_map<std::string, size_t> &labelPositions;
-  std::unordered_map<std::string, size_t> &unhandled_jumps; 
+  std::unordered_map<std::string, size_t> &unhandledJumps; 
   std::vector<std::string> &tokens;
 };
 

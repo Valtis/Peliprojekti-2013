@@ -1,7 +1,4 @@
 statics
-  string createObjectGraph as AllocateGraph # awesome naming here
-  string allocateTonsOfStuff as ForceGc  
-  string logging as LogValue
   string logger as Logger
 endstatics
 
@@ -12,24 +9,20 @@ function update
     root2
   endlocals
     
-  LoadStatic AllocateGraph
-  InvokeManaged
+  InvokeManaged createObjectGraph
   StoreLocal root
   
   # check that both roots get update correctly during GC
   LoadLocal root
   StoreLocal root2
   
-  LoadStatic ForceGc
-  InvokeManaged
+  InvokeManaged allocateTonsOfStuff
   
   LoadLocal root
-  LoadStatic LogValue
-  InvokeManaged
+  InvokeManaged logging
   
   LoadLocal root2
-  LoadStatic LogValue
-  InvokeManaged  
+  InvokeManaged logging
 endfunction
 
 function createObjectGraph

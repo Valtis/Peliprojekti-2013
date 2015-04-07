@@ -62,7 +62,7 @@ void ScriptLoader::AddStaticValue(const std::vector<std::string> &tokens) {
   auto name = tokens[3];
   auto value = tokens[1];
   
-  if (m_staticNameIndexMapping.find(name) != m_staticNameIndexMapping.end()) {
+  if (m_staticNameToIndexMapping.find(name) != m_staticNameToIndexMapping.end()) {
     throw std::runtime_error("Multiple declarations of static value " + name);
   }
   
@@ -82,7 +82,7 @@ void ScriptLoader::AddStaticValue(const std::vector<std::string> &tokens) {
   }
 
   auto index = m_state.AddStaticObject(obj);
-  m_staticNameIndexMapping[name] = index;
+  m_staticNameToIndexMapping[name] = index;
 }
 
 
@@ -99,6 +99,8 @@ void ScriptLoader::LoadFunctions() {
 
     LoadFunction(tokens[1]);
   }
+
+  HandleFunctionCallsWithUndeclaredNames();
 }
 
 void ScriptLoader::LoadFunction(const std::string &name) {
@@ -125,22 +127,22 @@ void ScriptLoader::LoadFunction(const std::string &name) {
 
     auto tokens = Utility::Tokenize(line, " ");
     try {
-      m_byteCodeCreator.at(tokens[0])({ function, m_staticNameIndexMapping, locals, labelPositions, unhandledJumps, tokens });
+      m_byteCodeCreator.at(tokens[0])({ function, m_staticNameToIndexMapping, locals, m_functionNameToIndexMapping, m_funcionCallsWithUndeclaredNames, labelPositions, unhandledJumps, tokens });
     } catch (const std::out_of_range &ex) {
       throw std::runtime_error("Unexpected token '" + tokens[0] + "'. Expected a command");
     }
   }
 
-  HandleUnhandledJumps(function, unhandledJumps, labelPositions);
+  HandleJumpsWithUndeclaredTargets(function, unhandledJumps, labelPositions);
 
 
   function.SetLocalCount(locals.size());
   function.AddByteCode(ByteCode::RETURN);
-  m_state.AddFunction(name, function);
+  m_functionNameToIndexMapping[name] = m_state.AddFunction(function);
 }
 
 
-void ScriptLoader::HandleUnhandledJumps(VMFunction &function, std::unordered_map<std::string, size_t> &unhandledJumps, std::unordered_map<std::string, size_t> &labelPositions)
+void ScriptLoader::HandleJumpsWithUndeclaredTargets(VMFunction &function, std::unordered_map<std::string, size_t> &unhandledJumps, std::unordered_map<std::string, size_t> &labelPositions)
 {
   for (auto pair : unhandledJumps) {
     if (labelPositions.find(pair.first) == labelPositions.end()) {
@@ -150,7 +152,18 @@ void ScriptLoader::HandleUnhandledJumps(VMFunction &function, std::unordered_map
   }
 }
 
-
+void ScriptLoader::HandleFunctionCallsWithUndeclaredNames() {
+  for (auto &call : m_funcionCallsWithUndeclaredNames) {
+    auto it = m_functionNameToIndexMapping.find(std::get<1>(call));
+    if (it == m_functionNameToIndexMapping.end()) {
+      throw std::runtime_error("Could not find function name " + std::get<1>(call));
+    }
+    // GetFunction returns const pointer as this is meant for runtime usage where functions should not be modified
+    // however, in this context, we do need to modify the placeholder bytecode, so we need to cast the constness away
+    auto function = const_cast<VMFunction *>(m_state.GetFunction(std::get<0>(call)));
+    function->ChangeByteCode(std::get<2>(call), static_cast<ByteCode>(it->second));
+  }
+}
 
 std::unordered_map<std::string, size_t> ScriptLoader::LoadLocals()
 {

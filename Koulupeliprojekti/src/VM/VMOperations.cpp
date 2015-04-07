@@ -23,17 +23,17 @@ namespace Op {
   }
 
   void PushInteger(std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
-    PushValue(VMValue{ (int32_t)frames.back().GetNextInstruction() }, stack);
+    PushValue(VMValue{ static_cast<int32_t>(frames.back().GetNextInstruction()) }, stack);
   }
 
 
   void LoadStaticObject(const VMState &state, std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
-    auto index = (uint32_t)frames.back().GetNextInstruction();
+    auto index = static_cast<uint32_t>(frames.back().GetNextInstruction());
     PushValue(state.GetStaticObject(index), stack);
   }
 
   void StoreStaticObject(VMState &state, std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
-    auto index = (uint32_t)frames.back().GetNextInstruction();
+    auto index = static_cast<uint32_t>(frames.back().GetNextInstruction());
     auto value = PopValue(stack);
     state.SetStaticObject(index, value);
   }
@@ -92,12 +92,8 @@ namespace Op {
   }
 
   void InvokeManaged(const VMState &state, std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
-    auto ptrToName = PopValue(stack);
-    auto name = ToNativeType<std::string>(ptrToName);
-    auto function = state.GetFunction(name);
-    if (function == nullptr) {
-      throw std::runtime_error("Could not invoke function " + name + ": No such function exists");
-    }
+    auto index = static_cast<uint32_t>(frames.back().GetNextInstruction());
+    auto function = state.GetFunction(index);
     frames.push_back(function);
   }
 
@@ -112,7 +108,7 @@ namespace Op {
   }
 
   void JumpIfZero(const VMState &state, std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
-    auto jumpDestination = (uint32_t)frames.back().GetNextInstruction();
+    auto jumpDestination = static_cast<uint32_t>(frames.back().GetNextInstruction());
     auto value = PopValue(stack);
 
     if (value.as_int() == 0) {
@@ -121,7 +117,7 @@ namespace Op {
   }
 
   void JumpIfNegative(const VMState &state, std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
-    auto jumpDestination = (uint32_t)frames.back().GetNextInstruction();
+    auto jumpDestination = static_cast<uint32_t>(frames.back().GetNextInstruction());
     auto value = PopValue(stack);
     if (value.as_int() < 0) {
       frames.back().SetNextInstruction(jumpDestination);
@@ -129,7 +125,7 @@ namespace Op {
   }
 
   void JumpIfPositive(const VMState &state, std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
-    auto jumpDestination = (uint32_t)frames.back().GetNextInstruction();
+    auto jumpDestination = static_cast<uint32_t>(frames.back().GetNextInstruction());
     auto value = PopValue(stack);
 
     if (value.as_int() > 0) {
@@ -138,20 +134,20 @@ namespace Op {
   }
 
   void StoreLocal(const VMState &state, std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
-    auto index = (uint32_t)frames.back().GetNextInstruction();
+    auto index = static_cast<uint32_t>(frames.back().GetNextInstruction());
     auto value = PopValue(stack);
 
     frames.back().SetLocalVariable(index, value);
   }
 
   void LoadLocal(const VMState &state, std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
-    auto index = (uint32_t)frames.back().GetNextInstruction();
+    auto index = static_cast<uint32_t>(frames.back().GetNextInstruction());
     PushValue(frames.back().GetLocalVariable(index), stack);
   }
 
   void DoubleToInteger(std::vector<VMValue> &stack) {
     auto value = PopValue(stack);
-    value.set_int((int32_t)value.as_double());
+    value.set_int(static_cast<int32_t>(value.as_double()));
     PushValue(value, stack);
   }
 

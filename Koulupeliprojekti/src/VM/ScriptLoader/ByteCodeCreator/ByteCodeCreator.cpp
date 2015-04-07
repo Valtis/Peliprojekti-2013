@@ -21,30 +21,30 @@ namespace ByteCodeCreator{
 
   HANDLER(LoadStaticToken) {
     ExpectTokenCount(args.tokens, 2);
-    ExpectNameExists(args.staticNameToIndexMappings, args.tokens[1]);
+    ExpectNameExists(args.staticNameToIndexMapping, args.tokens[1]);
     args.function.AddByteCode(ByteCode::LOAD_STATIC_OBJECT);
-    args.function.AddByteCode(static_cast<ByteCode>(args.staticNameToIndexMappings[args.tokens[1]]));
+    args.function.AddByteCode(static_cast<ByteCode>(args.staticNameToIndexMapping[args.tokens[1]]));
   }
 
   HANDLER(StoreStaticToken) {
     ExpectTokenCount(args.tokens, 2);
-    ExpectNameExists(args.staticNameToIndexMappings, args.tokens[1]);
+    ExpectNameExists(args.staticNameToIndexMapping, args.tokens[1]);
     args.function.AddByteCode(ByteCode::STORE_STATIC_OBJECT);
-    args.function.AddByteCode(static_cast<ByteCode>(args.staticNameToIndexMappings[args.tokens[1]]));
+    args.function.AddByteCode(static_cast<ByteCode>(args.staticNameToIndexMapping[args.tokens[1]]));
   }
 
   HANDLER(LoadLocalToken) {
     ExpectTokenCount(args.tokens, 2);
-    ExpectNameExists(args.localsToIndexMappings, args.tokens[1]);
+    ExpectNameExists(args.localToIndexMapping, args.tokens[1]);
     args.function.AddByteCode(ByteCode::LOAD_LOCAL);
-    args.function.AddByteCode(static_cast<ByteCode>(args.localsToIndexMappings[args.tokens[1]]));
+    args.function.AddByteCode(static_cast<ByteCode>(args.localToIndexMapping[args.tokens[1]]));
   }
 
   HANDLER(StoreLocalToken) {
     ExpectTokenCount(args.tokens, 2);
-    ExpectNameExists(args.localsToIndexMappings, args.tokens[1]);
+    ExpectNameExists(args.localToIndexMapping, args.tokens[1]);
     args.function.AddByteCode(ByteCode::STORE_LOCAL);
-    args.function.AddByteCode(static_cast<ByteCode>(args.localsToIndexMappings[args.tokens[1]]));
+    args.function.AddByteCode(static_cast<ByteCode>(args.localToIndexMapping[args.tokens[1]]));
   }
 
   HANDLER(LoadArrayIndexToken) {
@@ -71,19 +71,19 @@ namespace ByteCodeCreator{
   HANDLER(JumpIfZeroToken) {
     ExpectTokenCount(args.tokens, 2);
     args.function.AddByteCode(ByteCode::JUMP_IF_ZERO);
-    SetJumpTarget(args.function, args.labelPositions, args.unhandled_jumps, args.tokens[1]);
+    SetJumpTarget(args.function, args.labelPositions, args.unhandledJumps, args.tokens[1]);
   }
 
   HANDLER(JumpIfNegativeToken) {
     ExpectTokenCount(args.tokens, 2);
     args.function.AddByteCode(ByteCode::JUMP_IF_NEGATIVE);
-    SetJumpTarget(args.function, args.labelPositions, args.unhandled_jumps, args.tokens[1]);
+    SetJumpTarget(args.function, args.labelPositions, args.unhandledJumps, args.tokens[1]);
   }
 
   HANDLER(JumpIfPositiveToken) {
     ExpectTokenCount(args.tokens, 2);
     args.function.AddByteCode(ByteCode::JUMP_IF_POSITIVE);
-    SetJumpTarget(args.function, args.labelPositions, args.unhandled_jumps, args.tokens[1]);
+    SetJumpTarget(args.function, args.labelPositions, args.unhandledJumps, args.tokens[1]);
   }
 
   HANDLER(LabelToken) {
@@ -133,8 +133,15 @@ namespace ByteCodeCreator{
   } 
   
   HANDLER(InvokeManagedToken) {
-    ExpectTokenCount(args.tokens, 1);
+    ExpectTokenCount(args.tokens, 2);
     args.function.AddByteCode(ByteCode::INVOKE_MANAGED);
+    if (args.functionNameToIndexMapping.find(args.tokens[1]) == args.functionNameToIndexMapping.end()) {
+      size_t index = args.function.AddByteCode(ByteCode::NOP);
+      args.funcionCallsWithUndeclaredNames.push_back(std::make_tuple(args.function.GetName(), args.tokens[1], index));
+    }
+    else {
+      args.function.AddByteCode(static_cast<ByteCode>(args.functionNameToIndexMapping.at(args.tokens[1])));
+    }
   }
 
   HANDLER(DoubleToIntegerToken) {

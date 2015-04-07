@@ -94,9 +94,6 @@
     <Filter Include="Header Files\Physics">
       <UniqueIdentifier>{f24ba431-952f-4413-a544-6e5bad9e5fb8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Physics">
-      <UniqueIdentifier>{76732070-0e13-4a91-8c60-17d782209b60}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Sound">
       <UniqueIdentifier>{5170db3e-cea5-4bfe-83e1-77c68c1cf8de}</UniqueIdentifier>
     </Filter>
@@ -132,6 +129,9 @@
     </Filter>
     <Filter Include="Header Files\VM\ScriptLoader\ByteCodeCreator">
       <UniqueIdentifier>{d345fab9-cc90-49b5-a84c-2c7517a612a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sound\Physics">
+      <UniqueIdentifier>{76732070-0e13-4a91-8c60-17d782209b60}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -600,7 +600,7 @@
       <Filter>Source Files\UI\Window</Filter>
     </ClCompile>
     <ClCompile Include="src\Physics\PhysicsHandler.cpp">
-      <Filter>Source Files\Physics</Filter>
+      <Filter>Source Files\Sound\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\Component\FlyingAiComponent.cpp">
       <Filter>Source Files\Component</Filter>
