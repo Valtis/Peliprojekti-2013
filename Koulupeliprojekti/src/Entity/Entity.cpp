@@ -1,5 +1,6 @@
 #include "Entity/Entity.h"
-#include "VM/VM.h"
+#include "VM/Core/VM.h"
+
 Entity::Entity()
 {
 
@@ -19,8 +20,8 @@ void Entity::AddComponent(ComponentType type, std::unique_ptr<Component> c)
   }
 }
 
-void Entity::AddVmScript(const VMState &state) {
-  m_vmScripts.push_back(state); 
+void Entity::AddVmScript(VMState state) {
+  m_vmScripts.push_back(std::move(state)); 
 
   VMInstance().RegisterVMState(&m_vmScripts.back());
   VMInstance().InvokeFunction(m_vmScripts.back(), "initialize", { VMValue{ this }, VMValue{ &m_vmScripts.back() } });

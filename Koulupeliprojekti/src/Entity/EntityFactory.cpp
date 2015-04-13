@@ -24,8 +24,9 @@
 
 
 #include "Message/ScriptMessageInterface.h"
-#include "VM/VmState.h"
+#include "VM/Core/VmState.h"
 #include "VM/FFI/NativeBinding.h"
+#include "VM/Compiler/Compiler.h"
 
 #include <string>
 #include <SDL.h>
@@ -151,24 +152,21 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   std::unique_ptr<Entity> e(new Entity);
 
   // placeholder for testing purposes
-  VMState invulnerabilityOnHitScript = VMState{ "data/scripts/invulnerabilityOnHit.txt" };
+  VMState invulnerabilityOnHitScript = Compiler::Compile("data/scripts/InvulnerabilityOnHitScript.txt");
 
 
   auto registerBinding = CreateBinding(&Entity::RegisterScriptMessageHandler);
   auto blinkMessageBinding = CreateBinding(&ScriptMessageInterface::SendBlinkingMessage);
 
-  void(*pointer)(VMValue) = [](VMValue value) -> void { LoggerManager::GetLog("script.log").AddLine(LogLevel::ALL, value.to_string()); };
+  void(*pointer)(VMValue) = [](VMValue value) -> void { LoggerManager::GetLog("script.log").AddLine(LogLevel::ALL, value.ToString()); };
   auto loggerBinding = CreateBinding(pointer);
 
   invulnerabilityOnHitScript.AddNativeBinding("RegisterMessageHandler", registerBinding);
   invulnerabilityOnHitScript.AddNativeBinding("SendBlinkMessage", blinkMessageBinding);
   
-  e->AddVmScript(invulnerabilityOnHitScript);
+  e->AddVmScript(std::move(invulnerabilityOnHitScript));
 
-  auto memoryTesting = VMState{ "data/scripts/SpendTonsOfMemory.txt" };
-  memoryTesting.AddNativeBinding("logger", loggerBinding);
-  e->AddVmScript(memoryTesting);
-
+  
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
   std::unique_ptr<LocationComponent> l(new LocationComponent);
   std::unique_ptr<VelocityComponent> v(new VelocityComponent(5, 13));

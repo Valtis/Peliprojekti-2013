@@ -118,343 +118,469 @@
     <Filter Include="Header Files\VM\Memory">
       <UniqueIdentifier>{72c695d4-b228-44e6-b731-d948c1bd430b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\VM\ScriptLoader">
-      <UniqueIdentifier>{af562761-a70d-4f74-a493-e34380091c2f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\VM\ScriptLoader">
-      <UniqueIdentifier>{0fc20819-e228-411f-bb0e-cb584bff3a3d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\VM\ScriptLoader\ByteCodeCreator">
-      <UniqueIdentifier>{666cfb85-4c3e-4d9b-a13e-d005d4ae5b06}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\VM\ScriptLoader\ByteCodeCreator">
-      <UniqueIdentifier>{d345fab9-cc90-49b5-a84c-2c7517a612a2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Sound\Physics">
       <UniqueIdentifier>{76732070-0e13-4a91-8c60-17d782209b60}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\VM\Core">
+      <UniqueIdentifier>{dc7e2513-cd41-4d4e-8259-417ddccfab5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\VM\Compiler">
+      <UniqueIdentifier>{b9bb5783-cca5-4526-87af-d5428ba0d5a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\VM\Compiler\AST">
+      <UniqueIdentifier>{783dab78-9679-4709-a241-f1520434ae78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\VM\Compiler\CodeGen">
+      <UniqueIdentifier>{fb83f4e9-b7ef-4bf1-82ee-8cbdacad623c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\VM\Compiler\Tokenizer">
+      <UniqueIdentifier>{33d14c0c-8135-4dcf-b2bf-efd594ecc313}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\VM\Compiler\Tokens">
+      <UniqueIdentifier>{8ef17fd3-136b-4334-bf91-412f013931f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\VM\Core">
+      <UniqueIdentifier>{9818e51a-7dc7-4ad1-a7e6-70b914d58798}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\VM\Compiler">
+      <UniqueIdentifier>{ca5e9e09-127d-4cf4-8637-843ad8127400}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\VM\Compiler\AST">
+      <UniqueIdentifier>{4f5ea8ed-a28f-4a32-a707-4aed24a39065}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\VM\Compiler\CodeGen">
+      <UniqueIdentifier>{44a3845d-0b0f-4c91-8c2b-fff785182e17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\VM\Compiler\Parser">
+      <UniqueIdentifier>{d885e227-ae44-479d-b73c-f37f1b4afec6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\VM\Compiler\Parser">
+      <UniqueIdentifier>{bfec50f6-47f3-4af1-a300-d9f3074a4819}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\VM\Compiler\Tokenizer">
+      <UniqueIdentifier>{564cdfbd-ddc7-449e-81d8-e6584ca2cfc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\VM\Compiler\Tokens">
+      <UniqueIdentifier>{e60246aa-7021-4db6-b397-c42151a22bfd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Game.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\VM\Compiler\Compiler.h">
+      <Filter>Header Files\VM\Compiler</Filter>
     </ClInclude>
-    <ClInclude Include="include\Level\LevelManager.h">
-      <Filter>Header Files\Level</Filter>
+    <ClInclude Include="src\VM\FFI\ConversionFunctions.h">
+      <Filter>Header Files\VM\FFI</Filter>
     </ClInclude>
-    <ClInclude Include="include\Level\Level.h">
-      <Filter>Header Files\Level</Filter>
+    <ClInclude Include="src\VM\FFI\FunctionArgumentTupleTemplates.h">
+      <Filter>Header Files\VM\FFI</Filter>
     </ClInclude>
-    <ClInclude Include="include\Entity\Entity.h">
-      <Filter>Header Files\Entity</Filter>
+    <ClInclude Include="src\VM\FFI\NativeBinding.h">
+      <Filter>Header Files\VM\FFI</Filter>
     </ClInclude>
-    <ClInclude Include="include\Component\Component.h">
-      <Filter>Header Files\Component</Filter>
+    <ClInclude Include="src\VM\FFI\NativeBindingTypedef.h">
+      <Filter>Header Files\VM\FFI</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\Message.h">
-      <Filter>Header Files\Message</Filter>
+    <ClInclude Include="src\VM\FFI\VariadicFunctionCallTemplates.h">
+      <Filter>Header Files\VM\FFI</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\MessageProcessor.h">
-      <Filter>Header Files\Message</Filter>
+    <ClInclude Include="src\VM\Memory\CheneyCollector.h">
+      <Filter>Header Files\VM\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="include\Utility\Logger.h">
+    <ClInclude Include="src\VM\Memory\GarbageCollector.h">
+      <Filter>Header Files\VM\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Memory\GCFactory.h">
+      <Filter>Header Files\VM\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Memory\MemoryManager.h">
+      <Filter>Header Files\VM\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Memory\RootSetProvider.h">
+      <Filter>Header Files\VM\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Memory\VMObjectFunctions.h">
+      <Filter>Header Files\VM\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Core\ByteCode.h">
+      <Filter>Header Files\VM\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Core\VM.h">
+      <Filter>Header Files\VM\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Core\VMFrame.h">
+      <Filter>Header Files\VM\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Core\VMFunction.h">
+      <Filter>Header Files\VM\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Core\VMOperations.h">
+      <Filter>Header Files\VM\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Core\VMState.h">
+      <Filter>Header Files\VM\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Core\VMValue.h">
+      <Filter>Header Files\VM\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utility\DirectionEnum.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="include\Utility\LoggerManager.h">
+    <ClInclude Include="src\Utility\GenericDefines.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="include\Utility\Tick.h">
+    <ClInclude Include="src\Utility\Logger.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="include\UI\Window\WindowBase.h">
-      <Filter>Header Files\UI\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="include\UI\Window\Button.h">
-      <Filter>Header Files\UI\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="include\UI\Window\WindowManager.h">
-      <Filter>Header Files\UI\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="include\UI\Window\Window.h">
-      <Filter>Header Files\UI\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Utility\Logs.h">
+    <ClInclude Include="src\Utility\LoggerManager.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\Commands\Command.h">
-      <Filter>Header Files\Message\Commands</Filter>
+    <ClInclude Include="src\Utility\Logs.h">
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\Commands\MouseCommand.h">
-      <Filter>Header Files\Message\Commands</Filter>
+    <ClInclude Include="src\Utility\StringUtility.h">
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="include\UI\InputManager.h">
+    <ClInclude Include="src\Utility\Tick.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\AndNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\ArithmeticNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\ASTNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\ASTVisitor.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\ComparisonNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\CondNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\DoubleNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\ElseNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\FloatNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\FunctionNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\FunctionParameterListNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\IdentifierNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\IfNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\IntegerNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\InvokeNativeNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\LocalsNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\OrNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\ReturnNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\RootNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\SetValueNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\StaticsNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\StringNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\AST\WhileNode.h">
+      <Filter>Header Files\VM\Compiler\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\CodeGen\CodeGenerator.h">
+      <Filter>Header Files\VM\Compiler\CodeGen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\CodeGen\CodeGeneratorVisitor.h">
+      <Filter>Header Files\VM\Compiler\CodeGen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\Tokens\Token.h">
+      <Filter>Header Files\VM\Compiler\Tokens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\Tokens\TokenFactory.h">
+      <Filter>Header Files\VM\Compiler\Tokens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\Tokens\Tokens.h">
+      <Filter>Header Files\VM\Compiler\Tokens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\Tokens\TokenType.h">
+      <Filter>Header Files\VM\Compiler\Tokens</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\Tokenizer\Reader.h">
+      <Filter>Header Files\VM\Compiler\Tokenizer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\Tokenizer\Tokenizer.h">
+      <Filter>Header Files\VM\Compiler\Tokenizer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\Parser\Parser.h">
+      <Filter>Header Files\VM\Compiler\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\Hud.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\FontManager.h">
-      <Filter>Header Files\Graphics</Filter>
+    <ClInclude Include="src\UI\InputManager.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\Renderer.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\SpriteManager.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Utility\StringUtility.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\Sprite.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\SpriteLoader.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\SpriteSheetLoader.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\UI\Controller\Controller.h">
-      <Filter>Header Files\UI\Controller</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\SurfaceOperations.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\UI\Controller\KeyboardController.h">
-      <Filter>Header Files\UI\Controller</Filter>
-    </ClInclude>
-    <ClInclude Include="include\UI\Controller\MouseController.h">
-      <Filter>Header Files\UI\Controller</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Component\LocationComponent.h">
-      <Filter>Header Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\TextureFactory.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\UI\Window\TextElement.h">
+    <ClInclude Include="src\UI\Window\Button.h">
       <Filter>Header Files\UI\Window</Filter>
     </ClInclude>
-    <ClInclude Include="include\Component\VelocityComponent.h">
-      <Filter>Header Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Collision\CollisionChecker.h">
-      <Filter>Header Files\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\LocationChangeMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\MessageFactory.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Component\GraphicsComponent.h">
-      <Filter>Header Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\Camera\Camera.h">
-      <Filter>Header Files\Graphics\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Graphics\Camera\EntityTrackingCamera.h">
-      <Filter>Header Files\Graphics\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Component\CollisionComponent.h">
-      <Filter>Header Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\CollisionMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Component\InputComponent.h">
-      <Filter>Header Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\SetVelocityMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\Commands\ControlCommand.h">
-      <Filter>Header Files\Message\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Component\PhysicsComponent.h">
-      <Filter>Header Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Component\Scripts\BulletScriptComponent.h">
-      <Filter>Header Files\Component\Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\GenericMessageWithNoData.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Component\AiComponent.h">
-      <Filter>Header Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Component\FactionComponent.h">
-      <Filter>Header Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Component\FollowingAiComponent.h">
-      <Filter>Header Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Component\HealthComponent.h">
-      <Filter>Header Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Entity\EntityFactory.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\UI\Window\TextBox.h">
+    <ClInclude Include="src\UI\Window\TextBox.h">
       <Filter>Header Files\UI\Window</Filter>
     </ClInclude>
-    <ClInclude Include="include\UI\Window\TextField.h">
+    <ClInclude Include="src\UI\Window\TextElement.h">
       <Filter>Header Files\UI\Window</Filter>
     </ClInclude>
-    <ClInclude Include="include\Component\WalkingAiComponent.h">
-      <Filter>Header Files\Component</Filter>
+    <ClInclude Include="src\UI\Window\TextField.h">
+      <Filter>Header Files\UI\Window</Filter>
     </ClInclude>
-    <ClInclude Include="include\Physics\PhysicsHandler.h">
+    <ClInclude Include="src\UI\Window\Window.h">
+      <Filter>Header Files\UI\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\Window\WindowBase.h">
+      <Filter>Header Files\UI\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\Window\WindowManager.h">
+      <Filter>Header Files\UI\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\Controller\Controller.h">
+      <Filter>Header Files\UI\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\Controller\JoystickController.h">
+      <Filter>Header Files\UI\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\Controller\KeyboardController.h">
+      <Filter>Header Files\UI\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\Controller\MouseController.h">
+      <Filter>Header Files\UI\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sound\Music.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sound\SoundEffectDefs.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sound\SoundEffects.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sound\SoundManager.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\PhysicsHandler.h">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Component\FlyingAiComponent.h">
-      <Filter>Header Files\Component</Filter>
+    <ClInclude Include="src\Message\AddHealthMessage.h">
+      <Filter>Header Files\Message</Filter>
     </ClInclude>
-    <ClInclude Include="include\Component\Scripts\EndLevelScriptComponent.h">
-      <Filter>Header Files\Component\Scripts</Filter>
+    <ClInclude Include="src\Message\AnimationChangeMessage.h">
+      <Filter>Header Files\Message</Filter>
     </ClInclude>
-    <ClInclude Include="include\Level\LevelGenerator.h">
+    <ClInclude Include="src\Message\CollisionMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\FiringDirectionMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\GenericMessageWithNoData.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\LocationChangeMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\Message.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\MessageFactory.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\MessageProcessor.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\NewTiledSpriteMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\PlaySoundEffectMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\ResetEntityPositionMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\ScriptMessageInterface.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\SetGraphicsVisibilityMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\SetLocationMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\SetVelocityMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\SoundManagerPlaySoundMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\SpawnEntityMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\StartBlinkingMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\TerminateEntityMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\VelocityChangeMessage.h">
+      <Filter>Header Files\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\Commands\Command.h">
+      <Filter>Header Files\Message\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\Commands\ControlCommand.h">
+      <Filter>Header Files\Message\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Message\Commands\MouseCommand.h">
+      <Filter>Header Files\Message\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Level\Level.h">
       <Filter>Header Files\Level</Filter>
     </ClInclude>
-    <ClInclude Include="include\Sound\Music.h">
-      <Filter>Header Files\Sound</Filter>
+    <ClInclude Include="src\Level\LevelGenerator.h">
+      <Filter>Header Files\Level</Filter>
     </ClInclude>
-    <ClInclude Include="include\Sound\SoundEffects.h">
-      <Filter>Header Files\Sound</Filter>
+    <ClInclude Include="src\Level\LevelManager.h">
+      <Filter>Header Files\Level</Filter>
     </ClInclude>
-    <ClInclude Include="include\Sound\SoundManager.h">
-      <Filter>Header Files\Sound</Filter>
+    <ClInclude Include="src\Graphics\FontManager.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\NewTiledSpriteMessage.h">
-      <Filter>Header Files\Message</Filter>
+    <ClInclude Include="src\Graphics\Renderer.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\UI\Hud.h">
-      <Filter>Header Files\UI</Filter>
+    <ClInclude Include="src\Graphics\Sprite.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Component\Scripts\TempInvulnerabilityScript.h">
-      <Filter>Header Files\Component\Scripts</Filter>
+    <ClInclude Include="src\Graphics\SpriteLoader.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Component\Scripts\BlinkScript.h">
-      <Filter>Header Files\Component\Scripts</Filter>
+    <ClInclude Include="src\Graphics\SpriteManager.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\StartBlinkingMessage.h">
-      <Filter>Header Files\Message</Filter>
+    <ClInclude Include="src\Graphics\SpriteSheetLoader.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\SetGraphicsVisibilityMessage.h">
-      <Filter>Header Files\Message</Filter>
+    <ClInclude Include="src\Graphics\SurfaceOperations.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Component\Scripts\DamageColliderScript.h">
-      <Filter>Header Files\Component\Scripts</Filter>
+    <ClInclude Include="src\Graphics\TextureFactory.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\ResetEntityPositionMessage.h">
-      <Filter>Header Files\Message</Filter>
+    <ClInclude Include="src\Graphics\Camera\Camera.h">
+      <Filter>Header Files\Graphics\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\SpawnEntityMessage.h">
-      <Filter>Header Files\Message</Filter>
+    <ClInclude Include="src\Graphics\Camera\EntityTrackingCamera.h">
+      <Filter>Header Files\Graphics\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\SetLocationMessage.h">
-      <Filter>Header Files\Message</Filter>
+    <ClInclude Include="src\Entity\Entity.h">
+      <Filter>Header Files\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="include\Utility\DirectionEnum.h">
-      <Filter>Header Files\Utility</Filter>
+    <ClInclude Include="src\Entity\EntityFactory.h">
+      <Filter>Header Files\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\PlaySoundEffectMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Sound\SoundEffectDefs.h">
-      <Filter>Header Files\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Component\Scripts\HealthPickupScript.h">
-      <Filter>Header Files\Component\Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\AddHealthMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Component\Scripts\SpawnHealthPickupOnDeathScript.h">
-      <Filter>Header Files\Component\Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Component\Scripts\QuitGameOnDeathScript.h">
-      <Filter>Header Files\Component\Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\FiringDirectionMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Utility\GenericDefines.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\AnimationChangeMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Message\SoundManagerPlaySoundMessage.h">
-      <Filter>Header Files\Message</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Component\SoundComponent.h">
+    <ClInclude Include="src\Component\AiComponent.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\VM.h">
-      <Filter>Header Files\VM</Filter>
+    <ClInclude Include="src\Component\CollisionComponent.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\VMFrame.h">
-      <Filter>Header Files\VM</Filter>
+    <ClInclude Include="src\Component\Component.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\VMFunction.h">
-      <Filter>Header Files\VM</Filter>
+    <ClInclude Include="src\Component\FactionComponent.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\VMState.h">
-      <Filter>Header Files\VM</Filter>
+    <ClInclude Include="src\Component\FlyingAiComponent.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\ByteCode.h">
-      <Filter>Header Files\VM</Filter>
+    <ClInclude Include="src\Component\FollowingAiComponent.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\VMClass.h">
-      <Filter>Header Files\VM</Filter>
+    <ClInclude Include="src\Component\GraphicsComponent.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\FFI\ConversionFunctions.h">
-      <Filter>Header Files\VM\FFI</Filter>
+    <ClInclude Include="src\Component\HealthComponent.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\FFI\NativeBinding.h">
-      <Filter>Header Files\VM\FFI</Filter>
+    <ClInclude Include="src\Component\InputComponent.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\FFI\NativeBindingTypedef.h">
-      <Filter>Header Files\VM\FFI</Filter>
+    <ClInclude Include="src\Component\LocationComponent.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\VMValue.h">
-      <Filter>Header Files\VM</Filter>
+    <ClInclude Include="src\Component\PhysicsComponent.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\VMOperations.h">
-      <Filter>Header Files\VM</Filter>
+    <ClInclude Include="src\Component\SoundComponent.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\Message\ScriptMessageInterface.h">
-      <Filter>Header Files\Message</Filter>
+    <ClInclude Include="src\Component\WalkingAiComponent.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\FFI\VariadicFunctionCallTemplates.h">
-      <Filter>Header Files\VM\FFI</Filter>
+    <ClInclude Include="src\Component\VelocityComponent.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\FFI\FunctionArgumentTupleTemplates.h">
-      <Filter>Header Files\VM\FFI</Filter>
+    <ClInclude Include="src\Component\Scripts\BlinkScript.h">
+      <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\Memory\MemoryManager.h">
-      <Filter>Header Files\VM\Memory</Filter>
+    <ClInclude Include="src\Component\Scripts\BulletScriptComponent.h">
+      <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\Memory\RootSetProvider.h">
-      <Filter>Header Files\VM\Memory</Filter>
+    <ClInclude Include="src\Component\Scripts\DamageColliderScript.h">
+      <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\Memory\GarbageCollector.h">
-      <Filter>Header Files\VM\Memory</Filter>
+    <ClInclude Include="src\Component\Scripts\EndLevelScriptComponent.h">
+      <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\Memory\CheneyCollector.h">
-      <Filter>Header Files\VM\Memory</Filter>
+    <ClInclude Include="src\Component\Scripts\HealthPickupScript.h">
+      <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\Memory\GCFactory.h">
-      <Filter>Header Files\VM\Memory</Filter>
+    <ClInclude Include="src\Component\Scripts\QuitGameOnDeathScript.h">
+      <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\Memory\VMObjectFunctions.h">
-      <Filter>Header Files\VM\Memory</Filter>
+    <ClInclude Include="src\Component\Scripts\SpawnHealthPickupOnDeathScript.h">
+      <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\ScriptLoader\ScriptLoader.h">
-      <Filter>Header Files\VM\ScriptLoader</Filter>
+    <ClInclude Include="src\Component\Scripts\TempInvulnerabilityScript.h">
+      <Filter>Header Files\Component\Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\ScriptLoader\ByteCodeCreator\ByteCodeCreator.h">
-      <Filter>Header Files\VM\ScriptLoader\ByteCodeCreator</Filter>
+    <ClInclude Include="src\Collision\CollisionChecker.h">
+      <Filter>Header Files\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="include\VM\ScriptLoader\Tokens.h">
-      <Filter>Header Files\VM\ScriptLoader</Filter>
+    <ClInclude Include="src\Game.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -647,35 +773,11 @@
     <ClCompile Include="src\Component\SoundComponent.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
-    <ClCompile Include="src\VM\VM.cpp">
-      <Filter>Source Files\VM</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VM\VMFrame.cpp">
-      <Filter>Source Files\VM</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VM\VMFunction.cpp">
-      <Filter>Source Files\VM</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VM\VMState.cpp">
-      <Filter>Source Files\VM</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VM\VMClass.cpp">
-      <Filter>Source Files\VM</Filter>
-    </ClCompile>
     <ClCompile Include="src\VM\FFI\ConversionFunctions.cpp">
       <Filter>Source Files\VM\FFI</Filter>
     </ClCompile>
     <ClCompile Include="src\VM\FFI\NativeBinding.cpp">
       <Filter>Source Files\VM\FFI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VM\ByteCode.cpp">
-      <Filter>Source Files\VM</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VM\VMValue.cpp">
-      <Filter>Source Files\VM</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VM\VMOperations.cpp">
-      <Filter>Source Files\VM</Filter>
     </ClCompile>
     <ClCompile Include="src\Message\ScriptMessageInterface.cpp">
       <Filter>Source Files\Message</Filter>
@@ -698,11 +800,59 @@
     <ClCompile Include="src\VM\Memory\VMObjectFunctions.cpp">
       <Filter>Source Files\VM\Memory</Filter>
     </ClCompile>
-    <ClCompile Include="src\VM\ScriptLoader\ScriptLoader.cpp">
-      <Filter>Source Files\VM\ScriptLoader</Filter>
+    <ClCompile Include="src\VM\Compiler\Compiler.cpp">
+      <Filter>Source Files\VM\Compiler</Filter>
     </ClCompile>
-    <ClCompile Include="src\VM\ScriptLoader\ByteCodeCreator\ByteCodeCreator.cpp">
-      <Filter>Source Files\VM\ScriptLoader\ByteCodeCreator</Filter>
+    <ClCompile Include="src\VM\Core\ByteCode.cpp">
+      <Filter>Source Files\VM\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Core\VM.cpp">
+      <Filter>Source Files\VM\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Core\VMFrame.cpp">
+      <Filter>Source Files\VM\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Core\VMFunction.cpp">
+      <Filter>Source Files\VM\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Core\VMOperations.cpp">
+      <Filter>Source Files\VM\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Core\VMState.cpp">
+      <Filter>Source Files\VM\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Core\VMValue.cpp">
+      <Filter>Source Files\VM\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Compiler\AST\ASTNode.cpp">
+      <Filter>Source Files\VM\Compiler\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Compiler\AST\ASTVisitor.cpp">
+      <Filter>Source Files\VM\Compiler\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Compiler\CodeGen\CodeGenerator.cpp">
+      <Filter>Source Files\VM\Compiler\CodeGen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Compiler\CodeGen\CodeGeneratorVisitor.cpp">
+      <Filter>Source Files\VM\Compiler\CodeGen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Compiler\Tokenizer\Reader.cpp">
+      <Filter>Source Files\VM\Compiler\Tokenizer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Compiler\Tokenizer\Tokenizer.cpp">
+      <Filter>Source Files\VM\Compiler\Tokenizer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Compiler\Tokens\Token.cpp">
+      <Filter>Source Files\VM\Compiler\Tokens</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Compiler\Tokens\TokenFactory.cpp">
+      <Filter>Source Files\VM\Compiler\Tokens</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Compiler\Tokens\TokenType.cpp">
+      <Filter>Source Files\VM\Compiler\Tokens</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Compiler\Parser\Parser.cpp">
+      <Filter>Source Files\VM\Compiler\Parser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

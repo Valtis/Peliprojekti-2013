@@ -1,6 +1,5 @@
 #include "Message/MessageProcessor.h"
-#include "VM/VM.h"
-#include "Utility/LoggerManager.h"
+#include "VM/Core/VM.h"
 #include <algorithm>
 bool MessageProcessor::SendMessage(Message *message)
 {
@@ -42,7 +41,7 @@ void MessageProcessor::RegisterScriptMessageHandler(VMState *state, int type, in
   MessageCallback callback = [=](Message *message) -> MessageHandling {
     auto messageHandling = VMInstance().InvokeFunction(*state, scriptName, { VMValue{ message } });
     try {
-      return static_cast<MessageHandling>(messageHandling.as_int());
+      return static_cast<MessageHandling>(messageHandling.AsInt());
     } catch (std::exception &ex) {
       throw std::runtime_error(std::string("An error occurred when parsing script message handler return value: ") + ex.what());
     }
