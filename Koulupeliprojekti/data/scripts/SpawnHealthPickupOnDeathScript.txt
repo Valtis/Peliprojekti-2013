@@ -1,0 +1,26 @@
+(statics owningEntity)
+(fn initialize (entity state) 
+  (
+    (setvalue owningEntity entity)    
+    # 9 = MessageType::TERMINATE_ENTITY, 4 = Priority::HIGHEST
+    (invokenative "RegisterMessageHandler" entity state 9 4 "spawnHealthPickup")  
+  )
+)
+
+(fn spawnHealthPickup (message)
+  (locals dropChange max)
+  (
+    (setvalue dropChange 10000)
+    (setvalue max 10000)
+    
+    (if (<= (invokenative "Rand" 0 max) dropChange)
+      (
+        # 1 = EntityType::HEALTH_PICKUP, 0 = EntityType::BULLET
+        (invokenative "SendSpawnEntityMessage" owningEntity 0)
+      )
+    )
+    # send message upwards so that the game is notified on the death
+    (invokenative "SendMessageUpwards" owningEntity message)
+    (return 1) # stop handling this message 
+  )
+)

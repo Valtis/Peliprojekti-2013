@@ -18,7 +18,6 @@
 #include "Component/Scripts/DamageColliderScript.h"
 #include "Component/Scripts/BlinkScript.h"
 #include "Component/Scripts/HealthPickupScript.h"
-#include "Component/Scripts/SpawnHealthPickupOnDeathScript.h"
 #include "Component/Scripts/QuitGameOnDeathScript.h"
 #include "Component/Scripts/TempInvulnerabilityScript.h"
 
@@ -31,13 +30,39 @@
 #include <string>
 #include <SDL.h>
 #include <stdexcept>
-#include <sstream>
 #include "Utility/LoggerManager.h"
 #include "Utility/GenericDefines.h"
 
 
+
+
 // sobadsobadsobad
 // honestly, whole thing should be defined in a data file somewhere
+
+
+void RegisterNativeBindings(VMState &state) {
+
+  auto registerBinding = CreateBinding(&Entity::RegisterScriptMessageHandler);
+  auto spawnMessageBinding = CreateBinding(&ScriptMessageInterface::SendSpawnMessage);
+  auto blinkMessageBinding = CreateBinding(&ScriptMessageInterface::SendBlinkingMessage);
+  auto sendUpwards = CreateBinding(&Entity::SendMessageUpwards);
+
+  int(*rand_ptr)(int, int) = [](int low, int high) -> int
+  { 
+    auto val = (rand() % (high - low)) + low;
+    return val;
+  };
+
+  auto randBinding = CreateBinding(rand_ptr);
+
+  state.AddNativeBinding("RegisterMessageHandler", registerBinding);
+  state.AddNativeBinding("SendSpawnEntityMessage", spawnMessageBinding);
+  state.AddNativeBinding("SendBlinkMessage", blinkMessageBinding);
+  state.AddNativeBinding("SendMessageUpwards", sendUpwards);
+  state.AddNativeBinding("Rand", randBinding);
+}
+
+
 void CreateBullet(Entity *e, SpawnEntityMessage *msg)
 {
   const int bulletHitboxSize = 15;
@@ -94,12 +119,7 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   std::unique_ptr<CollisionComponent> collision(new CollisionComponent);
   collision->AddHitbox(8, 8, bulletHitboxSize, bulletHitboxSize, HitboxType::TRIGGER);
   std::unique_ptr<VelocityComponent> velocity(new VelocityComponent(0, 0));
-
-  
-  
-
-
-
+    
   velocity->SetVelocity(xVel, yVel);
 
   std::unique_ptr<FactionComponent> faction(new FactionComponent(bulletFaction));
@@ -153,17 +173,8 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
 
   // placeholder for testing purposes
   VMState invulnerabilityOnHitScript = Compiler::Compile("data/scripts/InvulnerabilityOnHitScript.txt");
+  RegisterNativeBindings(invulnerabilityOnHitScript);
 
-
-  auto registerBinding = CreateBinding(&Entity::RegisterScriptMessageHandler);
-  auto blinkMessageBinding = CreateBinding(&ScriptMessageInterface::SendBlinkingMessage);
-
-  void(*pointer)(VMValue) = [](VMValue value) -> void { LoggerManager::GetLog("script.log").AddLine(LogLevel::ALL, value.ToString()); };
-  auto loggerBinding = CreateBinding(pointer);
-
-  invulnerabilityOnHitScript.AddNativeBinding("RegisterMessageHandler", registerBinding);
-  invulnerabilityOnHitScript.AddNativeBinding("SendBlinkMessage", blinkMessageBinding);
-  
   e->AddVmScript(std::move(invulnerabilityOnHitScript));
 
   
@@ -201,7 +212,6 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   e->AddComponent(ComponentType::FACTION, std::move(f));
   e->AddComponent(ComponentType::PHYSICS,std::move(p));
   e->AddComponent(ComponentType::HEALTH, std::move(h));
-  //e->AddScript(std::unique_ptr<Component>(new TempInvulnerabilityScript(60)));
   e->AddScript(std::unique_ptr<Component>(new BlinkScript(5)));
   e->AddScript(std::unique_ptr<Component>(new QuitGameOnDeathScript));
 
@@ -242,7 +252,13 @@ std::unique_ptr<Entity> EntityFactory::CreateFlyingEnemy(int x, int y, Entity *t
 
   e->AddComponent(ComponentType::SOUND, std::move(sound));
   
-  e->AddScript(std::unique_ptr<Component>(new SpawnHealthPickupOnDeathScript(25)));
+
+  auto spawnHealthPickupOnDeathScript = Compiler::Compile("data/scripts/SpawnHealthPickupOnDeathScript.txt");
+  RegisterNativeBindings(spawnHealthPickupOnDeathScript);
+
+  e->AddVmScript(std::move(spawnHealthPickupOnDeathScript));
+  
+
   return e;
 }
 

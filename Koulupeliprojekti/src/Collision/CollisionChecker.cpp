@@ -160,11 +160,14 @@ void Collision::CheckCollisions(const std::vector<std::unique_ptr<Entity>> &enti
     bool first_hit_s = true, first_hit_t = true;
     for (auto e2 = entities.begin(); e2 != entities.end(); e2++)
     {
+      SDL_assert_release((*e2).get() != nullptr);
       CheckEntityEntityCollision((*e),(*e2),solid_hit,first_hit_s);
       CheckEntityEntityCollision((*e),(*e2),trigger_hit,first_hit_t);
     }
-    for (auto s_e = staticEntities.begin(); s_e != staticEntities.end(); s_e++)
-      CheckEntityEntityCollision((*e),(*s_e),solid_hit,first_hit_s);
+    for (auto s_e = staticEntities.begin(); s_e != staticEntities.end(); s_e++) {
+      SDL_assert_release((*s_e).get() != nullptr);
+      CheckEntityEntityCollision((*e), (*s_e), solid_hit, first_hit_s);
+    }
 
     if (solid_hit.h_side != CollisionSide::NONE ||
         solid_hit.v_side != CollisionSide::NONE)

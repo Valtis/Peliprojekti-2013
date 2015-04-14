@@ -3,11 +3,14 @@
 #include "Entity/Entity.h"
 
 namespace ScriptMessageInterface {
-void SendBlinkingMessage(Entity *entity, int duration) {
-  //LoggerManager::GetLog("foobar.txt").AddLine(LogLevel::INFO, std::string("Invoking message creation with entity ")
-    // + std::to_string(uint64_t(entity)) + " and duration  " + std::to_string(duration));
-  auto message = MessageFactory::CreateStartBlinkingMessage(duration);
-  entity->SendMessage(message.get());
-}
+  void SendBlinkingMessage(Entity *entity, int duration) {
+    auto message = MessageFactory::CreateStartBlinkingMessage(duration);
+    entity->SendMessage(message.get());
+  }
+  void SendSpawnMessage(Entity *entity, int entityType) {
+    auto message = MessageFactory::CreateSpawnEntityMessage(static_cast<EntityType>(entityType), entity);
+    entity->SendMessage(message.get());
+  }
+
 
 }
