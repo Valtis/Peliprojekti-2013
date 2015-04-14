@@ -40,6 +40,7 @@ void Level::Update(double ticksPassed)
 
   Physics::HandlePhysics(m_entities);
   Collision::CheckCollisions(m_entities, m_staticCollidables);
+  HandlePendingAdditions();
   HandlePendingDeletions();
 }
 
@@ -61,8 +62,12 @@ const std::vector<std::unique_ptr<Entity>> &Level::GetStaticCollidables()
 
 void Level::AddEntity(std::unique_ptr<Entity> e)
 {
+
   e->SetParent(this);
-  m_entities.push_back(std::move(e));
+
+  // spawn on next frame, as this could be called from inside collision checking
+  // and adding the entity directly into the vector would invalidate iterators
+  m_pendingAdditionList.push_back(std::move(e));
 }
 
 void Level::AddStaticEntity(std::unique_ptr<Entity> e)
@@ -102,7 +107,7 @@ MessageHandling Level::HandleEntityTermination(Message *msg)
   }
 
   auto terminateMsg = static_cast<TerminateEntityMessage *>(msg);
-  m_deletionList.push_back(terminateMsg->GetTerminateEntity());  
+  m_pendingDeletionList.push_back(terminateMsg->GetTerminateEntity());  
   return MessageHandling::STOP_HANDLING;
 }
 
@@ -115,9 +120,18 @@ MessageHandling Level::HandleEntityPositionReset(Message *msg)
   return MessageHandling::STOP_HANDLING;
 }
 
+void Level::HandlePendingAdditions() {
+  for (auto &e : m_pendingAdditionList) {
+
+    m_entities.push_back(std::move(e));
+  }
+
+  m_pendingAdditionList.clear();
+}
+
 void Level::HandlePendingDeletions()
 {
-  for (auto entity : m_deletionList)
+  for (auto entity : m_pendingDeletionList)
   {
     for (auto iter = m_entities.begin(); iter != m_entities.end(); ++iter)
     {
@@ -128,5 +142,5 @@ void Level::HandlePendingDeletions()
       }
     }
   }
-  m_deletionList.clear();
+  m_pendingDeletionList.clear();
 }

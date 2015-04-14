@@ -10,13 +10,13 @@
 (fn spawnHealthPickup (message)
   (locals dropChange max)
   (
-    (setvalue dropChange 10000)
+    (setvalue dropChange 6000)
     (setvalue max 10000)
     
     (if (<= (invokenative "Rand" 0 max) dropChange)
       (
         # 1 = EntityType::HEALTH_PICKUP, 0 = EntityType::BULLET
-        (invokenative "SendSpawnEntityMessage" owningEntity 0)
+        (invokenative "SendSpawnEntityMessage" owningEntity 1)
       )
     )
     # send message upwards so that the game is notified on the death

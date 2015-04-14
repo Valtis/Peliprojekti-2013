@@ -15,7 +15,6 @@ public:
 
   void Update(double ticksPassed);
 
-  void HandlePendingDeletions();
 
   const std::vector<std::unique_ptr<Entity>> &GetEntities();
   const std::vector<std::unique_ptr<Entity>> &GetStaticEntities();
@@ -28,6 +27,8 @@ public:
 
 private:
 
+  void HandlePendingAdditions();
+  void HandlePendingDeletions();
   std::pair<double, double> m_levelStartPoint;
 
   MessageHandling HandleEntitySpawning(Message *msg);
@@ -37,6 +38,8 @@ private:
   std::vector<std::unique_ptr<Entity>> m_entities;
   std::vector<std::unique_ptr<Entity>> m_staticEntities; // potentially more than ground, rename if needed
   std::vector<std::unique_ptr<Entity>> m_staticCollidables;
-  std::vector<Entity *> m_deletionList;
+
+  std::vector<std::unique_ptr<Entity>> m_pendingAdditionList;
+  std::vector<Entity *> m_pendingDeletionList;
 
 };
