@@ -1,6 +1,7 @@
 #include "VM/Compiler/CodeGen/CodeGeneratorVisitor.h"
 #include "VM/Compiler/AST/AndNode.h"
 #include "VM/Compiler/AST/ArithmeticNode.h"
+#include "VM/Compiler/AST/ArrayNode.h"
 #include "VM/Compiler/AST/ComparisonNode.h"
 #include "VM/Compiler/AST/CondNode.h"
 #include "VM/Compiler/AST/DoubleNode.h"
@@ -109,6 +110,25 @@ namespace Compiler {
       m_current_function->AddByteCode(operation);
 
     }
+  }
+
+  void CodeGeneratorVisitor::Visit(ArrayNode * node) {
+    auto children = node->GetChildren();
+    if (children.size() != 1) {
+      throw std::runtime_error("Invalid argument count for array allocation at " + node->GetPositionInfo());
+    }
+
+    ByteCode code;
+    switch (node->GetType()) {
+    case TokenType::INTEGER_ARRAY:
+      code = ByteCode::ALLOCATE_INTEGER_ARRAY;
+      break;
+    default:
+      throw std::logic_error("Internal compiler error: Invalid type with array node");
+    }
+
+    children[0]->Accept(*this);
+    m_current_function->AddByteCode(code);
   }
 
   void CodeGeneratorVisitor::Visit(ComparisonNode *node) {

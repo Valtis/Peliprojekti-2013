@@ -28,7 +28,8 @@ namespace Compiler {
     void ParseAndOrExpression(std::shared_ptr<ASTNode> parent);
     void ParseFunctionCall(std::shared_ptr<ASTNode> parent);
     void ParseArgumentList(std::shared_ptr<ASTNode> parent);
-    
+    void ParseAllocateArray(std::shared_ptr<ASTNode> parent);
+
 
     void ParseLiteralOrIdentifier(std::shared_ptr<ASTNode> parent);
     

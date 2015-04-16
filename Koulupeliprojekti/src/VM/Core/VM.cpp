@@ -52,7 +52,6 @@ void VM::Execute(VMState &state) {
 
   for (;;)  {
     auto code = m_frames.back().GetNextInstruction();
-
     switch (code) {
     case ByteCode::POP:
       Op::PopValue(m_stack);
@@ -270,6 +269,14 @@ void VM::GetRootsFromStates(std::vector<VMValue *> &rootSet) {
       }
     }
   }
+}
+
+void VM::RegisterVMState(VMState *state)
+{
+  if (std::find(m_states.begin(), m_states.end(), state) != m_states.end()) {
+    throw std::runtime_error("Multiple registrations of same VMState");
+  }
+  m_states.push_back(state);
 }
 
 

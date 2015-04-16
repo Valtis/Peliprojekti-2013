@@ -3,7 +3,6 @@
 #include "VM/Core/VM.h"
 
 VMState::VMState() {
-  VMInstance().RegisterVMState(this);
 }
 
 VMState::VMState(VMState &&rhs) {
@@ -25,8 +24,6 @@ void VMState::DoMove(VMState &rhs) {
   m_functions = std::move(rhs.m_functions);
   m_native_bindings = std::move(rhs.m_native_bindings);
   m_static_objects = std::move(rhs.m_static_objects);
-
-  VMInstance().RegisterVMState(this);
 }
 
 VMState::~VMState() {

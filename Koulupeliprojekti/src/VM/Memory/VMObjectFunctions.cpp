@@ -30,7 +30,7 @@ namespace VMObjectFunction {
     if (IsArray(typeField)) {
       return AlignSize(GetArrayLengthUnchecked(object, memoryArea)*TypeSize(GetArrayValueType(typeField)) + ArrayMetaDataSize());
     }
-    else {
+    else {      
       throw std::logic_error("Size calculation not implemented for non-arrays");
     }
   }

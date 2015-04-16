@@ -1,7 +1,9 @@
 #include "VM/Compiler/Parser/Parser.h"
 #include "VM/Compiler/Tokens/Tokens.h"
+
 #include "VM/Compiler/AST/AndNode.h"
 #include "VM/Compiler/AST/ArithmeticNode.h"
+#include "VM/Compiler/AST/ArrayNode.h"
 #include "VM/Compiler/AST/ComparisonNode.h"
 #include "VM/Compiler/AST/CondNode.h"
 #include "VM/Compiler/AST/DoubleNode.h"
@@ -298,6 +300,9 @@ namespace Compiler {
         case TokenType::IDENTIFIER:
           ParseFunctionCall(parent);
           break;
+        case TokenType::INTEGER_ARRAY:
+          ParseAllocateArray(parent);
+          break;
         default:
           throw std::runtime_error("Unexpected token " + innerToken->ToString() + " at "
             + GetTokenPositionInfo(innerToken) + ". Expected arithmetic expression, function call, comparison or invokenative");
@@ -500,6 +505,21 @@ namespace Compiler {
         throw std::runtime_error("Unexpected token " + token->ToString() + " at " +GetTokenPositionInfo(token) +
           ". Expected literal or identifier");
     }
+  }
+
+
+  void Parser::ParseAllocateArray(std::shared_ptr<ASTNode> parent) {
+    Expect(TokenType::LPAREN);
+    auto token = ExpectOneOf({TokenType::INTEGER_ARRAY});
+    
+    auto arrayNode = std::make_shared<ArrayNode>();
+    arrayNode->SetLine(token->GetLine());
+    arrayNode->SetColumn(token->GetColumn());
+    arrayNode->SetType(token->GetType());
+
+    parent->AddChild(arrayNode);
+    ParseExpression(arrayNode);
+    Expect(TokenType::RPAREN);
   }
 
   Token *Parser::Peek() {

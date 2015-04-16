@@ -1,0 +1,19 @@
+(fn wastememory ()
+  (locals dummy counter)
+  (
+    (setvalue counter 0)
+    (while (<= counter 100000)
+      (
+        (setvalue dummy (integerarray 400)) 
+        (setvalue counter (+ counter 1))
+      )
+    )
+  )
+)
+
+
+(fn update (ticksPassed)
+  (
+    (wastememory)
+  )
+)

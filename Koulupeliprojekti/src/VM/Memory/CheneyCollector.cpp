@@ -28,8 +28,12 @@ void CheneyCollector::Scavenge(uint8_t **fromSpace, MemoryManager &manager) {
 // evacuates root set from fromSpace to toSPace
 void CheneyCollector::EvacuateRootSet(std::vector<VMValue *> rootSet, uint8_t *fromSpace) {
   m_freeSpacePointer = HEAP_BEGIN_ADDRESS;
-  for (auto &value : rootSet) {
+  for (auto value : rootSet) {
+    if (value->AsManagedPointer() == 5576) {
+      int a = 0;
+    }
     MoveObject(value, fromSpace);
+    assert(value->AsManagedPointer() >= HEAP_BEGIN_ADDRESS);
   }
 }
 
@@ -113,6 +117,7 @@ void CheneyCollector::PerformCopy(VMValue *pointer, uint8_t *fromSpace) {
   // write new object address into the forwarding pointer
   UpdateForwardingPointer(pointer, fromSpace);
   // and update the pointer to point to new location in toSpace
+  assert(m_freeSpacePointer > 0);
   UpdatePointer(pointer, m_freeSpacePointer);
   // update free space pointer
   m_freeSpacePointer += size;

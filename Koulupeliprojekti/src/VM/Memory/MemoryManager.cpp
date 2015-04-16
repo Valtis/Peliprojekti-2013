@@ -65,7 +65,7 @@ VMValue MemoryManager::AllocateArray(const ValueType objectType, const uint32_t 
   uint32_t *lengthField = (uint32_t *)(m_memory + m_freeSpacePointer + TYPE_POINTER_SIZE + FORWARD_POINTER_SIZE);
   *lengthField = length;
 
-
+  
   m_freeSpacePointer += requiredSpace; 
   return object;
 }

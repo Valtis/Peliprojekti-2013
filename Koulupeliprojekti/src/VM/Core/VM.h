@@ -17,7 +17,7 @@ public:
   VMValue InvokeFunction(VMState &state, const std::string &functionName, std::vector<VMValue> arguments);
  
   std::vector<VMValue *> GetRootSet() override;
-  void RegisterVMState(VMState *state) { m_states.push_back(state);  }
+  void RegisterVMState(VMState *state);
   void UnregisterVMState(VMState *state) { m_states.erase(std::remove(std::begin(m_states), std::end(m_states), state), std::end(m_states)); }
 private:
 
