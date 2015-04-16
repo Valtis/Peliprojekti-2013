@@ -176,6 +176,7 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   RegisterNativeBindings(invulnerabilityOnHitScript);
 
   e->AddVmScript(std::move(invulnerabilityOnHitScript));
+  e->AddVmScript(std::move(Compiler::Compile("data/scripts/WasteMemory.txt")));
 
   
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
