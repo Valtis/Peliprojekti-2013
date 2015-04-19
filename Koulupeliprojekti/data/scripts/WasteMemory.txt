@@ -2,9 +2,9 @@
   (locals dummy counter)
   (
     (setvalue counter 0)
-    (while (<= counter 100000)
+    (while (<= counter 10000)
       (
-        (setvalue dummy (integerarray 400)) 
+        (setvalue dummy (integerarray 25000)) 
         (setvalue counter (+ counter 1))
       )
     )
