@@ -183,4 +183,4 @@ Koulupeliprojekti/CMakeFiles/
 cmake_install.cmake
 Makefile
 *.log
-
+*.bytecode

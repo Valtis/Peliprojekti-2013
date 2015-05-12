@@ -52,6 +52,7 @@ void VM::Execute(VMState &state) {
 
   for (;;)  {
     auto code = m_frames.back().GetNextInstruction();
+
     switch (code) {
     case ByteCode::POP:
       Op::PopValue(m_stack);
@@ -67,6 +68,9 @@ void VM::Execute(VMState &state) {
       break;
     case ByteCode::PUSH_BOOLEAN:
       Op::PushBoolean(m_stack, m_frames);
+      break;
+    case ByteCode::PUSH_FUNCTION:
+      Op::PushFunction(m_stack, m_frames);
       break;
     case ByteCode::LOAD_LOCAL:
       Op::LoadLocal(state, m_stack, m_frames);
@@ -85,7 +89,10 @@ void VM::Execute(VMState &state) {
       break;
     case ByteCode::STORE_ARRAY_INDEX:
       Op::StoreArrayIndex(m_stack);
-      break;    
+      break;
+    case ByteCode::ARRAY_LENGTH:
+      Op::ArrayLength(m_stack);
+      break;
     case ByteCode::IS_GREATER:   
       Op::IsGreater(m_stack);
       break;
@@ -152,6 +159,9 @@ void VM::Execute(VMState &state) {
     case ByteCode::INVOKE_MANAGED:
       Op::InvokeManaged(state, m_stack, m_frames);
       break;
+    case ByteCode::INVOKE_MANAGED_INDIRECT:
+      Op::InvokeManagedIndirect(state, m_stack, m_frames);
+      break;
     case ByteCode::ALLOCATE_INTEGER_ARRAY:
       Op::AllocateIntegerArray(m_stack);
       break; 
@@ -182,12 +192,10 @@ void VM::Execute(VMState &state) {
 
 VMValue VM::ReturnValue() {
   // return topmost stack item, if any
-  if (!m_stack.empty()) {
-    return m_stack.back();
-  }
-  else {
+  if (m_stack.empty()) {
     return{};
   }
+  return m_stack.back();
 }
 
 void VM::BuildStackTraceAndThrow(const std::exception &ex) {
@@ -269,14 +277,6 @@ void VM::GetRootsFromStates(std::vector<VMValue *> &rootSet) {
       }
     }
   }
-}
-
-void VM::RegisterVMState(VMState *state)
-{
-  if (std::find(m_states.begin(), m_states.end(), state) != m_states.end()) {
-    throw std::runtime_error("Multiple registrations of same VMState");
-  }
-  m_states.push_back(state);
 }
 
 

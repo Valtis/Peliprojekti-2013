@@ -2,6 +2,7 @@
 #include "VM/Compiler/AST/AndNode.h"
 #include "VM/Compiler/AST/ArithmeticNode.h"
 #include "VM/Compiler/AST/ArrayNode.h"
+#include "VM/Compiler/AST/ArrayLengthNode.h"
 #include "VM/Compiler/AST/ComparisonNode.h"
 #include "VM/Compiler/AST/CondNode.h"
 #include "VM/Compiler/AST/DoubleNode.h"
@@ -16,12 +17,14 @@
 #include "VM/Compiler/AST/InvokeNativeNode.h"
 #include "VM/Compiler/AST/LocalsNode.h"
 #include "VM/Compiler/AST/OrNode.h"
+#include "VM/Compiler/AST/ReadArrayNode.h"
 #include "VM/Compiler/AST/ReturnNode.h"
 #include "VM/Compiler/AST/RootNode.h"
 #include "VM/Compiler/AST/SetValueNode.h"
 #include "VM/Compiler/AST/StaticsNode.h"
 #include "VM/Compiler/AST/StringNode.h"
 #include "VM/Compiler/AST/WhileNode.h"
+#include "VM/Compiler/AST/WriteArrayNode.h"
 
 #include "VM/Core/ByteCode.h"
 #include "VM/Core/VMValue.h"
@@ -111,7 +114,7 @@ namespace Compiler {
 
     }
   }
-
+  
   void CodeGeneratorVisitor::Visit(ArrayNode * node) {
     auto children = node->GetChildren();
     if (children.size() != 1) {
@@ -129,6 +132,19 @@ namespace Compiler {
 
     children[0]->Accept(*this);
     m_current_function->AddByteCode(code);
+  }
+
+  void CodeGeneratorVisitor::Visit(ArrayLengthNode* node) {
+    auto children = node->GetChildren();
+    if (children.size() != 1) {
+      throw std::runtime_error("Invalid argument count for arraylength at" + node->GetPositionInfo());
+    }
+
+    for (auto child : children) {
+      child->Accept(*this);
+    }
+
+    m_current_function->AddByteCode(ByteCode::ARRAY_LENGTH);
   }
 
   void CodeGeneratorVisitor::Visit(ComparisonNode *node) {
@@ -232,32 +248,70 @@ namespace Compiler {
   void CodeGeneratorVisitor::Visit(FloatNode *node) {
     m_current_function->AddByteCode(ByteCode::PUSH_FLOAT);
     static_assert(sizeof(float) == sizeof(uint32_t), "Invalid assumption in casting");
-    float number = node->GetNumber();
+    auto number = node->GetNumber();
     auto val = *reinterpret_cast<uint32_t *>(&number);
     m_current_function->AddByteCode(static_cast<ByteCode>(val));
 
   }
 
+
+  // TODO: Cleanup. 
   void CodeGeneratorVisitor::Visit(FunctionCallNode *node) {
+    auto instruction = ByteCode::INVOKE_MANAGED;
     auto children = node->GetChildren();
-    auto function = m_state.GetFunction(node->GetName());
-    if (function == nullptr) {
-      throw std::runtime_error("Usage of undeclared function " + node->GetName() + " at " + node->GetPositionInfo());
+    if (m_functionNameMap.find(node->GetName()) == m_functionNameMap.end()) {
+      if (m_localsNameMap.find(node->GetName()) == m_localsNameMap.end() && m_staticsNameMap.find(node->GetName()) == m_staticsNameMap.end()) {
+        // no function or variable with this name - error
+        throw std::runtime_error("Usage of undeclared function " + node->GetName() + " at " + node->GetPositionInfo());
+      } else {
+        // there is a variable with this name - generate indirect call using this variable
+        uint32_t id = 0;
+        
+        // push arguments
+        for (auto child : children) {
+          child->Accept(*this);
+        }
+
+        // push argument count so that this can be verified at runtime
+        m_current_function->AddByteCode(ByteCode::PUSH_INTEGER);
+        m_current_function->AddByteCode(static_cast<ByteCode>(children.size()));
+
+        if (m_localsNameMap.find(node->GetName()) != m_localsNameMap.end()) {
+          id = m_localsNameMap[node->GetName()];
+          m_current_function->AddByteCode(ByteCode::LOAD_LOCAL);
+          m_current_function->AddByteCode(static_cast<ByteCode>(id));
+
+        }
+        else if (m_staticsNameMap.find(node->GetName()) != m_staticsNameMap.end()) {
+          id = m_staticsNameMap[node->GetName()];
+          m_current_function->AddByteCode(ByteCode::LOAD_STATIC_OBJECT);
+          m_current_function->AddByteCode(static_cast<ByteCode>(id));
+
+        }
+        m_current_function->AddByteCode(ByteCode::INVOKE_MANAGED_INDIRECT);
+        return;
+      }
     }
 
-    if (function->GetArgumentCount() != children.size()) {
+    // if this stage is reached, a function with this name exists, so generate direct call
+
+    if (m_functionNameArgCountMap.find(node->GetName()) == m_functionNameArgCountMap.end()) {
+      throw std::logic_error("Internal compiler error. No argument count recorded for function " + node->GetName());
+    }
+
+    if (m_functionNameArgCountMap[node->GetName()] != children.size()) {
       throw std::runtime_error("Invalid argument count for " + node->GetName() + ". Expected " +
-        std::to_string(function->GetArgumentCount()) + " parameters but " + std::to_string(children.size()) + " was given");
+        std::to_string(m_functionNameArgCountMap[node->GetName()]) + " parameters but " + std::to_string(children.size()) + " was given");
     }
     
-
     for (auto child : children) {
       child->Accept(*this);
     }
 
     m_current_function->AddByteCode(ByteCode::INVOKE_MANAGED);
+   
     m_current_function->AddByteCode(static_cast<ByteCode>(m_functionNameMap[node->GetName()]));
-
+      
   }
 
   void CodeGeneratorVisitor::Visit(FunctionNode *node) {
@@ -277,15 +331,23 @@ namespace Compiler {
       auto name = dynamic_cast<IdentifierNode *>(arguments[i])->GetName();
       if (m_localsNameMap.find(name) != m_localsNameMap.end()) {
         throw std::runtime_error("Redeclaration of variable " + name + " at " + arguments[i]->GetPositionInfo());
+      } 
+
+      if (m_functionNameMap.find(name) != m_functionNameMap.end()) {
+        throw std::runtime_error("Variable " + name + " shadows function with same name at " + arguments[i]->GetPositionInfo());
+      }
+
+      if (m_staticsNameMap.find(name) != m_staticsNameMap.end()) {
+        throw std::runtime_error("Variable " + name + " shadows static variable with same name at " + arguments[i]->GetPositionInfo());
       }
       m_localsNameMap[name] = variableID;
-
     }
   }
 
   void CodeGeneratorVisitor::Visit(FunctionParameterListNode *node) {
     auto children = node->GetChildren();
     m_current_function->SetArgumentCount(children.size());
+    m_functionNameArgCountMap[m_current_function->GetName()] = children.size();
     LocalVariableHelper(node);
 
     for (size_t i = 0; i < children.size(); ++i) {
@@ -312,6 +374,11 @@ namespace Compiler {
       m_current_function->AddByteCode(ByteCode::LOAD_STATIC_OBJECT);
       m_current_function->AddByteCode(static_cast<ByteCode>(id));
 
+    }
+    else if (m_functionNameMap.find(name) != m_functionNameMap.end()) {
+      id = m_functionNameMap[name];
+      m_current_function->AddByteCode(ByteCode::PUSH_FUNCTION);
+      m_current_function->AddByteCode(static_cast<ByteCode>(id));
     }
     else {
       throw std::runtime_error("Usage of undeclared identifier " + name + " at " + node->GetPositionInfo());
@@ -387,6 +454,19 @@ namespace Compiler {
 
   }
 
+  void CodeGeneratorVisitor::Visit(ReadArrayNode* node) {
+    auto children = node->GetChildren();
+    if (children.size() != 2) {
+      throw std::runtime_error("Invalid argument count for arrayread at" + node->GetPositionInfo());
+    }
+
+    for (auto child : children) {
+      child->Accept(*this);
+    }
+
+    m_current_function->AddByteCode(ByteCode::LOAD_ARRAY_INDEX);
+  }
+
   void CodeGeneratorVisitor::Visit(ReturnNode* node) {
     auto children = node->GetChildren();
     for (auto child : children) {
@@ -408,9 +488,14 @@ namespace Compiler {
       auto name = dynamic_cast<FunctionNode *>(children[i])->GetName();
       if (m_functionNameMap.find(name) != m_functionNameMap.end()) {
         throw std::runtime_error("Redeclaration of function " + name + " at " + children[i]->GetPositionInfo());
+      } 
+      
+      if (m_staticsNameMap.find(name) != m_staticsNameMap.end()) {
+        throw std::runtime_error("Function " + name + " shadows static variable with same name at " + children[i]->GetPositionInfo());
       }
       m_functionNameMap[name] = id++;
     }
+
     // and then actually handle the functions
     for (size_t i = 1; i < children.size(); ++i) {
       m_current_function = std::make_shared<VMFunction>();
@@ -419,7 +504,11 @@ namespace Compiler {
 
       children[i]->Accept(*this);
 
-      m_current_function->AddByteCode(ByteCode::RETURN);
+      // if last instruction of the function is not return, insert return instruction.
+      if (children.size() > 0 && (children[i]->GetChildren().size() == 0 || dynamic_cast<ReturnNode *>(children[i]->GetChildren().back()) == nullptr)) {
+        m_current_function->AddByteCode(ByteCode::RETURN);
+      }
+
       // check that compiler generated id actually matches the id that VMState chose. Should only fail if
       // implementation is changed. (TODO: Let the compiler decide the id?)
       if (m_state.AddFunction(*m_current_function) != m_functionNameMap[m_current_function->GetName()]) {
@@ -477,11 +566,13 @@ namespace Compiler {
   void CodeGeneratorVisitor::Visit(StringNode *node) {
     // if the compiler wasn't this closely coupled with the VM, the string would be stored in a 
     // compiled data file read-only section and loaded at runtime. However, as this isn't the case
-    // and the compiler is always run just before interpretation, the value is actually allocated and pointer 
+    // and the compiler is always run just before interpretation, the value is actually allocated here and pointer 
     // stored in VMstate. 
 
     auto ptr = MemMgrInstance().AllocateArray(ValueType::CHAR, node->GetValue().length());
+    
     MemMgrInstance().WriteToArrayIndex(ptr, &node->GetValue()[0], 0, node->GetValue().length());
+    
     int id = m_state.AddStaticObject(ptr); 
 
     m_current_function->AddByteCode(ByteCode::LOAD_STATIC_OBJECT);
@@ -512,5 +603,17 @@ namespace Compiler {
   
   }
 
-  
+  void CodeGeneratorVisitor::Visit(WriteArrayNode* node) {
+    auto children = node->GetChildren();
+    if (children.size() != 3) {
+      throw std::runtime_error("Invalid argument count for arraywrite at" + node->GetPositionInfo());
+    }
+
+    for (auto child : children) {
+      child->Accept(*this);
+    }
+
+    m_current_function->AddByteCode(ByteCode::STORE_ARRAY_INDEX);
+  }
+
 }

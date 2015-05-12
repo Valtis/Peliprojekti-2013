@@ -9,6 +9,7 @@ const char *GetByteCodeName(ByteCode code) {
     case ByteCode::PUSH_FLOAT: return "PUSH_FLOAT";
     case ByteCode::PUSH_DOUBLE: return "PUSH_DOUBLE";
     case ByteCode::PUSH_BOOLEAN: return "PUSH_BOOLEAN";
+    case ByteCode::PUSH_FUNCTION: return "PUSH_FUNCTION";
     case ByteCode::POP: return "POP";
     case ByteCode::STORE_STATIC_OBJECT:  return "STORE_STATIC_OBJECT";
     case ByteCode::LOAD_STATIC_OBJECT: return "LOAD_STATIC_OBJECT";
@@ -16,13 +17,15 @@ const char *GetByteCodeName(ByteCode code) {
     case ByteCode::LOAD_LOCAL:  return "LOAD_LOCAL";
     case ByteCode::STORE_ARRAY_INDEX: return "STORE_ARRAY_INDEX";
     case ByteCode::LOAD_ARRAY_INDEX: return "LOAD_ARRAY_INDEX";
+    case ByteCode::ARRAY_LENGTH: return "ARRAY_LENGTH";
     case ByteCode::INVOKE_NATIVE: return "INVOKE_NATIVE";
     case ByteCode::INVOKE_MANAGED: return "INVOKE_MANAGED";    
+    case ByteCode::INVOKE_MANAGED_INDIRECT: return "INVOKE_MANAGED_INDIRECT";
     case ByteCode::ADD: return "ADD";
     case ByteCode::SUB: return "SUB";
     case ByteCode::MUL:return "MUL";
     case ByteCode::DIV: return "DIV";
-    case ByteCode::MOD: return "DIV";
+    case ByteCode::MOD: return "MOD";
     case ByteCode::ADD_INTEGER: return "ADD_INTEGER";
     case ByteCode::SUB_INTEGER: return "SUB_INTEGER";
     case ByteCode::MUL_INTEGER: return "MUL_INTEGER";
@@ -32,7 +35,7 @@ const char *GetByteCodeName(ByteCode code) {
     case ByteCode::IS_EQ: return "IS_EQ";
     case ByteCode::IS_LESS_OR_EQ: return "IS_LESS_OR_EQ";
     case ByteCode::IS_LESS: return "IS_LESS";
-    case ByteCode::JUMP: return "JUMP_IF_TRUE";
+    case ByteCode::JUMP: return "JUMP";
     case ByteCode::JUMP_IF_TRUE: return "JUMP_IF_TRUE";
     case ByteCode::JUMP_IF_FALSE: return "JUMP_IF_FALSE";
     case ByteCode::JUMP_IF_ZERO:  return "JUMP_IF_ZERO";

@@ -5,6 +5,7 @@
 #include "VM/Core/VMFunction.h"
 #include "VM/FFI/ConversionFunctions.h"
 #include "VM/Memory/MemoryManager.h"
+#include <array>
 
 
 namespace Op {
@@ -94,6 +95,13 @@ namespace Op {
   void PushInteger(std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
     PushValue(VMValue{ static_cast<int32_t>(frames.back().GetNextInstruction()) }, stack);
   }
+
+  void PushFunction(std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
+    VMValue value;
+    value.SetFunction(static_cast<uint32_t>(frames.back().GetNextInstruction()));
+    PushValue(value, stack);
+  }
+
   void PushFloat(std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
     auto val = static_cast<uint32_t>(frames.back().GetNextInstruction());
     PushValue(VMValue{ *reinterpret_cast<float*>(&val) }, stack);
@@ -140,8 +148,8 @@ namespace Op {
   }
 
   void LoadArrayIndex(std::vector<VMValue> &stack) {
-    auto array = PopValue(stack);
     auto index = PopValue(stack);
+    auto array = PopValue(stack);
     auto type = MemMgrInstance().GetArrayType(array);
 
     VMValue value{ type };
@@ -150,9 +158,9 @@ namespace Op {
   }
 
   void StoreArrayIndex(std::vector<VMValue> &stack) {
-    auto array = PopValue(stack);
-    auto index = PopValue(stack);
     auto value = PopValue(stack);
+    auto index = PopValue(stack); 
+    auto array = PopValue(stack);
     auto type = MemMgrInstance().GetArrayType(array);
     if (type != value.GetType()) {
       throw std::runtime_error("Array type and value type mismatch: Array is of type " + TypeToString(type) + " and value is of type " +
@@ -160,6 +168,12 @@ namespace Op {
     }
 
     MemMgrInstance().WriteToArrayIndex(array, value.ValuePointer(), index.AsInt(), 1);
+  }
+
+  void ArrayLength(std::vector<VMValue>& stack) {
+    auto array = PopValue(stack);
+    PushValue(VMValue{ static_cast<int32_t>(MemMgrInstance().GetArrayLength(array)) }, stack);
+
   }
 
   void AddInteger(std::vector<VMValue> &stack) {
@@ -241,9 +255,29 @@ namespace Op {
   void InvokeManaged(const VMState &state, std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
     auto index = static_cast<uint32_t>(frames.back().GetNextInstruction());
     auto function = state.GetFunction(index);
+
+    if (frames.size() == frameSize) {
+      throw std::runtime_error("Maximum number of frames reached - stack overflow");
+    }
     frames.push_back(function);
   }
 
+  void InvokeManagedIndirect(const VMState &state, std::vector<VMValue> &stack, std::vector<VMFrame> &frames) {
+    if (frames.size() == frameSize) {
+      throw std::runtime_error("Maximum number of frames reached - stack overflow");
+    }
+    
+    auto index = PopValue(stack).AsFunction();
+    auto function = state.GetFunction(index);
+
+    auto paramCount = PopValue(stack).AsInt();
+    if (function->GetArgumentCount() != paramCount) {
+      throw std::runtime_error("Invalid argument count for function " + function->GetName() + ". " 
+        + std::to_string(paramCount) + " were provided when " + std::to_string(function->GetArgumentCount()) + " were expected.");
+    }
+
+    frames.push_back(function);
+  }
 
   bool Return(std::vector<VMFrame> &frames) {
     frames.pop_back();

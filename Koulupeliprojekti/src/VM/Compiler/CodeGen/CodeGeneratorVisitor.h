@@ -5,6 +5,10 @@
 
 #include <memory>
 
+/*
+  A class that implements ASTVisitor. Uses the visitor pattern to go through the AST and generate code.
+  This class also handles the semantic checks. This should arguably be in a separate class, but for now this works.
+*/
 namespace Compiler {
 
   class ASTNode;
@@ -16,6 +20,7 @@ namespace Compiler {
     void Visit(AndNode *node) override;
     void Visit(ArithmeticNode *node) override;
     void Visit(ArrayNode *node) override;
+    void Visit(ArrayLengthNode *node) override;
     void Visit(ComparisonNode *node) override;
     void Visit(CondNode *node) override;
     void Visit(DoubleNode *node) override;
@@ -30,12 +35,14 @@ namespace Compiler {
     void Visit(InvokeNativeNode *node) override;
     void Visit(LocalsNode *node) override;
     void Visit(OrNode *node) override;
+    void Visit(ReadArrayNode *node) override;
     void Visit(ReturnNode *node) override;
     void Visit(RootNode *node) override;
     void Visit(SetValueNode *node) override;
     void Visit(StaticsNode *node) override;
     void Visit(StringNode *node) override;
     void Visit(WhileNode *node) override;
+    void Visit(WriteArrayNode * node) override;
 
   private:
     VMState m_state;
@@ -44,6 +51,8 @@ namespace Compiler {
     
     std::unordered_map <std::string, size_t> m_staticsNameMap;
     std::unordered_map <std::string, size_t> m_functionNameMap;
+    std::unordered_map <std::string, size_t> m_functionNameArgCountMap;
+
     std::unordered_map<std::string, size_t> m_localsNameMap;
     std::shared_ptr<VMFunction> m_current_function;
   };

@@ -22,8 +22,6 @@ void Entity::AddComponent(ComponentType type, std::unique_ptr<Component> c)
 
 void Entity::AddVmScript(VMState state) {
   m_vmScripts.push_back(std::move(state)); 
-
-  VMInstance().RegisterVMState(&m_vmScripts.back());
   VMInstance().InvokeFunction(m_vmScripts.back(), "initialize", { VMValue{ this }, VMValue{ &m_vmScripts.back() } });
 }
 

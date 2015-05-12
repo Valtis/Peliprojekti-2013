@@ -1,7 +1,9 @@
 #pragma once 
 #include <string>
 namespace Compiler {
-
+  /*
+    Token type enum.
+  */
   enum class TokenType {
     LPAREN,
     RPAREN,
@@ -32,7 +34,10 @@ namespace Compiler {
     WHILE,
     RETURN,
     INVOKE_NATIVE,
-    INTEGER_ARRAY
+    INTEGER_ARRAY,
+    READ_ARRAY,
+    WRITE_ARRAY,
+    ARRAY_LENGTH
   };
 
   std::string TokenName(TokenType type);

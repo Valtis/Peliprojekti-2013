@@ -4,6 +4,7 @@
 #include "VM/Compiler/AST/AndNode.h"
 #include "VM/Compiler/AST/ArithmeticNode.h"
 #include "VM/Compiler/AST/ArrayNode.h"
+#include "VM/Compiler/AST/ArrayLengthNode.h"
 #include "VM/Compiler/AST/ComparisonNode.h"
 #include "VM/Compiler/AST/CondNode.h"
 #include "VM/Compiler/AST/DoubleNode.h"
@@ -18,28 +19,26 @@
 #include "VM/Compiler/AST/InvokeNativeNode.h"
 #include "VM/Compiler/AST/LocalsNode.h"
 #include "VM/Compiler/AST/OrNode.h"
+#include "VM/Compiler/AST/ReadArrayNode.h"
 #include "VM/Compiler/AST/ReturnNode.h"
 #include "VM/Compiler/AST/RootNode.h"
 #include "VM/Compiler/AST/SetValueNode.h"
 #include "VM/Compiler/AST/StaticsNode.h"
 #include "VM/Compiler/AST/StringNode.h"
 #include "VM/Compiler/AST/WhileNode.h"
+#include "VM/Compiler/AST/WriteArrayNode.h"
 
 
 namespace Compiler {
   Parser::Parser(std::vector<std::unique_ptr<Token>> tokens) 
-    : m_tokens(std::move(tokens)), m_position(0) {
-
+    : m_reader(std::move(tokens)) {
   }
 
   std::shared_ptr<ASTNode> Parser::Parse() {
     auto rootNode = std::make_shared<RootNode>();
 
     ParseOptionalStaticsList(rootNode);
-    while (true) {
-      if (m_position == m_tokens.size()) {
-        break;
-      }
+    while (m_reader.HasTokens()) {
       ParseFunction(rootNode);
     }
 
@@ -51,21 +50,21 @@ namespace Compiler {
     auto staticsNode = std::make_shared<StaticsNode>();
     parent->AddChild(std::dynamic_pointer_cast<ASTNode>(staticsNode));
 
-    auto token = Peek2();
+    auto token = m_reader.Peek2();
     if (token && token->GetType() == TokenType::STATICS) {
-      Expect(TokenType::LPAREN);
-      Expect(TokenType::STATICS);
+      m_reader.Expect(TokenType::LPAREN);
+      m_reader.Expect(TokenType::STATICS);
       ParseIdentifierList(staticsNode);
-      Expect(TokenType::RPAREN);
+      m_reader.Expect(TokenType::RPAREN);
     }
   }
 
   void Parser::ParseIdentifierList(std::shared_ptr<ASTNode> parent) {
-    while (Peek() && Peek()->GetType() == TokenType::IDENTIFIER) {
+    while (m_reader.Peek() && m_reader.Peek()->GetType() == TokenType::IDENTIFIER) {
       auto identifierNode = std::make_shared<IdentifierNode>();
-      auto token = Advance();
+      auto token = m_reader.Advance();
       identifierNode->SetLine(token->GetLine());
-      identifierNode->SetLine(token->GetColumn());
+      identifierNode->SetColumn(token->GetColumn());
       identifierNode->SetName(dynamic_cast<IdentifierToken *>(token)->GetValue());      
       parent->AddChild(identifierNode);
     }
@@ -73,45 +72,49 @@ namespace Compiler {
 
   void Parser::ParseFunction(std::shared_ptr<ASTNode> parent) {
     auto functionNode = std::make_shared<FunctionNode>();
+
     parent->AddChild(functionNode);
     
-    Expect(TokenType::LPAREN);
-    Expect(TokenType::FUNCTION);
-    auto identifier = Expect(TokenType::IDENTIFIER);
+    m_reader.Expect(TokenType::LPAREN);
+    m_reader.Expect(TokenType::FUNCTION);
+    auto identifier = m_reader.Expect(TokenType::IDENTIFIER);
     functionNode->SetName(dynamic_cast<IdentifierToken *>(identifier)->GetValue());
-    Expect(TokenType::LPAREN);
+    functionNode->SetLine(identifier->GetLine());
+    functionNode->SetColumn(identifier->GetColumn());
+
+    m_reader.Expect(TokenType::LPAREN);
 
 
     auto argumentListNode = std::make_shared<FunctionParameterListNode>();
     functionNode->AddChild(argumentListNode);
     ParseIdentifierList(argumentListNode);
-    Expect(TokenType::RPAREN);
+    m_reader.Expect(TokenType::RPAREN);
     ParseLocals(functionNode);
-    Expect(TokenType::LPAREN);
+    m_reader.Expect(TokenType::LPAREN);
     ParseStatements(functionNode);
-    Expect(TokenType::RPAREN);
-    Expect(TokenType::RPAREN);
+    m_reader.Expect(TokenType::RPAREN);
+    m_reader.Expect(TokenType::RPAREN);
   }
 
 
   void Parser::ParseLocals(std::shared_ptr<ASTNode> parent) {
-    auto node = Peek2();
+    auto node = m_reader.Peek2();
     if (node == nullptr || node->GetType() != TokenType::LOCALS) {
       return;
     }
 
     auto localsNode = std::make_shared<LocalsNode>();
     parent->AddChild(localsNode);
-    Expect(TokenType::LPAREN);
-    Expect(TokenType::LOCALS);
+    m_reader.Expect(TokenType::LPAREN);
+    m_reader.Expect(TokenType::LOCALS);
     ParseArgumentList(localsNode);
-    Expect(TokenType::RPAREN);
+    m_reader.Expect(TokenType::RPAREN);
 
   }
 
   void Parser::ParseStatements(std::shared_ptr<ASTNode> parent) {
     while (true) {
-      if (Peek() && Peek()->GetType() != TokenType::LPAREN) {
+      if (m_reader.Peek() && m_reader.Peek()->GetType() != TokenType::LPAREN) {
         return;
       }
 
@@ -121,7 +124,7 @@ namespace Compiler {
   }
   
   void Parser::ParseStatement(std::shared_ptr<ASTNode> parent) {
-    auto token = Peek2();
+    auto token = m_reader.Peek2();
     if (token) {
       if (token->GetType() == TokenType::SET_VALUE) {
         ParseSetValue(parent);
@@ -141,44 +144,44 @@ namespace Compiler {
 
 
   void Parser::ParseReturn(std::shared_ptr<ASTNode> parent) {
-    Expect(TokenType::LPAREN);
-    auto token = Expect(TokenType::RETURN);
+    m_reader.Expect(TokenType::LPAREN);
+    auto token = m_reader.Expect(TokenType::RETURN);
     auto returnNode = std::make_shared<ReturnNode>();
     returnNode->SetLine(token->GetLine());
     returnNode->SetColumn(token->GetColumn());
     parent->AddChild(returnNode);
 
-    auto next = Peek();
+    auto next = m_reader.Peek();
     if (next == nullptr) {
       throw std::runtime_error("Unexpected end-of-file when parsing return statement");
     }
 
     if (next->GetType() == TokenType::RPAREN) {
-      Advance();
+      m_reader.Advance();
       return;
     }
 
     ParseStatement(returnNode);
-    Expect(TokenType::RPAREN);
+    m_reader.Expect(TokenType::RPAREN);
   }
 
   void Parser::ParseCond(std::shared_ptr<ASTNode> parent) {
     auto condNode = std::make_shared<CondNode>();
-    Expect(TokenType::LPAREN);
-    auto token = Expect(TokenType::COND);
+    m_reader.Expect(TokenType::LPAREN);
+    auto token = m_reader.Expect(TokenType::COND);
     
     condNode->SetLine(token->GetLine());
     condNode->SetColumn(token->GetColumn());
     parent->AddChild(condNode);
     while (true) {
-      auto next = Peek();
+      auto next = m_reader.Peek();
       if (next) {
         if (next->GetType() == TokenType::RPAREN) {
           break;
         } 
         
         if (next->GetType() == TokenType::ELSE) {
-          auto elseToken = Advance();
+          auto elseToken = m_reader.Advance();
           auto elseNode = std::make_shared<ElseNode>();
           elseNode->SetLine(elseToken->GetLine());
           elseNode->SetColumn(elseToken->GetColumn());
@@ -188,9 +191,9 @@ namespace Compiler {
           
           auto statementsNode = std::make_shared<RootNode>();
           elseNode->AddChild(statementsNode);
-          Expect(TokenType::LPAREN);
+          m_reader.Expect(TokenType::LPAREN);
           ParseStatements(statementsNode);
-          Expect(TokenType::RPAREN);
+          m_reader.Expect(TokenType::RPAREN);
           break;
         }
 
@@ -199,11 +202,11 @@ namespace Compiler {
         ParseExpression(condStatementsNode);
 
 
-        Expect(TokenType::LPAREN);
+        m_reader.Expect(TokenType::LPAREN);
         auto statementsNode = std::make_shared<RootNode>();
         condStatementsNode->AddChild(statementsNode);
         ParseStatements(statementsNode);
-        Expect(TokenType::RPAREN);
+        m_reader.Expect(TokenType::RPAREN);
 
 
       }
@@ -212,14 +215,14 @@ namespace Compiler {
 
 
 
-    Expect(TokenType::RPAREN);
+    m_reader.Expect(TokenType::RPAREN);
   }
 
   void Parser::ParseIf(std::shared_ptr<ASTNode> parent) {
     auto ifNode = std::make_shared<IfNode>();
     parent->AddChild(ifNode);
-    Expect(TokenType::LPAREN);
-    auto token = Expect(TokenType::IF);
+    m_reader.Expect(TokenType::LPAREN);
+    auto token = m_reader.Expect(TokenType::IF);
 
     ifNode->SetLine(token->GetLine());
     ifNode->SetColumn(token->GetColumn());
@@ -231,46 +234,46 @@ namespace Compiler {
     auto falseBranch = std::make_shared<RootNode>();
     ifNode->AddChild(falseBranch);
 
-    Expect(TokenType::LPAREN);
+    m_reader.Expect(TokenType::LPAREN);
     ParseStatements(trueBranch);
-    Expect(TokenType::RPAREN);
+    m_reader.Expect(TokenType::RPAREN);
 
-    if (Peek() && Peek()->GetType() == TokenType::LPAREN) {
-      Expect(TokenType::LPAREN);
+    if (m_reader.Peek() && m_reader.Peek()->GetType() == TokenType::LPAREN) {
+      m_reader.Expect(TokenType::LPAREN);
       ParseStatements(falseBranch);
-      Expect(TokenType::RPAREN);
+      m_reader.Expect(TokenType::RPAREN);
     }
-    Expect(TokenType::RPAREN);
+    m_reader.Expect(TokenType::RPAREN);
   }
 
   void Parser::ParseWhile(std::shared_ptr<ASTNode> parent) {
     auto whileNode = std::make_shared<WhileNode>();
     parent->AddChild(whileNode);
     
-    Expect(TokenType::LPAREN);
-    auto token = Expect(TokenType::WHILE);
+    m_reader.Expect(TokenType::LPAREN);
+    auto token = m_reader.Expect(TokenType::WHILE);
     whileNode->SetLine(token->GetLine());
     whileNode->SetColumn(token->GetColumn());
 
     ParseExpression(whileNode);
 
 
-    Expect(TokenType::LPAREN);
+    m_reader.Expect(TokenType::LPAREN);
     ParseStatements(whileNode);
-    Expect(TokenType::RPAREN);
+    m_reader.Expect(TokenType::RPAREN);
 
-    Expect(TokenType::RPAREN);
+    m_reader.Expect(TokenType::RPAREN);
   }
 
   void Parser::ParseExpression(std::shared_ptr<ASTNode> parent) {
   
-    auto token = Peek();
+    auto token = m_reader.Peek();
     if (token == nullptr) {
       throw std::runtime_error("Unexpected end-of-file while parsing an expression");
     }
     
     if (token->GetType() == TokenType::LPAREN) {
-      auto innerToken = Peek2();
+      auto innerToken = m_reader.Peek2();
       if (innerToken == nullptr) {
         throw std::runtime_error("Unexpected end-of-file while parsing an expression");
       }
@@ -303,9 +306,18 @@ namespace Compiler {
         case TokenType::INTEGER_ARRAY:
           ParseAllocateArray(parent);
           break;
+        case TokenType::WRITE_ARRAY:
+          ParseWriteArray(parent);
+          break;
+        case TokenType::READ_ARRAY:
+          ParseReadArray(parent);
+          break;
+        case TokenType::ARRAY_LENGTH:
+          ParseArrayLength(parent);
+          break;
         default:
           throw std::runtime_error("Unexpected token " + innerToken->ToString() + " at "
-            + GetTokenPositionInfo(innerToken) + ". Expected arithmetic expression, function call, comparison or invokenative");
+            + innerToken->GetTokenPositionInfo() + ". Expected arithmetic expression, function call, comparison, array operation or invokenative");
       }
       return;
     } else {
@@ -315,15 +327,15 @@ namespace Compiler {
   }
 
   void Parser::ParseSetValue(std::shared_ptr<ASTNode> parent) {
-    Expect(TokenType::LPAREN);
-    auto token = Expect(TokenType::SET_VALUE);
+    m_reader.Expect(TokenType::LPAREN);
+    auto token = m_reader.Expect(TokenType::SET_VALUE);
     
     auto setValueNode = std::make_shared<SetValueNode>();
     parent->AddChild(setValueNode);
     setValueNode->SetLine(token->GetLine());
     setValueNode->SetColumn(token->GetColumn());
     
-    auto idToken = Expect(TokenType::IDENTIFIER);
+    auto idToken = m_reader.Expect(TokenType::IDENTIFIER);
     auto idNode = std::make_shared<IdentifierNode>();
     setValueNode->AddChild(idNode);
     idNode->SetLine(idToken->GetLine());
@@ -331,18 +343,18 @@ namespace Compiler {
     idNode->SetName(dynamic_cast<IdentifierToken *>(idToken)->GetValue());
 
     ParseExpression(setValueNode);
-    Expect(TokenType::RPAREN);
+    m_reader.Expect(TokenType::RPAREN);
   }
 
   void Parser::ParseInvokeNative(std::shared_ptr<ASTNode> parent) {
-    Expect(TokenType::LPAREN);
-    auto invokeNativeToken = Expect(TokenType::INVOKE_NATIVE); 
+    m_reader.Expect(TokenType::LPAREN);
+    auto invokeNativeToken = m_reader.Expect(TokenType::INVOKE_NATIVE); 
     
     auto invokeNativeNode = std::make_shared<InvokeNativeNode>();
     invokeNativeNode->SetLine(invokeNativeToken->GetLine());
     invokeNativeNode->SetColumn(invokeNativeToken->GetColumn());
     parent->AddChild(invokeNativeNode);
-    auto token = Peek();
+    auto token = m_reader.Peek();
     if (token == nullptr) {
       throw std::runtime_error("Unexpected end-of-file when parsing invokenative");
     }
@@ -354,13 +366,13 @@ namespace Compiler {
     }
     
     ParseArgumentList(invokeNativeNode);
-    Expect(TokenType::RPAREN);
+    m_reader.Expect(TokenType::RPAREN);
   }
 
   void Parser::ParseArithmeticExpression(std::shared_ptr<ASTNode> parent) {
-    Expect(TokenType::LPAREN);
+    m_reader.Expect(TokenType::LPAREN);
     
-    auto token = ExpectOneOf({ TokenType::PLUS, TokenType::MINUS, TokenType::MULTIPLY, TokenType::DIVIDE, TokenType::MOD });
+    auto token = m_reader.ExpectOneOf({ TokenType::PLUS, TokenType::MINUS, TokenType::MULTIPLY, TokenType::DIVIDE, TokenType::MOD });
     auto arithmeticNode = std::make_shared<ArithmeticNode>();
     
     parent->AddChild(arithmeticNode);
@@ -369,15 +381,15 @@ namespace Compiler {
     arithmeticNode->SetType(token->GetType());
 
     ParseArgumentList(arithmeticNode);
-    Expect(TokenType::RPAREN);
+    m_reader.Expect(TokenType::RPAREN);
   }
 
   void Parser::ParseComparisonExpression(std::shared_ptr<ASTNode> parent) {
-    Expect(TokenType::LPAREN); 
+    m_reader.Expect(TokenType::LPAREN); 
     auto comparisonNode = std::make_shared<ComparisonNode>();
     parent->AddChild(comparisonNode);
 
-    auto token = ExpectOneOf({TokenType::GREATER_OR_EQUAL_THAN, TokenType::GREATER_THAN, 
+    auto token = m_reader.ExpectOneOf({TokenType::GREATER_OR_EQUAL_THAN, TokenType::GREATER_THAN, 
       TokenType::EQUAL, TokenType::LESS_OR_EQUAL_THAN, TokenType::LESS_THAN});
       
 
@@ -388,15 +400,15 @@ namespace Compiler {
     ParseExpression(comparisonNode);
     ParseExpression(comparisonNode);
     
-    Expect(TokenType::RPAREN);
+    m_reader.Expect(TokenType::RPAREN);
   }
 
 
   void Parser::ParseAndOrExpression(std::shared_ptr<ASTNode> parent) {
-    Expect(TokenType::LPAREN);
+    m_reader.Expect(TokenType::LPAREN);
     std::shared_ptr<ASTNode> andOrNode;
 
-    auto token = ExpectOneOf({ TokenType::AND, TokenType::OR });
+    auto token = m_reader.ExpectOneOf({ TokenType::AND, TokenType::OR });
     switch (token->GetType()) {
       case TokenType::AND:
         andOrNode = std::make_shared<AndNode>();
@@ -417,12 +429,12 @@ namespace Compiler {
     ParseArgumentList(andOrNode);
     
 
-    Expect(TokenType::RPAREN);
+    m_reader.Expect(TokenType::RPAREN);
   }
 
   void Parser::ParseFunctionCall(std::shared_ptr<ASTNode> parent) {
-    Expect(TokenType::LPAREN);
-    auto token = Expect(TokenType::IDENTIFIER);
+    m_reader.Expect(TokenType::LPAREN);
+    auto token = m_reader.Expect(TokenType::IDENTIFIER);
     auto functionCallNode = std::make_shared<FunctionCallNode>();
     functionCallNode->SetName((dynamic_cast<IdentifierToken *>(token))->GetValue());
     functionCallNode->SetLine(token->GetLine());
@@ -432,13 +444,13 @@ namespace Compiler {
     ParseArgumentList(functionCallNode);
 
 
-    Expect(TokenType::RPAREN);
+    m_reader.Expect(TokenType::RPAREN);
   }
 
 
   void Parser::ParseArgumentList(std::shared_ptr<ASTNode> parent) {
     while (true) {
-      auto token = Peek();
+      auto token = m_reader.Peek();
       if (token == nullptr) {
         throw std::runtime_error("Unexpected end-of-file while parsing argument list");
       }
@@ -450,17 +462,25 @@ namespace Compiler {
     }
   }
 
+  void Parser::CreateIdentifierNode(std::shared_ptr<ASTNode> parent, Token* token) {
+    auto identifier = std::make_shared<IdentifierNode>();
+    identifier->SetLine(token->GetLine());
+    identifier->SetColumn(token->GetColumn());
+    identifier->SetName(dynamic_cast<IdentifierToken *>(token)->GetValue());
+    parent->AddChild(identifier);
+  }
+
   void Parser::ParseLiteralOrIdentifier(std::shared_ptr<ASTNode> parent) {
-    auto token = ExpectOneOf({TokenType::IDENTIFIER, TokenType::STRING, TokenType::INTEGER_NUMBER,
-      TokenType::DOUBLE_NUMBER, TokenType::FLOAT_NUMBER });
+    int sign = 1;
+    handle_minus:
+    auto token = m_reader.ExpectOneOf({TokenType::IDENTIFIER, TokenType::STRING, TokenType::INTEGER_NUMBER,
+      TokenType::DOUBLE_NUMBER, TokenType::FLOAT_NUMBER, TokenType::MINUS });
+
+  
     switch (token->GetType()) {
       case TokenType::IDENTIFIER:
       {
-        auto identifier = std::make_shared<IdentifierNode>();
-        identifier->SetLine(token->GetLine());
-        identifier->SetColumn(token->GetColumn());
-        identifier->SetName(dynamic_cast<IdentifierToken *>(token)->GetValue());
-        parent->AddChild(identifier);
+        CreateIdentifierNode(parent, token);
       }
       break;
 
@@ -473,12 +493,16 @@ namespace Compiler {
         parent->AddChild(string);
       }
       break;
+      case TokenType::MINUS:
+        sign = -1;
+        // yaay goto
+        goto handle_minus;
       case TokenType::INTEGER_NUMBER:
       {
         auto number = std::make_shared<IntegerNode>();
         number->SetLine(token->GetLine());
         number->SetColumn(token->GetColumn());
-        number->SetNumber(dynamic_cast<IntegerToken *>(token)->GetValue());
+        number->SetNumber(sign*dynamic_cast<IntegerToken *>(token)->GetValue());
         parent->AddChild(number);
       }
       break;
@@ -488,7 +512,7 @@ namespace Compiler {
         auto number = std::make_shared<DoubleNode>();
         number->SetLine(token->GetLine());
         number->SetColumn(token->GetColumn());
-        number->SetNumber(dynamic_cast<DoubleToken *>(token)->GetValue());
+        number->SetNumber(sign*dynamic_cast<DoubleToken *>(token)->GetValue());
         parent->AddChild(number);
       }
       break;
@@ -497,20 +521,20 @@ namespace Compiler {
         auto number = std::make_shared<FloatNode>();
         number->SetLine(token->GetLine());
         number->SetColumn(token->GetColumn());
-        number->SetNumber(dynamic_cast<FloatToken *>(token)->GetValue());
+        number->SetNumber(sign*dynamic_cast<FloatToken *>(token)->GetValue());
         parent->AddChild(number);
       }
       break;
       default:
-        throw std::runtime_error("Unexpected token " + token->ToString() + " at " +GetTokenPositionInfo(token) +
+        throw std::runtime_error("Unexpected token " + token->ToString() + " at " + token->GetTokenPositionInfo() +
           ". Expected literal or identifier");
     }
   }
 
 
   void Parser::ParseAllocateArray(std::shared_ptr<ASTNode> parent) {
-    Expect(TokenType::LPAREN);
-    auto token = ExpectOneOf({TokenType::INTEGER_ARRAY});
+    m_reader.Expect(TokenType::LPAREN);
+    auto token = m_reader.ExpectOneOf({TokenType::INTEGER_ARRAY});
     
     auto arrayNode = std::make_shared<ArrayNode>();
     arrayNode->SetLine(token->GetLine());
@@ -519,64 +543,49 @@ namespace Compiler {
 
     parent->AddChild(arrayNode);
     ParseExpression(arrayNode);
-    Expect(TokenType::RPAREN);
+    m_reader.Expect(TokenType::RPAREN);
   }
 
-  Token *Parser::Peek() {
-    if (m_position >= m_tokens.size()) {
-      return nullptr;
-    }
-    return m_tokens[m_position].get();
+  void Parser::ParseWriteArray(std::shared_ptr<ASTNode> parent) {
+    m_reader.Expect(TokenType::LPAREN);
+    auto token = m_reader.Expect(TokenType::WRITE_ARRAY);
+    auto writeNode = std::make_shared<WriteArrayNode>();
+    writeNode->SetLine(token->GetLine());
+    writeNode->SetColumn(token->GetColumn());
+    parent->AddChild(writeNode);
+    auto idtoken = m_reader.Expect(TokenType::IDENTIFIER);
+    CreateIdentifierNode(writeNode, idtoken);
+    ParseExpression(writeNode);
+    ParseExpression(writeNode);
+
+    m_reader.Expect(TokenType::RPAREN);
   }
 
-  Token *Parser::Peek2() {
-    if (m_position + 1 >= m_tokens.size()) {
-      return nullptr;
-    }
-    return m_tokens[m_position+1].get();
+  void Parser::ParseReadArray(std::shared_ptr<ASTNode> parent) {
+    m_reader.Expect(TokenType::LPAREN);
+    auto token = m_reader.Expect(TokenType::READ_ARRAY);
+    auto readNode = std::make_shared<ReadArrayNode>();
+    readNode->SetLine(token->GetLine());
+    readNode->SetColumn(token->GetColumn());
+    parent->AddChild(readNode);
+    auto idtoken = m_reader.Expect(TokenType::IDENTIFIER);
+    CreateIdentifierNode(readNode, idtoken);
+    ParseExpression(readNode);
+    m_reader.Expect(TokenType::RPAREN);
   }
 
-  Token *Parser::Advance() {
-    if (m_position >= m_tokens.size()) {
-      throw std::runtime_error("Unexpected end-of-file while parsing");
-    }
-    
-    return m_tokens[m_position++].get();
-  }
-
-  Token *Parser::Expect(TokenType type) {
-    Token *actual;
-    try {
-      actual = Advance();
-    } catch (std::exception &ex) {
-      throw std::runtime_error(std::string(ex.what()) + ". Expected token '" + TokenName(type) + "'");
-    }
-    if (actual->GetType() != type) {
-      auto expected = TokenName(type);
-      throw std::runtime_error("Unexpected token '" + actual->ToString() + "' at " 
-        + GetTokenPositionInfo(actual) + ". Token '" + expected + "' was expected");
-    }
-    return actual;
-  }
-
-  Token *Parser::ExpectOneOf(std::vector<TokenType> tokenTypes) {
-    auto actual = Advance();
-
-    if (std::find(tokenTypes.begin(), tokenTypes.end(), actual->GetType()) == tokenTypes.end()) {
-      std::string tokenList = "";
-      for (auto type : tokenTypes) {
-        tokenList += " '" + TokenName(type) + "'";
-      }
-      throw std::runtime_error("Unexpected token '" + actual->ToString() + "' at " +
-        GetTokenPositionInfo(actual) + ". Expected one of" + tokenList);
-    }
-    return actual;
+  void Parser::ParseArrayLength(std::shared_ptr<ASTNode> parent) {
+    m_reader.Expect(TokenType::LPAREN);
+    auto token = m_reader.Expect(TokenType::ARRAY_LENGTH);
+    auto arrayLengthNode = std::make_shared<ArrayLengthNode>();
+    arrayLengthNode->SetLine(token->GetLine());
+    arrayLengthNode->SetColumn(token->GetColumn());
+    parent->AddChild(arrayLengthNode);
+    auto idtoken = m_reader.Expect(TokenType::IDENTIFIER);
+    CreateIdentifierNode(arrayLengthNode, idtoken);
+    m_reader.Expect(TokenType::RPAREN);
   }
 
 
-  std::string Parser::GetTokenPositionInfo(const Token *token) {
-    return std::string("line ") + std::to_string(token->GetLine())
-      + " column " + std::to_string(token->GetColumn());
-  }
 
 }

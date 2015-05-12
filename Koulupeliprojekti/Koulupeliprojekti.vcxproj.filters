@@ -163,6 +163,18 @@
     <Filter Include="Header Files\VM\Compiler\Tokens">
       <UniqueIdentifier>{e60246aa-7021-4db6-b397-c42151a22bfd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\VM\Compiler\Optimizer">
+      <UniqueIdentifier>{16f712df-79a8-42f9-9cbe-42eb35285d06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\VM\Compiler\Optimizer">
+      <UniqueIdentifier>{70debca1-37ea-486a-8cc7-b5e41a19d397}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\VM\Compiler\ByteCodePrinter">
+      <UniqueIdentifier>{f13a9472-1a2f-402c-a19d-e641fd5cae5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\VM\Compiler\ByteCodePrinter">
+      <UniqueIdentifier>{8b8c0e42-93f6-450a-8470-71b58565cf08}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\VM\Compiler\Compiler.h">
@@ -585,6 +597,18 @@
     <ClInclude Include="src\VM\Compiler\AST\ArrayNode.h">
       <Filter>Header Files\VM\Compiler\AST</Filter>
     </ClInclude>
+    <ClInclude Include="src\VM\Compiler\Parser\TokenReader.h">
+      <Filter>Header Files\VM\Compiler\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\Optimizer\ByteCodeOptimizer.h">
+      <Filter>Header Files\VM\Compiler\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\Optimizer\TailCallOptimization.h">
+      <Filter>Header Files\VM\Compiler\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VM\Compiler\ByteCodePrinter\ByteCodePrinter.h">
+      <Filter>Header Files\VM\Compiler\ByteCodePrinter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -779,9 +803,6 @@
     <ClCompile Include="src\VM\FFI\ConversionFunctions.cpp">
       <Filter>Source Files\VM\FFI</Filter>
     </ClCompile>
-    <ClCompile Include="src\VM\FFI\NativeBinding.cpp">
-      <Filter>Source Files\VM\FFI</Filter>
-    </ClCompile>
     <ClCompile Include="src\Message\ScriptMessageInterface.cpp">
       <Filter>Source Files\Message</Filter>
     </ClCompile>
@@ -856,6 +877,18 @@
     </ClCompile>
     <ClCompile Include="src\VM\Compiler\Parser\Parser.cpp">
       <Filter>Source Files\VM\Compiler\Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Compiler\Optimizer\ByteCodeOptimizer.cpp">
+      <Filter>Source Files\VM\Compiler\Optimizer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Compiler\Optimizer\TailCallOptimization.cpp">
+      <Filter>Source Files\VM\Compiler\Optimizer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Compiler\Parser\TokenReader.cpp">
+      <Filter>Source Files\VM\Compiler\Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VM\Compiler\ByteCodePrinter\ByteCodePrinter.cpp">
+      <Filter>Source Files\VM\Compiler\ByteCodePrinter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

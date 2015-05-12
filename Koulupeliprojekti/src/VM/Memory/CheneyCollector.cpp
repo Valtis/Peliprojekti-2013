@@ -11,7 +11,10 @@ CheneyCollector::~CheneyCollector() {
 }
 
 void CheneyCollector::Scavenge(uint8_t **fromSpace, MemoryManager &manager) {
+  // root set provider was not set; we cannot actually perform collection. 
+  // We will return and hope that the GC was not triggered by low memory\allocation failure
   if (m_provider == nullptr) {
+    LoggerManager::GetLog(MEMORY_LOG).AddLine(LogLevel::ERROR, "Root set provider is null - cannot perform collection");
     return;
   }
   
@@ -28,12 +31,8 @@ void CheneyCollector::Scavenge(uint8_t **fromSpace, MemoryManager &manager) {
 // evacuates root set from fromSpace to toSPace
 void CheneyCollector::EvacuateRootSet(std::vector<VMValue *> rootSet, uint8_t *fromSpace) {
   m_freeSpacePointer = HEAP_BEGIN_ADDRESS;
-  for (auto value : rootSet) {
-    if (value->AsManagedPointer() == 5576) {
-      int a = 0;
-    }
+  for (auto &value : rootSet) {
     MoveObject(value, fromSpace);
-    assert(value->AsManagedPointer() >= HEAP_BEGIN_ADDRESS);
   }
 }
 
@@ -64,7 +63,7 @@ void CheneyCollector::CopyPointedObjects(VMValue &pointer, uint8_t *fromSpace) {
 
 
     // some calculate starting position, get array length, get index size
-    auto position = pointer.AsManagedPointer() + VMObjectFunction::ArrayMetaDataSize();
+    auto position = pointer.AsManagedPointer() + VMObjectFunction::ArrayHeaderSize();
     auto length = VMObjectFunction::GetArrayLengthUnchecked(pointer, m_toSpace);
     auto typeSize = TypeSize(VMObjectFunction::GetArrayValueType(typeField));
 
@@ -93,7 +92,7 @@ void CheneyCollector::CopyPointedObjects(VMValue &pointer, uint8_t *fromSpace) {
   }
 }
 
-// moves object pointed by the pointer if it did not contain forwarding pointer, otherwise merely updates pointer
+// moves object pointed by the pointer into tospace if it did not contain forwarding pointer, otherwise merely updates pointer
 void CheneyCollector::MoveObject(VMValue *pointer, uint8_t *fromSpace) {
   if (pointer->AsManagedPointer() == VM_NULLPTR) {
     return;
@@ -108,6 +107,8 @@ void CheneyCollector::MoveObject(VMValue *pointer, uint8_t *fromSpace) {
   PerformCopy(pointer, fromSpace);
 }
 
+
+// copies the object from fromspace into tospace
 void CheneyCollector::PerformCopy(VMValue *pointer, uint8_t *fromSpace) {
 
   // get object size, and copy it from fromSpace into toSpace
@@ -117,7 +118,6 @@ void CheneyCollector::PerformCopy(VMValue *pointer, uint8_t *fromSpace) {
   // write new object address into the forwarding pointer
   UpdateForwardingPointer(pointer, fromSpace);
   // and update the pointer to point to new location in toSpace
-  assert(m_freeSpacePointer > 0);
   UpdatePointer(pointer, m_freeSpacePointer);
   // update free space pointer
   m_freeSpacePointer += size;
@@ -129,7 +129,7 @@ void CheneyCollector::UpdateForwardingPointer(VMValue *pointer, uint8_t *fromSpa
   memcpy(fromSpace + position, &m_freeSpacePointer, sizeof(m_freeSpacePointer));
 }
 
-
+// reads object forwarding pointer
 uint32_t CheneyCollector::GetForwardingPointer(VMValue *pointer, uint8_t *fromSpace) {
   uint32_t ptr;
   auto position = pointer->AsManagedPointer() + TYPE_POINTER_SIZE; // skip first header field
@@ -137,6 +137,7 @@ uint32_t CheneyCollector::GetForwardingPointer(VMValue *pointer, uint8_t *fromSp
   return ptr;
 }
 
+// updates object address
 void CheneyCollector::UpdatePointer(VMValue *pointer, uint32_t newValue) {
   VMValue newLocation;
   newLocation.SetManagedPointer(newValue);

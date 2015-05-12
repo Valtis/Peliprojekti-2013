@@ -4,12 +4,16 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
-enum class ValueType : uint8_t { UNINITIALIZED, INT, FLOAT, DOUBLE, BOOL, CHAR, NATIVE_POINTER, MANAGED_POINTER };
+enum class ValueType : uint8_t { UNINITIALIZED, INT, FLOAT, DOUBLE, BOOL, CHAR, NATIVE_POINTER, MANAGED_POINTER, FUNCTION };
 
 uint32_t TypeSize(ValueType type);
 
 std::string TypeToString(ValueType t);
 
+/*
+  Represents a value. Contains type field and a union with all the possible types. Performs type checks when attempting to access the values.
+  AsX-functions throw if there is type mismatch.
+*/
 
 class VMValue {
 public:
@@ -58,6 +62,11 @@ public:
     m_value.managed_pointer_value = v;
   }
 
+  void SetFunction(uint32_t v) {
+    m_type = ValueType::FUNCTION;
+    m_value.function_value = v;
+  }
+
   int32_t AsInt() const {
     AssertType(ValueType::INT);
     return m_value.int_value;
@@ -91,7 +100,13 @@ public:
   uint32_t AsManagedPointer() const {
     AssertType(ValueType::MANAGED_POINTER);
     return m_value.managed_pointer_value;
+  } 
+
+  uint32_t AsFunction() const {
+    AssertType(ValueType::FUNCTION);
+    return m_value.function_value;
   }
+
 
   std::string ToString() const;
 
@@ -118,6 +133,7 @@ private:
     bool bool_value;
     char char_value;
     uint32_t managed_pointer_value;
+    uint32_t function_value;
     void *native_pointer_value;
   } m_value;
 };

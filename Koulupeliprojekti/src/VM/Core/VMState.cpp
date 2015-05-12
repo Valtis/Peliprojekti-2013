@@ -3,6 +3,7 @@
 #include "VM/Core/VM.h"
 
 VMState::VMState() {
+  VMInstance().RegisterVMState(this);
 }
 
 VMState::VMState(VMState &&rhs) {
@@ -24,6 +25,8 @@ void VMState::DoMove(VMState &rhs) {
   m_functions = std::move(rhs.m_functions);
   m_native_bindings = std::move(rhs.m_native_bindings);
   m_static_objects = std::move(rhs.m_static_objects);
+
+  VMInstance().RegisterVMState(this);
 }
 
 VMState::~VMState() {
@@ -49,6 +52,16 @@ const VMFunction *VMState::GetFunction(uint32_t index) const
   }
 }
 
+uint32_t VMState::GetFunctionID(const std::string& name) const {
+  if (m_functioNameToIndexMapping.find(name) == m_functioNameToIndexMapping.end()) {
+    throw std::runtime_error("Unable to find function name to id mapping for function " + name);
+  }
+
+  return m_functioNameToIndexMapping.at(name);
+}
+
+
+
 const VMFunction *VMState::GetFunction(const std::string &name) const
 {
   auto it = m_functioNameToIndexMapping.find(name);
@@ -56,6 +69,14 @@ const VMFunction *VMState::GetFunction(const std::string &name) const
     return nullptr;
   }
   return GetFunction(it->second);
+}
+
+const std::vector<VMFunction> &VMState::GetFunctions() const {
+  return m_functions;
+}
+
+std::vector<VMFunction>& VMState::GetMutableFunctions() {
+  return m_functions;
 }
 
 void VMState::SetStaticObject(uint32_t index, VMValue value) {
@@ -90,3 +111,4 @@ void VMState::AddNativeBinding(const std::string &name, NativeBinding binding) {
 size_t VMState::GetStaticObjectCount() const {
   return m_static_objects.size();
 }
+

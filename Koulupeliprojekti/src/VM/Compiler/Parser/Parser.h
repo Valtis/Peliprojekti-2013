@@ -1,12 +1,18 @@
 #pragma once
 #include "VM/Compiler/Tokens/Token.h"
+#include "VM/Compiler/Parser/TokenReader.h"
 #include <vector>
 #include <memory>
 namespace Compiler {
   class ASTNode;
+
+  /*
+    Goes through the list of tokens, using TokenReader. If there are syntax errors, throws. Otherwise creates and returns abstract syntax tree
+    Grammar is available in separate file
+  */
   class Parser {
   public:
-    Parser(std::vector<std::unique_ptr<Token>> tokens);
+    explicit Parser(std::vector<std::unique_ptr<Token>> tokens);
     std::shared_ptr<ASTNode> Parse();
 
   private: 
@@ -28,21 +34,16 @@ namespace Compiler {
     void ParseAndOrExpression(std::shared_ptr<ASTNode> parent);
     void ParseFunctionCall(std::shared_ptr<ASTNode> parent);
     void ParseArgumentList(std::shared_ptr<ASTNode> parent);
+    void CreateIdentifierNode(std::shared_ptr<ASTNode> parent, Token* token);
     void ParseAllocateArray(std::shared_ptr<ASTNode> parent);
+    void ParseWriteArray(std::shared_ptr<ASTNode> parent);
+    void ParseReadArray(std::shared_ptr<ASTNode> parent);
+    void ParseArrayLength(std::shared_ptr<ASTNode> parent);
 
 
     void ParseLiteralOrIdentifier(std::shared_ptr<ASTNode> parent);
-    
-    std::vector<std::unique_ptr<Token>> m_tokens;
-    size_t m_position;
 
-    Token *Peek(); // peeks next token
-    Token *Peek2(); // peeks token following the next one
-    Token *Advance();
-    Token *Expect(TokenType type);
-    Token *ExpectOneOf(std::vector<TokenType> tokenTypes);
 
-    std::string GetTokenPositionInfo(const Token *token);
-    
+    TokenReader m_reader;
   };
 }

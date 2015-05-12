@@ -21,6 +21,7 @@
 #include "Component/Scripts/QuitGameOnDeathScript.h"
 #include "Component/Scripts/TempInvulnerabilityScript.h"
 
+#include "Message/MessageFactory.h"
 
 #include "Message/ScriptMessageInterface.h"
 #include "VM/Core/VmState.h"
@@ -171,12 +172,7 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
 {
   std::unique_ptr<Entity> e(new Entity);
 
-  // placeholder for testing purposes
-  VMState invulnerabilityOnHitScript = Compiler::Compile("data/scripts/InvulnerabilityOnHitScript.txt");
-  RegisterNativeBindings(invulnerabilityOnHitScript);
-
-  e->AddVmScript(std::move(invulnerabilityOnHitScript));
-  e->AddVmScript(std::move(Compiler::Compile("data/scripts/WasteMemory.txt")));
+  //e->AddVmScript(std::move(Compiler::Compile("data/scripts/WasteMemory.txt")));
 
   
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
@@ -229,8 +225,14 @@ std::unique_ptr<Entity> BaseEnemy(int x, int y)
   e->AddComponent(ComponentType::HEALTH, std::unique_ptr<Component>(new HealthComponent(3, 3, 0)));
   e->AddComponent(ComponentType::INPUT,  std::unique_ptr<InputComponent>(new InputComponent(-1)));
   e->AddComponent(ComponentType::FACTION, std::unique_ptr<FactionComponent>(new FactionComponent(Faction::ENEMY)));
-  e->AddScript(std::unique_ptr<DamageColliderScript>(new DamageColliderScript));
+ // e->AddScript(std::unique_ptr<DamageColliderScript>(new DamageColliderScript));
   e->AddScript(std::unique_ptr<TempInvulnerabilityScript>(new TempInvulnerabilityScript(2)));
+
+
+  VMState invulnerabilityOnHitScript = Compiler::Compile("data/scripts/DamageColliderScript.txt");
+  RegisterNativeBindings(invulnerabilityOnHitScript);
+
+  e->AddVmScript(std::move(invulnerabilityOnHitScript));
   return e;
 }
 
@@ -294,7 +296,6 @@ std::unique_ptr<Entity> EntityFactory::CreateCollisionBlock(int x, int y, int w,
 
 }
 
-#include "Message/MessageFactory.h"
 
 
 std::unique_ptr<Entity> EntityFactory::CreateEndLevelEntity(int x, int y)

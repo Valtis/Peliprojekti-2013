@@ -10,13 +10,14 @@ class VMValue;
 const uint32_t stackSize = 4096;
 const uint32_t frameSize = 1024;
 /*
-  Functions that actually perform the work required by the VM opcodes.
+  Functions that actually perform the work required by the VM opcodes. 
 */
 namespace Op {
   void PushValue(const VMValue &value, std::vector<VMValue> &stack);
   VMValue PopValue(std::vector<VMValue> &stack);
   void PushInteger(std::vector<VMValue> &stack, std::vector<VMFrame> &frames);
   void PushFloat(std::vector<VMValue> &stack, std::vector<VMFrame> &frames);
+  void PushFunction(std::vector<VMValue> &stack, std::vector<VMFrame> &frames);
   void PushDouble(std::vector<VMValue> &stack, std::vector<VMFrame> &frames);
   void PushBoolean(std::vector<VMValue> &stack, std::vector<VMFrame> &frames);
 
@@ -25,7 +26,8 @@ namespace Op {
 
   void LoadArrayIndex(std::vector<VMValue> &stack);
   void StoreArrayIndex(std::vector<VMValue> &stack);
-
+  void ArrayLength(std::vector<VMValue> &stack);
+  
   void AddInteger(std::vector<VMValue> &stack);
   void SubInteger(std::vector<VMValue> &stack);
   void MulInteger(std::vector<VMValue> &stack);
@@ -41,6 +43,7 @@ namespace Op {
 
   void InvokeNative(const VMState &state, std::vector<VMValue> &stack);
   void InvokeManaged(const VMState &state, std::vector<VMValue> &stack, std::vector<VMFrame> &frames);
+  void InvokeManagedIndirect(const VMState &state, std::vector<VMValue> &stack, std::vector<VMFrame> &frames);
 
 
   // these functions will do type conversions automatically
