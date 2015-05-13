@@ -33,8 +33,7 @@
 #include <stdexcept>
 #include "Utility/LoggerManager.h"
 #include "Utility/GenericDefines.h"
-
-
+#include <Message/CollisionMessage.h>
 
 
 // sobadsobadsobad
@@ -46,6 +45,9 @@ void RegisterNativeBindings(VMState &state) {
   auto registerBinding = CreateBinding(&Entity::RegisterScriptMessageHandler);
   auto spawnMessageBinding = CreateBinding(&ScriptMessageInterface::SendSpawnMessage);
   auto blinkMessageBinding = CreateBinding(&ScriptMessageInterface::SendBlinkingMessage);
+  auto takeDamageBinding = CreateBinding(&ScriptMessageInterface::SendTakeDamageMessage);
+  auto getFaction = CreateBinding(&ScriptMessageInterface::GetFaction);
+  auto getEntities = CreateBinding(&ScriptMessageInterface::CollisionMessageGetFactions);
   auto sendUpwards = CreateBinding(&Entity::SendMessageUpwards);
 
   int(*rand_ptr)(int, int) = [](int low, int high) -> int
@@ -59,7 +61,12 @@ void RegisterNativeBindings(VMState &state) {
   state.AddNativeBinding("RegisterMessageHandler", registerBinding);
   state.AddNativeBinding("SendSpawnEntityMessage", spawnMessageBinding);
   state.AddNativeBinding("SendBlinkMessage", blinkMessageBinding);
+  state.AddNativeBinding("SendTakeDamageMessage", takeDamageBinding);
   state.AddNativeBinding("SendMessageUpwards", sendUpwards);
+
+  state.AddNativeBinding("GetEntityFaction", getFaction);
+  state.AddNativeBinding("CollisonMessageGetEntities", getEntities);
+
   state.AddNativeBinding("Rand", randBinding);
 }
 
