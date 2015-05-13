@@ -23,8 +23,11 @@ VMValue VM::InvokeFunction(VMState &state, const std::string &functionName, std:
     BuildStackTraceAndThrow(ex);
   }
 
-  return ReturnValue();
 
+  auto returnValue = ReturnValue();
+
+  RestoreOldContext();
+  return returnValue;
 }
 
 void VM::InitializeVMForExecution(const std::string & functionName, std::vector<VMValue> arguments, const VMFunction *function)
@@ -34,17 +37,24 @@ void VM::InitializeVMForExecution(const std::string & functionName, std::vector<
       " arguments were provided but " + std::to_string(function->GetArgumentCount()) + " arguments were expected");
   }
 
+  // we are re-entering the vm: save old stack and frame values
+  if (m_stack.size() != 0 || m_frames.size() != 0) {
+    SaveState();
+  }
+
   m_stack.clear();
   m_frames.clear();
-
-  m_stack.reserve(stackSize);
-  m_frames.reserve(frameSize);
-
+  
   m_frames.push_back(VMFrame{ function });
 
   for (const auto &o : arguments) {
     m_stack.push_back(o);
   }
+}
+
+void VM::SaveState() {
+  m_previousStacks.push_back(m_stack);
+  m_previousFrames.push_back(m_frames);
 }
 
 
@@ -193,12 +203,30 @@ void VM::Execute(VMState &state) {
   }
 }
 
+
+void VM::RestoreOldContext() {
+  if (m_previousStacks.size() != 0) {
+    m_stack = std::move(m_previousStacks.back());
+    m_previousStacks.pop_back();
+  }
+  
+  if (m_previousFrames.size() != 0) {
+    m_frames = std::move(m_previousFrames.back());
+    m_previousFrames.pop_back();
+  }
+}
+
+
 VMValue VM::ReturnValue() {
   // return topmost stack item, if any
   if (m_stack.empty()) {
     return{};
   }
-  return m_stack.back();
+
+
+  auto value = m_stack.back();
+  m_stack.pop_back();
+  return value;
 }
 
 void VM::BuildStackTraceAndThrow(const std::exception &ex) {

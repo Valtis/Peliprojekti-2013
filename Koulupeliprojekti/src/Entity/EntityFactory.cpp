@@ -50,6 +50,13 @@ void RegisterNativeBindings(VMState &state) {
   auto getEntities = CreateBinding(&ScriptMessageInterface::CollisionMessageGetFactions);
   auto sendUpwards = CreateBinding(&Entity::SendMessageUpwards);
 
+  
+  void(*logger)(VMValue) = [](VMValue value) -> void
+  {
+    LoggerManager::GetLog(VM_LOG).AddLine(LogLevel::INFO, "Debug print: " + value.ToString());
+  };
+
+
   int(*rand_ptr)(int, int) = [](int low, int high) -> int
   { 
     auto val = (rand() % (high - low)) + low;
@@ -58,6 +65,7 @@ void RegisterNativeBindings(VMState &state) {
 
   auto randBinding = CreateBinding(rand_ptr);
 
+  state.AddNativeBinding("log", CreateBinding(logger));
   state.AddNativeBinding("RegisterMessageHandler", registerBinding);
   state.AddNativeBinding("SendSpawnEntityMessage", spawnMessageBinding);
   state.AddNativeBinding("SendBlinkMessage", blinkMessageBinding);
@@ -179,7 +187,10 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
 {
   std::unique_ptr<Entity> e(new Entity);
 
-  //e->AddVmScript(std::move(Compiler::Compile("data/scripts/WasteMemory.txt")));
+  VMState invulnerabilityOnHitScript = Compiler::Compile("data/scripts/InvulnerabilityOnHitScript.txt");
+  RegisterNativeBindings(invulnerabilityOnHitScript);
+  e->AddVmScript(std::move(invulnerabilityOnHitScript));
+ // e->AddVmScript(std::move(Compiler::Compile("data/scripts/WasteMemory.txt")));
 
   
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);

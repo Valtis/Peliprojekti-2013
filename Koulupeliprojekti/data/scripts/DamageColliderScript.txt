@@ -27,7 +27,7 @@
         (setvalue otherfaction (getfaction otherentity))
         (if (or (= myfaction -1) (= otherfaction -1) (not (= myfaction otherfaction)))
           (
-            #(invokenative "SendTakeDamageMessage" otherentity)
+            (invokenative "SendTakeDamageMessage" otherentity)
           )
         )
           (setvalue counter (+ counter 1))
