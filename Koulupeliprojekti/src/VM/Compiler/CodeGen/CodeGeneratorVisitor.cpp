@@ -3,6 +3,7 @@
 #include "VM/Compiler/AST/ArithmeticNode.h"
 #include "VM/Compiler/AST/ArrayNode.h"
 #include "VM/Compiler/AST/ArrayLengthNode.h"
+#include "VM/Compiler/AST/BooleanNode.h"
 #include "VM/Compiler/AST/ComparisonNode.h"
 #include "VM/Compiler/AST/CondNode.h"
 #include "VM/Compiler/AST/DoubleNode.h"
@@ -16,6 +17,7 @@
 #include "VM/Compiler/AST/IntegerNode.h"
 #include "VM/Compiler/AST/InvokeNativeNode.h"
 #include "VM/Compiler/AST/LocalsNode.h"
+#include "VM/Compiler/AST/NotNode.h"
 #include "VM/Compiler/AST/OrNode.h"
 #include "VM/Compiler/AST/ReadArrayNode.h"
 #include "VM/Compiler/AST/ReturnNode.h"
@@ -145,6 +147,11 @@ namespace Compiler {
     }
 
     m_current_function->AddByteCode(ByteCode::ARRAY_LENGTH);
+  }
+
+  void CodeGeneratorVisitor::Visit(BooleanNode *node) {
+    m_current_function->AddByteCode(ByteCode::PUSH_BOOLEAN);
+    m_current_function->AddByteCode(static_cast<ByteCode>(node->GetBoolean()));
   }
 
   void CodeGeneratorVisitor::Visit(ComparisonNode *node) {
@@ -448,6 +455,15 @@ namespace Compiler {
     LocalVariableHelper(node);
   }
 
+  void CodeGeneratorVisitor::Visit(NotNode* node) {
+    auto children = node->GetChildren();
+    if (children.size() != 1) {
+      throw std::runtime_error("Invalid argument count for not at " + node->GetPositionInfo());
+    }
+
+    children[0]->Accept(*this);
+    m_current_function->AddByteCode(ByteCode::NOT);
+  }
 
   void CodeGeneratorVisitor::Visit(OrNode *node) {
     AndOrHelper(node, ByteCode::JUMP_IF_TRUE, false);

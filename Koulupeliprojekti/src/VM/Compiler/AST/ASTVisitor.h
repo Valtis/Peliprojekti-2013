@@ -6,6 +6,7 @@ namespace Compiler {
   class ArithmeticNode;
   class ArrayNode;
   class ArrayLengthNode;
+  class BooleanNode;
   class ComparisonNode;
   class CondNode;
   class DoubleNode;
@@ -19,6 +20,7 @@ namespace Compiler {
   class IntegerNode;
   class InvokeNativeNode;
   class LocalsNode;
+  class NotNode;
   class OrNode;
   class ReadArrayNode;
   class ReturnNode;
@@ -37,6 +39,7 @@ namespace Compiler {
     virtual void Visit(ArithmeticNode *node) = 0;
     virtual void Visit(ArrayNode *node) = 0;
     virtual void Visit(ArrayLengthNode *node) = 0;
+    virtual void Visit(BooleanNode *node) = 0;
     virtual void Visit(ComparisonNode *node) = 0; 
     virtual void Visit(CondNode *node) = 0;
     virtual void Visit(DoubleNode *node) = 0;
@@ -50,6 +53,7 @@ namespace Compiler {
     virtual void Visit(InvokeNativeNode *node) = 0;
     virtual void Visit(IntegerNode *node) = 0;
     virtual void Visit(LocalsNode *node) = 0;
+    virtual void Visit(NotNode *node) = 0;
     virtual void Visit(OrNode *node) = 0;
     virtual void Visit(ReadArrayNode *node) = 0;
     virtual void Visit(ReturnNode *node) = 0;

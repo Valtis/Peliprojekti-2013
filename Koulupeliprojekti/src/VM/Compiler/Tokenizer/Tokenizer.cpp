@@ -16,11 +16,14 @@ namespace Compiler {
 
     m_keyWords["mod"] = TokenType::MOD;
     m_keyWords["while"] = TokenType::WHILE;
+    m_keyWords["true"] = TokenType::TRUE;
+    m_keyWords["false"] = TokenType::FALSE;
     m_keyWords["if"] = TokenType::IF;
     m_keyWords["else"] = TokenType::ELSE;
     m_keyWords["cond"] = TokenType::COND;
     m_keyWords["and"] = TokenType::AND;
     m_keyWords["or"] = TokenType::OR;
+    m_keyWords["not"] = TokenType::NOT;
     m_keyWords["invokenative"] = TokenType::INVOKE_NATIVE;
     m_keyWords["return"] = TokenType::RETURN;
     m_keyWords["setvalue"] = TokenType::SET_VALUE;

@@ -21,6 +21,7 @@ namespace Compiler {
     void Visit(ArithmeticNode *node) override;
     void Visit(ArrayNode *node) override;
     void Visit(ArrayLengthNode *node) override;
+    void Visit(BooleanNode *node) override;
     void Visit(ComparisonNode *node) override;
     void Visit(CondNode *node) override;
     void Visit(DoubleNode *node) override;
@@ -34,6 +35,7 @@ namespace Compiler {
     void Visit(IntegerNode *node) override;
     void Visit(InvokeNativeNode *node) override;
     void Visit(LocalsNode *node) override;
+    void Visit(NotNode *node) override;
     void Visit(OrNode *node) override;
     void Visit(ReadArrayNode *node) override;
     void Visit(ReturnNode *node) override;

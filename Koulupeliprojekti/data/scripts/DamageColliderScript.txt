@@ -1,0 +1,38 @@
+(statics owningEntity)
+
+(fn initialize (entity state) 
+  (
+    (setvalue owningEntity entity)
+    # 7 = MessageType::COLLISION, 3 = Priority::HIGH
+    (invokenative "RegisterMessageHandler" entity state 7 3 "damageCollider")
+  )    
+)
+
+(fn getfaction (entity) 
+  (
+    (return (invokenative "GetFaction" entity))
+  )
+)
+
+(fn damageCollider (message)
+  (locals collisionEntityArray counter length myfaction otherfaction)
+  (
+    (setvalue myfaction (getfaction owningEntity))
+    (setvalue collisionEntityArray (invokenative "GetCollisionEntities" message))
+    (setvalue counter 0)
+    (setvalue length (arraylength collisionEntityArray))
+    (while (< counter length) 
+      (
+        
+        (setvalue otherfaction (getfaction(readarray collisionEntityArray counter)))
+        (if (or (= myfaction 0) (= otherfaction 0) (not (= myfaction otherfaction)))
+          (
+            (invokenative "SendTakeDamageMessage" owningEntity)
+          )
+        )
+          (setvalue counter (+ counter 1))
+      )
+    ) 
+    (return 1) # pass the message onwards
+  )
+)

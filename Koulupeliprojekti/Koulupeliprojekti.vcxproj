@@ -105,6 +105,7 @@
     <ClInclude Include="src\VM\Compiler\AST\ArrayNode.h" />
     <ClInclude Include="src\VM\Compiler\AST\ASTNode.h" />
     <ClInclude Include="src\VM\Compiler\AST\ASTVisitor.h" />
+    <ClInclude Include="src\VM\Compiler\AST\BooleanNode.h" />
     <ClInclude Include="src\VM\Compiler\AST\ComparisonNode.h" />
     <ClInclude Include="src\VM\Compiler\AST\CondNode.h" />
     <ClInclude Include="src\VM\Compiler\AST\DoubleNode.h" />
@@ -117,6 +118,7 @@
     <ClInclude Include="src\VM\Compiler\AST\IntegerNode.h" />
     <ClInclude Include="src\VM\Compiler\AST\InvokeNativeNode.h" />
     <ClInclude Include="src\VM\Compiler\AST\LocalsNode.h" />
+    <ClInclude Include="src\VM\Compiler\AST\NotNode.h" />
     <ClInclude Include="src\VM\Compiler\AST\OrNode.h" />
     <ClInclude Include="src\VM\Compiler\AST\ReturnNode.h" />
     <ClInclude Include="src\VM\Compiler\AST\RootNode.h" />

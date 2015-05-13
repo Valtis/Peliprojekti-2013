@@ -5,6 +5,7 @@
 #include "VM/Compiler/AST/ArithmeticNode.h"
 #include "VM/Compiler/AST/ArrayNode.h"
 #include "VM/Compiler/AST/ArrayLengthNode.h"
+#include "VM/Compiler/AST/BooleanNode.h"
 #include "VM/Compiler/AST/ComparisonNode.h"
 #include "VM/Compiler/AST/CondNode.h"
 #include "VM/Compiler/AST/DoubleNode.h"
@@ -18,6 +19,7 @@
 #include "VM/Compiler/AST/IntegerNode.h"
 #include "VM/Compiler/AST/InvokeNativeNode.h"
 #include "VM/Compiler/AST/LocalsNode.h"
+#include "VM/Compiler/AST/NotNode.h"
 #include "VM/Compiler/AST/OrNode.h"
 #include "VM/Compiler/AST/ReadArrayNode.h"
 #include "VM/Compiler/AST/ReturnNode.h"
@@ -297,6 +299,9 @@ namespace Compiler {
         case TokenType::OR:
           ParseAndOrExpression(parent);
           break;
+        case TokenType::NOT:
+          ParseNotExpression(parent);
+          break;
         case TokenType::INVOKE_NATIVE:
           ParseInvokeNative(parent);
           break;
@@ -316,7 +321,7 @@ namespace Compiler {
           ParseArrayLength(parent);
           break;
         default:
-          throw std::runtime_error("Unexpected token " + innerToken->ToString() + " at "
+          throw std::runtime_error("Unexpected token '" + innerToken->ToString() + "' at "
             + innerToken->GetTokenPositionInfo() + ". Expected arithmetic expression, function call, comparison, array operation or invokenative");
       }
       return;
@@ -362,7 +367,7 @@ namespace Compiler {
     if (token->GetType() == TokenType::STRING || token->GetType() == TokenType::IDENTIFIER) {
       ParseLiteralOrIdentifier(invokeNativeNode);
     } else {
-      throw std::runtime_error("Unexpected token " + token->ToString() + " Expected either string or identifer");
+      throw std::runtime_error("Unexpected token '" + token->ToString() + "' Expected either string or identifer");
     }
     
     ParseArgumentList(invokeNativeNode);
@@ -432,6 +437,18 @@ namespace Compiler {
     m_reader.Expect(TokenType::RPAREN);
   }
 
+  void Parser::ParseNotExpression(std::shared_ptr<ASTNode> parent) {
+    m_reader.Expect(TokenType::LPAREN);      
+    auto token = m_reader.Expect(TokenType::NOT);
+
+    std::shared_ptr<ASTNode> notNode = std::make_shared<NotNode>();
+    notNode->SetLine(token->GetLine());
+    notNode->SetColumn(token->GetColumn());
+    parent->AddChild(notNode);
+    ParseExpression(notNode);
+    m_reader.Expect(TokenType::RPAREN);
+  }
+
   void Parser::ParseFunctionCall(std::shared_ptr<ASTNode> parent) {
     m_reader.Expect(TokenType::LPAREN);
     auto token = m_reader.Expect(TokenType::IDENTIFIER);
@@ -474,7 +491,7 @@ namespace Compiler {
     int sign = 1;
     handle_minus:
     auto token = m_reader.ExpectOneOf({TokenType::IDENTIFIER, TokenType::STRING, TokenType::INTEGER_NUMBER,
-      TokenType::DOUBLE_NUMBER, TokenType::FLOAT_NUMBER, TokenType::MINUS });
+      TokenType::DOUBLE_NUMBER, TokenType::FLOAT_NUMBER, TokenType::MINUS, TokenType::TRUE, TokenType::FALSE });
 
   
     switch (token->GetType()) {
@@ -494,7 +511,7 @@ namespace Compiler {
       }
       break;
       case TokenType::MINUS:
-        sign = -1;
+        sign = -1*sign;
         // yaay goto
         goto handle_minus;
       case TokenType::INTEGER_NUMBER:
@@ -525,8 +542,18 @@ namespace Compiler {
         parent->AddChild(number);
       }
       break;
+      case TokenType::TRUE:
+      case TokenType::FALSE:
+      {
+        auto booleanNode = std::make_shared<BooleanNode>();
+        booleanNode->SetLine(token->GetLine());
+        booleanNode->SetColumn(token->GetColumn());
+        booleanNode->SetBoolean(token->GetType() == TokenType::TRUE);
+        parent->AddChild(booleanNode);
+      }
+        break;
       default:
-        throw std::runtime_error("Unexpected token " + token->ToString() + " at " + token->GetTokenPositionInfo() +
+        throw std::runtime_error("Unexpected token '" + token->ToString() + "' at " + token->GetTokenPositionInfo() +
           ". Expected literal or identifier");
     }
   }
