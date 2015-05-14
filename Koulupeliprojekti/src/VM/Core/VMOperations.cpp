@@ -13,6 +13,10 @@ namespace Op {
   // TODO: Cleanup
   ValueType GetConversionType(ValueType first, ValueType second) {
 
+    if (first == second) {
+      return first;
+    }
+
     if (first == ValueType::DOUBLE || second == ValueType::DOUBLE) {
       return ValueType::DOUBLE;
     }
@@ -20,6 +24,7 @@ namespace Op {
     if (first == ValueType::FLOAT || second == ValueType::FLOAT) {
       return ValueType::FLOAT;
     }
+
     return ValueType::INT;
   }
 
@@ -59,7 +64,6 @@ namespace Op {
         return VMValue{ (int32_t )value.AsFloat() };
       }
       throw std::runtime_error("TypeError: Could not convert " + TypeToString(value.GetType()) + " to " + TypeToString(type));
-
     default:
       throw std::runtime_error("Invalid type for type conversion: " + TypeToString(type));
     }
@@ -206,7 +210,7 @@ namespace Op {
 
 
   // Not entirely happy with this.
-  #define CREATE_BINARY_FUNCTION_WITH_TYPE_CONVERSION(NAME__, OPERAND__, CHECK_FOR_SECOND_OPERAND) \
+#define CREATE_BINARY_FUNCTION_WITH_TYPE_CONVERSION(NAME__, OPERAND__, CHECK_FOR_SECOND_OPERAND) \
   void NAME__(std::vector<VMValue> &stack) { \
     ValueType type; \
     VMValue firstConverted; \
@@ -215,18 +219,20 @@ namespace Op {
     \
     if (type == ValueType::DOUBLE) { \
       PushValue(VMValue{ firstConverted.AsDouble() OPERAND__ secondConverted.AsDouble() }, stack); \
-    } \
-    else if (type == ValueType::FLOAT) { \
+    } else if (type == ValueType::FLOAT) { \
       PushValue(VMValue{ firstConverted.AsFloat() OPERAND__ secondConverted.AsFloat() }, stack); \
-    } \
-    else if (type == ValueType::INT) { \
+    } else if (type == ValueType::INT) { \
       if ((CHECK_FOR_SECOND_OPERAND)) {\
         if (secondConverted.AsInt() == 0) {\
-            throw std::runtime_error("Division by zero"); \
+          throw std::runtime_error("Division by zero"); \
         } \
       }\
       PushValue(VMValue{ firstConverted.AsInt() OPERAND__ secondConverted.AsInt() }, stack); \
-    } \
+    } else if (type == ValueType::BOOL) { \
+      PushValue(VMValue{ firstConverted.AsBool() OPERAND__ secondConverted.AsBool() }, stack); \
+    } else if (type == ValueType::CHAR) { \
+      PushValue(VMValue{ firstConverted.AsChar() OPERAND__ secondConverted.AsChar() }, stack); \
+    }\
     else { \
       throw std::runtime_error("Invalid type for " + std::string(#NAME__) + TypeToString(type)); \
     } \

@@ -22,7 +22,7 @@ public:
 protected:
   void OnAttatchingToEntity() override; 
 private:
-  void TakeDamage();
+  void TakeDamage(Message *msg);
   MessageHandling HandleAddHealthMessage(Message *msg);
 
   int m_hitpoints;

@@ -18,7 +18,7 @@
   (locals collisionEntityArray counter length myfaction otherentity otherfaction)
   (
     (setvalue myfaction (getfaction owningEntity))
-    (setvalue collisionEntityArray (invokenative "CollisonMessageGetEntities" message))
+    (setvalue collisionEntityArray (invokenative "CollisionMessageGetEntities" message))
     (setvalue counter 0)
     (setvalue length (arraylength collisionEntityArray))
     (while (< counter length) 
@@ -27,12 +27,12 @@
         (setvalue otherfaction (getfaction otherentity))
         (if (or (= myfaction -1) (= otherfaction -1) (not (= myfaction otherfaction)))
           (
-            (invokenative "SendTakeDamageMessage" otherentity)
+            (invokenative "SendTakeDamageMessage" otherentity 1)
           )
         )
           (setvalue counter (+ counter 1))
       )
     ) 
-    (return 1) # pass the message onwards
+    (return 0) # pass the message onwards
   )
 )

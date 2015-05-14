@@ -15,25 +15,19 @@
 #include "Component/PhysicsComponent.h"
 #include "Component/Scripts/BulletScriptComponent.h"
 #include "Component/Scripts/EndLevelScriptComponent.h"
-#include "Component/Scripts/DamageColliderScript.h"
 #include "Component/Scripts/BlinkScript.h"
-#include "Component/Scripts/HealthPickupScript.h"
 #include "Component/Scripts/QuitGameOnDeathScript.h"
 #include "Component/Scripts/TempInvulnerabilityScript.h"
 
 #include "Message/MessageFactory.h"
-
 #include "Message/ScriptMessageInterface.h"
 #include "VM/Core/VmState.h"
 #include "VM/FFI/NativeBinding.h"
 #include "VM/Compiler/Compiler.h"
 
-#include <string>
-#include <SDL.h>
 #include <stdexcept>
 #include "Utility/LoggerManager.h"
 #include "Utility/GenericDefines.h"
-#include <Message/CollisionMessage.h>
 
 
 // sobadsobadsobad
@@ -41,15 +35,6 @@
 
 
 void RegisterNativeBindings(VMState &state) {
-
-  auto registerBinding = CreateBinding(&Entity::RegisterScriptMessageHandler);
-  auto spawnMessageBinding = CreateBinding(&ScriptMessageInterface::SendSpawnMessage);
-  auto blinkMessageBinding = CreateBinding(&ScriptMessageInterface::SendBlinkingMessage);
-  auto takeDamageBinding = CreateBinding(&ScriptMessageInterface::SendTakeDamageMessage);
-  auto getFaction = CreateBinding(&ScriptMessageInterface::GetFaction);
-  auto getEntities = CreateBinding(&ScriptMessageInterface::CollisionMessageGetFactions);
-  auto sendUpwards = CreateBinding(&Entity::SendMessageUpwards);
-
   
   void(*logger)(VMValue) = [](VMValue value) -> void
   {
@@ -66,14 +51,18 @@ void RegisterNativeBindings(VMState &state) {
   auto randBinding = CreateBinding(rand_ptr);
 
   state.AddNativeBinding("log", CreateBinding(logger));
-  state.AddNativeBinding("RegisterMessageHandler", registerBinding);
-  state.AddNativeBinding("SendSpawnEntityMessage", spawnMessageBinding);
-  state.AddNativeBinding("SendBlinkMessage", blinkMessageBinding);
-  state.AddNativeBinding("SendTakeDamageMessage", takeDamageBinding);
-  state.AddNativeBinding("SendMessageUpwards", sendUpwards);
+  state.AddNativeBinding("RegisterMessageHandler", CreateBinding(&Entity::RegisterScriptMessageHandler));
+  state.AddNativeBinding("SendSpawnEntityMessage", CreateBinding(&ScriptMessageInterface::SendSpawnMessage));
+  state.AddNativeBinding("SendBlinkMessage", CreateBinding(&ScriptMessageInterface::SendBlinkingMessage));
+  state.AddNativeBinding("SendAddHealthMessage", CreateBinding(&ScriptMessageInterface::SendAddHealthMessage));
+  state.AddNativeBinding("SendTakeDamageMessage", CreateBinding(&ScriptMessageInterface::SendTakeDamageMessage));
+  state.AddNativeBinding("SendTerminateEntityMessage", CreateBinding(&ScriptMessageInterface::SendTerminateEntityMessage));
+  state.AddNativeBinding("SendMessageUpwards", CreateBinding(&Entity::SendMessageUpwards));
 
-  state.AddNativeBinding("GetEntityFaction", getFaction);
-  state.AddNativeBinding("CollisonMessageGetEntities", getEntities);
+  state.AddNativeBinding("GetEntityFaction", CreateBinding(&ScriptMessageInterface::GetFaction));
+
+  state.AddNativeBinding("CollisionMessageGetEntities", CreateBinding(&ScriptMessageInterface::CollisionMessageGetFactions));
+  state.AddNativeBinding("GetHitType", CreateBinding(&ScriptMessageInterface::GetHitType));
 
   state.AddNativeBinding("Rand", randBinding);
 }
@@ -152,7 +141,10 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   e->AddComponent(ComponentType::FACTION, std::move(faction));
   e->AddComponent(ComponentType::HEALTH, std::move(health));
   e->AddScript(std::unique_ptr<BulletScriptComponent>(new BulletScriptComponent));
-  e->AddScript(std::unique_ptr<DamageColliderScript>(new DamageColliderScript));
+ 
+  VMState invulnerabilityOnHitScript = Compiler::Compile("data/scripts/DamageColliderScript.txt");
+  RegisterNativeBindings(invulnerabilityOnHitScript);
+  e->AddVmScript(std::move(invulnerabilityOnHitScript));
 }
 
 void CreateHealthPickup(Entity *e, SpawnEntityMessage *msg)
@@ -179,7 +171,10 @@ void CreateHealthPickup(Entity *e, SpawnEntityMessage *msg)
 
   e->AddComponent(ComponentType::COLLISION, std::move(collision));
   e->AddComponent(ComponentType::GRAPHICS, std::move(graphics));
-  e->AddScript(std::unique_ptr<Component>(new HealthPickupScript(1)));
+
+  VMState healCollider = Compiler::Compile("data/scripts/HealColliderScript.txt");
+  RegisterNativeBindings(healCollider);
+  e->AddVmScript(std::move(healCollider));
 }
 
 
@@ -243,14 +238,13 @@ std::unique_ptr<Entity> BaseEnemy(int x, int y)
   e->AddComponent(ComponentType::HEALTH, std::unique_ptr<Component>(new HealthComponent(3, 3, 0)));
   e->AddComponent(ComponentType::INPUT,  std::unique_ptr<InputComponent>(new InputComponent(-1)));
   e->AddComponent(ComponentType::FACTION, std::unique_ptr<FactionComponent>(new FactionComponent(Faction::ENEMY)));
- // e->AddScript(std::unique_ptr<DamageColliderScript>(new DamageColliderScript));
   e->AddScript(std::unique_ptr<TempInvulnerabilityScript>(new TempInvulnerabilityScript(2)));
 
 
-  VMState invulnerabilityOnHitScript = Compiler::Compile("data/scripts/DamageColliderScript.txt");
-  RegisterNativeBindings(invulnerabilityOnHitScript);
+  VMState damageCollider = Compiler::Compile("data/scripts/DamageColliderScript.txt");
+  RegisterNativeBindings(damageCollider);
 
-  e->AddVmScript(std::move(invulnerabilityOnHitScript));
+  e->AddVmScript(std::move(damageCollider));
   return e;
 }
 

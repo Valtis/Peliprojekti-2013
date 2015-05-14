@@ -73,6 +73,7 @@
     <ClInclude Include="src\Message\SoundManagerPlaySoundMessage.h" />
     <ClInclude Include="src\Message\SpawnEntityMessage.h" />
     <ClInclude Include="src\Message\StartBlinkingMessage.h" />
+    <ClInclude Include="src\Message\TakeDamageMessage.h" />
     <ClInclude Include="src\Message\TerminateEntityMessage.h" />
     <ClInclude Include="src\Message\VelocityChangeMessage.h" />
     <ClInclude Include="src\Physics\PhysicsHandler.h" />

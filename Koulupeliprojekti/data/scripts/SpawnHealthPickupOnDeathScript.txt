@@ -10,7 +10,8 @@
 (fn spawnHealthPickup (message)
   (locals dropChange max)
   (
-    (setvalue dropChange 6000)
+  
+    (setvalue dropChange 60000)
     (setvalue max 10000)
     
     (if (<= (invokenative "Rand" 0 max) dropChange)

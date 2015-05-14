@@ -1,11 +1,13 @@
 #include "Component/HealthComponent.h"
 #include "Message/MessageFactory.h"
 #include "Message/AddHealthMessage.h"
+#include "Message/TakeDamageMessage.h"
 #include "Component/FactionComponent.h"
 #include "Entity/Entity.h"
 #include "Utility/LoggerManager.h"
 
 #include <algorithm>
+#include <Message/TakeDamageMessage.h>
 
 HealthComponent::HealthComponent() : m_hitpoints(0), m_lives(0)
 {
@@ -26,7 +28,7 @@ void HealthComponent::OnAttatchingToEntity()
 {
   GetOwner()->RegisterMessageHandler(MessageType::TAKE_DAMAGE, Priority::LOWEST, [&](Message *msg) 
   {
-    this->TakeDamage();
+    this->TakeDamage(msg);
     return MessageHandling::STOP_HANDLING;
   }
   );
@@ -35,11 +37,16 @@ void HealthComponent::OnAttatchingToEntity()
     [&](Message *msg) { return this->HandleAddHealthMessage(msg); });
 }
 
-void HealthComponent::TakeDamage()
+void HealthComponent::TakeDamage(Message *msg)
 {
+
+  if (msg->GetType() != MessageType::TAKE_DAMAGE) {
+    return;
+  }
+  auto dmgMsg = static_cast<TakeDamageMessage *>(msg);
   auto faction = static_cast<FactionComponent *>(GetOwner()->GetComponent(ComponentType::FACTION));
 
-  --m_hitpoints;
+  m_hitpoints -= dmgMsg->GetAmount();
   
   if (m_hitpoints > 0)
   {

@@ -19,7 +19,7 @@ MessageHandling DamageColliderScript::HandleCollisionMessage(Message *msg)
   auto myFaction = static_cast<FactionComponent *>(GetOwner()->GetComponent(ComponentType::FACTION));
 
   std::vector<Entity *> targets;
-  auto takeDamageMsg = MessageFactory::CreateTakeDamageMessage();
+  auto takeDamageMsg = MessageFactory::CreateTakeDamageMessage(1);
   for (auto entity : colMsg->GetEntities())
   {
     auto otherFaction = static_cast<FactionComponent *>(entity->GetComponent(ComponentType::FACTION));

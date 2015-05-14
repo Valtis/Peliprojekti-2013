@@ -15,8 +15,18 @@ namespace ScriptMessageInterface {
     entity->SendMessage(message.get());
   }
 
-  void SendTakeDamageMessage(Entity *entity) {
-    auto message = MessageFactory::CreateTakeDamageMessage();
+  void SendAddHealthMessage(Entity *entity, int32_t amount) {
+    auto message = MessageFactory::CreateAddHealthMessage(amount);
+    entity->SendMessage(message.get());
+  }
+
+  void SendTakeDamageMessage(Entity *entity, int32_t amount) {
+    auto message = MessageFactory::CreateTakeDamageMessage(amount);
+    entity->SendMessage(message.get());
+  }
+
+  void SendTerminateEntityMessage(Entity *entity) {
+    auto message = MessageFactory::CreateTerminateEntityMessage(entity);
     entity->SendMessage(message.get());
   }
 
@@ -26,6 +36,14 @@ namespace ScriptMessageInterface {
       throw std::runtime_error("Invalid pointer: Expected CollisionMessage but wasn't");
     }
     return colMsg->GetEntities();
+  }
+
+  int32_t GetHitType(Message* message) {
+    auto colMsg = dynamic_cast<CollisionMessage *>(message);
+    if (colMsg == nullptr) {
+      throw std::runtime_error("Invalid pointer: Expected CollisionMessage but wasn't");
+    }
+    return static_cast<int32_t>(colMsg->GetHitType());
   }
 
   int32_t GetFaction(Entity *entity) {

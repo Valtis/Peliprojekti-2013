@@ -14,6 +14,7 @@
 #include "Message/SoundManagerPlaySoundMessage.h"
 #include "Message/PlaySoundEffectMessage.h"
 #include "Message/AddHealthMessage.h"
+#include "Message/TakeDamageMessage.h"
 #include "Message/FiringDirectionMessage.h"
 #include "Message/AnimationChangeMessage.h"
 
@@ -58,9 +59,9 @@ std::unique_ptr<Message> MessageFactory::CreateNewTiledSpriteMessage(int baseID,
   return std::unique_ptr<Message>(new NewTiledSpriteMessage(baseID, newID, width, height));
 }
 
-std::unique_ptr<Message> MessageFactory::CreateTakeDamageMessage()
+std::unique_ptr<Message> MessageFactory::CreateTakeDamageMessage(int amount)
 {
-  return std::unique_ptr<Message>(new GenericMessageWithNoData(MessageType::TAKE_DAMAGE));
+  return std::unique_ptr<Message>(new TakeDamageMessage(amount));
 }
 
 std::unique_ptr<Message> MessageFactory::CreateEndLevelMessage()

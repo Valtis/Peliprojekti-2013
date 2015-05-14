@@ -19,7 +19,7 @@ namespace MessageFactory
   std::unique_ptr<Message> CreateTerminateEntityMessage(Entity *entity);
   std::unique_ptr<Message> CreateResetEntityPositionMessage(Entity *entity);
   std::unique_ptr<Message> CreateNewTiledSpriteMessage(int baseID, int newID, int width, int height);
-  std::unique_ptr<Message> CreateTakeDamageMessage();
+  std::unique_ptr<Message> CreateTakeDamageMessage(int amount);
   std::unique_ptr<Message> CreateEndLevelMessage();
   std::unique_ptr<Message> CreateEndGameMessage();
   std::unique_ptr<Message> CreateStartBlinkingMessage(double duration);

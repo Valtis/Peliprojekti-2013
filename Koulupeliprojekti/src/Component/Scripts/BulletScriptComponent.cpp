@@ -21,7 +21,7 @@ void BulletScriptComponent::Update(double ticksPassed)
   m_lifeTimeRemaining -= ticksPassed;
   if (m_lifeTimeRemaining <= 0)
   {
-    auto takeDamageMsg = MessageFactory::CreateTakeDamageMessage();
+    auto takeDamageMsg = MessageFactory::CreateTakeDamageMessage(1);
     GetOwner()->SendMessage(takeDamageMsg.get());
   }
 }
@@ -52,7 +52,7 @@ MessageHandling BulletScriptComponent::HandleCollisionMessage(Message *msg)
     if (myFaction == nullptr || otherFaction == nullptr ||
       myFaction->GetFaction() != otherFaction->GetFaction())
     {
-      auto takeDamageMsg = MessageFactory::CreateTakeDamageMessage();
+      auto takeDamageMsg = MessageFactory::CreateTakeDamageMessage(1);
       GetOwner()->SendMessage(takeDamageMsg.get());
     }
 

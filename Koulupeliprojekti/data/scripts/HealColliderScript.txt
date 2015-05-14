@@ -1,0 +1,52 @@
+(statics owningEntity)
+
+(fn initialize (entity state) 
+  (
+    (setvalue owningEntity entity)
+    # 7 = MessageType::COLLISION, 4 = Priority::HIGHEST
+    (invokenative "RegisterMessageHandler" owningEntity state 7 4 "healCollider")
+  )    
+)
+
+(fn getfaction (entity) 
+  (
+    (return (invokenative "GetEntityFaction" entity))
+  )
+)
+
+(fn healCollider (message)
+  (locals collisionEntityArray counter length faction otherentity destroypickup)
+  (
+    # if type is trigger collision (TriggerCollision = 1), stop handling the message
+    (if (= (invokenative "GetHitType" message) 1) 
+      (
+        (return 1)
+      )
+    )
+    
+    (setvalue collisionEntityArray (invokenative "CollisionMessageGetEntities" message))
+    (setvalue counter 0)
+    (setvalue length (arraylength collisionEntityArray))
+    (setvalue destroypickup false)
+    (while (< counter length) 
+      (
+        (setvalue otherentity (readarray collisionEntityArray counter))
+        (setvalue faction (getfaction otherentity))
+        (if (= faction 1) # 1 = Playerfaction; only heal players
+          (
+            (invokenative "SendAddHealthMessage" otherentity 1)
+            (setvalue destroypickup true)
+          )
+        )
+        (setvalue counter (+ counter 1))
+      )
+    ) 
+    
+    (if (= destroypickup true) 
+      (
+        (invokenative "SendTerminateEntityMessage" owningEntity)
+      )
+    )
+    (return 0) # pass the message onwards
+  )
+)
