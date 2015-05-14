@@ -23,7 +23,6 @@
         (return 1)
       )
     )
-    
     (setvalue collisionEntityArray (invokenative "CollisionMessageGetEntities" message))
     (setvalue counter 0)
     (setvalue length (arraylength collisionEntityArray))
@@ -41,9 +40,10 @@
         (setvalue counter (+ counter 1))
       )
     ) 
-    
+   
     (if (= destroypickup true) 
       (
+     
         (invokenative "SendTerminateEntityMessage" owningEntity)
       )
     )

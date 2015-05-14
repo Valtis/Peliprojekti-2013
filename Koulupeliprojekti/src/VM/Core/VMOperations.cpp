@@ -5,8 +5,7 @@
 #include "VM/Core/VMFunction.h"
 #include "VM/FFI/ConversionFunctions.h"
 #include "VM/Memory/MemoryManager.h"
-#include <array>
-
+#include <functional>
 
 namespace Op {
 
@@ -25,11 +24,12 @@ namespace Op {
       return ValueType::FLOAT;
     }
 
-    return ValueType::INT;
+    throw std::runtime_error("No conversion exists between " + TypeToString(second) + " and " + TypeToString(first));
   }
 
   VMValue ConvertToType(ValueType type, VMValue value) {
 
+    // if the value already has the type, no conversion is required.
     if (value.GetType() == type) {
       return value;
     }
@@ -65,8 +65,9 @@ namespace Op {
       }
       throw std::runtime_error("TypeError: Could not convert " + TypeToString(value.GetType()) + " to " + TypeToString(type));
     default:
-      throw std::runtime_error("Invalid type for type conversion: " + TypeToString(type));
+      return value;
     }
+    return value;
   }
 
 
@@ -208,68 +209,64 @@ namespace Op {
     PushValue(VMValue{ first / second }, stack);
   }
 
+  template <template<typename> class Operand>
+  void AritmeticOperationWithTypeConversion(std::vector<VMValue> &stack) {
+    ValueType type; 
+    VMValue firstConverted; 
+    VMValue secondConverted; 
+    GetTwoParametersWithTypeConversion(stack, type, firstConverted, secondConverted);
+    // some operands may return boolean instead of VMValue, so need to wrap this in constructor call
+    VMValue result = VMValue{ Operand<VMValue>()(firstConverted, secondConverted) }; 
 
-  // Not entirely happy with this.
-#define CREATE_BINARY_FUNCTION_WITH_TYPE_CONVERSION(NAME__, OPERAND__, CHECK_FOR_SECOND_OPERAND) \
-  void NAME__(std::vector<VMValue> &stack) { \
-    ValueType type; \
-    VMValue firstConverted; \
-    VMValue secondConverted; \
-    GetTwoParametersWithTypeConversion(stack, type, firstConverted, secondConverted); \
-    \
-    if (type == ValueType::DOUBLE) { \
-      PushValue(VMValue{ firstConverted.AsDouble() OPERAND__ secondConverted.AsDouble() }, stack); \
-    } else if (type == ValueType::FLOAT) { \
-      PushValue(VMValue{ firstConverted.AsFloat() OPERAND__ secondConverted.AsFloat() }, stack); \
-    } else if (type == ValueType::INT) { \
-      if ((CHECK_FOR_SECOND_OPERAND)) {\
-        if (secondConverted.AsInt() == 0) {\
-          throw std::runtime_error("Division by zero"); \
-        } \
-      }\
-      PushValue(VMValue{ firstConverted.AsInt() OPERAND__ secondConverted.AsInt() }, stack); \
-    } else if (type == ValueType::BOOL) { \
-      PushValue(VMValue{ firstConverted.AsBool() OPERAND__ secondConverted.AsBool() }, stack); \
-    } else if (type == ValueType::CHAR) { \
-      PushValue(VMValue{ firstConverted.AsChar() OPERAND__ secondConverted.AsChar() }, stack); \
-    }\
-    else { \
-      throw std::runtime_error("Invalid type for " + std::string(#NAME__) + TypeToString(type)); \
-    } \
-  } 
-
-  CREATE_BINARY_FUNCTION_WITH_TYPE_CONVERSION(Add, +, false)
-  CREATE_BINARY_FUNCTION_WITH_TYPE_CONVERSION(Sub, -, false)
-  CREATE_BINARY_FUNCTION_WITH_TYPE_CONVERSION(Mul, *, false)
-  CREATE_BINARY_FUNCTION_WITH_TYPE_CONVERSION(Div, / , true)
-  
-
-
-  void Mod(std::vector<VMValue>& stack) {
-    auto second = PopValue(stack);
-    auto first = PopValue(stack);
-
-    first = ConvertToType(ValueType::INT, first);
-    second = ConvertToType(ValueType::INT, second);
-    if (second.AsInt() == 0) {
-      throw std::runtime_error("Division by zero");
-    }
-    PushValue(VMValue{ first.AsInt() % second.AsInt() }, stack);
+    PushValue(result, stack);;
   }
 
+
+
+  void Add(std::vector<VMValue> &stack) {
+    AritmeticOperationWithTypeConversion<std::plus>(stack);
+  }
+
+  void Sub(std::vector<VMValue> &stack) {
+    AritmeticOperationWithTypeConversion<std::minus>(stack);
+  } 
+  
+  void Mul(std::vector<VMValue> &stack) {
+    AritmeticOperationWithTypeConversion<std::multiplies>(stack);
+  }
+
+  void Div(std::vector<VMValue> &stack) {
+    AritmeticOperationWithTypeConversion<std::divides>(stack);
+  }
+
+  void Mod(std::vector<VMValue>& stack) {
+    AritmeticOperationWithTypeConversion<std::modulus>(stack);
+  }
+  
   void Not(std::vector<VMValue>& stack) {
-
     auto first = PopValue(stack);
-
     PushValue(VMValue{ !first.AsBool() }, stack);
   }
 
-  CREATE_BINARY_FUNCTION_WITH_TYPE_CONVERSION(IsGreater, >, false)
-  CREATE_BINARY_FUNCTION_WITH_TYPE_CONVERSION(IsGreaterOrEq, >= , false)
-  CREATE_BINARY_FUNCTION_WITH_TYPE_CONVERSION(IsEq, == , false)
-  CREATE_BINARY_FUNCTION_WITH_TYPE_CONVERSION(IsLessOrEq, <= , false)
-  CREATE_BINARY_FUNCTION_WITH_TYPE_CONVERSION(IsLess, <, false)
+  void IsGreater(std::vector<VMValue> &stack) {
+    AritmeticOperationWithTypeConversion<std::greater>(stack);
+  }
 
+  void IsGreaterOrEq(std::vector<VMValue> &stack) {
+    AritmeticOperationWithTypeConversion<std::greater_equal>(stack);
+  }
+
+  void IsEq(std::vector<VMValue> &stack) {
+    AritmeticOperationWithTypeConversion<std::equal_to>(stack);
+  }  
+  
+  void IsLessOrEq(std::vector<VMValue> &stack) {
+    AritmeticOperationWithTypeConversion<std::less_equal>(stack);
+  } 
+  
+  void IsLess(std::vector<VMValue> &stack) {
+    AritmeticOperationWithTypeConversion<std::less>(stack);
+  }
 
   void InvokeNative(const VMState &state, std::vector<VMValue> &stack) {
     auto ptrToStr = PopValue(stack);

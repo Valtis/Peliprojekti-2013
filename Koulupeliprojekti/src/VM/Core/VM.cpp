@@ -23,11 +23,9 @@ VMValue VM::InvokeFunction(VMState &state, const std::string &functionName, std:
     BuildStackTraceAndThrow(ex);
   }
 
-
-  auto returnValue = ReturnValue();
-
-  RestoreOldContext();
-  return returnValue;
+  auto retVal = ReturnValue();
+  RestoreOldContext(); 
+  return retVal;
 }
 
 void VM::InitializeVMForExecution(const std::string & functionName, std::vector<VMValue> arguments, const VMFunction *function)
@@ -53,8 +51,8 @@ void VM::InitializeVMForExecution(const std::string & functionName, std::vector<
 }
 
 void VM::SaveState() {
-  m_previousStacks.push_back(m_stack);
-  m_previousFrames.push_back(m_frames);
+  m_previousStacks.push_back(std::move(m_stack));
+  m_previousFrames.push_back(std::move(m_frames));
 }
 
 
@@ -222,8 +220,6 @@ VMValue VM::ReturnValue() {
   if (m_stack.empty()) {
     return{};
   }
-
-
   auto value = m_stack.back();
   m_stack.pop_back();
   return value;
