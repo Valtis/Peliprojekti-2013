@@ -34,14 +34,13 @@
   )
 )
 
-# destroy on collision, if faction do not match (no collision with friendlies!)
+# destroy on collision, if factions do not match or if entity has no faction (no collision with friendlies!)
 (fn destroyOnCollision (message)
-  (locals collisionEntityArray counter length destroy myfaction otherfaction)
+  (locals collisionEntityArray counter length myfaction otherfaction)
   (
     (setvalue collisionEntityArray (invokenative "CollisionMessageGetEntities" message))
     (setvalue counter 0)
     (setvalue length (arraylength collisionEntityArray))
-    (setvalue destroy false)
     (setvalue myfaction (getfaction owningEntity))
     (while (< counter length) 
       (
@@ -50,7 +49,7 @@
         # if bullet has no faction, or the factions do not match, destroy on collision
         (if (or (= myfaction -1) (not (= myfaction otherfaction)))
           (
-            (setvalue destroy true)
+            (terminateEntity)
             (setvalue counter length) # terminate loop
           )
         )
@@ -59,12 +58,6 @@
       )
     ) 
    
-    (if (= destroy true) 
-      (     
-        (terminateEntity)
-      )
-    )
-    
     (return 0) # let the message pass forwards
   )
 )

@@ -1,0 +1,66 @@
+(statics owningEntity blinkduration ticksUntilFlip isvisible )
+
+(fn initialize (entity state)
+  (
+    # 14 = MessageType::START_BLINKING, 3 = Priority::HIGH
+    (invokenative "RegisterMessageHandler" entity state 14 3 "startBlinking")
+    (setvalue owningEntity entity)
+    (setvalue blinkduration 0)
+    (setvalue ticksUntilFlip 0)
+    (setvalue isvisible true)
+  )
+)
+
+(fn sendvisibilitymessage (visibility) 
+  (
+    (invokenative "SendVisibilityMessage" owningEntity visibility)
+  )
+)
+
+(fn stopblinking() 
+  (
+    (sendvisibilitymessage true)
+    (setvalue ticksUntilFlip 0)
+    (setvalue blinkduration 0)
+  )
+)
+
+
+(fn flipGraphicsState() 
+  ( 
+    (setvalue ticksUntilFlip 5)
+    (setvalue isvisible (not isvisible))
+    (sendvisibilitymessage isvisible)
+  )
+)
+
+(fn update (tickspassed) 
+  (
+    (if (> blinkduration 0)
+      (
+        (setvalue blinkduration (- blinkduration tickspassed))
+        (if (<= blinkduration 0) 
+          (
+            (stopblinking)
+            (return)
+          )
+        )
+        
+        (setvalue ticksUntilFlip (- ticksUntilFlip tickspassed))
+        (if (<= ticksUntilFlip 0) 
+          (
+            (flipGraphicsState)
+          )
+        )
+      )
+    )
+  )
+)
+
+(fn startBlinking (message)
+  (
+    (setvalue blinkduration (invokenative "BlinkMessageGetDuration" message))
+    (setvalue isvisible true)
+    (return 0)
+  )
+)

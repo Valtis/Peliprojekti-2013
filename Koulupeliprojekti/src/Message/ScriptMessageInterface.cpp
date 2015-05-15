@@ -1,8 +1,12 @@
 #include "Message/ScriptMessageInterface.h"
 #include "Message/MessageFactory.h"
-#include "CollisionMessage.h"
 #include "Component/FactionComponent.h"
 #include "Entity/Entity.h"
+
+
+#include "Message/CollisionMessage.h"
+#include "Message/StartBlinkingMessage.h"
+
 
 namespace ScriptMessageInterface {
   void SendBlinkingMessage(Entity *entity, int duration) {
@@ -25,6 +29,11 @@ namespace ScriptMessageInterface {
     entity->SendMessage(message.get());
   }
 
+  void SendVisibilityMessage(Entity* entity, bool visibility) {
+    auto message = MessageFactory::CreateSetGraphicsVisibilityMessage(visibility);
+    entity->SendMessage(message.get());
+  }
+
   void SendTakeDamageMessage(Entity *entity, int32_t amount) {
     auto message = MessageFactory::CreateTakeDamageMessage(amount);
     entity->SendMessage(message.get());
@@ -41,6 +50,15 @@ namespace ScriptMessageInterface {
       throw std::runtime_error("Invalid pointer: Expected CollisionMessage but wasn't");
     }
     return colMsg->GetEntities();
+  }
+
+  int32_t BlinkMessageGetDuration(Message* message) {
+    auto blinkMsg = dynamic_cast<StartBlinkingMessage *>(message);
+    if (blinkMsg == nullptr) {
+      throw std::runtime_error("Invalid pointer: Expected StartBlinkingMessage but wasn't");
+    }
+    return static_cast<int32_t>(blinkMsg->GetBlinkDuration());
+
   }
 
   int32_t GetHitType(Message* message) {

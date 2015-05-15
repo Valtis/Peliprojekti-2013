@@ -14,7 +14,6 @@
 #include "Component/HealthComponent.h"
 #include "Component/PhysicsComponent.h"
 #include "Component/Scripts/EndLevelScriptComponent.h"
-#include "Component/Scripts/BlinkScript.h"
 #include "Component/Scripts/QuitGameOnDeathScript.h"
 #include "Component/Scripts/TempInvulnerabilityScript.h"
 
@@ -57,11 +56,13 @@ void RegisterNativeBindings(VMState &state) {
   state.AddNativeBinding("SendTakeDamageMessage", CreateBinding(&ScriptMessageInterface::SendTakeDamageMessage));
   state.AddNativeBinding("SendTerminateEntityMessage", CreateBinding(&ScriptMessageInterface::SendTerminateEntityMessage));
   state.AddNativeBinding("SendPlaySoundEffectMessage", CreateBinding(&ScriptMessageInterface::SendPlaySoundEffectMessage));
+  state.AddNativeBinding("SendVisibilityMessage", CreateBinding(&ScriptMessageInterface::SendVisibilityMessage));
   state.AddNativeBinding("SendMessageUpwards", CreateBinding(&Entity::SendMessageUpwards));
 
   state.AddNativeBinding("GetEntityFaction", CreateBinding(&ScriptMessageInterface::GetFaction));
 
   state.AddNativeBinding("CollisionMessageGetEntities", CreateBinding(&ScriptMessageInterface::CollisionMessageGetFactions));
+  state.AddNativeBinding("BlinkMessageGetDuration", CreateBinding(&ScriptMessageInterface::BlinkMessageGetDuration));
   state.AddNativeBinding("GetHitType", CreateBinding(&ScriptMessageInterface::GetHitType));
 
   state.AddNativeBinding("Rand", randBinding);
@@ -185,7 +186,10 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   VMState invulnerabilityOnHitScript = Compiler::Compile("data/scripts/InvulnerabilityOnHitScript.txt");
   RegisterNativeBindings(invulnerabilityOnHitScript);
   e->AddVmScript(std::move(invulnerabilityOnHitScript));
- // e->AddVmScript(std::move(Compiler::Compile("data/scripts/WasteMemory.txt")));
+
+  VMState blinkScript = Compiler::Compile("data/scripts/BlinkScript.txt");
+  RegisterNativeBindings(blinkScript);
+  e->AddVmScript(std::move(blinkScript));
 
   
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
@@ -222,7 +226,7 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   e->AddComponent(ComponentType::FACTION, std::move(f));
   e->AddComponent(ComponentType::PHYSICS,std::move(p));
   e->AddComponent(ComponentType::HEALTH, std::move(h));
-  e->AddScript(std::unique_ptr<Component>(new BlinkScript(5)));
+
   e->AddScript(std::unique_ptr<Component>(new QuitGameOnDeathScript));
 
   return e;
