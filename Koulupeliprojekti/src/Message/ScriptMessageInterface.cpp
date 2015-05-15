@@ -20,6 +20,11 @@ namespace ScriptMessageInterface {
     entity->SendMessage(message.get());
   }
 
+  void SendPlaySoundEffectMessage(Entity *entity, int32_t id) {
+    auto message = MessageFactory::CreatePlaySoundMessage(static_cast<SoundEffectType>(id));
+    entity->SendMessage(message.get());
+  }
+
   void SendTakeDamageMessage(Entity *entity, int32_t amount) {
     auto message = MessageFactory::CreateTakeDamageMessage(amount);
     entity->SendMessage(message.get());

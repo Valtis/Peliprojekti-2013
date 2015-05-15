@@ -9,6 +9,7 @@ namespace ScriptMessageInterface {
   void SendSpawnMessage(Entity *entity, int entityType);
   void SendAddHealthMessage(Entity *entity, int32_t amount);
   void SendTakeDamageMessage(Entity *entity, int32_t amount);
+  void SendPlaySoundEffectMessage(Entity *entity, int32_t id);
   void SendTerminateEntityMessage(Entity *entity);
 
   std::vector<Entity* > CollisionMessageGetFactions(Message *message);

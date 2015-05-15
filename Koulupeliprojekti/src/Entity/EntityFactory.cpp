@@ -13,7 +13,6 @@
 #include "Component/FactionComponent.h"
 #include "Component/HealthComponent.h"
 #include "Component/PhysicsComponent.h"
-#include "Component/Scripts/BulletScriptComponent.h"
 #include "Component/Scripts/EndLevelScriptComponent.h"
 #include "Component/Scripts/BlinkScript.h"
 #include "Component/Scripts/QuitGameOnDeathScript.h"
@@ -57,6 +56,7 @@ void RegisterNativeBindings(VMState &state) {
   state.AddNativeBinding("SendAddHealthMessage", CreateBinding(&ScriptMessageInterface::SendAddHealthMessage));
   state.AddNativeBinding("SendTakeDamageMessage", CreateBinding(&ScriptMessageInterface::SendTakeDamageMessage));
   state.AddNativeBinding("SendTerminateEntityMessage", CreateBinding(&ScriptMessageInterface::SendTerminateEntityMessage));
+  state.AddNativeBinding("SendPlaySoundEffectMessage", CreateBinding(&ScriptMessageInterface::SendPlaySoundEffectMessage));
   state.AddNativeBinding("SendMessageUpwards", CreateBinding(&Entity::SendMessageUpwards));
 
   state.AddNativeBinding("GetEntityFaction", CreateBinding(&ScriptMessageInterface::GetFaction));
@@ -128,8 +128,6 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   velocity->SetVelocity(xVel, yVel);
 
   std::unique_ptr<FactionComponent> faction(new FactionComponent(bulletFaction));
-  std::unique_ptr<HealthComponent> health(new HealthComponent(1, 1, 0));
-  
   std::unique_ptr<SoundComponent> sound(new SoundComponent());
   sound->AddSoundEffect(SoundEffectType::DEATH, SOUND_GUN_HIT);
 
@@ -138,13 +136,15 @@ void CreateBullet(Entity *e, SpawnEntityMessage *msg)
   e->AddComponent(ComponentType::GRAPHICS, std::move(graphics));
   e->AddComponent(ComponentType::LOCATION, std::move(location));
   e->AddComponent(ComponentType::VELOCITY, std::move(velocity));
-  e->AddComponent(ComponentType::FACTION, std::move(faction));
-  e->AddComponent(ComponentType::HEALTH, std::move(health));
-  e->AddScript(std::unique_ptr<BulletScriptComponent>(new BulletScriptComponent));
- 
-  VMState invulnerabilityOnHitScript = Compiler::Compile("data/scripts/DamageColliderScript.txt");
-  RegisterNativeBindings(invulnerabilityOnHitScript);
-  e->AddVmScript(std::move(invulnerabilityOnHitScript));
+  e->AddComponent(ComponentType::FACTION, std::move(faction));  
+
+  VMState damageColliderScript = Compiler::Compile("data/scripts/DamageColliderScript.txt");
+  RegisterNativeBindings(damageColliderScript);
+  e->AddVmScript(std::move(damageColliderScript));
+
+  VMState bulletScript = Compiler::Compile("data/scripts/BulletScript.txt");
+  RegisterNativeBindings(bulletScript);
+  e->AddVmScript(std::move(bulletScript));
 }
 
 void CreateHealthPickup(Entity *e, SpawnEntityMessage *msg)

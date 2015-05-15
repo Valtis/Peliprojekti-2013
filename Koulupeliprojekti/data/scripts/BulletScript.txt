@@ -1,0 +1,70 @@
+(statics owningEntity lifetime)
+
+(fn initialize (entity state) 
+  (
+    (setvalue lifetime 100) # number of frames until death
+    (setvalue owningEntity entity)
+    # 7 = MessageType::COLLISION, 4 = Priority::HIGHEST
+    (invokenative "RegisterMessageHandler" owningEntity state 7 4 "destroyOnCollision")
+  )   
+)
+
+
+(fn terminateEntity() 
+  (
+    (invokenative "SendPlaySoundEffectMessage" owningEntity 1) # 1 = DEATH
+    (invokenative "SendTerminateEntityMessage" owningEntity)
+  )
+)
+
+(fn update (tickspassed) 
+  (
+    (setvalue lifetime (- lifetime tickspassed))
+    (if (<= lifetime 0) 
+      (
+        (terminateEntity)
+      )
+    )
+  )
+)
+
+(fn getfaction (entity) 
+  (
+    (return (invokenative "GetEntityFaction" entity))
+  )
+)
+
+# destroy on collision, if faction do not match (no collision with friendlies!)
+(fn destroyOnCollision (message)
+  (locals collisionEntityArray counter length destroy myfaction otherfaction)
+  (
+    (setvalue collisionEntityArray (invokenative "CollisionMessageGetEntities" message))
+    (setvalue counter 0)
+    (setvalue length (arraylength collisionEntityArray))
+    (setvalue destroy false)
+    (setvalue myfaction (getfaction owningEntity))
+    (while (< counter length) 
+      (
+        
+        (setvalue otherfaction (getfaction (readarray collisionEntityArray counter)))
+        # if bullet has no faction, or the factions do not match, destroy on collision
+        (if (or (= myfaction -1) (not (= myfaction otherfaction)))
+          (
+            (setvalue destroy true)
+            (setvalue counter length) # terminate loop
+          )
+        )
+        
+        (setvalue counter (+ counter 1))
+      )
+    ) 
+   
+    (if (= destroy true) 
+      (     
+        (terminateEntity)
+      )
+    )
+    
+    (return 0) # let the message pass forwards
+  )
+)
