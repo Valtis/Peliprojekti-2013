@@ -1,7 +1,6 @@
 #include "Entity/EntityFactory.h"
 #include "Entity/Entity.h"
 #include "UI/InputManager.h"
-#include "Message/ScriptMessageInterface.h"
 #include "Message/SpawnEntityMessage.h"
 #include "Component/FlyingAiComponent.h"
 #include "Component/LocationComponent.h"
@@ -13,10 +12,6 @@
 #include "Component/FactionComponent.h"
 #include "Component/HealthComponent.h"
 #include "Component/PhysicsComponent.h"
-#include "Component/Scripts/EndLevelScriptComponent.h"
-#include "Component/Scripts/QuitGameOnDeathScript.h"
-#include "Component/Scripts/TempInvulnerabilityScript.h"
-
 #include "Message/MessageFactory.h"
 #include "Message/ScriptMessageInterface.h"
 #include "VM/Core/VmState.h"
@@ -57,8 +52,10 @@ void RegisterNativeBindings(VMState &state) {
   state.AddNativeBinding("SendTerminateEntityMessage", CreateBinding(&ScriptMessageInterface::SendTerminateEntityMessage));
   state.AddNativeBinding("SendPlaySoundEffectMessage", CreateBinding(&ScriptMessageInterface::SendPlaySoundEffectMessage));
   state.AddNativeBinding("SendVisibilityMessage", CreateBinding(&ScriptMessageInterface::SendVisibilityMessage));
+  state.AddNativeBinding("SendImportantCharacterDeathMessage", CreateBinding(&ScriptMessageInterface::SendImportantCharacterDeathMessage));
+  state.AddNativeBinding("SendEndLevelMessage", CreateBinding(&ScriptMessageInterface::SendEndLevelMessage));
   state.AddNativeBinding("SendMessageUpwards", CreateBinding(&Entity::SendMessageUpwards));
-
+  
   state.AddNativeBinding("GetEntityFaction", CreateBinding(&ScriptMessageInterface::GetFaction));
 
   state.AddNativeBinding("CollisionMessageGetEntities", CreateBinding(&ScriptMessageInterface::CollisionMessageGetFactions));
@@ -191,7 +188,11 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   RegisterNativeBindings(blinkScript);
   e->AddVmScript(std::move(blinkScript));
 
-  
+  VMState quitGameOnDeathScript = Compiler::Compile("data/scripts/QuitGameOnDeathScript.txt");
+  RegisterNativeBindings(quitGameOnDeathScript);
+  e->AddVmScript(std::move(quitGameOnDeathScript));
+
+
   std::unique_ptr<GraphicsComponent> g(new GraphicsComponent);
   std::unique_ptr<LocationComponent> l(new LocationComponent);
   std::unique_ptr<VelocityComponent> v(new VelocityComponent(5, 13));
@@ -226,9 +227,7 @@ std::unique_ptr<Entity> EntityFactory::CreatePlayer(int x, int y, InputManager &
   e->AddComponent(ComponentType::FACTION, std::move(f));
   e->AddComponent(ComponentType::PHYSICS,std::move(p));
   e->AddComponent(ComponentType::HEALTH, std::move(h));
-
-  e->AddScript(std::unique_ptr<Component>(new QuitGameOnDeathScript));
-
+  
   return e;
 }
 
@@ -242,8 +241,6 @@ std::unique_ptr<Entity> BaseEnemy(int x, int y)
   e->AddComponent(ComponentType::HEALTH, std::unique_ptr<Component>(new HealthComponent(3, 3, 0)));
   e->AddComponent(ComponentType::INPUT,  std::unique_ptr<InputComponent>(new InputComponent(-1)));
   e->AddComponent(ComponentType::FACTION, std::unique_ptr<FactionComponent>(new FactionComponent(Faction::ENEMY)));
-  e->AddScript(std::unique_ptr<TempInvulnerabilityScript>(new TempInvulnerabilityScript(2)));
-
 
   VMState damageCollider = Compiler::Compile("data/scripts/DamageColliderScript.txt");
   RegisterNativeBindings(damageCollider);
@@ -328,7 +325,11 @@ std::unique_ptr<Entity> EntityFactory::CreateEndLevelEntity(int x, int y)
 
   e->AddComponent(ComponentType::LOCATION, std::unique_ptr<LocationComponent>(new LocationComponent(x, y)));
 
-  e->AddScript(std::unique_ptr<Component>(new EndLevelScriptComponent));
+
+  auto endLevelScript = Compiler::Compile("data/scripts/EndLevelOnCollisionScript.txt");
+  RegisterNativeBindings(endLevelScript);
+  e->AddVmScript(std::move(endLevelScript));
+
   return e;
 }
 

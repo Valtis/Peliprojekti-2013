@@ -3,8 +3,8 @@
 (fn initialize (entity state) 
   (
     (setvalue owningEntity entity)
-    # 7 = MessageType::COLLISION, 4 = Priority::HIGHEST
-    (invokenative "RegisterMessageHandler" owningEntity state 7 4 "healCollider")
+    # 7 = MessageType::COLLISION, 2 = Priority::NORMAL
+    (invokenative "RegisterMessageHandler" owningEntity state 7 2 "healCollider")
   )    
 )
 

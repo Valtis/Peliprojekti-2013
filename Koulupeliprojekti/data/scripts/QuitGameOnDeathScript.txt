@@ -1,0 +1,17 @@
+(statics owningEntity)
+
+(fn initialize (entity state)
+  (
+    # 9 = MessageType::TERMINATE_ENTITY, 4 = Priority::HIGHEST
+    (invokenative "RegisterMessageHandler" entity state 9 4 "handleDeath")
+    (setvalue owningEntity entity)
+  )
+)
+
+
+(fn handleDeath(message) 
+  (
+    (invokenative "SendImportantCharacterDeathMessage" owningEntity)
+    (return 1) # terminate handling of message; important character died and we are quitting game anyway
+  )
+)

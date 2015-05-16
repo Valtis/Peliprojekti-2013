@@ -1,0 +1,32 @@
+(statics owningEntity)
+(fn initialize (entity state) 
+  (  
+    # 7 = MessageType::COLLISION, 4 = Priority::HIGHEST
+    (invokenative "RegisterMessageHandler" entity state 7 4 "handleLevelEnding")
+    (setvalue owningEntity entity)
+  )
+)
+
+(fn handleLevelEnding (message) 
+  (locals collisionEntityArray counter length faction)
+  (
+    (setvalue collisionEntityArray (invokenative "CollisionMessageGetEntities" message))
+    (setvalue counter 0)
+    (setvalue length (arraylength collisionEntityArray))
+    (while (< counter length) 
+      (
+        
+        (setvalue faction (invokenative "GetEntityFaction" (readarray collisionEntityArray counter)))
+        (if (= faction 1) # 1 = player faction
+          (
+            (invokenative "SendEndLevelMessage" owningEntity)
+            (return 1) # stop handling message 
+          )
+        )
+        
+        (setvalue counter (+ counter 1))
+      )
+    )  
+  (return 0) # keep handling
+  )
+)

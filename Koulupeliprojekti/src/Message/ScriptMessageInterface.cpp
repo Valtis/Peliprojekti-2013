@@ -44,6 +44,16 @@ namespace ScriptMessageInterface {
     entity->SendMessage(message.get());
   }
 
+  void SendImportantCharacterDeathMessage(Entity* entity) {
+    auto message = MessageFactory::CreateImportantCharacterDeathMessage();
+    entity->SendMessage(message.get());
+  }
+
+  void SendEndLevelMessage(Entity* entity) {
+    auto message = MessageFactory::CreateEndLevelMessage();
+    entity->SendMessage(message.get());
+  }
+
   std::vector<Entity *> CollisionMessageGetFactions(Message *message) {
     auto colMsg = dynamic_cast<CollisionMessage *>(message);
     if (colMsg == nullptr) {

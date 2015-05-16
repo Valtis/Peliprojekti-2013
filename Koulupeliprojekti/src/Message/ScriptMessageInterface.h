@@ -11,7 +11,10 @@ namespace ScriptMessageInterface {
   void SendTakeDamageMessage(Entity *entity, int32_t amount);
   void SendPlaySoundEffectMessage(Entity *entity, int32_t id);
   void SendVisibilityMessage(Entity *entity, bool visibility);
-  void SendTerminateEntityMessage(Entity *entity); 
+  void SendTerminateEntityMessage(Entity *entity);
+  void SendImportantCharacterDeathMessage(Entity *entity); 
+  void SendEndLevelMessage(Entity *entity);
+   
 
   std::vector<Entity* > CollisionMessageGetFactions(Message *message); 
   int32_t BlinkMessageGetDuration(Message *message);
