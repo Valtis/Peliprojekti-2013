@@ -8,7 +8,7 @@
 
 #include <functional>
 /*
-  Wraps the given function pointer into lambda function that handles the argument passing and invokation.
+  Wraps the given function pointer into lambda function that handles the argument passing and invocation.
   
   First pops parameters from VM stack and stores them in a tuple. Tuple values are then passed as arguments for the function pointer.
   If native function has a return value, the value is pushed into VM stack.
